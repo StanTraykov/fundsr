@@ -1,0 +1,6 @@
+pandoc: 3.6.2
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  fundsr-intro: fundsr-intro.html
+last_built: 2025-12-10T15:25Z

@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^dev$
+(^|/)data(/|$)
+(^|/)output(/|$)
+^desktop.ini$
+^doc$
+^Meta$

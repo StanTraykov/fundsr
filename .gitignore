@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*~
+desktop.ini
+**/data/
+**/output/
+inst/doc
+/doc/
+/Meta/
