@@ -30,3 +30,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/StanTraykov/fundsr
+BugReports: https://github.com/StanTraykov/fundsr/issues
