@@ -207,34 +207,34 @@ add_to_dl_list <- function(x) {
 }
 
 
-#' Read a two-column (date, NAV/index level) CSV file for a fund/index.
+#' Read a CSV (date + one or more value columns) for a fund/index.
 #'
 #' Loads a CSV from the directory specified by `fundsr.data_dir`,
-#' converts the first column to a proper date, and coerces the second
-#' column to numeric.
+#' converts the `date` column to a proper Date, and coerces all other
+#' columns to numeric.
 #'
-#' @param file Filename of the CSV to read.
-#' @param date_div Divider applied to the raw date field before
-#'   conversion. Defaults to `1000` (ms precision).
+#' @param file Filename of the CSV to read (relative to `getOption("fundsr.data_dir")`).
+#' @param date_div Divider applied to the raw date field before conversion.
+#'   Defaults to `1000` (ms precision).
 #'
-#' @return A tibble with parsed `date` and a numeric second column.
+#' @return A tibble with parsed `date` and numeric value columns.
 #'
 #' @details
-#' The function assumes the first column represents a numeric date stored
-#' in milliseconds or similar and rewrites the second column based on its
-#' detected name.
+#' The function assumes a column named `date` exists and represents a numeric
+#' timestamp in seconds or milliseconds. All non-`date` columns are coerced
+#' with `as.numeric()` (non-parsable values become `NA`).
 #'
 #' @export
 get_csv <- function(file, date_div = 1000) {
     fund_data_dir <- getOption("fundsr.data_dir")
-    df <- read_csv(file.path(fund_data_dir, file), show_col_types = FALSE)
-    second_col <- names(df)[2]
+    df <- readr::read_csv(file.path(fund_data_dir, file), show_col_types = FALSE)
     df %>%
-        mutate(
-            date = as_date(as_datetime(as.numeric(date) / date_div)),
-            !!second_col := as.numeric(.data[[second_col]])
+        dplyr::mutate(
+            date = lubridate::as_date(lubridate::as_datetime(as.numeric(date) / date_div)),
+            dplyr::across(-date, ~ suppressWarnings(as.numeric(.x)))
         )
 }
+
 
 #' Read an MSCI two-column TSV file
 #'

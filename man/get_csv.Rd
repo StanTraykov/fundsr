@@ -2,26 +2,26 @@
 % Please edit documentation in R/fund_imp.R
 \name{get_csv}
 \alias{get_csv}
-\title{Read a two-column (date, NAV/index level) CSV file for a fund/index.}
+\title{Read a CSV (date + one or more value columns) for a fund/index.}
 \usage{
 get_csv(file, date_div = 1000)
 }
 \arguments{
-\item{file}{Filename of the CSV to read.}
+\item{file}{Filename of the CSV to read (relative to \code{getOption("fundsr.data_dir")}).}
 
-\item{date_div}{Divider applied to the raw date field before
-conversion. Defaults to \code{1000} (ms precision).}
+\item{date_div}{Divider applied to the raw date field before conversion.
+Defaults to \code{1000} (ms precision).}
 }
 \value{
-A tibble with parsed \code{date} and a numeric second column.
+A tibble with parsed \code{date} and numeric value columns.
 }
 \description{
 Loads a CSV from the directory specified by \code{fundsr.data_dir},
-converts the first column to a proper date, and coerces the second
-column to numeric.
+converts the \code{date} column to a proper Date, and coerces all other
+columns to numeric.
 }
 \details{
-The function assumes the first column represents a numeric date stored
-in milliseconds or similar and rewrites the second column based on its
-detected name.
+The function assumes a column named \code{date} exists and represents a numeric
+timestamp in seconds or milliseconds. All non-\code{date} columns are coerced
+with \code{as.numeric()} (non-parsable values become \code{NA}).
 }

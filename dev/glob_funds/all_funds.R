@@ -38,4 +38,4 @@ run_plots(diffs$cagr, diffs$log, nd, spec, xlm_data)
 
 # Optional high-quality PNG export
 options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")
-ggexport()
+#ggexport()
