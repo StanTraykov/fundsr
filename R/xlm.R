@@ -10,11 +10,11 @@ read_xlsx_hdr <- function(file_path,
                                sheet = sheet_name,
                                col_types = col_types,
                                .name_repair = "unique_quiet")
-    data <- as_tibble(data)
+    data <- tibble::as_tibble(data)
     headers <- data[header_rows, ] %>% as.data.frame()
     # Join the headers if more than one row is specified
     concatenated_headers <- apply(headers, 2, function(col) {
-        paste(na.omit(col), collapse = ".")
+        paste(stats::na.omit(col), collapse = ".")
     })
     colnames(data) <- concatenated_headers
     # Remove header rows and anything above them from the data
@@ -81,8 +81,9 @@ read_xlm_directory <- function(directory,
             rename_with(~ "xlm", matches("^Xetra Liquidity Measure")) %>%
             rename_with(~ "ticker", matches("Xetra Ticker")) %>%
             rename_with(~ "name", matches("Product Name")) %>%
-            mutate(date = as_date(parse_date_time(month_year,
-                                                  orders = "my"))) %>%
+            mutate(date = lubridate::as_date(
+                lubridate::parse_date_time(month_year, orders = "my")
+            )) %>%
             mutate(xlm = as.numeric(.data$xlm))
         return(data)
     })
@@ -114,7 +115,7 @@ read_xlm_directory <- function(directory,
 #' @export
 xlm_plot <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL) {
     data <- if (rgx) {
-        xlm_data %>% filter(str_detect(.data$name, tickers))
+        xlm_data %>% filter(stringr::str_detect(.data$name, tickers))
     } else {
         xlm_data %>% filter(.data$ticker %in% toupper(tickers))
     }

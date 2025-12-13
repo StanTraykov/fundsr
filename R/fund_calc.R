@@ -4,7 +4,7 @@
 longer <- function(df, funds, sfx, values_to, names_to = "fund") {
     df %>%
         select(all_of(c("date", paste0(funds, sfx)))) %>%
-        pivot_longer(
+        tidyr::pivot_longer(
             cols = where(is.numeric),
             names_to = names_to,
             values_to = values_to,
@@ -58,9 +58,9 @@ roll_diffs <- function(df, n_days, fund_index_map, date_col = "date", use_log = 
     for (fund in names(fund_index_map)) {
         index <- fund_index_map[[fund]]
         roll_type <- if (use_log) "log-ret" else "CAGR"
-        message(glue::glue("Roll {roll_type} for {fund} tracking {index}"))
+        message(glue("Roll {roll_type} for {fund} tracking {index}"))
         if (!(fund %in% names(df))) {
-            message(glue::glue("--Skipping {fund}: not in df"))
+            message(glue("--Skipping {fund}: not in df"))
             next
         }
         rcd_col = paste0(fund, "_rcd")

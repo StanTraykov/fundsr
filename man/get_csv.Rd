@@ -21,7 +21,7 @@ converts the \code{date} column to a proper Date, and coerces all other
 columns to numeric.
 }
 \details{
-The function assumes a column named \code{date} exists and represents a numeric
+The function assumes a column named \code{date} exists and represents a Unix
 timestamp in seconds or milliseconds. All non-\code{date} columns are coerced
 with \code{as.numeric()} (non-parsable values become \code{NA}).
 }

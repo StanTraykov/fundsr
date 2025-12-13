@@ -83,7 +83,7 @@ add_gg_params <- function(p, gg_params) {
         gg_params <- list(gg_params)
     }
     # reduce over the list to add them one by one
-    p <- reduce(gg_params, `+`, .init = p)
+    p <- purrr::reduce(gg_params, `+`, .init = p)
 }
 
 #' Plot rolling return differences against benchmark
@@ -131,14 +131,14 @@ rcd_plot <- function(data,
     message(paste("rcd_plot:", title))
     if (is.null(date_brk)) {
         years <- data %>%
-            summarize(start_year = year(first(date)),
-                      end_year   = year(last(date))) %>%
+            summarize(start_year = lubridate::year(first(date)),
+                      end_year   = lubridate::year(last(date))) %>%
             unlist() %>%
             diff()
         date_brk <- ifelse(years >= 10, "6 months", "3 months")
     }
     cdata <- longer(data, funds, "_rcd", "roll_diff")
-    qlims <- quantile(cdata$roll_diff,
+    qlims <- stats::quantile(cdata$roll_diff,
                       probs = qprob,
                       na.rm = TRUE)
     y_lims <- range(c(qlims, 0))

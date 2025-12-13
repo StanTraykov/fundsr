@@ -37,7 +37,7 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
         cy <- paste0(b, sy)
 
         df <- df %>%
-            dplyr::mutate(
+            mutate(
                 !!b := dplyr::coalesce(.data[[cx]], .data[[cy]]),
                 .keep = "unused"
             )
@@ -171,7 +171,7 @@ save_as <- function(named_urls, path = getOption("fundsr.data_dir"), redownload 
         if (redownload || !file.exists(full_file)) {
             message(glue("Downloading '{file}'"))
             Sys.sleep(stats::runif(1, 0.5, 1.0))
-            download.file(url, full_file, mode = "wb")
+            utils::download.file(url, full_file, mode = "wb")
         } else {
             message(glue("Skipping '{file}': file already exists."))
         }
@@ -232,7 +232,7 @@ add_to_dl_list <- function(x) {
 #' @return A tibble with parsed `date` and numeric value columns.
 #'
 #' @details
-#' The function assumes a column named `date` exists and represents a numeric
+#' The function assumes a column named `date` exists and represents a Unix
 #' timestamp in seconds or milliseconds. All non-`date` columns are coerced
 #' with `as.numeric()` (non-parsable values become `NA`).
 #'
@@ -241,9 +241,9 @@ get_csv <- function(file, date_div = 1000) {
     fund_data_dir <- getOption("fundsr.data_dir")
     df <- readr::read_csv(file.path(fund_data_dir, file), show_col_types = FALSE)
     df %>%
-        dplyr::mutate(
+        mutate(
             date = lubridate::as_date(lubridate::as_datetime(as.numeric(date) / date_div)),
-            dplyr::across(-date, ~ suppressWarnings(as.numeric(.x)))
+            across(-date, ~ suppressWarnings(as.numeric(.x)))
         )
 }
 
@@ -266,11 +266,11 @@ get_csv <- function(file, date_div = 1000) {
 #' @export
 get_msci_tsv <- function(file) {
     fund_data_dir <- getOption("fundsr.data_dir")
-    lines <- read_lines(file.path(fund_data_dir, file))
+    lines <- readr::read_lines(file.path(fund_data_dir, file))
     data_lines <- grep("^[0-9]|Date", lines, value = TRUE)
-    df <- read_tsv(I(data_lines), col_types = cols(
-        col_date(format = "%m/%d/%Y"),
-        col_double()
+    df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
+        readr::col_date(format = "%m/%d/%Y"),
+        readr::col_double()
     ))
     df
 }

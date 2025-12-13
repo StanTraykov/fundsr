@@ -4,8 +4,8 @@
 .Ruserdata
 *~
 desktop.ini
-**/data/
-**/output/
+data/
+output/
 inst/doc
 /doc/
 /Meta/

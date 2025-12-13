@@ -159,7 +159,7 @@ import_xl_data <- function(xl_file,
         any(stringr::str_detect(as.character(x), date_field_name), na.rm = TRUE)
     }))
     if (length(row_header_idx) == 0) {
-        stop(glue::glue(
+        stop(glue(
             "Could NOT find the date column header matching '{date_field_name}' ",
             "in '{xl_file}', sheet '{data_sheet}'."
         ))
@@ -167,7 +167,7 @@ import_xl_data <- function(xl_file,
     row_header_idx <- row_header_idx[1]
 
     if (row_header_idx == nrow(raw_data)) {
-        stop(glue::glue(
+        stop(glue(
             "The detected header row ({row_header_idx}) is the last row. ",
             "No data below it in '{xl_file}', sheet '{data_sheet}'."
         ))
@@ -193,7 +193,7 @@ import_xl_data <- function(xl_file,
     # 5) Identify date column, rename => "date"
     date_col_idx <- which(stringr::str_detect(names(data_raw), date_field_name))
     if (length(date_col_idx) == 0) {
-        stop(glue::glue(
+        stop(glue(
             "Could NOT find a column matching '{date_field_name}' ",
             "after assigning header names in '{xl_file}', sheet '{data_sheet}'."
         ))
@@ -273,7 +273,7 @@ import_xl_data <- function(xl_file,
         }
     }
 
-    message(glue::glue(
+    message(glue(
         "Returning {nrow(data_subset)} rows x {ncol(data_subset)} columns ",
         "from '{xl_file}' (sheet='{data_sheet}', date_field='{date_field_name}')."
     ))
