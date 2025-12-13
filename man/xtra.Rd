@@ -2,7 +2,7 @@
 % Please edit documentation in R/fund_imp.R
 \name{xtra}
 \alias{xtra}
-\title{Import a Xtrackers (XTRA) fund}
+\title{Import an Xtrackers fund}
 \usage{
 xtra(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE)
 }

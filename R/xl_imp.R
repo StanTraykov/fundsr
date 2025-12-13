@@ -6,7 +6,10 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     message("Attempting readxl on '", file_path, "'...")
     df <- tryCatch({
         # Try readxl in a tryCatch
-        readxl::read_excel(path = file_path, sheet = sheet, col_names = FALSE)
+        readxl::read_excel(path = file_path,
+                           sheet = sheet,
+                           col_names = FALSE,
+                           .name_repair = "unique_quiet")
     }, error = function(e) e)  # if error, we store the error object
 
     if (!inherits(df, "error")) {

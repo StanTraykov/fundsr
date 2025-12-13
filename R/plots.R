@@ -63,13 +63,12 @@ ggexport <- function() {
         message("ggexport: nothing queued.")
         return(invisible(NULL))
     }
-    inkscape_path <- getOption("fundsr.inkscape", "inkscape")
-    arg_begin <- glue("--actions=\"export-background:white;")
-    arg_end <- "\""
+    inkscape <- getOption("fundsr.inkscape", "/usr/bin/inkscape")
     acts <- paste(.fundsr$ink_queue, collapse = ";")
-    cmd <- paste0(inkscape_path, " ", arg_begin, acts, arg_end)
-    message(glue("Executing {cmd}"))
-    exit_status <- system(cmd)
+    acts <- paste0('export-background:white;', acts)
+    args <- c(sprintf('--actions=%s', shQuote(acts)))
+    message(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"))
+    exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
         .fundsr$ink_queue <- character()
     } else {

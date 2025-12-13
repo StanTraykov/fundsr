@@ -12,7 +12,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -64,9 +65,10 @@ Set package options
 ```{r}
 options(fundsr.data_dir = dirs[["data"]])
 options(fundsr.out_dir = dirs[["out"]])
-options(fundsr.dl_list = c(
-    `IUSQ.xls` = "https://www.ishares.com/uk/individual/en/products/251850/ishares-msci-acwi-ucits-etf/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-ACWI-UCITS-ETF-USD-Acc_fund&dataType=fund",
-    `SPYY.xlsx` = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx"
+# Helper to set fundsr.dl_list
+add_to_dl_list(c(
+    IUSQ = "https://www.ishares.com/uk/individual/en/products/251850/ishares-msci-acwi-ucits-etf/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-ACWI-UCITS-ETF-USD-Acc_fund&dataType=fund",
+    SPYY = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx"
 ))
 ```
 
@@ -134,20 +136,24 @@ plot_spec <- tribble(
     acwi_funds
 )
 ```
-Plot!
+Run the plots! (outputs svg and queues for optional PNG export)
 ```{r}
-# Run the plots (outputs svg and queues for optional PNG export)
 Sys.setLanguage("en")
 run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
-
-# Plots in another language
+```
+Plot in another language.
+```{r}
 Sys.setLanguage("bg")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
-
-# Optional: high-quality PNG export
-options(fundsr.inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"")
-# options(fundsr.inkscape = "/usr/bin/inkscape")
+```
+Optional: high-quality PNG export
+```{r}
+options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")
+# or, depending on system:
+# options(fundsr.inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape") # macOS
+# options(fundsr.inkscape = "/usr/bin/inkscape") # unix-like
+# options(fundsr.inkscape = Sys.which("inkscape")) # find it, if it's on PATH
 ggexport()
 ```

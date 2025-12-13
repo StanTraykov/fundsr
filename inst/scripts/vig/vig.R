@@ -35,9 +35,10 @@ if (!exists("xlm_data")) {
 # Set package options
 options(fundsr.data_dir = dirs[["data"]])
 options(fundsr.out_dir = dirs[["out"]])
-options(fundsr.dl_list = c(
-    `IUSQ.xls` = "https://www.ishares.com/uk/individual/en/products/251850/ishares-msci-acwi-ucits-etf/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-ACWI-UCITS-ETF-USD-Acc_fund&dataType=fund",
-    `SPYY.xlsx` = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx"
+# Helper to set fundsr.dl_list option
+add_to_dl_list(c(
+    IUSQ = "https://www.ishares.com/uk/individual/en/products/251850/ishares-msci-acwi-ucits-etf/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-ACWI-UCITS-ETF-USD-Acc_fund&dataType=fund",
+    SPYY = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx"
 ))
 
 # Populate funds directory (download files in fundsr.dl_list option)
@@ -99,6 +100,6 @@ plot_spec <- plot_spec %>%
 run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 
 # Optional: high-quality PNG export
-options(fundsr.inkscape = "\"C:\\Program Files\\Inkscape\\bin\\inkscape.exe\"")
+options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe/")
 # options(fundsr.inkscape = "/usr/bin/inkscape")
 ggexport()

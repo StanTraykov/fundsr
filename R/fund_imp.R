@@ -144,16 +144,24 @@ get_fund_index <- function() {
     .fundsr$fund_index
 }
 
-save_as <- function(named_urls, path = "", redownload = FALSE) {
+save_as <- function(named_urls, path = getOption("fundsr.data_dir"), redownload = FALSE) {
+    if (!dir.exists(path)) dir.create(path, recursive = TRUE)
     for (file in names(named_urls)) {
         url <- named_urls[[file]]
-        file_with_path <- file.path(path, file)
-        if (redownload || !file.exists(file_with_path)) {
-            message("zzz...")
-            Sys.sleep(stats::runif(1, 0.5, 1.0))
-            download.file(url, file_with_path, mode = "wb")
+        # hack .xls extension for iShares downloads (not critical but allows Excel to open
+        # these files with a warning [outdated XML])
+        ext <- if (grepl("ishares", url, ignore.case = TRUE)) {
+            ".xls"
         } else {
-            message(sprintf("Skipping download for '%s'", file))
+            ".xlsx"
+        }
+        full_file <- file.path(path, paste0(file, ext))
+        if (redownload || !file.exists(full_file)) {
+            message(glue("Downloading '{file}'"))
+            Sys.sleep(stats::runif(1, 0.5, 1.0))
+            download.file(url, full_file, mode = "wb")
+        } else {
+            message(glue("Skipping '{file}': file already exists."))
         }
     }
 }
@@ -180,6 +188,25 @@ dl_funds <- function(redownload = FALSE) {
     save_as(dl_list, path = fund_data_dir, redownload = redownload)
 }
 
+#' Add entries to the fund download list
+#'
+#' Adds one or more named download specifications to the `fundsr.dl_list`
+#' option. Existing entries are preserved; entries in `x` replace any
+#' existing entries with the same name.
+#'
+#' @param x A named character vector mapping download identifiers to URLs.
+#'
+#' @return A list with the previous value of `fundsr.dl_list`.
+#' @export
+add_to_dl_list <- function(x) {
+    stopifnot(is.character(x), !is.null(names(x)), all(nzchar(names(x))))
+    cur <- getOption("fundsr.dl_list", character())
+    new <- c(cur, x)
+    new <- new[!duplicated(names(new), fromLast = TRUE)]
+    options(fundsr.dl_list = new)
+}
+
+
 #' Read a two-column (date, NAV/index level) CSV file for a fund/index.
 #'
 #' Loads a CSV from the directory specified by `fundsr.data_dir`,
@@ -200,7 +227,7 @@ dl_funds <- function(redownload = FALSE) {
 #' @export
 get_csv <- function(file, date_div = 1000) {
     fund_data_dir <- getOption("fundsr.data_dir")
-    df <- read_csv(file.path(fund_data_dir, file))
+    df <- read_csv(file.path(fund_data_dir, file), show_col_types = FALSE)
     second_col <- names(df)[2]
     df %>%
         mutate(
@@ -259,7 +286,7 @@ get_msci_tsv <- function(file) {
 #'
 #' @export
 setg <- function(var_name, expr, add_fi_pairs = NULL) {
-    message(paste("Storage:", var_name))
+    message(paste("*** Importing:", var_name))
     # Access the parent's environment (where setg was called)
     parent_env <- parent.frame()
     # Get global redo flag
@@ -386,10 +413,22 @@ fund_imp <- function(ticker,
                      date_order = "dmy",
                      default_ext = ".xlsx") {
     ticker_lower <- tolower(ticker)
+
     # Use provided file or derive default filename based on ticker
+    fund_data_dir <- getOption("fundsr.data_dir")
     if (is.null(file)) {
-        file <- paste0(toupper(ticker), default_ext)
+        candidates <- paste0(toupper(ticker), c(".xlsx", ".xls"))
+        paths <- file.path(fund_data_dir, candidates)
+        exists <- file.exists(paths)
+        if (!any(exists)) {
+            stop(glue("No .xls[x] file found for {ticker}."), call. = FALSE)
+        }
+        if (sum(exists) > 1L) {
+            stop(glue("Multiple .xls[x] files found for {ticker}."), call. = FALSE)
+        }
+        file <- candidates[exists]
     }
+
     # Build column translations
     ct <- c(
         set_names(nav_col, ticker_lower)
@@ -400,7 +439,6 @@ fund_imp <- function(ticker,
             stop("Need benchmark and benchmark_col to retrieve benchmark.")
         ct <- c(ct, set_names(benchmark_col, benchmark))
     }
-    fund_data_dir <- getOption("fundsr.data_dir")
     setg(
         ticker_lower,
         import_xl_data(
@@ -433,8 +471,7 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
              date_col = "^As Of",
              benchmark = benchmark,
              benchmark_col = "^Benchmark Ret",
-             retrieve_benchmark = retrieve_benchmark,
-             default_ext = ".xls")
+             retrieve_benchmark = retrieve_benchmark)
 }
 
 #' Import an SPDR fund
@@ -451,7 +488,7 @@ spdr <- function(ticker, file = NULL, benchmark = NULL) {
              benchmark = benchmark)
 }
 
-#' Import a Xtrackers (XTRA) fund
+#' Import an Xtrackers fund
 #'
 #' Wrapper around `fund_imp()` for Xtrackers files.
 #'

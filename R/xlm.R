@@ -6,7 +6,10 @@ read_xlsx_hdr <- function(file_path,
                           header_rows,
                           skip_rows = NULL,
                           col_types = NULL) {
-    data <- readxl::read_excel(file_path, sheet = sheet_name, col_types = col_types)
+    data <- readxl::read_excel(file_path,
+                               sheet = sheet_name,
+                               col_types = col_types,
+                               .name_repair = "unique_quiet")
     data <- as_tibble(data)
     headers <- data[header_rows, ] %>% as.data.frame()
     # Join the headers if more than one row is specified
@@ -62,7 +65,6 @@ read_xlm_directory <- function(directory,
                               col_types = col_types) %>%
             select(matches("XLM|Ticker|Product Name"))
         # Find the column matching "Xetra Liquidity Measure (XLM)*.<Month Year>"
-        print(colnames(data))
         xlm_col <- grep("^Xetra Liquidity Measure \\(XLM\\)\\*\\..*",
                         colnames(data), value = TRUE)
         if (length(xlm_col) != 1) {
@@ -74,6 +76,7 @@ read_xlm_directory <- function(directory,
         month_year <- sub("^Xetra Liquidity Measure \\(XLM\\)\\*\\.",
                           "",
                           xlm_col)
+        message(glue("XLM read: {month_year}"))
         data <- data %>%
             rename_with(~ "xlm", matches("^Xetra Liquidity Measure")) %>%
             rename_with(~ "ticker", matches("Xetra Ticker")) %>%
