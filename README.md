@@ -36,6 +36,7 @@ fi_map <- c(
 setg("funds", funds_data, add_fi_pairs = fi_map)
 setg("indices", get_csv("indices.csv"))
 ```
+Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see [`get_csv()`](https://stantraykov.github.io/fundsr/reference/get_csv.html).
 ## Indices
 ### From fund files
 Some fund providers' files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
