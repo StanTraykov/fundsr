@@ -120,15 +120,7 @@
 <span></span>
 <span><span class="fu"><a href="reference/setg.html">setg</a></span><span class="op">(</span><span class="st">"funds"</span>, <span class="va">funds_data</span>, add_fi_pairs <span class="op">=</span> <span class="va">fi_map</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/setg.html">setg</a></span><span class="op">(</span><span class="st">"indices"</span>, <span class="fu"><a href="reference/get_csv.html">get_csv</a></span><span class="op">(</span><span class="st">"indices.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-</div>
-<div class="section level2">
-<h2 id="indices">Indices<a class="anchor" aria-label="anchor" href="#indices"></a>
-</h2>
-<div class="section level3">
-<h3 id="from-fund-files">From fund files<a class="anchor" aria-label="anchor" href="#from-fund-files"></a>
-</h3>
-<p>Some fund providers’ files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.</p>
+<p>Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see <a href="https://stantraykov.github.io/fundsr/reference/get_csv.html" class="external-link"><code>get_csv()</code></a>. ## Indices ### From fund files Some fund providers’ files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.</p>
 <pre><code><span><span class="va">import_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve ACWI (R) from fund file</span></span>
