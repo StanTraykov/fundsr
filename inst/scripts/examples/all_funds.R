@@ -1,5 +1,3 @@
-# dev version of the script, meant to be run after devtools::load_all() during pkg development
-
 library(tidyverse)
 library(fundsr)
 source("glob_spec.R")
