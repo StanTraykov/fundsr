@@ -38,12 +38,12 @@ setg("indices", get_csv("indices.csv"))
 ```
 ## Indices
 ### From fund files
-Some fund providers include an index series. This can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
+Some fund providers' files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
 ```
 import_fun <- function() {
     spdr("SPYY", benchmark = "ACWI")
-    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T) # retrieve ACWI (R) from fund file
-    inve("FWRA", benchmark = "FTAW", retrieve_benchmark = T) # retrieve FTSE All-World (R) from fund file
+    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = TRUE) # retrieve ACWI (R) from fund file
+    inve("FWRA", benchmark = "FTAW", retrieve_benchmark = TRUE) # retrieve FTSE All-World (R) from fund file
 }
 ```
 Index series retrieved in this way may have holes (e.g. fund domicile holidays and such) that can potentially remove data points for funds that did publish a NAV for that day (e.g. different domicile). The overall effect on plots is negligible, however.
