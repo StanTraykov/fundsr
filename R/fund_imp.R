@@ -144,6 +144,18 @@ get_fund_index <- function() {
     .fundsr$fund_index
 }
 
+#' Get the internal fund storage
+#'
+#' Returns the fundsr's fund storage environment
+#' (`.fundsr_storage`).
+#'
+#' @return The storage environment.
+#'
+#' @export
+get_storage <- function() {
+    .fundsr_storage
+}
+
 save_as <- function(named_urls, path = getOption("fundsr.data_dir"), redownload = FALSE) {
     if (!dir.exists(path)) dir.create(path, recursive = TRUE)
     for (file in names(named_urls)) {
@@ -305,27 +317,36 @@ setg <- function(var_name, expr, add_fi_pairs = NULL) {
 
 #' Load or refresh the fund storage environment
 #'
-#' Calls the configured import function to populate `.fundsr_storage`,
+#' Calls the configured import function(s) to populate `.fundsr_storage`,
 #' optionally forcing a full re-import of all cached objects.
 #'
-#' @param redo Logical; if `TRUE`, forces all storage values to be
-#'   recomputed by temporarily setting the `fundsr.redo_import` option.
-#' @param import_fun Function used to populate the storage environment.
+#' @param import_fun A function, or a list of functions, used to populate the
+#'   storage environment. If a list is supplied, functions are called
+#'   sequentially in list order.
+#' @param redo Logical; if `TRUE`, forces all storage values to be recomputed by
+#'   temporarily setting the `fundsr.redo_import` option.
 #'
-#' @return The fund environment, after running the import function.
+#' @return The fund storage environment, after running the import function(s).
 #'
 #' @details
 #' The function temporarily overrides the `fundsr.redo_import` option,
-#' invokes `import_fun()`, and then restores the previous option value.
-#' It is typically used to initialise or refresh the package's cached
-#' data objects.
+#' invokes `import_fun` (or each function in `import_fun`), and then restores
+#' the previous option value. It is typically used to initialise or refresh the
+#' package's cached data objects.
 #'
 #' @export
 import_funds <- function(import_fun, redo = FALSE) {
+    fns <- if (is.function(import_fun)) {
+        list(import_fun)
+    } else if (is.list(import_fun) && length(import_fun) > 0L && all(vapply(import_fun, is.function, logical(1)))) {
+        import_fun
+    } else {
+        stop("`import_fun` must be a function or a non-empty list of functions.", call. = FALSE)
+    }
     old <- getOption("fundsr.redo_import", FALSE)
     options(fundsr.redo_import = redo)
     on.exit(options(fundsr.redo_import = old), add = TRUE)
-    import_fun()
+    for (fn in fns) fn()
     .fundsr_storage
 }
 

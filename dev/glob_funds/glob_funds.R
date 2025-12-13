@@ -8,7 +8,7 @@ options(fundsr.out_dir = "output")
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env
-storage <- import_funds(import_fun = import_fun, redo = T)
+storage <- import_funds(import_fun = import_glob, redo = T)
 fund_index <- get_fund_index() # fund-index map resulting from above import
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
@@ -31,7 +31,7 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
+run_plots(diffs$cagr, diffs$log, nd, plot_glob, xlm_data)
 
 # Optional high-quality PNG export
 options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")

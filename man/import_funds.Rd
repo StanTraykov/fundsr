@@ -7,21 +7,23 @@
 import_funds(import_fun, redo = FALSE)
 }
 \arguments{
-\item{import_fun}{Function used to populate the storage environment.}
+\item{import_fun}{A function, or a list of functions, used to populate the
+storage environment. If a list is supplied, functions are called
+sequentially in list order.}
 
-\item{redo}{Logical; if \code{TRUE}, forces all storage values to be
-recomputed by temporarily setting the \code{fundsr.redo_import} option.}
+\item{redo}{Logical; if \code{TRUE}, forces all storage values to be recomputed by
+temporarily setting the \code{fundsr.redo_import} option.}
 }
 \value{
-The fund environment, after running the import function.
+The fund storage environment, after running the import function(s).
 }
 \description{
-Calls the configured import function to populate \code{.fundsr_storage},
+Calls the configured import function(s) to populate \code{.fundsr_storage},
 optionally forcing a full re-import of all cached objects.
 }
 \details{
 The function temporarily overrides the \code{fundsr.redo_import} option,
-invokes \code{import_fun()}, and then restores the previous option value.
-It is typically used to initialise or refresh the package's cached
-data objects.
+invokes \code{import_fun} (or each function in \code{import_fun}), and then restores
+the previous option value. It is typically used to initialise or refresh the
+package's cached data objects.
 }

@@ -19,7 +19,7 @@ glob_fund_pal <- c("WEBN" = "red",           "IUSQ" = "#00BFC4",
                    "EXUS" = "black")
 
 # plot specification
-plot_spec <- tribble(
+plot_glob <- tribble(
     ~plot_id, ~title, ~filter,
     ~gg_params, ~width,  ~height,
     ~funds,
@@ -49,7 +49,7 @@ options(fundsr.xetra_map = c(
 ))
 
 # import function definition
-import_fun <- function() {
+import_glob <- function() {
     ####### Indices #######
     setg("gmlm", get_csv("GMLM.csv"))
     setg("gmlm-gr", get_csv("GMLM-GR.csv"), add_fi_pairs = set_names("GMLM", "GMLM-GR"))

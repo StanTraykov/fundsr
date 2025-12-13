@@ -80,7 +80,7 @@ dl_funds()
 Specify import function
 ```{r}
 import_fun <- function() {
-    spdr("SPYY", benchmark = "ACWI") # filename defaults to <ticker>.xlsx (.xls for iShares)
+    spdr("SPYY", benchmark = "ACWI") # automatically attempts to read <ticker>.xls[x]
     ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T) # also retrieve ACWI from file
 }
 ```

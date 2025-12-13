@@ -9,8 +9,7 @@ options(fundsr.out_dir = "output")
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env
-import_funds(import_fun = import_fun)
-storage <- import_funds(import_fun = import_dm)
+storage <- import_funds(import_fun = list(import_glob, import_dm))
 fund_index <- get_fund_index() # fund-index map resulting from above import
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
@@ -33,7 +32,7 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-spec <- bind_rows(plot_spec, plot_dm)
+spec <- bind_rows(plot_glob, plot_dm)
 run_plots(diffs$cagr, diffs$log, nd, spec, xlm_data)
 
 # Optional high-quality PNG export
