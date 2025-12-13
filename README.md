@@ -5,6 +5,8 @@ Check github-pages:
 
 `inst/scripts/glob_funds` contains a more comprehensive example but requires data setup (you have to download indices, NAV histories separately).
 
+# Getting data
+TODO
 # Installation
 ``` r
 # install.packages("pak")
