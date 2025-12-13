@@ -207,7 +207,7 @@ add_to_dl_list <- function(x) {
 }
 
 
-#' Read a CSV (date + one or more value columns) for a fund/index.
+#' Read a CSV with a date + one or more value (fund NAV/index level) columns.
 #'
 #' Loads a CSV from the directory specified by `fundsr.data_dir`,
 #' converts the `date` column to a proper Date, and coerces all other

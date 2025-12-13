@@ -2,7 +2,7 @@
 % Please edit documentation in R/fund_imp.R
 \name{get_csv}
 \alias{get_csv}
-\title{Read a CSV (date + one or more value columns) for a fund/index.}
+\title{Read a CSV with a date + one or more value (fund NAV/index level) columns.}
 \usage{
 get_csv(file, date_div = 1000)
 }
