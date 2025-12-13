@@ -28,7 +28,7 @@ add_to_dl_list(c(
 ))
 
 # import function definition
-import_dm <- function() {
+import_fun <- function() {
     ####### Indices #######
     net_idx_trans <- c(
         WORLD = "^WORLD Standard",
@@ -52,4 +52,4 @@ import_dm <- function() {
     spdr("SPPW", benchmark = "WORLD")
     ishs("IWDA", benchmark = "WORLD")
 }
-
+fun_list$dm <- import_fun

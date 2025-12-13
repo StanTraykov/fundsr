@@ -49,7 +49,7 @@ options(fundsr.xetra_map = c(
 ))
 
 # import function definition
-import_glob <- function() {
+import_fun <- function() {
     ####### Indices #######
     setg("gmlm", get_csv("GMLM.csv"))
     setg("gmlm-gr", get_csv("GMLM-GR.csv"), add_fi_pairs = set_names("GMLM", "GMLM-GR"))
@@ -76,4 +76,5 @@ import_glob <- function() {
     spdr("SPYI", benchmark = "ACWI_IMI")
     ishs("IUSQ", benchmark = "ACWI")
 }
+fun_list$glob <- import_fun
 
