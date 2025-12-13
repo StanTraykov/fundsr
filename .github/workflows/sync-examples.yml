@@ -33,7 +33,7 @@ jobs:
           find inst/scripts/examples -type f -name "*.R" -print0 |
             xargs -0 perl -pi -e '
               s#dev/glob_funds/##g;
-              s/^(\s*library\(\s*tidyverse\s*\)\s*)$/$1\nlibrary(fundsr)/m;
+             s/^(\h*library\(\h*tidyverse\h*\)\h*\R)/$1library(fundsr)\n/m;
             '
 
       - name: Create or update PR
