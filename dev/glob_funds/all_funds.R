@@ -33,7 +33,8 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-run_plots(diffs$cagr, diffs$log, nd, plot_dm, xlm_data)
+spec <- bind_rows(plot_spec, plot_dm)
+run_plots(diffs$cagr, diffs$log, nd, spec, xlm_data)
 
 # Optional high-quality PNG export
 options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")

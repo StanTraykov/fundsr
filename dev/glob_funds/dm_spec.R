@@ -12,7 +12,7 @@ plot_dm <- tribble(
     ~gg_params, ~width,  ~height,
     ~funds,
 
-    "dm", "DM phys. funds", no_filter,
+    "dm", list("DM phys. funds"), no_filter,
     geom_blank(), std_w, std_h,
     dm_phys,
 
