@@ -148,13 +148,6 @@ import_xl_data <- function(xl_file,
                            force_numeric = TRUE,
                            comma_rep = ".") {
 
-    # requireNamespace("dplyr",  quietly = TRUE)
-    # requireNamespace("stringr",quietly = TRUE)
-    # requireNamespace("lubridate",quietly = TRUE)
-    # requireNamespace("purrr",  quietly = TRUE)
-    # requireNamespace("glue",   quietly = TRUE)
-    # requireNamespace("tidyr",  quietly = TRUE)
-
     # 1) Read raw data (now tries readxl first, then XML fallback)
     raw_data <- read_excel_or_xml(file_path = xl_file, sheet = data_sheet)
 
@@ -207,40 +200,26 @@ import_xl_data <- function(xl_file,
     }
     date_col_idx <- date_col_idx[1]
     old_date_name <- names(data_raw)[date_col_idx]
-
     data_raw <- dplyr::rename(data_raw, date = !!old_date_name)
 
     # 6) Parse date, drop trailing junk
-    parse_date_with_heuristics <- function(x, date_order) {
-        if (is.null(x) || is.na(x)) return(as.Date(NA))
-        if (is.numeric(x)) {
-            return(as.Date(x, origin = "1899-12-30"))
+    if (is.numeric(data_raw$date)) {
+        safe_dates <- as.Date(data_raw$date, origin = "1899-12-30")
+    } else if (grepl("^[0-9]+(\\.[0-9]+)?$", data_raw$date[1])) {
+        safe_dates <- as.Date(suppressWarnings(as.numeric(data_raw$date)), origin = "1899-12-30")
+    } else {
+        dts <- data_raw$date
+        dts[!is.na(dts) & nchar(dts) > 24] <-
+            substr(dts[!is.na(dts) & nchar(dts) > 24], 1, 24)
+        dts <- gsub("Sept", "Sep", dts)
+        dts <- gsub(" 12:00:00 AM$", "", dts)
+        if (date_order == "dmy") {
+            fmts <- c("%d/%m/%Y", "%d.%m.%Y", "%d %b %Y", "%d/%b/%Y", "%d-%b-%Y")
+        } else { #mdy
+            fmts <- c("%m/%d/%Y", "%b %d, %Y")
         }
-        x <- as.character(x)
-        x <- stringr::str_trim(x)
-        if (x == "") return(as.Date(NA))
-
-        # ----- Fix "Sept" => "Sep" & issues
-        x <- stringr::str_replace_all(x, "\\bSept\\b", "Sep")
-        x <- stringr::str_replace_all(x, " 12:00:00 AM", "")
-
-        if (stringr::str_detect(x, "^[0-9]+(\\.[0-9]+)?$")) {
-            num_val <- suppressWarnings(as.numeric(x))
-            if (!is.na(num_val)) {
-                return(as.Date(num_val, origin = "1899-12-30"))
-            }
-            return(as.Date(NA))
-        }
-        parsed <- lubridate::parse_date_time(x, orders = date_order)
-        as.Date(parsed)
+        safe_dates <- as.Date(dts, tryFormats = fmts)
     }
-
-    safe_dates <- vapply(
-        data_raw$date,
-        FUN = parse_date_with_heuristics,
-        FUN.VALUE = as.Date(NA),
-        date_order = date_order
-    )
 
     first_junk <- which(is.na(safe_dates))[1]
     if (!is.na(first_junk)) {
