@@ -1,16 +1,20 @@
 library(tidyverse)
 library(fundsr)
 
-fun_list <- list()
 source("glob_spec.R")
 source("dm_spec.R")
 
 options(fundsr.data_dir = file.path("data", "funds"))
 options(fundsr.out_dir = "output")
+options(fundsr.px_width = 1300)
+options(fundsr.internal_png = TRUE)
+options(fundsr.xetra_map = c(
+    FWRA = "FWIA"
+))
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env
-storage <- import_funds(import_fun = fun_list)
+storage <- import_funds()
 fund_index <- get_fund_index() # fund-index map resulting from above import
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
