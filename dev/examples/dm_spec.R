@@ -7,11 +7,11 @@ plot_dm <- tribble(
     ~gg_params, ~width,  ~height,
     ~funds,
 
-    "dm", "DM phys. funds", no_filter,
+    "dm_phys", "DM phys. funds", no_filter,
     fund_colors(), std_w, std_h,
     dm_phys,
 
-    "dmZ", "DM phys. funds: zoom", zoom_filter,
+    "dm_physZ", "DM phys. funds: zoom", zoom_filter,
     fund_colors(), std_w, std_h,
     dm_phys
 )

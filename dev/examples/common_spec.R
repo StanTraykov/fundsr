@@ -30,6 +30,6 @@ fund_palette <- c("#11569B",
                   "grey50",
                   "#206666")
 fund_colors <- function(...) {
-    scale_color_manual(values = fund_palette, ...)
+    scale_color_manual(values = fund_palette, na.value = "grey70", ...)
 }
 spec_list <- list()

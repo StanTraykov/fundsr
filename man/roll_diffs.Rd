@@ -32,12 +32,12 @@ differences}. If \code{FALSE}, computes \strong{CAGR tracking differences}.}
 }
 \value{
 A data frame like \code{df} with one additional column per fund,
-named \verb{<fund>_rcd}, containing the rolling tracking differences.
+named \verb{<fund>_rd}, containing the rolling tracking differences.
 }
 \description{
 For each fund–index pair in \code{fund_index_map}, computes a rolling,
 annualized tracking-difference series over a backward window of
-\code{n_days}. The result is added as new columns named \verb{<fund>_rcd}.
+\code{n_days}. The result is added as new columns named \verb{<fund>_rd}.
 }
 \details{
 For each fund–index pair, the function locates a start point

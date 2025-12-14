@@ -117,23 +117,24 @@ xlm_plot <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL) {
         xlm_data %>% filter(.data$ticker %in% toupper(tickers))
     }
     message(paste("xml_plot:", paste(tickers, collapse = ", ")))
-    p <- ggplot(data, aes(x = .data$date, y = .data$xlm, color = .data$ticker)) +
-        geom_line(linewidth = 1) +
-        geom_point(size = 2) +
-        scale_x_date(
+    p <- ggplot2::ggplot(data,
+                         ggplot2::aes(x = .data$date, y = .data$xlm, color = .data$ticker)) +
+        ggplot2::geom_line(linewidth = 1) +
+        ggplot2::geom_point(size = 2) +
+        ggplot2::scale_x_date(
             date_breaks = "1 month",
             date_labels = "%Y-%m",
-            expand = expansion(mult = 0, add = 5)
+            expand = ggplot2::expansion(mult = 0, add = 5)
         ) +
-        expand_limits(y = 0) +
-        theme_minimal() +
-        theme(
-            text = element_text(size = 12),
+        ggplot2::expand_limits(y = 0) +
+        ggplot2::theme_minimal() +
+        ggplot2::theme(
+            text = ggplot2::element_text(size = 12),
             legend.position = "bottom",
-            panel.grid.minor = element_blank(),
-            axis.text.x = element_text(angle = 30, hjust = 1)
+            panel.grid.minor = ggplot2::element_blank(),
+            axis.text.x = ggplot2::element_text(angle = 30, hjust = 1)
         ) +
-        labs(
+        ggplot2::labs(
             title = gettext("Xetra Liquidity Measure (\u20AC100K round-trip spread costs)"),
             y = gettext("monthly avg XLM (bps)"),
             x = NULL,

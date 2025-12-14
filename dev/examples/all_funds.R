@@ -1,9 +1,9 @@
 library(tidyverse)
 
+# Config
 source("dev/examples/common_spec.R")
 source("dev/examples/glob_spec.R")
 source("dev/examples/dm_spec.R")
-
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env

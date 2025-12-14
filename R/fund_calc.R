@@ -15,7 +15,7 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
 #'
 #' For each fund–index pair in `fund_index_map`, computes a rolling,
 #' annualized tracking-difference series over a backward window of
-#' `n_days`. The result is added as new columns named `<fund>_rcd`.
+#' `n_days`. The result is added as new columns named `<fund>_rd`.
 #'
 #' @param df Data frame containing the date column, fund columns, and
 #'   benchmark/index columns referenced in `fund_index_map`.
@@ -29,7 +29,7 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
 #'   `365`.
 #'
 #' @return A data frame like `df` with one additional column per fund,
-#'   named `<fund>_rcd`, containing the rolling tracking differences.
+#'   named `<fund>_rd`, containing the rolling tracking differences.
 #'
 #' @details
 #' For each fund–index pair, the function locates a start point
@@ -60,11 +60,11 @@ roll_diffs <- function(df, n_days, fund_index_map, date_col = "date", use_log = 
             message(glue("--Skipping {fund}: not in df"))
             next
         }
-        rcd_col = paste0(fund, "_rcd")
+        roll_diff_col = paste0(fund, "_rd")
         no_na <- df %>%
             select(".date_num", !!sym(fund), !!sym(index)) %>%
             filter(!is.na(!!sym(fund)), !is.na(!!sym(index)))
-        rcd <- function(fnd, idx, date, n_days) {
+        roll_diff <- function(fnd, idx, date, n_days) {
             if (is.na(fnd) || is.na(idx)) {
                 return(NA_real_)
             }
@@ -94,10 +94,10 @@ roll_diffs <- function(df, n_days, fund_index_map, date_col = "date", use_log = 
         df <- df %>%
             rowwise() %>%
             mutate(
-                !!rcd_col := rcd(!!sym(fund),
-                                 !!sym(index),
-                                 !!sym(date_col),
-                                 n_days)
+                !!roll_diff_col := roll_diff(!!sym(fund),
+                                             !!sym(index),
+                                             !!sym(date_col),
+                                             n_days)
             ) %>%
             ungroup()
     }

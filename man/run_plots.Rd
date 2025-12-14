@@ -5,18 +5,18 @@
 \title{Generate and export all configured rolling-difference plots}
 \usage{
 run_plots(
-  rcds,
-  rcds_log,
+  rds,
+  rds_log,
   n_days,
   plot_spec,
   xlm_data = NULL,
-  add_gg_params = geom_blank()
+  add_gg_params = ggplot2::geom_blank()
 )
 }
 \arguments{
-\item{rcds}{Data frame containing rolling CAGR differences.}
+\item{rds}{Data frame containing rolling CAGR differences.}
 
-\item{rcds_log}{Data frame containing rolling log-return differences.}
+\item{rds_log}{Data frame containing rolling log-return differences.}
 
 \item{n_days}{Rolling-window length in days.}
 
@@ -40,7 +40,7 @@ plots for both CAGR and log-return variants. Each plot is saved via
 }
 \details{
 For each row in \code{plot_spec}, the function constructs both a CAGR-based
-and a log-return-based variant using \code{\link[=rcd_plot]{rcd_plot()}} and writes the
+and a log-return-based variant using \code{\link[=rd_plot]{rd_plot()}} and writes the
 resulting plots via \code{\link[=ggink]{ggink()}}, using a filename suffix to distinguish
 the log-return variant. The \code{plot_spec} is expected to provide columns
 such as \code{plot_id}, \code{title}, \code{filter}, \code{gg_params}, \code{width}, \code{height},

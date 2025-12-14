@@ -12,6 +12,9 @@ glob_fund_pal <- c("WEBN" = "red",           "IUSQ" = "#00BFC4",
                    "GMLM-GR" = "grey50",     "ACWI-GR" = "black",
                    "ACWI_IMI-GR" = "grey50", "SCWX" = "#206666",
                    "EXUS" = "black")
+glob_colors <- function(...) {
+    scale_color_manual(values = glob_fund_pal, na.value = "grey70", ...)
+}
 
 # plot specification
 plot_glob <- tribble(
@@ -20,15 +23,15 @@ plot_glob <- tribble(
     ~funds,
 
     "glob", glob_funds_title, no_filter,
-    scale_color_manual(values = glob_fund_pal), std_w, std_h,
+    glob_colors(), std_w, std_h,
     glob_funds,
 
     "globZ", glob_funds_title, zoom_filter,
-    scale_color_manual(values = glob_fund_pal), std_w, std_h,
+    glob_colors(), std_w, std_h,
     glob_funds,
 
     "globI", glob_spyi_title, no_filter,
-    scale_color_manual(values = glob_fund_pal), std_w, std_h,
+    glob_colors(), std_w, std_h,
     c("spyy", "spyi", "vwce", "iusq", "ACWI-GR", "ACWI_IMI-GR")
 )
 spec_list <- c(spec_list, list(plot_glob))

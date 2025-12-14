@@ -200,7 +200,7 @@ clear_ink_queue <- function() {
 #' via `gg_params`.
 #'
 #' @export
-rcd_plot <- function(data,
+rd_plot <- function(data,
                       n_days,
                       funds,
                       use_log = FALSE,
@@ -216,7 +216,7 @@ rcd_plot <- function(data,
         gettext("{n_days}d rolling CAGR differences vs net benchmark{ttl}")
     }
     title <- glue(title_msg)
-    message(paste("rcd_plot:", title))
+    message(paste("rd_plot:", title))
     if (is.null(date_brk)) {
         years <- data %>%
             summarize(start_year = lubridate::year(first(date)),
@@ -225,36 +225,37 @@ rcd_plot <- function(data,
             diff()
         date_brk <- ifelse(years >= 10, "6 months", "3 months")
     }
-    cdata <- longer(data, funds, "_rcd", "roll_diff")
+    cdata <- longer(data, funds, "_rd", "roll_diff")
     qlims <- stats::quantile(cdata$roll_diff,
                       probs = qprob,
                       na.rm = TRUE)
     y_lims <- range(c(qlims, 0))
-    p <- ggplot(cdata, aes(x = .data$date, y = .data$roll_diff, color = .data$fund)) +
-        geom_point(alpha = 0.5, size = 1.5) +
-        guides(color = guide_legend(override.aes = list(alpha = 1, size = 3.2))) +
-        scale_x_date(
+    p <- ggplot2::ggplot(cdata,
+                         ggplot2::aes(x = .data$date, y = .data$roll_diff, color = .data$fund)) +
+        ggplot2::geom_point(alpha = 0.5, size = 1.5) +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(alpha = 1, size = 3.2))) +
+        ggplot2::scale_x_date(
             date_breaks = date_brk,
             date_labels = "%Y-%m"     # Format labels 2024-01
         ) +
-        scale_y_continuous(
+        ggplot2::scale_y_continuous(
             labels = function(x) x * 10000
         ) +
-        coord_cartesian(ylim = y_lims) +
-        expand_limits(y = 0) +
+        ggplot2::coord_cartesian(ylim = y_lims) +
+        ggplot2::expand_limits(y = 0) +
         # scale_color_distinct() +
-        theme_minimal() +
-        theme(
-            text = element_text(size = 12),
-            panel.grid.minor.x = element_blank(),
-            axis.text.x = element_text(angle = 30, hjust = 1)
+        ggplot2::theme_minimal() +
+        ggplot2::theme(
+            text = ggplot2::element_text(size = 12),
+            panel.grid.minor.x = ggplot2::element_blank(),
+            axis.text.x = ggplot2::element_text(angle = 30, hjust = 1)
         ) +
-        geom_hline(yintercept = 0,
-                   color = "black",
-                   linewidth = 0.7,
-                   linetype = "solid",
-                   alpha = 0.5) +
-        labs(
+        ggplot2::geom_hline(yintercept = 0,
+                            color = "black",
+                            linewidth = 0.7,
+                            linetype = "solid",
+                            alpha = 0.5) +
+        ggplot2::labs(
             title = title,
             color = gettext("fund"),
             x = NULL,
@@ -278,8 +279,8 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' plots for both CAGR and log-return variants. Each plot is saved via
 #' [ggink()], and optional XLM comparison plots may also be generated.
 #'
-#' @param rcds Data frame containing rolling CAGR differences.
-#' @param rcds_log Data frame containing rolling log-return differences.
+#' @param rds Data frame containing rolling CAGR differences.
+#' @param rds_log Data frame containing rolling log-return differences.
 #' @param n_days Rolling-window length in days.
 #' @param plot_spec A data frame describing plot parameters such as plot
 #'   IDs, titles, filters, sizing, and fund sets.
@@ -293,7 +294,7 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'
 #' @details
 #' For each row in `plot_spec`, the function constructs both a CAGR-based
-#' and a log-return-based variant using [rcd_plot()] and writes the
+#' and a log-return-based variant using [rd_plot()] and writes the
 #' resulting plots via [ggink()], using a filename suffix to distinguish
 #' the log-return variant. The `plot_spec` is expected to provide columns
 #' such as `plot_id`, `title`, `filter`, `gg_params`, `width`, `height`,
@@ -306,12 +307,12 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'
 #' @export
 
-run_plots <- function(rcds,
-                       rcds_log,
-                       n_days,
-                       plot_spec,
-                       xlm_data = NULL,
-                       add_gg_params = geom_blank()) {
+run_plots <- function(rds,
+                      rds_log,
+                      n_days,
+                      plot_spec,
+                      xlm_data = NULL,
+                      add_gg_params = ggplot2::geom_blank()) {
     variants <- c("CAGR", "log")
     runs <- tidyr::crossing(plot_spec, variants)
     .fundsr$done_xlms <- character()
@@ -324,14 +325,14 @@ run_plots <- function(rcds,
                                 funds,
                                 variants) {
         use_log = variants == "log"
-        data <- if (use_log) rcds_log else rcds
+        data <- if (use_log) rds_log else rds
         if (!is.null(filter)) data <- data %>% filter()
-        plot <- rcd_plot(data,
-                          n_days,
-                          funds = funds,
-                          use_log = use_log,
-                          gg_params = list(gg_params, add_gg_params),
-                          title_add = title)
+        plot <- rd_plot(data,
+                         n_days,
+                         funds = funds,
+                         use_log = use_log,
+                         gg_params = list(gg_params, add_gg_params),
+                         title_add = title)
         fname <- paste0(plot_id, if (use_log) "_L" else "")
         ggink(fname, plot, width = width, height = height)
         if (!is.null(xlm_data)) {
