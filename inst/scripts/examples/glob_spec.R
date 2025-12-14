@@ -1,9 +1,4 @@
 ##### Plots #####
-# plot spec helpers
-std_w <- 14
-std_h <- 9
-no_filter <- NULL
-zoom_filter <- function(x) {x %>% filter(date >= as_date("2022-01-01"))}
 glob_funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "ACWI-GR", "GMLM-GR")
 glob_funds_title <- c(en = "Global funds + some gross indices",
                       bg = "Глобални фондове + брутни индески")

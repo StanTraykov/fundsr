@@ -13,11 +13,11 @@ plot_dm <- tribble(
     ~funds,
 
     "dm", list("DM phys. funds"), no_filter,
-    geom_blank(), std_w, std_h,
+    fund_colors(), std_w, std_h,
     dm_phys,
 
     "dmZ", "DM phys. funds: zoom", zoom_filter,
-    geom_blank(), std_w, std_h,
+    fund_colors(), std_w, std_h,
     dm_phys
 )
 
