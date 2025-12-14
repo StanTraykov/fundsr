@@ -7,7 +7,7 @@ plot_dm <- tribble(
     ~gg_params, ~width,  ~height,
     ~funds,
 
-    "dm", list("DM phys. funds"), no_filter,
+    "dm", "DM phys. funds", no_filter,
     fund_colors(), std_w, std_h,
     dm_phys,
 
@@ -15,6 +15,7 @@ plot_dm <- tribble(
     fund_colors(), std_w, std_h,
     dm_phys
 )
+spec_list <- c(spec_list, list(plot_dm))
 
 ##### Data #####
 add_to_dl_list(c(

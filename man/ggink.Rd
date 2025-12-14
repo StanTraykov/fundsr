@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{ggink}
 \alias{ggink}
-\title{Save a plot as SVG and queue it for optional PNG export via Inkscape}
+\title{Save a plot as SVG and optionally queue PNG export via Inkscape}
 \usage{
 ggink(
   file,
@@ -12,48 +12,58 @@ ggink(
   width = 12,
   units = "in",
   out_dir = getOption("fundsr.out_dir", "output"),
-  save_png = getOption("fundsr.internal_png", FALSE)
+  save_png = getOption("fundsr.internal_png", FALSE),
+  save_svg = getOption("fundsr.export_svg", TRUE)
 )
 }
 \arguments{
-\item{file}{Base filename (without extension) used for both the SVG and PNG.}
+\item{file}{Base filename (without extension) used for output files.}
 
 \item{plot}{A plot object (typically a ggplot) to be saved.}
 
-\item{px_width}{Width in pixels for the queued PNG export command, and (if
-\code{save_png = TRUE}) for the PNG saved immediately. Defaults to
-\code{getOption("fundsr.px_width", 1300)}.}
+\item{px_width}{Width in pixels for the queued Inkscape PNG export, and (if
+\code{save_png = TRUE}) the target PNG pixel width used to compute the DPI.
+Defaults to \code{getOption("fundsr.px_width", 1300)}.}
 
-\item{height}{Height of the saved SVG. Defaults to \code{12}.}
+\item{height}{Height of the saved plot in \code{units}. Defaults to \code{12}.}
 
-\item{width}{Width of the saved SVG. Defaults to \code{12}.}
+\item{width}{Width of the saved plot in \code{units}. Defaults to \code{12}.}
 
-\item{units}{Units for \code{height} and \code{width} (e.g. \code{"in"}). Defaults to \code{"in"}.}
+\item{units}{Units for \code{width}/\code{height} (e.g. \code{"in"}). Defaults to \code{"in"}.
+Note: for immediate PNG saving, only \code{"in"}, \code{"cm"}, and \code{"mm"} are supported
+(to compute DPI from \code{px_width}).}
 
 \item{out_dir}{Output directory where files are written. Defaults to
 \code{getOption("fundsr.out_dir", "output")}.}
 
 \item{save_png}{Logical scalar; if \code{TRUE}, also saves a PNG immediately.
 Defaults to \code{getOption("fundsr.internal_png", FALSE)}.}
+
+\item{save_svg}{Logical scalar; if \code{TRUE}, saves the SVG and queues an
+Inkscape export command. Defaults to \code{getOption("fundsr.export_svg", TRUE)}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-Saves \code{plot} as an SVG file and appends an Inkscape export command to the
-internal queue (\code{.fundsr$ink_queue}) so PNG generation can be performed later
-in batch (via \code{ggexport()}).
+When \code{save_svg = TRUE}, saves \code{plot} as an SVG file and appends an Inkscape
+export command to the internal queue (\code{.fundsr$ink_queue}) so PNG generation
+can be performed later in batch (via \code{ggexport()}).
 }
 \details{
-Optionally, the function can also save a PNG immediately via
-\code{ggplot2::ggsave()} (in addition to queueing the Inkscape command).
+Optionally, when \code{save_png = TRUE}, the function also saves a PNG immediately
+via \code{ggplot2::ggsave()} (independently of queueing).
 
-The SVG is always written to \code{out_dir} as \code{"{file}.svg"}. An Inkscape export
-action string is stored in \code{.fundsr$ink_queue[[file]]} for later batch PNG
-export to \code{"{file}.png"} at \code{px_width} pixels wide.
+If \code{save_svg = TRUE}, the SVG is written as \code{"{file}.svg"} and an Inkscape
+action string is stored as \code{.fundsr$ink_queue[file]} for later batch export to
+\code{"{file}.png"} at \code{px_width} pixels wide.
 
-If \code{save_png = TRUE}, a PNG is also written immediately using
-\code{ggplot2::ggsave()} with \code{units = "px"}. The PNG height is computed as
-\code{round(px_width * (height / width))} to preserve the aspect ratio implied by
-the SVG sizing.
+If \code{save_png = TRUE}, a PNG is also written immediately as \code{"{file}.png"}.
+The PNG uses the same \code{width}, \code{height}, and \code{units} as the SVG, and sets
+\code{dpi = px_width / width_in} so that the pixel width is approximately
+\code{px_width} while keeping the same physical-size typography. The PNG background
+is set to white.
+
+If both \code{save_svg} and \code{save_png} are \code{FALSE}, the function issues a warning
+and returns without writing files or queueing exports.
 }

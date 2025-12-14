@@ -31,6 +31,21 @@ add_import_fun <- function(fun) {
     invisible(.fundsr$import_funs)
 }
 
+#' Clear registered import functions
+#'
+#' Clears the internal import-function registry (`.fundsr$import_funs`), removing
+#' all previously registered import functions.
+#'
+#' @return Invisibly returns `NULL`. Called for side effects.
+#' @export
+#'
+#' @examples
+#' clear_import_funs()
+clear_import_funs <- function() {
+    .fundsr$import_funs <- list()
+    invisible(NULL)
+}
+
 #' Load or refresh the fund storage environment
 #'
 #' Runs the import function registry (`.fundsr$import_funs`) to populate (or refresh)

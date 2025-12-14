@@ -76,8 +76,19 @@ if (!exists("xlm_data")) {
 Set package options
 
 ```{r}
-options(fundsr.data_dir = dirs[["data"]])
-options(fundsr.out_dir = dirs[["out"]])
+fundsr_options(
+    data_dir = dirs[["data"]],
+    out_dir = dirs[["out"]],
+    # internal_png = TRUE, # output PNGs without Inkscape (lower quality)
+    
+    # Inkscape executable for higher-quality PNG export
+    # (uncomment depending on system or comment all to disable)
+    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe",
+    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
+    # inkscape = "/usr/bin/inkscape",
+    # inkscape = Sys.which("inkscape"), # if it's on PATH
+)
+
 # options(fundsr.internal_png = TRUE) # output PNGs without Inkscape (lower quality)
 # Helper to set option fundsr.dl_list
 add_to_dl_list(c(
@@ -220,11 +231,6 @@ run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 ```
 Optional: high-quality PNG export
 ```{r}
-options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")
-# or, depending on system:
-# options(fundsr.inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape") # macOS
-# options(fundsr.inkscape = "/usr/bin/inkscape") # unix-like
-# options(fundsr.inkscape = Sys.which("inkscape")) # find it, if on PATH (usually not on Win/Mac)
 ggexport()
 #> Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"
 #> [1] 0
