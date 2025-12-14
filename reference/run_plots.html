@@ -65,12 +65,12 @@ plots for both CAGR and log-return variants. Each plot is saved via
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_plots</span><span class="op">(</span></span>
-<span>  <span class="va">rcds</span>,</span>
-<span>  <span class="va">rcds_log</span>,</span>
+<span>  <span class="va">rds</span>,</span>
+<span>  <span class="va">rds_log</span>,</span>
 <span>  <span class="va">n_days</span>,</span>
 <span>  <span class="va">plot_spec</span>,</span>
 <span>  xlm_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  add_gg_params <span class="op">=</span> <span class="fu">geom_blank</span><span class="op">(</span><span class="op">)</span></span>
+<span>  add_gg_params <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">geom_blank</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,11 +78,11 @@ plots for both CAGR and log-return variants. Each plot is saved via
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-rcds">rcds<a class="anchor" aria-label="anchor" href="#arg-rcds"></a></dt>
+<dl><dt id="arg-rds">rds<a class="anchor" aria-label="anchor" href="#arg-rds"></a></dt>
 <dd><p>Data frame containing rolling CAGR differences.</p></dd>
 
 
-<dt id="arg-rcds-log">rcds_log<a class="anchor" aria-label="anchor" href="#arg-rcds-log"></a></dt>
+<dt id="arg-rds-log">rds_log<a class="anchor" aria-label="anchor" href="#arg-rds-log"></a></dt>
 <dd><p>Data frame containing rolling log-return differences.</p></dd>
 
 
@@ -91,13 +91,14 @@ plots for both CAGR and log-return variants. Each plot is saved via
 
 
 <dt id="arg-plot-spec">plot_spec<a class="anchor" aria-label="anchor" href="#arg-plot-spec"></a></dt>
-<dd><p>A data frame describing plot parameters such as plot
-IDs, titles, filters, sizing, and fund sets.</p></dd>
+<dd><p>A data frame or a list of data frames describing plot
+parameters: <code>plot_id</code>, <code>title</code>, <code>filter</code>, <code>gg_params</code>, <code>width</code>, <code>height</code>,
+<code>funds</code>.</p></dd>
 
 
 <dt id="arg-xlm-data">xlm_data<a class="anchor" aria-label="anchor" href="#arg-xlm-data"></a></dt>
-<dd><p>Optional data frame used to produce XLM comparison plots;
-typically includes <code>date</code>, <code>xlm</code>, <code>ticker</code>, and <code>name</code> columns.</p></dd>
+<dd><p>Optional data frame used to produce XLM comparison plots,
+including <code>date</code>, <code>xlm</code>, <code>ticker</code>, and <code>name</code> columns.</p></dd>
 
 
 <dt id="arg-add-gg-params">add_gg_params<a class="anchor" aria-label="anchor" href="#arg-add-gg-params"></a></dt>
@@ -113,7 +114,7 @@ defined in <code>plot_spec</code>. Defaults to <code><a href="https://ggplot2.ti
     <div id="details">
     <h2>Details</h2>
     <p>For each row in <code>plot_spec</code>, the function constructs both a CAGR-based
-and a log-return-based variant using <code><a href="rcd_plot.html">rcd_plot()</a></code> and writes the
+and a log-return-based variant using <code><a href="rd_plot.html">rd_plot()</a></code> and writes the
 resulting plots via <code><a href="ggink.html">ggink()</a></code>, using a filename suffix to distinguish
 the log-return variant. The <code>plot_spec</code> is expected to provide columns
 such as <code>plot_id</code>, <code>title</code>, <code>filter</code>, <code>gg_params</code>, <code>width</code>, <code>height</code>,
