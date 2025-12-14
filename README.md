@@ -18,34 +18,37 @@ pak::pak("StanTraykov/fundsr")
 ## Funds
 ### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers)
 Fund providers allow downloading a NAV history in Excel format (even if it's sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the [`add_to_dl_list()`](https://stantraykov.github.io/fundsr/reference/add_to_dl_list.html) and [`dl_funds()`](https://stantraykov.github.io/fundsr/reference/dl_funds.html) functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund `.xls` or `.xlsx` file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. `FWRA.xlsx`) it can be imported without specifying a file.
-```
+```r
+add_import_fun(function () {
 inve("FWRA", benchmark = "FTAW")
 amun("WEBN", benchmark = "GMLM", file = "NAV History_Amundi Prime All Country World UCITS ETF Acc_IE0003XJA0J9_10_06_2024.xlsx")
+}
 ```
 ### Other funds
 Prepare a tibble/dataframe or a CSV file with a date column and one or more data columns that must be lowercase for funds (e.g. `sxr8`, `vwce`, `spyy`) and uppercase for indices (e.g. `SP500`, `FTAW`, `ACWI`). Suppose you have a dataframe ``funds_data`` with fund NAVs and a CSV file with index levels. You can import them via:
-```
-fi_map <- c(
-    fwra = "FTAW",
-    webn = "GMLM",
-    vwce = "FTAW", 
-    spyy = "ACWI",
-    spyi = "ACWI_IMI",
-    iusq = "ACWI")
-
-setg("funds", funds_data, add_fi_pairs = fi_map)
-setg("indices", get_csv("indices.csv"))
+```r
+add_import_fun(function() {
+    fi_map <- c(
+        fwra = "FTAW",
+        webn = "GMLM",
+        vwce = "FTAW", 
+        spyy = "ACWI",
+        spyi = "ACWI_IMI",
+        iusq = "ACWI")
+    setg("funds", funds_data, add_fi_pairs = fi_map)
+    setg("indices", get_csv("indices.csv"))
+})
 ```
 Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see [`get_csv()`](https://stantraykov.github.io/fundsr/reference/get_csv.html).
 ## Indices
 ### From fund files
 Some fund providers' files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
-```
-import_fun <- function() {
+```r
+add_import_fun(function() {
     spdr("SPYY", benchmark = "ACWI")
     ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = TRUE) # retrieve ACWI (R) from fund file
     inve("FWRA", benchmark = "FTAW", retrieve_benchmark = TRUE) # retrieve FTSE All-World (R) from fund file
-}
+})
 ```
 Index series retrieved in this way may have holes (e.g. fund domicile holidays and such) that can potentially remove data points for funds that did publish a NAV for that day (e.g. different domicile). The overall effect on plots is negligible, however.
 ### MSCI
