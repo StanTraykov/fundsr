@@ -18,8 +18,17 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(tidyverse)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> [...]
+library(ggplot2)
+library(lubridate)
+#> 
+#> Attaching package: 'lubridate'
+#> [...]
 library(fundsr)
+#> fundsr loaded.
 ```
 
 Set up directories.
@@ -58,6 +67,10 @@ Import all XLM files into a tibble
 if (!exists("xlm_data")) {
     xlm_data <- read_xlm_directory(dirs[["xlm"]])
 }
+#> XLM read: August 2025
+#> XLM read: September 2025
+#> XLM read: October 2025
+#> XLM read: November 2025
 ```
 
 Set package options
@@ -65,7 +78,8 @@ Set package options
 ```{r}
 options(fundsr.data_dir = dirs[["data"]])
 options(fundsr.out_dir = dirs[["out"]])
-# Helper to set fundsr.dl_list
+# options(fundsr.internal_png = TRUE) # output PNGs without Inkscape (lower quality)
+# Helper to set option fundsr.dl_list
 add_to_dl_list(c(
     IUSQ = "https://www.ishares.com/uk/individual/en/products/251850/ishares-msci-acwi-ucits-etf/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-ACWI-UCITS-ETF-USD-Acc_fund&dataType=fund",
     SPYY = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx"
@@ -77,22 +91,26 @@ Populate funds directory (download files in fundsr.dl_list option)
 dl_funds()
 ```
 
-Specify import function
+Register import function
 ```{r}
-import_fun <- function() {
+add_import_fun(function() {
     spdr("SPYY", benchmark = "ACWI") # automatically attempts to read <ticker>.xls[x]
     ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T) # also retrieve ACWI from file
-}
+})
 ```
 
 Get fund data into tibbles in a storage environment
 ```{r}
-storage <- import_funds(import_fun = import_fun)
+storage <- import_funds() # call registered import functions
+#> *** Importing: spyy
+#> Attempting readxl on 'data/funds/SPYY.xlsx'...
+#> readxl succeeded. Returning data.
+#> Returning 3714 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').
+#> *** Importing: iusq
+#> Attempting readxl on 'data/funds/IUSQ.xls'...
+#> readxl failed. Attempting parse as Excel 2003 XML...
+#> Returning 3608 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
 fund_index_map <- get_fund_index() # fund-index map resulting from above import
-
-# check contents
-storage[["iusq"]]
-fund_index_map
 ```
 
 Join the environment into a big tibble, cut off & sort
@@ -100,15 +118,57 @@ Join the environment into a big tibble, cut off & sort
 series <- join_env(storage, by = "date") %>%
     filter(date >= as_date("2012-12-29")) %>%
     arrange(date)
+#> Joining: spyy, iusq
+```
+
+Check contents
+```{r}
+storage[["iusq"]]
+#> # A tibble: 3,608 × 3
+#>    date        iusq  ACWI
+#>    <date>     <dbl> <dbl>
+#>  1 2025-12-09  108.  433.
+#>  2 2025-12-08  108.  434.
+#>  3 2025-12-05  108.  435.
+#>  4 2025-12-04  108.  435.
+#>  5 2025-12-03  108.  433.
+#>  6 2025-12-02  107.  432.
+#>  7 2025-12-01  107.  431.
+#>  8 2025-11-28  107.  432.
+#>  9 2025-11-27  107.  431.
+#> 10 2025-11-26  107.  430.
+#> # ℹ 3,598 more rows
+fund_index_map
+#>   spyy   iusq 
+#> "ACWI" "ACWI"
+series
+#> # A tibble: 3,329 × 4
+#>    date        spyy  iusq  ACWI
+#>    <date>     <dbl> <dbl> <dbl>
+#>  1 2012-12-31  76.7  29.2  115.
+#>  2 2013-01-01  NA    29.2  115.
+#>  3 2013-01-02  78.4  29.8  118.
+#>  4 2013-01-03  78.3  29.8  118.
+#>  5 2013-01-04  78.5  29.9  118.
+#>  6 2013-01-07  78.3  29.8  118.
+#>  7 2013-01-08  77.9  29.7  117.
+#>  8 2013-01-09  78.2  29.8  118.
+#>  9 2013-01-10  78.8  30.1  119.
+#> 10 2013-01-11  79.0  30.1  119.
+#> # ℹ 3,319 more rows
 ```
 
 Calculate CAGR & log diffs
 ```{r}
 nd <- 365
-diffs <- map(
+diffs <- purrr::map(
     list(cagr = FALSE, log = TRUE),
     ~ roll_diffs(series, nd, fund_index_map, use_log = .x)
 )
+#> Roll CAGR for spyy tracking ACWI
+#> Roll CAGR for iusq tracking ACWI
+#> Roll log-ret for spyy tracking ACWI
+#> Roll log-ret for iusq tracking ACWI
 ```
 
 Plot specification
@@ -136,10 +196,15 @@ plot_spec <- tribble(
     acwi_funds
 )
 ```
-Run the plots! (outputs svg and queues for optional PNG export)
+Run the plots! This outputs SVG files, queues polots for optional PNG export using Inkscape (see blow). It may also output lower-quality PNGs without Inkscape (if option `fundsr.internal_png` is `TRUE`).
 ```{r}
 Sys.setLanguage("en")
 run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
+#> rcd_plot: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
+#> xml_plot: SPYY, IUSQ
+#> rcd_plot: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
+#> rcd_plot: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: recent years
+#> rcd_plot: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: recent years
 ```
 Plot in another language.
 ```{r}
@@ -147,6 +212,11 @@ Sys.setLanguage("bg")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
+#> rcd_plot: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ
+#> xml_plot: SPYY, IUSQ
+#> rcd_plot: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ
+#> rcd_plot: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ: последни години
+#> rcd_plot: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ: последни години
 ```
 Optional: high-quality PNG export
 ```{r}
@@ -156,4 +226,6 @@ options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")
 # options(fundsr.inkscape = "/usr/bin/inkscape") # unix-like
 # options(fundsr.inkscape = Sys.which("inkscape")) # find it, if it's on PATH
 ggexport()
+#> Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"
+#> [1] 0
 ```

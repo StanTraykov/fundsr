@@ -4,26 +4,27 @@
 \alias{import_funds}
 \title{Load or refresh the fund storage environment}
 \usage{
-import_funds(import_fun, redo = FALSE)
+import_funds(redo = FALSE)
 }
 \arguments{
-\item{import_fun}{A function, or a list of functions, used to populate the
-storage environment. If a list is supplied, functions are called
-sequentially in list order.}
-
-\item{redo}{Logical; if \code{TRUE}, forces all storage values to be recomputed by
-temporarily setting the \code{fundsr.redo_import} option.}
+\item{redo}{Logical scalar. If \code{TRUE}, forces a full re-import by setting
+\code{options(fundsr.redo_import = TRUE)} for the duration of this call.}
 }
 \value{
-The fund storage environment, after running the import function(s).
+Invisibly returns \code{.fundsr_storage} after running the import functions.
 }
 \description{
-Calls the configured import function(s) to populate \code{.fundsr_storage},
-optionally forcing a full re-import of all cached objects.
+Runs the import function registry (\code{.fundsr$import_funs}) to populate (or refresh)
+the package's storage environment (\code{.fundsr_storage}).
 }
 \details{
-The function temporarily overrides the \code{fundsr.redo_import} option,
-invokes \code{import_fun} (or each function in \code{import_fun}), and then restores
-the previous option value. It is typically used to initialise or refresh the
-package's cached data objects.
+The function temporarily sets the \code{fundsr.redo_import} option so that import
+functions can decide whether to recompute cached objects.
+
+The previous value of \code{getOption("fundsr.redo_import")} is restored on exit,
+even if an import function errors.
+
+Import functions are taken from \code{.fundsr$import_funs} and are called
+sequentially in registration order. Each registered function must take
+no arguments.
 }

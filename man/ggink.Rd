@@ -7,38 +7,53 @@
 ggink(
   file,
   plot,
-  px_width = 1300,
+  px_width = getOption("fundsr.px_width", 1300),
   height = 12,
   width = 12,
   units = "in",
-  out_dir = getOption("fundsr.out_dir", "output")
+  out_dir = getOption("fundsr.out_dir", "output"),
+  save_png = getOption("fundsr.internal_png", FALSE)
 )
 }
 \arguments{
-\item{file}{Base filename (without extension) used for the SVG and PNG.}
+\item{file}{Base filename (without extension) used for both the SVG and PNG.}
 
 \item{plot}{A plot object (typically a ggplot) to be saved.}
 
-\item{px_width}{Width in pixels for the exported PNG.}
+\item{px_width}{Width in pixels for the queued PNG export command, and (if
+\code{save_png = TRUE}) for the PNG saved immediately. Defaults to
+\code{getOption("fundsr.px_width", 1300)}.}
 
-\item{height}{Height of the saved SVG, in the units specified.}
+\item{height}{Height of the saved SVG. Defaults to \code{12}.}
 
-\item{width}{Width of the saved SVG, in the units specified.}
+\item{width}{Width of the saved SVG. Defaults to \code{12}.}
 
-\item{units}{Units to use for the height and width (e.g. \code{"in"}).}
+\item{units}{Units for \code{height} and \code{width} (e.g. \code{"in"}). Defaults to \code{"in"}.}
 
-\item{out_dir}{Output directory where files will be written.}
+\item{out_dir}{Output directory where files are written. Defaults to
+\code{getOption("fundsr.out_dir", "output")}.}
+
+\item{save_png}{Logical scalar; if \code{TRUE}, also saves a PNG immediately.
+Defaults to \code{getOption("fundsr.internal_png", FALSE)}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-This function saves a plot to an SVG file and appends an Inkscape
-command to the package's internal export queue, allowing PNG
-generation to be performed later in batch.
+Saves \code{plot} as an SVG file and appends an Inkscape export command to the
+internal queue (\code{.fundsr$ink_queue}) so PNG generation can be performed later
+in batch (via \code{ggexport()}).
 }
 \details{
-The function writes an SVG file to \code{out_dir} and records an Inkscape
-export command in the internal \code{.fundsr$ink_queue}. \code{ggexport()}
-can later process this queue to generate PNGs externally.
+Optionally, the function can also save a PNG immediately via
+\code{ggplot2::ggsave()} (in addition to queueing the Inkscape command).
+
+The SVG is always written to \code{out_dir} as \code{"{file}.svg"}. An Inkscape export
+action string is stored in \code{.fundsr$ink_queue[[file]]} for later batch PNG
+export to \code{"{file}.png"} at \code{px_width} pixels wide.
+
+If \code{save_png = TRUE}, a PNG is also written immediately using
+\code{ggplot2::ggsave()} with \code{units = "px"}. The PNG height is computed as
+\code{round(px_width * (height / width))} to preserve the aspect ratio implied by
+the SVG sizing.
 }

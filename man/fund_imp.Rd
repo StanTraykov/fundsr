@@ -34,7 +34,8 @@ Defaults to \code{"^Date"}.}
 Defaults to \code{"^NAV"}.}
 
 \item{benchmark}{Optional benchmark that this fund should
-be associated with in the fund index map\verb{. When }retrieve_benchmark = TRUE`, the same value is also used as the name
+be associated with in the fund index map. When
+\code{retrieve_benchmark = TRUE}, the same value is also used as the name
 under which the benchmark series is imported.}
 
 \item{benchmark_col}{Regular expression identifying the benchmark

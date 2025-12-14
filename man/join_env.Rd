@@ -60,5 +60,4 @@ warning.
   # Full join with automatic coalescing of x.x / x.y into x
   join_env(e, by = "date", coalesce_suffixes = c(".x", ".y"))
 }
-
 }

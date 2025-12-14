@@ -1,6 +1,88 @@
 # © 2023–2025 Stanislav Traykov <st@gmuf.com>.
 # Personal use and non-commercial result sharing permitted; commercial use requires permission.
 
+#' Register an import function
+#'
+#' Appends `fun` to the internal import-function registry (`.fundsr$import_funs`).
+#' Registered functions are intended to be run sequentially in registration order.
+#'
+#' @param fun A function to register. Must take no arguments.
+#'
+#' @return Invisibly returns the updated `.fundsr$import_funs` list.
+#' @export
+#'
+#' @examples
+#' add_import_fun(function() NULL)
+
+add_import_fun <- function(fun) {
+    if (!is.function(fun)) {
+        stop("`fun` must be a function.", call. = FALSE)
+    }
+    if (length(formals(fun)) != 0L) {
+        stop("`fun` must take no arguments.", call. = FALSE)
+    }
+    if (is.null(.fundsr$import_funs)) {
+        .fundsr$import_funs <- list()
+    }
+    if (!is.list(.fundsr$import_funs)) {
+        stop("Internal registry `.fundsr$import_funs` must be a list.", call. = FALSE)
+    }
+    .fundsr$import_funs <- c(.fundsr$import_funs, list(fun))
+    invisible(.fundsr$import_funs)
+}
+
+#' Load or refresh the fund storage environment
+#'
+#' Runs the import function registry (`.fundsr$import_funs`) to populate (or refresh)
+#' the package's storage environment (`.fundsr_storage`).
+#'
+#' The function temporarily sets the `fundsr.redo_import` option so that import
+#' functions can decide whether to recompute cached objects.
+#'
+#' @param redo Logical scalar. If `TRUE`, forces a full re-import by setting
+#'   `options(fundsr.redo_import = TRUE)` for the duration of this call.
+#'
+#' @return Invisibly returns `.fundsr_storage` after running the import functions.
+#'
+#' @details
+#' The previous value of `getOption("fundsr.redo_import")` is restored on exit,
+#' even if an import function errors.
+#'
+#' Import functions are taken from `.fundsr$import_funs` and are called
+#' sequentially in registration order. Each registered function must take
+#' no arguments.
+#'
+#' @export
+import_funds <- function(redo = FALSE) {
+    if (!is.logical(redo) || length(redo) != 1L || is.na(redo)) {
+        stop("`redo` must be TRUE or FALSE.", call. = FALSE)
+    }
+    if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
+        stop("Internal storage `.fundsr_storage` is not initialised.", call. = FALSE)
+    }
+    fns <- .fundsr$import_funs
+    if (is.null(fns)) fns <- list()
+    if (!is.list(fns)) {
+        stop("Internal registry `.fundsr$import_funs` must be a list of functions.", call. = FALSE)
+    }
+    for (i in seq_along(fns)) {
+        fn <- fns[[i]]
+        if (!is.function(fn)) {
+            stop(sprintf("`.fundsr$import_funs[[%d]]` is not a function.", i), call. = FALSE)
+        }
+        if (length(formals(fn)) != 0L) {
+            stop(sprintf("`.fundsr$import_funs[[%d]]` must take no arguments.", i), call. = FALSE)
+        }
+    }
+    old <- getOption("fundsr.redo_import", FALSE)
+    options(fundsr.redo_import = redo)
+    on.exit(options(fundsr.redo_import = old), add = TRUE)
+
+    for (fn in fns) fn()
+
+    invisible(.fundsr_storage)
+}
+
 #' Coalesce suffixed join columns into unsuffixed base columns
 #'
 #' Helper for post-processing join results that use suffixes such as
@@ -84,6 +166,8 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 #' If a name in `late` does not exist in `env`, it is ignored with a
 #' warning.
 #'
+#' @export
+#'
 #' @examples
 #' \dontrun{
 #'   e <- new.env()
@@ -96,8 +180,6 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 #'   # Full join with automatic coalescing of x.x / x.y into x
 #'   join_env(e, by = "date", coalesce_suffixes = c(".x", ".y"))
 #' }
-#'
-#' @export
 join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
     obj_names <- ls(envir = env, sorted = FALSE)
 
@@ -315,41 +397,6 @@ setg <- function(var_name, expr, add_fi_pairs = NULL) {
     }
 }
 
-#' Load or refresh the fund storage environment
-#'
-#' Calls the configured import function(s) to populate `.fundsr_storage`,
-#' optionally forcing a full re-import of all cached objects.
-#'
-#' @param import_fun A function, or a list of functions, used to populate the
-#'   storage environment. If a list is supplied, functions are called
-#'   sequentially in list order.
-#' @param redo Logical; if `TRUE`, forces all storage values to be recomputed by
-#'   temporarily setting the `fundsr.redo_import` option.
-#'
-#' @return The fund storage environment, after running the import function(s).
-#'
-#' @details
-#' The function temporarily overrides the `fundsr.redo_import` option,
-#' invokes `import_fun` (or each function in `import_fun`), and then restores
-#' the previous option value. It is typically used to initialise or refresh the
-#' package's cached data objects.
-#'
-#' @export
-import_funds <- function(import_fun, redo = FALSE) {
-    fns <- if (is.function(import_fun)) {
-        list(import_fun)
-    } else if (is.list(import_fun) && length(import_fun) > 0L && all(vapply(import_fun, is.function, logical(1)))) {
-        import_fun
-    } else {
-        stop("`import_fun` must be a function or a non-empty list of functions.", call. = FALSE)
-    }
-    old <- getOption("fundsr.redo_import", FALSE)
-    options(fundsr.redo_import = redo)
-    on.exit(options(fundsr.redo_import = old), add = TRUE)
-    for (fn in fns) fn()
-    .fundsr_storage
-}
-
 #' Import an MSCI index sheet and register benchmark mappings
 #'
 #' Wrapper around `setg()` and `import_xl_data()` for MSCI index files.
@@ -397,7 +444,7 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' @param nav_col Regular expression identifying the fund's NAV column.
 #'   Defaults to `"^NAV"`.
 #' @param benchmark Optional benchmark that this fund should
-#'   be associated with in the fund index map`. When
+#'   be associated with in the fund index map. When
 #'   `retrieve_benchmark = TRUE`, the same value is also used as the name
 #'   under which the benchmark series is imported.
 #' @param benchmark_col Regular expression identifying the benchmark

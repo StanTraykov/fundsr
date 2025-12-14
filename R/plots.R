@@ -3,43 +3,90 @@
 
 #' Save a plot as SVG and queue it for optional PNG export via Inkscape
 #'
-#' This function saves a plot to an SVG file and appends an Inkscape
-#' command to the package's internal export queue, allowing PNG
-#' generation to be performed later in batch.
+#' Saves `plot` as an SVG file and appends an Inkscape export command to the
+#' internal queue (`.fundsr$ink_queue`) so PNG generation can be performed later
+#' in batch (via \code{ggexport()}).
 #'
-#' @param file Base filename (without extension) used for the SVG and PNG.
+#' Optionally, the function can also save a PNG immediately via
+#' \code{ggplot2::ggsave()} (in addition to queueing the Inkscape command).
+#'
+#' @param file Base filename (without extension) used for both the SVG and PNG.
 #' @param plot A plot object (typically a ggplot) to be saved.
-#' @param px_width Width in pixels for the exported PNG.
-#' @param height Height of the saved SVG, in the units specified.
-#' @param width Width of the saved SVG, in the units specified.
-#' @param units Units to use for the height and width (e.g. `"in"`).
-#' @param out_dir Output directory where files will be written.
+#' @param px_width Width in pixels for the queued PNG export command, and (if
+#'   `save_png = TRUE`) for the PNG saved immediately. Defaults to
+#'   `getOption("fundsr.px_width", 1300)`.
+#' @param height Height of the saved SVG. Defaults to `12`.
+#' @param width Width of the saved SVG. Defaults to `12`.
+#' @param units Units for `height` and `width` (e.g. `"in"`). Defaults to `"in"`.
+#' @param out_dir Output directory where files are written. Defaults to
+#'   `getOption("fundsr.out_dir", "output")`.
+#' @param save_png Logical scalar; if `TRUE`, also saves a PNG immediately.
+#'   Defaults to `getOption("fundsr.internal_png", FALSE)`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
 #' @details
-#' The function writes an SVG file to `out_dir` and records an Inkscape
-#' export command in the internal `.fundsr$ink_queue`. \code{ggexport()}
-#' can later process this queue to generate PNGs externally.
+#' The SVG is always written to `out_dir` as `"{file}.svg"`. An Inkscape export
+#' action string is stored in `.fundsr$ink_queue[[file]]` for later batch PNG
+#' export to `"{file}.png"` at `px_width` pixels wide.
+#'
+#' If `save_png = TRUE`, a PNG is also written immediately using
+#' \code{ggplot2::ggsave()} with `units = "px"`. The PNG height is computed as
+#' `round(px_width * (height / width))` to preserve the aspect ratio implied by
+#' the SVG sizing.
 #'
 #' @export
 ggink <- function(file,
                   plot,
-                  px_width = 1300,
+                  px_width = getOption("fundsr.px_width", 1300),
                   height = 12,
                   width = 12,
                   units = "in",
-                  out_dir = getOption("fundsr.out_dir", "output")) {
+                  out_dir = getOption("fundsr.out_dir", "output"),
+                  save_png = getOption("fundsr.internal_png", FALSE)) {
+    if (!is.logical(save_png) || length(save_png) != 1L || is.na(save_png)) {
+        stop("`save_png` must be TRUE or FALSE.", call. = FALSE)
+    }
+    if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
     fname <- function(fn, ext) file.path(out_dir, glue("{fn}.{ext}"))
     svgf <- fname(file, "svg")
     pngf <- fname(file, "png")
-    ggsave(svgf,
-           plot = plot,
-           height = height,
-           width = width,
-           units = units)
-    a <- glue("file-open:{svgf};export-filename:{pngf};export-width:{px_width};export-do;file-close")
-    .fundsr$ink_queue[[file]] <- a
+
+    ggplot2::ggsave(
+        svgf,
+        plot = plot,
+        height = height,
+        width = width,
+        units = units
+    )
+
+    a <- glue(
+        "file-open:{svgf};export-filename:{pngf};export-width:{px_width};export-do;file-close"
+    )
+    .fundsr$ink_queue[file] <- a
+
+    if (isTRUE(save_png)) {
+        width_in <- switch(
+            units,
+            `in` = width,
+            cm = width / 2.54,
+            mm = width / 25.4,
+            stop("For PNG saving, `units` must be one of: \"in\", \"cm\", \"mm\".", call. = FALSE)
+        )
+        dpi <- px_width / width_in
+        ggplot2::ggsave(
+            pngf,
+            plot = plot,
+            width = width,
+            height = height,
+            units = units,
+            dpi = dpi,
+            bg = "white",
+            limitsize = FALSE
+        )
+    }
+
+    invisible(NULL)
 }
 
 #' Export queued SVG files to PNG using Inkscape

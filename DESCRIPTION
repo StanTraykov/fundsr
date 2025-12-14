@@ -28,7 +28,8 @@ RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    svglite
 VignetteBuilder: knitr
 URL: https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues
