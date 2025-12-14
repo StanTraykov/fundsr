@@ -43,13 +43,9 @@ add_to_dl_list(c(
     SPYY = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx",
     SPYI = "https://www.ssga.com/uk/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyi-gy.xlsx"
 ))
-options(fundsr.xetra_map = c(
-    FWRA = "FWIA",
-    EMIM = "IS3N"
-))
 
 # import function definition
-import_fun <- function() {
+add_import_fun(function() {
     ####### Indices #######
     setg("gmlm", get_csv("GMLM.csv"))
     setg("gmlm-gr", get_csv("GMLM-GR.csv"), add_fi_pairs = set_names("GMLM", "GMLM-GR"))
@@ -75,6 +71,4 @@ import_fun <- function() {
     spdr("SPYY", benchmark = "ACWI")
     spdr("SPYI", benchmark = "ACWI_IMI")
     ishs("IUSQ", benchmark = "ACWI")
-}
-fun_list$glob <- import_fun
-
+})
