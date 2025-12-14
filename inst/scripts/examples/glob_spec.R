@@ -1,37 +1,40 @@
 ##### Plots #####
-glob_funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "ACWI-GR", "GMLM-GR")
-glob_funds_title <- c(en = "Global funds + some gross indices",
-                      bg = "Глобални фондове + брутни индески")
-glob_spyi_title <- c(en = "SPYI in comparison to a few global funds",
-                     bg = "SPYI в сравнение с някои глобални фондове")
-glob_fund_pal <- c("WEBN" = "red",           "IUSQ" = "#00BFC4",
-                   "SPYY" = "#89AE00",       "VWCE" = "#600000",
-                   "FWRA" = "blue",          "FWIA" = "blue",
-                   "SPYI" = "darkgreen",     "ACWI" = "pink",
-                   "ACWU" = "lightblue",     "ACWIA" = "orange",
+funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "ACWI-GR", "GMLM-GR")
+title <- c(en = "Global funds + some gross indices",
+           bg = "Глобални фондове + брутни индески")
+spyi_title <- c(en = "SPYI in comparison to a few global funds",
+                bg = "SPYI в сравнение с някои глобални фондове")
+glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
+                   "spyy" = "#89AE00",       "vwce" = "#600000",
+                   "fwra" = "blue",          "fwia" = "blue",
+                   "spyi" = "darkgreen",     "acwi" = "pink",
+                   "acwu" = "lightblue",     "acwia" = "orange",
                    "GMLM-GR" = "grey50",     "ACWI-GR" = "black",
-                   "ACWI_IMI-GR" = "grey50", "SCWX" = "#206666",
-                   "EXUS" = "black")
+                   "ACWI_IMI-GR" = "grey50", "scwx" = "#206666",
+                   "exus" = "black")
+glob_colors <- function(...) {
+    scale_color_manual(values = glob_fund_pal, na.value = "grey70", labels = toupper, ...)
+}
 
 # plot specification
-plot_glob <- tribble(
+plot_spec <- tribble(
     ~plot_id, ~title, ~filter,
     ~gg_params, ~width,  ~height,
     ~funds,
 
-    "glob", glob_funds_title, no_filter,
-    scale_color_manual(values = glob_fund_pal), std_w, std_h,
-    glob_funds,
+    "glob", title, no_filter,
+    glob_colors(), std_w, std_h,
+    funds,
 
-    "globZ", glob_funds_title, zoom_filter,
-    scale_color_manual(values = glob_fund_pal), std_w, std_h,
-    glob_funds,
+    "globZ", title, zoom_filter,
+    glob_colors(), std_w, std_h,
+    funds,
 
-    "globI", glob_spyi_title, no_filter,
-    scale_color_manual(values = glob_fund_pal), std_w, std_h,
+    "globI", spyi_title, no_filter,
+    glob_colors(), std_w, std_h,
     c("spyy", "spyi", "vwce", "iusq", "ACWI-GR", "ACWI_IMI-GR")
 )
-spec_list <- c(spec_list, list(plot_glob))
+spec_list <- c(spec_list, list(plot_spec))
 
 ##### Data #####
 add_to_dl_list(c(
@@ -45,12 +48,6 @@ add_import_fun(function() {
     setg("gmlm", get_csv("GMLM.csv"))
     setg("gmlm-gr", get_csv("GMLM-GR.csv"), add_fi_pairs = set_names("GMLM", "GMLM-GR"))
     setg("ftaw", get_csv("FTAW.csv"))
-    net_idx_trans <- c(
-        WORLD = "^WORLD Standard",
-        ACWI = "^ACWI Standard",
-        ACWI_IMI = "^ACWI IMI"
-    )
-    gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,
          file = "MSCI-NT.xls")

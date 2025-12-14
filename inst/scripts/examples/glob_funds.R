@@ -1,9 +1,9 @@
 library(tidyverse)
 library(fundsr)
 
+# Config
 source("common_spec.R")
 source("glob_spec.R")
-
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env
@@ -19,7 +19,7 @@ series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".
 nd <- 365
 diffs <- map(
     list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, fund_index, use_log = .x)
+    ~ roll_diffs(series, nd, fund_index, use_log = .x, silent_skip = TRUE)
 )
 
 # Get XLM data
@@ -30,7 +30,7 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-run_plots(diffs$cagr, diffs$log, nd, plot_glob, xlm_data)
+run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data)
 
 # Optional high-quality PNG export
 # ggexport()

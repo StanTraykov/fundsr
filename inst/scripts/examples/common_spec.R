@@ -13,9 +13,10 @@ fundsr_options(
     # inkscape = Sys.which("inkscape"), # if it's on PATH
 
     xetra_map = c(
-        FWRA = "FWIA"
+        fwra = "fwia"
     )
 )
+spec_list <- list()
 std_w <- 14
 std_h <- 9
 no_filter <- NULL
@@ -26,10 +27,58 @@ fund_palette <- c("#11569B",
                   "#46B8DA",
                   "#DD7700",
                   "#880088",
-                  "black",
+                  "#206666",
                   "grey50",
-                  "#206666")
-fund_colors <- function(...) {
-    scale_color_manual(values = fund_palette, ...)
+                  "black")
+
+fund_colors <- function(breaks,
+                        special = NULL,
+                        palette = fund_palette,
+                        na.value = "grey70",
+                        ...) {
+    if (missing(breaks) || is.null(breaks)) {
+        stop("`breaks` must be supplied.", call. = FALSE)
+    }
+    breaks <- as.character(breaks)
+    if (is.null(special)) special <- character()
+    if (!is.character(special) || is.null(names(special)) || any(!nzchar(names(special)))) {
+        stop("`special` must be NULL or a named character vector, e.g. c(foo = \"black\").",
+             call. = FALSE)
+    }
+    present <- intersect(names(special), breaks)
+    others  <- breaks[!breaks %in% present]
+
+    # assign palette ONLY to non-special levels (no palette slots wasted)
+    vals_others <- set_names(rep(palette, length.out = length(others)), others)
+    vals <- c(vals_others, special[present])
+
+    ggplot2::scale_color_manual(
+        values   = vals,
+        na.value = na.value,
+        labels = toupper,
+        ...
+    )
 }
-spec_list <- list()
+
+
+net_idx_trans <- c(
+    WORLD = "^WORLD Standard",
+    ACWI = "^ACWI Standard",
+    ACWI_IMI = "^ACWI IMI",
+    WxUSA = "^WORLD ex USA Standard",
+    EM = "^EM \\(EMERGING MARKETS\\) Standard",
+    EM_IMI = "^EM \\(EMERGING MARKETS\\) IMI",
+    USA = "^USA Standard",
+    EUR = "^EUROPE Standard",
+    PACxJPN = "^PACIFIC ex JAPAN Standard",
+    JPN = "^JAPAN Standard",
+    JPN_IMI = "^JAPAN IMI",
+    WxUSPAR = "^WORLD EX USA CLIMATE PARIS ALIGNED Standard"
+)
+gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
+net_idx_trans_ccy <- function(ccy) {
+    set_names(net_idx_trans, paste0(names(net_idx_trans), ccy))
+}
+gross_idx_trans_ccy <- function(ccy) {
+    set_names(net_idx_trans, paste0(names(net_idx_trans_ccy(ccy)), "-GR"))
+}
