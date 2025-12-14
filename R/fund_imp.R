@@ -43,6 +43,38 @@ clear_import_funs <- function() {
     invisible(NULL)
 }
 
+#' Clear fund storage
+#'
+#' Removes all objects from the package's internal fund storage environment
+#' (`.fundsr_storage`). Optionally also clears the internal fund-index map
+#' (`.fundsr$fund_index`).
+#'
+#' @param clear_fund_index Logical scalar; if `TRUE`, also clears `.fundsr$fund_index`.
+#'
+#' @return Invisibly returns `NULL`. Called for side effects.
+#' @export
+#'
+#' @examples
+#' clear_fund_storage()
+#' clear_fund_storage(clear_fund_index = TRUE)
+clear_fund_storage <- function(clear_fund_index = FALSE) {
+    if (!is.logical(clear_fund_index) || length(clear_fund_index) != 1L || is.na(clear_fund_index)) {
+        stop("`clear_fund_index` must be TRUE or FALSE.", call. = FALSE)
+    }
+    if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
+        stop("Internal storage `.fundsr_storage` is not initialised.", call. = FALSE)
+    }
+
+    rm(list = ls(envir = .fundsr_storage, all.names = TRUE), envir = .fundsr_storage)
+
+    if (isTRUE(clear_fund_index)) {
+        .fundsr$fund_index <- character()
+    }
+
+    invisible(NULL)
+}
+
+
 #' Load or refresh the fund storage environment
 #'
 #' Runs the import function registry (`.fundsr$import_funs`) to populate (or refresh)

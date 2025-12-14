@@ -159,6 +159,21 @@ add_gg_params <- function(p, gg_params) {
     p <- purrr::reduce(gg_params, `+`, .init = p)
 }
 
+#' Clear queued Inkscape exports
+#'
+#' Clears the internal Inkscape export queue (`.fundsr$ink_queue`), removing all
+#' queued export commands.
+#'
+#' @return Invisibly returns `NULL`. Called for side effects.
+#' @export
+#'
+#' @examples
+#' clear_ink_queue()
+clear_ink_queue <- function() {
+    .fundsr$ink_queue <- character()
+    invisible(NULL)
+}
+
 #' Plot rolling return differences against benchmark
 #'
 #' Creates a scatter plot of rolling CAGR or log-return differences for the
