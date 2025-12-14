@@ -6,7 +6,6 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
             names_to = names_to,
             values_to = values_to,
             names_pattern = paste0("(.+)", sfx),
-            names_transform = toupper,
             values_drop_na = TRUE
         )
 }

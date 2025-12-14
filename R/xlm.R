@@ -81,7 +81,8 @@ read_xlm_directory <- function(directory,
             mutate(date = lubridate::as_date(
                 lubridate::parse_date_time(month_year, orders = "my")
             )) %>%
-            mutate(xlm = as.numeric(.data$xlm))
+            mutate(xlm = as.numeric(.data$xlm)) %>%
+            mutate(ticker = tolower(ticker))
         return(data)
     })
 
@@ -114,7 +115,7 @@ xlm_plot <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL) {
     data <- if (rgx) {
         xlm_data %>% filter(stringr::str_detect(.data$name, tickers))
     } else {
-        xlm_data %>% filter(.data$ticker %in% toupper(tickers))
+        xlm_data %>% filter(.data$ticker %in% tickers)
     }
     message(paste("xml_plot:", paste(tickers, collapse = ", ")))
     p <- ggplot2::ggplot(data,

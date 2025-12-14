@@ -13,7 +13,7 @@ fundsr_options(
     # inkscape = Sys.which("inkscape"), # if it's on PATH
 
     xetra_map = c(
-        FWRA = "FWIA"
+        fwra = "fwia"
     )
 )
 spec_list <- list()
@@ -27,12 +27,39 @@ fund_palette <- c("#11569B",
                   "#46B8DA",
                   "#DD7700",
                   "#880088",
-                  "black",
+                  "#206666",
                   "grey50",
-                  "#206666")
-fund_colors <- function(...) {
-    scale_color_manual(values = fund_palette, na.value = "grey70", ...)
+                  "black")
+
+fund_colors <- function(breaks,
+                        special = NULL,
+                        palette = fund_palette,
+                        na.value = "grey70",
+                        ...) {
+    if (missing(breaks) || is.null(breaks)) {
+        stop("`breaks` must be supplied.", call. = FALSE)
+    }
+    breaks <- as.character(breaks)
+    if (is.null(special)) special <- character()
+    if (!is.character(special) || is.null(names(special)) || any(!nzchar(names(special)))) {
+        stop("`special` must be NULL or a named character vector, e.g. c(foo = \"black\").",
+             call. = FALSE)
+    }
+    present <- intersect(names(special), breaks)
+    others  <- breaks[!breaks %in% present]
+
+    # assign palette ONLY to non-special levels (no palette slots wasted)
+    vals_others <- set_names(rep(palette, length.out = length(others)), others)
+    vals <- c(vals_others, special[present])
+
+    ggplot2::scale_color_manual(
+        values   = vals,
+        na.value = na.value,
+        labels = toupper,
+        ...
+    )
 }
+
 
 net_idx_trans <- c(
     WORLD = "^WORLD Standard",

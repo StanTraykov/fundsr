@@ -357,11 +357,10 @@ run_plots <- function(rds,
         fname <- paste0(plot_id, if (use_log) "_L" else "")
         ggink(fname, plot, width = width, height = height)
         if (!is.null(xlm_data)) {
-            funds_u <- toupper(funds)
             xetra_map <- getOption("fundsr.xetra_map")
-            funds_xet <- ifelse(funds_u %in% names(xetra_map),
-                                xetra_map[funds_u],
-                                funds_u)
+            funds_xet <- ifelse(funds %in% names(xetra_map),
+                                xetra_map[funds],
+                                funds)
             key <- vec_key(funds_xet, ignore_order = TRUE)
             if (!key %in% .fundsr$done_xlms) {
                 xlm_plot <- xlm_plot(xlm_data,

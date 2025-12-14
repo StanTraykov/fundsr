@@ -1,7 +1,8 @@
 ##### Plots #####
 funds <- c("iwda", "sppw", "xdwd", "mwrd", "uetw", "h4zy", "WORLD-GR")
 title <- "MSCI World phys. funds"
-
+dm_pal <- c(c(`WORLD-GR` = "black"), fund_palette)
+gg_par <- fund_colors(breaks = funds, special = c(`WORLD-GR` = "black"))
 # plot specification
 plot_spec <- tribble(
     ~plot_id, ~title, ~filter,
@@ -9,11 +10,11 @@ plot_spec <- tribble(
     ~funds,
 
     "dm_phys", title, no_filter,
-    fund_colors(), std_w, std_h,
+    gg_par, std_w, std_h,
     funds,
 
     "dm_physZ", title, zoom_filter,
-    fund_colors(), std_w, std_h,
+    gg_par, std_w, std_h,
     funds
 )
 spec_list <- c(spec_list, list(plot_spec))
