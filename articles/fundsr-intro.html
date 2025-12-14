@@ -137,8 +137,19 @@ Traykov</h4>
 <span><span class="co">#&gt; XLM read: November 2025</span></span></code></pre></div>
 <p>Set package options</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>fundsr.data_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>fundsr.out_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"out"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fundsr_options.html">fundsr_options</a></span><span class="op">(</span></span>
+<span>    data_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    out_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"out"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>    <span class="co"># internal_png = TRUE, # output PNGs without Inkscape (lower quality)</span></span>
+<span>    </span>
+<span>    <span class="co"># Inkscape executable for higher-quality PNG export</span></span>
+<span>    <span class="co"># (uncomment depending on system or comment all to disable)</span></span>
+<span>    inkscape <span class="op">=</span> <span class="st">"C:/Program Files/Inkscape/bin/inkscape.exe"</span>,</span>
+<span>    <span class="co"># inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",</span></span>
+<span>    <span class="co"># inkscape = "/usr/bin/inkscape",</span></span>
+<span>    <span class="co"># inkscape = Sys.which("inkscape"), # if it's on PATH</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># options(fundsr.internal_png = TRUE) # output PNGs without Inkscape (lower quality)</span></span>
 <span><span class="co"># Helper to set option fundsr.dl_list</span></span>
 <span><span class="fu"><a href="../reference/add_to_dl_list.html">add_to_dl_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -268,12 +279,7 @@ without Inkscape (if option <code>fundsr.internal_png</code> is
 <span><span class="co">#&gt; rcd_plot: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY &amp; IUSQ: последни години</span></span></code></pre></div>
 <p>Optional: high-quality PNG export</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>fundsr.inkscape <span class="op">=</span> <span class="st">"C:/Program Files/Inkscape/bin/inkscape.exe"</span><span class="op">)</span></span>
-<span><span class="co"># or, depending on system:</span></span>
-<span><span class="co"># options(fundsr.inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape") # macOS</span></span>
-<span><span class="co"># options(fundsr.inkscape = "/usr/bin/inkscape") # unix-like</span></span>
-<span><span class="co"># options(fundsr.inkscape = Sys.which("inkscape")) # find it, if on PATH (usually not on Win/Mac)</span></span>
-<span><span class="fu"><a href="../reference/ggexport.html">ggexport</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ggexport.html">ggexport</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"</span></span>
 <span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
   </div>
