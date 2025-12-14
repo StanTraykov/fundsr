@@ -224,7 +224,7 @@ options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")
 # or, depending on system:
 # options(fundsr.inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape") # macOS
 # options(fundsr.inkscape = "/usr/bin/inkscape") # unix-like
-# options(fundsr.inkscape = Sys.which("inkscape")) # find it, if it's on PATH
+# options(fundsr.inkscape = Sys.which("inkscape")) # find it, if on PATH (usually not on Win/Mac)
 ggexport()
 #> Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"
 #> [1] 0
