@@ -17,3 +17,6 @@ Adds one or more named download specifications to the \code{fundsr.dl_list}
 option. Existing entries are preserved; entries in \code{x} replace any
 existing entries with the same name.
 }
+\details{
+Names are normalised to uppercase before storing.
+}

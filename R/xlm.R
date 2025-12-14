@@ -82,7 +82,7 @@ read_xlm_directory <- function(directory,
                 lubridate::parse_date_time(month_year, orders = "my")
             )) %>%
             mutate(xlm = as.numeric(.data$xlm)) %>%
-            mutate(ticker = tolower(ticker))
+            mutate(ticker = tolower(.data$ticker))
         return(data)
     })
 

@@ -76,4 +76,9 @@ net_idx_trans <- c(
     WxUSPAR = "^WORLD EX USA CLIMATE PARIS ALIGNED Standard"
 )
 gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
-
+net_idx_trans_ccy <- function(ccy) {
+    set_names(net_idx_trans, paste0(names(net_idx_trans), ccy))
+}
+gross_idx_trans_ccy <- function(ccy) {
+    set_names(net_idx_trans, paste0(names(net_idx_trans_ccy(ccy)), "-GR"))
+}

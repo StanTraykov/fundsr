@@ -332,18 +332,25 @@ dl_funds <- function(redownload = FALSE) {
 #' option. Existing entries are preserved; entries in `x` replace any
 #' existing entries with the same name.
 #'
+#' Names are normalised to uppercase before storing.
+#'
 #' @param x A named character vector mapping download identifiers to URLs.
 #'
 #' @return A list with the previous value of `fundsr.dl_list`.
 #' @export
 add_to_dl_list <- function(x) {
     stopifnot(is.character(x), !is.null(names(x)), all(nzchar(names(x))))
+
+    names(x) <- toupper(names(x))
     cur <- getOption("fundsr.dl_list", character())
+    if (length(cur) && !is.null(names(cur))) {
+        names(cur) <- toupper(names(cur))
+    }
+
     new <- c(cur, x)
     new <- new[!duplicated(names(new), fromLast = TRUE)]
     options(fundsr.dl_list = new)
 }
-
 
 #' Read a CSV with a date + one or more value (fund NAV/index level) columns.
 #'

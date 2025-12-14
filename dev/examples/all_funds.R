@@ -7,6 +7,7 @@ source("dev/examples/dm_spec.R")
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env
+dl_funds(redownload = FALSE) # download only missing funds
 storage <- import_funds()
 fund_index <- get_fund_index() # fund-index map resulting from above import
 
