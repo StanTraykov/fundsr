@@ -25,8 +25,11 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
 #' @param date_col Name of the date column in `df`. Defaults to `"date"`.
 #' @param use_log Logical; if `TRUE`, computes **log-return tracking
 #'   differences**. If `FALSE`, computes **CAGR tracking differences**.
+#'   Defaults to `TRUE`.
 #' @param annual_days Number of days used for annualization. Defaults to
 #'   `365`.
+#' @param silent_skip Logical; whether to show messages when skipping
+#'   funds that are in `fund_index_map` but not in `df`. Defaults to `FALSE`.
 #'
 #' @return A data frame like `df` with one additional column per fund,
 #'   named `<fund>_rd`, containing the rolling tracking differences.
@@ -49,17 +52,25 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
 #' observation lies within the required window.
 #'
 #' @export
-roll_diffs <- function(df, n_days, fund_index_map, date_col = "date", use_log = TRUE, annual_days = 365) {
+roll_diffs <- function(df,
+                       n_days,
+                       fund_index_map,
+                       date_col = "date",
+                       use_log = TRUE,
+                       annual_days = 365,
+                       silent_skip = FALSE) {
     df <- df %>%
         mutate(.date_num = as.numeric(.data[[date_col]]))
     for (fund in names(fund_index_map)) {
         index <- fund_index_map[[fund]]
         roll_type <- if (use_log) "log-ret" else "CAGR"
-        message(glue("Roll {roll_type} for {fund} tracking {index}"))
         if (!(fund %in% names(df))) {
-            message(glue("--Skipping {fund}: not in df"))
+            if (!isTRUE(silent_skip)) {
+                message(glue("Skipping {fund}: not in df"))
+            }
             next
         }
+        message(glue("Roll {roll_type} for {fund} tracking {index}"))
         roll_diff_col = paste0(fund, "_rd")
         no_na <- df %>%
             select(".date_num", !!sym(fund), !!sym(index)) %>%

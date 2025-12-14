@@ -1,21 +1,22 @@
 ##### Plots #####
-dm_phys <- c("uetw", "sppw", "h4zy", "iwda", "xdwd", "mwrd")
+funds <- c("iwda", "sppw", "xdwd", "mwrd", "uetw", "h4zy", "WORLD-GR")
+title <- "MSCI World phys. funds"
 
 # plot specification
-plot_dm <- tribble(
+plot_spec <- tribble(
     ~plot_id, ~title, ~filter,
     ~gg_params, ~width,  ~height,
     ~funds,
 
-    "dm_phys", "DM phys. funds", no_filter,
+    "dm_phys", title, no_filter,
     fund_colors(), std_w, std_h,
-    dm_phys,
+    funds,
 
-    "dm_physZ", "DM phys. funds: zoom", zoom_filter,
+    "dm_physZ", title, zoom_filter,
     fund_colors(), std_w, std_h,
-    dm_phys
+    funds
 )
-spec_list <- c(spec_list, list(plot_dm))
+spec_list <- c(spec_list, list(plot_spec))
 
 ##### Data #####
 add_to_dl_list(c(
@@ -25,12 +26,6 @@ add_to_dl_list(c(
 
 add_import_fun(function() {
     ####### Indices #######
-    net_idx_trans <- c(
-        WORLD = "^WORLD Standard",
-        ACWI = "^ACWI Standard",
-        ACWI_IMI = "^ACWI IMI"
-    )
-    gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,
          file = "MSCI-NT.xls")

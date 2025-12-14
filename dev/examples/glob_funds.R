@@ -18,7 +18,7 @@ series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".
 nd <- 365
 diffs <- map(
     list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, fund_index, use_log = .x)
+    ~ roll_diffs(series, nd, fund_index, use_log = .x, silent_skip = TRUE)
 )
 
 # Get XLM data

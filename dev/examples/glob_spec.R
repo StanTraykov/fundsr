@@ -48,12 +48,6 @@ add_import_fun(function() {
     setg("gmlm", get_csv("GMLM.csv"))
     setg("gmlm-gr", get_csv("GMLM-GR.csv"), add_fi_pairs = set_names("GMLM", "GMLM-GR"))
     setg("ftaw", get_csv("FTAW.csv"))
-    net_idx_trans <- c(
-        WORLD = "^WORLD Standard",
-        ACWI = "^ACWI Standard",
-        ACWI_IMI = "^ACWI IMI"
-    )
-    gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,
          file = "MSCI-NT.xls")

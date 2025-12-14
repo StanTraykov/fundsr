@@ -20,11 +20,12 @@ run_plots(
 
 \item{n_days}{Rolling-window length in days.}
 
-\item{plot_spec}{A data frame describing plot parameters such as plot
-IDs, titles, filters, sizing, and fund sets.}
+\item{plot_spec}{A data frame or a list of data frames describing plot
+parameters: \code{plot_id}, \code{title}, \code{filter}, \code{gg_params}, \code{width}, \code{height},
+\code{funds}.}
 
-\item{xlm_data}{Optional data frame used to produce XLM comparison plots;
-typically includes \code{date}, \code{xlm}, \code{ticker}, and \code{name} columns.}
+\item{xlm_data}{Optional data frame used to produce XLM comparison plots,
+including \code{date}, \code{xlm}, \code{ticker}, and \code{name} columns.}
 
 \item{add_gg_params}{Optional ggplot component (or list of components)
 appended to each generated plot in addition to the per-plot \code{gg_params}

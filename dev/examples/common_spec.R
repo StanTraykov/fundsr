@@ -16,6 +16,7 @@ fundsr_options(
         FWRA = "FWIA"
     )
 )
+spec_list <- list()
 std_w <- 14
 std_h <- 9
 no_filter <- NULL
@@ -32,4 +33,20 @@ fund_palette <- c("#11569B",
 fund_colors <- function(...) {
     scale_color_manual(values = fund_palette, na.value = "grey70", ...)
 }
-spec_list <- list()
+
+net_idx_trans <- c(
+    WORLD = "^WORLD Standard",
+    ACWI = "^ACWI Standard",
+    ACWI_IMI = "^ACWI IMI",
+    WxUSA = "^WORLD ex USA Standard",
+    EM = "^EM \\(EMERGING MARKETS\\) Standard",
+    EM_IMI = "^EM \\(EMERGING MARKETS\\) IMI",
+    USA = "^USA Standard",
+    EUR = "^EUROPE Standard",
+    PACxJPN = "^PACIFIC ex JAPAN Standard",
+    JPN = "^JAPAN Standard",
+    JPN_IMI = "^JAPAN IMI",
+    WxUSPAR = "^WORLD EX USA CLIMATE PARIS ALIGNED Standard"
+)
+gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
+

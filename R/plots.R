@@ -282,10 +282,11 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' @param rds Data frame containing rolling CAGR differences.
 #' @param rds_log Data frame containing rolling log-return differences.
 #' @param n_days Rolling-window length in days.
-#' @param plot_spec A data frame describing plot parameters such as plot
-#'   IDs, titles, filters, sizing, and fund sets.
-#' @param xlm_data Optional data frame used to produce XLM comparison plots;
-#'   typically includes `date`, `xlm`, `ticker`, and `name` columns.
+#' @param plot_spec A data frame or a list of data frames describing plot
+#'   parameters: `plot_id`, `title`, `filter`, `gg_params`, `width`, `height`,
+#'   `funds`.
+#' @param xlm_data Optional data frame used to produce XLM comparison plots,
+#'   including `date`, `xlm`, `ticker`, and `name` columns.
 #' @param add_gg_params Optional ggplot component (or list of components)
 #'   appended to each generated plot in addition to the per-plot `gg_params`
 #'   defined in `plot_spec`. Defaults to [ggplot2::geom_blank()].
@@ -314,6 +315,26 @@ run_plots <- function(rds,
                       xlm_data = NULL,
                       add_gg_params = ggplot2::geom_blank()) {
     variants <- c("CAGR", "log")
+    if (is.list(plot_spec)) {
+        ensure_title_col <- function(df, col = "title") {
+            if (!col %in% names(df)) return(df)
+            x <- df[[col]]
+            if (is.list(x)) return(df)
+            if (is.character(x)) {
+                is_multilang <- !is.null(names(x)) && any(nzchar(names(x)))
+                # If it's a multilingual named vector, keep it as one element (common in 1-row specs)
+                if (is_multilang && nrow(df) == 1L) {
+                    df[[col]] <- list(x)
+                    return(df)
+                }
+                # Otherwise treat as per-row scalar titles
+                df[[col]] <- as.list(x)
+                return(df)
+            }
+            stop(sprintf("`%s` must be character or list.", col), call. = FALSE)
+        }
+        plot_spec <- dplyr::bind_rows(lapply(plot_spec, ensure_title_col))
+    }
     runs <- tidyr::crossing(plot_spec, variants)
     .fundsr$done_xlms <- character()
     purrr::pwalk(runs, function(plot_id,

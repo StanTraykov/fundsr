@@ -86,7 +86,7 @@ fundsr_options(
     inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe",
     # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
     # inkscape = "/usr/bin/inkscape",
-    # inkscape = Sys.which("inkscape"), # if it's on PATH
+    # inkscape = Sys.which("inkscape"), # if it's on PATH (usually not on Win/Mac)
 )
 
 # options(fundsr.internal_png = TRUE) # output PNGs without Inkscape (lower quality)

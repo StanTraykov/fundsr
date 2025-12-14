@@ -10,7 +10,8 @@ roll_diffs(
   fund_index_map,
   date_col = "date",
   use_log = TRUE,
-  annual_days = 365
+  annual_days = 365,
+  silent_skip = FALSE
 )
 }
 \arguments{
@@ -25,10 +26,14 @@ to their corresponding benchmark/index column names.}
 \item{date_col}{Name of the date column in \code{df}. Defaults to \code{"date"}.}
 
 \item{use_log}{Logical; if \code{TRUE}, computes \strong{log-return tracking
-differences}. If \code{FALSE}, computes \strong{CAGR tracking differences}.}
+differences}. If \code{FALSE}, computes \strong{CAGR tracking differences}.
+Defaults to \code{TRUE}.}
 
 \item{annual_days}{Number of days used for annualization. Defaults to
 \code{365}.}
+
+\item{silent_skip}{Logical; whether to show messages when skipping
+funds that are in \code{fund_index_map} but not in \code{df}. Defaults to \code{FALSE}.}
 }
 \value{
 A data frame like \code{df} with one additional column per fund,
