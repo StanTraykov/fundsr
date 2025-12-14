@@ -1,6 +1,6 @@
 library(tidyverse)
-library(fundsr)
 
+library(fundsr)
 source("glob_spec.R")
 source("dm_spec.R")
 

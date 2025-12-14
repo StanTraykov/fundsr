@@ -1,6 +1,6 @@
 library(tidyverse)
-library(fundsr)
 
+library(fundsr)
 source("glob_spec.R")
 
 options(fundsr.data_dir = file.path("data", "funds"))
