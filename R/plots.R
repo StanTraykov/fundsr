@@ -1,6 +1,3 @@
-# © 2023–2025 Stanislav Traykov <st@gmuf.com>.
-# Personal use and non-commercial result sharing permitted; commercial use requires permission.
-
 #' Save a plot as SVG and optionally queue PNG export via Inkscape
 #'
 #' When `save_svg = TRUE`, saves `plot` as an SVG file and appends an Inkscape

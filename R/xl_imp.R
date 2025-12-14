@@ -1,6 +1,3 @@
-# © 2023–2025 Stanislav Traykov <st@gmuf.com>.
-# Personal use and non-commercial result sharing permitted; commercial use requires permission.
-
 read_excel_or_xml <- function(file_path, sheet = NULL) {
     # First, try reading as a standard Excel file with readxl
     message("Attempting readxl on '", file_path, "'...")

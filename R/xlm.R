@@ -1,6 +1,3 @@
-# © 2023–2025 Stanislav Traykov <st@gmuf.com>.
-# Personal use and non-commercial result sharing permitted; commercial use requires permission.
-
 read_xlsx_hdr <- function(file_path,
                           sheet_name = 1,
                           header_rows,

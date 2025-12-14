@@ -1,6 +1,3 @@
-# © 2023–2025 Stanislav Traykov <st@gmuf.com>.
-# Personal use and non-commercial result sharing permitted; commercial use requires permission.
-
 #' Register an import function
 #'
 #' Appends `fun` to the internal import-function registry (`.fundsr$import_funs`).

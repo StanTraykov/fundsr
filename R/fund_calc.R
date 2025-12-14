@@ -1,6 +1,3 @@
-# © 2023–2025 Stanislav Traykov <st@gmuf.com>.
-# Personal use and non-commercial result sharing permitted; commercial use requires permission.
-
 longer <- function(df, funds, sfx, values_to, names_to = "fund") {
     df %>%
         select(all_of(c("date", paste0(funds, sfx)))) %>%
