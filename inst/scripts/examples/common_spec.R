@@ -1,11 +1,21 @@
-options(fundsr.data_dir = file.path("data", "funds"))
-options(fundsr.out_dir = "output")
-options(fundsr.px_width = 1300)
-# options(fundsr.internal_png = TRUE)
-options(fundsr.xetra_map = c(
-    FWRA = "FWIA"
-))
+fundsr_options(
+    data_dir = file.path("data", "funds"), # where to find fund/index data
+    out_dir = "output", # where to write plots
+    px_width = 1300, # for optional PNG output
+    # internal_png = TRUE, # whether to export PNGs via ggplot2 (lower quality)
+    export_svg = TRUE, # whether to export SVGs (needed for Inkscape PNG export)
 
+    # Inkscape executable for higher-quality PNG export
+    # (uncomment depending on system or comment all to disable)
+    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe",
+    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
+    # inkscape = "/usr/bin/inkscape",
+    # inkscape = Sys.which("inkscape"), # if it's on PATH
+
+    xetra_map = c(
+        FWRA = "FWIA"
+    )
+)
 std_w <- 14
 std_h <- 9
 no_filter <- NULL
@@ -22,3 +32,4 @@ fund_palette <- c("#11569B",
 fund_colors <- function(...) {
     scale_color_manual(values = fund_palette, ...)
 }
+spec_list <- list()

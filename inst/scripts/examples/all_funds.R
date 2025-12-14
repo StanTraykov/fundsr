@@ -31,9 +31,26 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-spec <- bind_rows(plot_glob, plot_dm)
-run_plots(diffs$cagr, diffs$log, nd, spec, xlm_data)
+ensure_title_col <- function(df, col = "title") {
+    if (!col %in% names(df)) return(df)
+    x <- df[[col]]
+    if (is.list(x)) return(df)
+    if (is.character(x)) {
+        is_multilang <- !is.null(names(x)) && any(nzchar(names(x)))
+        # If it's a multilingual named vector, keep it as one element (common in 1-row specs)
+        if (is_multilang && nrow(df) == 1L) {
+            df[[col]] <- list(x)
+            return(df)
+        }
+        # Otherwise treat as per-row scalar titles
+        df[[col]] <- as.list(x)
+        return(df)
+    }
+    stop(sprintf("`%s` must be character or list.", col), call. = FALSE)
+}
+spec_list_l <- lapply(spec_list, ensure_title_col)
+master_spec <- dplyr::bind_rows(spec_list_l)
+run_plots(diffs$cagr, diffs$log, nd, master_spec, xlm_data)
 
 # Optional high-quality PNG export
-options(fundsr.inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe")
-#ggexport()
+# ggexport()

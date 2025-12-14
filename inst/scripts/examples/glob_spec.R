@@ -31,6 +31,7 @@ plot_glob <- tribble(
     scale_color_manual(values = glob_fund_pal), std_w, std_h,
     c("spyy", "spyi", "vwce", "iusq", "ACWI-GR", "ACWI_IMI-GR")
 )
+spec_list <- c(spec_list, list(plot_glob))
 
 ##### Data #####
 add_to_dl_list(c(
