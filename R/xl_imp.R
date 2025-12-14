@@ -140,6 +140,9 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     return(df2)
 }
 
+# Mostly AI-written, except step (6) which is optimized (tidier alternative
+# based on lubridate::parse_date_time() is too slow when importing many funds).
+# Other steps could be cleaned up in the future.
 import_xl_data <- function(xl_file,
                            data_sheet,
                            date_field_name,
@@ -213,11 +216,7 @@ import_xl_data <- function(xl_file,
             substr(dts[!is.na(dts) & nchar(dts) > 24], 1, 24)
         dts <- gsub("Sept", "Sep", dts)
         dts <- gsub(" 12:00:00 AM$", "", dts)
-        if (date_order == "dmy") {
-            fmts <- c("%d/%m/%Y", "%d.%m.%Y", "%d %b %Y", "%d/%b/%Y", "%d-%b-%Y")
-        } else { #mdy
-            fmts <- c("%m/%d/%Y", "%b %d, %Y")
-        }
+        fmts <- make_date_fmts(date_order)
         safe_dates <- as.Date(dts, tryFormats = fmts)
     }
 
