@@ -3,13 +3,6 @@ library(tidyverse)
 source("dev/examples/common_spec.R")
 source("dev/examples/glob_spec.R")
 
-options(fundsr.data_dir = file.path("data", "funds"))
-options(fundsr.out_dir = "output")
-options(fundsr.px_width = 1300)
-options(fundsr.xetra_map = c(
-    FWRA = "FWIA"
-))
-
 xlm_dir <- file.path("data", "xlm")
 
 # Get fund data into tibbles stored in the storage env

@@ -1,9 +1,4 @@
 ##### Plots #####
-# plot spec helpers
-std_w <- 14
-std_h <- 9
-no_filter <- NULL
-zoom_filter <- function(x) {x %>% filter(date >= as_date("2022-01-01"))}
 dm_phys <- c("uetw", "sppw", "h4zy", "iwda", "xdwd", "mwrd")
 
 # plot specification
@@ -27,7 +22,6 @@ add_to_dl_list(c(
     SPPW = "https://www.ssga.com/uk/en_gb/intermediary/library-content/products/fund-data/etfs/emea/navhist-emea-en-sppw-gy.xlsx"
 ))
 
-# import function definition
 add_import_fun(function() {
     ####### Indices #######
     net_idx_trans <- c(

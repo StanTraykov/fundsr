@@ -39,7 +39,6 @@ add_to_dl_list(c(
     SPYI = "https://www.ssga.com/uk/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyi-gy.xlsx"
 ))
 
-# import function definition
 add_import_fun(function() {
     ####### Indices #######
     setg("gmlm", get_csv("GMLM.csv"))
