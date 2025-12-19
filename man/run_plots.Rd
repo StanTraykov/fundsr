@@ -5,7 +5,7 @@
 \title{Generate and export all configured rolling-difference plots}
 \usage{
 run_plots(
-  rds,
+  rds_cagr,
   rds_log,
   n_days,
   plot_spec,
@@ -14,15 +14,15 @@ run_plots(
 )
 }
 \arguments{
-\item{rds}{Data frame containing rolling CAGR differences.}
+\item{rds_cagr}{Data frame containing rolling CAGR differences.}
 
 \item{rds_log}{Data frame containing rolling log-return differences.}
 
 \item{n_days}{Rolling-window length in days.}
 
 \item{plot_spec}{A data frame or a list of data frames describing plot
-parameters: \code{plot_id}, \code{title}, \code{filter}, \code{gg_params}, \code{width}, \code{height},
-\code{funds}.}
+parameters: \code{plot_id}, \code{title}, \code{data_filter}, \code{gg_params}, \code{width},
+\code{height}, \code{funds}.}
 
 \item{xlm_data}{Optional data frame used to produce XLM comparison plots,
 including \code{date}, \code{xlm}, \code{ticker}, and \code{name} columns.}
@@ -37,18 +37,18 @@ Invisibly returns \code{NULL}. Plots are saved as a side effect.
 \description{
 Iterates over the plot specifications and produces rolling-difference
 plots for both CAGR and log-return variants. Each plot is saved via
-\code{\link[=ggink]{ggink()}}, and optional XLM comparison plots may also be generated.
+\code{\link[=save_plot]{save_plot()}}, and optional XLM comparison plots may also be generated.
 }
 \details{
 For each row in \code{plot_spec}, the function constructs both a CAGR-based
-and a log-return-based variant using \code{\link[=rd_plot]{rd_plot()}} and writes the
-resulting plots via \code{\link[=ggink]{ggink()}}, using a filename suffix to distinguish
+and a log-return-based variant using \code{\link[=plot_roll_diffs]{plot_roll_diffs()}} and writes the
+resulting plots via \code{\link[=save_plot]{save_plot()}}, using a filename suffix to distinguish
 the log-return variant. The \code{plot_spec} is expected to provide columns
-such as \code{plot_id}, \code{title}, \code{filter}, \code{gg_params}, \code{width}, \code{height},
+such as \code{plot_id}, \code{title}, \code{data_filter}, \code{gg_params}, \code{width}, \code{height},
 and \code{funds}.
 
 If \code{xlm_data} is supplied, a separate Xetra Liquidity Measure (XLM)
 plot is generated once per unique combination of funds, using
-\code{\link[=xlm_plot]{xlm_plot()}}. The mapping from fund tickers to Xetra tickers is taken
+\code{\link[=plot_xlms]{plot_xlms()}}. The mapping from fund tickers to Xetra tickers is taken
 from the option \code{fundsr.xetra_map}.
 }

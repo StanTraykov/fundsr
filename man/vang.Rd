@@ -14,5 +14,5 @@ vang(ticker, file = NULL, benchmark = NULL)
 \item{benchmark}{Optional benchmark key.}
 }
 \description{
-Wrapper around \code{fund_imp()} for Vanguard files.
+Wrapper around \code{load_fund()} for Vanguard files.
 }

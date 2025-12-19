@@ -1,11 +1,11 @@
 #' Save a plot as SVG and optionally queue PNG export via Inkscape
 #'
 #' When `save_svg = TRUE`, saves `plot` as an SVG file and appends an Inkscape
-#' export command to the internal queue (`.fundsr$ink_queue`) so PNG generation
-#' can be performed later in batch (via \code{ggexport()}).
+#' export command to the internal queue (`.fundsr$inkscape_queue`) so PNG generation
+#' can be performed later in batch (via `export_pngs()`).
 #'
 #' Optionally, when `save_png = TRUE`, the function also saves a PNG immediately
-#' via \code{ggplot2::ggsave()} (independently of queueing).
+#' via `ggplot2::ggsave()` (independently of queueing).
 #'
 #' @param file Base filename (without extension) used for output files.
 #' @param plot A plot object (typically a ggplot) to be saved.
@@ -28,7 +28,7 @@
 #'
 #' @details
 #' If `save_svg = TRUE`, the SVG is written as `"{file}.svg"` and an Inkscape
-#' action string is stored as `.fundsr$ink_queue[file]` for later batch export to
+#' action string is stored as `.fundsr$inkscape_queue[file]` for later batch export to
 #' `"{file}.png"` at `px_width` pixels wide.
 #'
 #' If `save_png = TRUE`, a PNG is also written immediately as `"{file}.png"`.
@@ -42,7 +42,7 @@
 #'
 #' @export
 
-ggink <- function(file,
+save_plot <- function(file,
                   plot,
                   px_width = getOption("fundsr.px_width", 1300),
                   height = 12,
@@ -83,8 +83,8 @@ ggink <- function(file,
         a <- glue(
             "file-open:{svgf};export-filename:{pngf};export-width:{px_width};export-do;file-close"
         )
-        if (is.null(.fundsr$ink_queue)) .fundsr$ink_queue <- character()
-        .fundsr$ink_queue[file] <- a
+        if (is.null(.fundsr$inkscape_queue)) .fundsr$inkscape_queue <- character()
+        .fundsr$inkscape_queue[file] <- a
     }
 
     if (isTRUE(save_png)) {
@@ -121,31 +121,31 @@ ggink <- function(file,
 #'
 #' @details
 #' This function collects all queued Inkscape actions stored in
-#' `.fundsr$ink_queue`, constructs a single Inkscape command using the
+#' `.fundsr$inkscape_queue`, constructs a single Inkscape command using the
 #' executable specified by the `fundsr.inkscape` option, and executes it
 #' via `system()`. On success, the queue is cleared. On failure, the queue
 #' is preserved and a message is printed.
 #'
 #' @export
-ggexport <- function() {
-    if (length(.fundsr$ink_queue) == 0) {
-        message("ggexport: nothing queued.")
+export_pngs <- function() {
+    if (length(.fundsr$inkscape_queue) == 0) {
+        message("export_pngs: nothing queued.")
         return(invisible(NULL))
     }
     inkscape <- getOption("fundsr.inkscape")
     if (is.null(inkscape)) {
-        message("ggexport: no inkscape executable specified")
+        message("export_pngs: no inkscape executable specified")
         return(invisible(NULL))
     }
-    acts <- paste(.fundsr$ink_queue, collapse = ";")
+    acts <- paste(.fundsr$inkscape_queue, collapse = ";")
     acts <- paste0('export-background:white;', acts)
     args <- c(sprintf('--actions=%s', shQuote(acts)))
     message(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"))
     exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
-        .fundsr$ink_queue <- character()
+        .fundsr$inkscape_queue <- character()
     } else {
-        message(glue("ggexport: Inkscape returned non-zero exit status: {exit_status}"))
+        message(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"))
     }
     exit_status
 }
@@ -161,16 +161,16 @@ add_gg_params <- function(p, gg_params) {
 
 #' Clear queued Inkscape exports
 #'
-#' Clears the internal Inkscape export queue (`.fundsr$ink_queue`), removing all
+#' Clears the internal Inkscape export queue (`.fundsr$inkscape_queue`), removing all
 #' queued export commands.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #' @export
 #'
 #' @examples
-#' clear_ink_queue()
-clear_ink_queue <- function() {
-    .fundsr$ink_queue <- character()
+#' clear_inkscape_queue()
+clear_inkscape_queue <- function() {
+    .fundsr$inkscape_queue <- character()
     invisible(NULL)
 }
 
@@ -200,7 +200,7 @@ clear_ink_queue <- function() {
 #' via `gg_params`.
 #'
 #' @export
-rd_plot <- function(data,
+plot_roll_diffs <- function(data,
                       n_days,
                       funds,
                       use_log = FALSE,
@@ -216,7 +216,7 @@ rd_plot <- function(data,
         gettext("{n_days}d rolling CAGR differences vs net benchmark{ttl}")
     }
     title <- glue(title_msg)
-    message(paste("rd_plot:", title))
+    message(paste("plot_roll_diffs:", title))
     if (is.null(date_brk)) {
         years <- data %>%
             summarize(start_year = lubridate::year(first(date)),
@@ -277,14 +277,14 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'
 #' Iterates over the plot specifications and produces rolling-difference
 #' plots for both CAGR and log-return variants. Each plot is saved via
-#' [ggink()], and optional XLM comparison plots may also be generated.
+#' [save_plot()], and optional XLM comparison plots may also be generated.
 #'
-#' @param rds Data frame containing rolling CAGR differences.
+#' @param rds_cagr Data frame containing rolling CAGR differences.
 #' @param rds_log Data frame containing rolling log-return differences.
 #' @param n_days Rolling-window length in days.
 #' @param plot_spec A data frame or a list of data frames describing plot
-#'   parameters: `plot_id`, `title`, `filter`, `gg_params`, `width`, `height`,
-#'   `funds`.
+#'   parameters: `plot_id`, `title`, `data_filter`, `gg_params`, `width`,
+#'   `height`, `funds`.
 #' @param xlm_data Optional data frame used to produce XLM comparison plots,
 #'   including `date`, `xlm`, `ticker`, and `name` columns.
 #' @param add_gg_params Optional ggplot component (or list of components)
@@ -295,27 +295,27 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'
 #' @details
 #' For each row in `plot_spec`, the function constructs both a CAGR-based
-#' and a log-return-based variant using [rd_plot()] and writes the
-#' resulting plots via [ggink()], using a filename suffix to distinguish
+#' and a log-return-based variant using [plot_roll_diffs()] and writes the
+#' resulting plots via [save_plot()], using a filename suffix to distinguish
 #' the log-return variant. The `plot_spec` is expected to provide columns
-#' such as `plot_id`, `title`, `filter`, `gg_params`, `width`, `height`,
+#' such as `plot_id`, `title`, `data_filter`, `gg_params`, `width`, `height`,
 #' and `funds`.
 #'
 #' If `xlm_data` is supplied, a separate Xetra Liquidity Measure (XLM)
 #' plot is generated once per unique combination of funds, using
-#' [xlm_plot()]. The mapping from fund tickers to Xetra tickers is taken
+#' [plot_xlms()]. The mapping from fund tickers to Xetra tickers is taken
 #' from the option `fundsr.xetra_map`.
 #'
 #' @export
 
-run_plots <- function(rds,
+run_plots <- function(rds_cagr,
                       rds_log,
                       n_days,
                       plot_spec,
                       xlm_data = NULL,
                       add_gg_params = ggplot2::geom_blank()) {
     variants <- c("CAGR", "log")
-    if (is.list(plot_spec)) {
+    if (is.list(plot_spec) && !inherits(plot_spec, "data.frame")) {
         ensure_title_col <- function(df, col = "title") {
             if (!col %in% names(df)) return(df)
             x <- df[[col]]
@@ -336,38 +336,38 @@ run_plots <- function(rds,
         plot_spec <- dplyr::bind_rows(lapply(plot_spec, ensure_title_col))
     }
     runs <- tidyr::crossing(plot_spec, variants)
-    .fundsr$done_xlms <- character()
+    .fundsr$done_xlm_sets <- character()
     purrr::pwalk(runs, function(plot_id,
                                 title,
-                                filter,
+                                data_filter,
                                 gg_params,
                                 width,
                                 height,
                                 funds,
                                 variants) {
         use_log = variants == "log"
-        data <- if (use_log) rds_log else rds
-        if (!is.null(filter)) data <- data %>% filter()
-        plot <- rd_plot(data,
+        data <- if (use_log) rds_log else rds_cagr
+        if (!is.null(data_filter)) data <- data %>% data_filter()
+        plot <- plot_roll_diffs(data,
                          n_days,
                          funds = funds,
                          use_log = use_log,
                          gg_params = list(gg_params, add_gg_params),
                          title_add = title)
         fname <- paste0(plot_id, if (use_log) "_L" else "")
-        ggink(fname, plot, width = width, height = height)
+        save_plot(fname, plot, width = width, height = height)
         if (!is.null(xlm_data)) {
             xetra_map <- getOption("fundsr.xetra_map")
             funds_xet <- ifelse(funds %in% names(xetra_map),
                                 xetra_map[funds],
                                 funds)
             key <- vec_key(funds_xet, ignore_order = TRUE)
-            if (!key %in% .fundsr$done_xlms) {
-                xlm_plot <- xlm_plot(xlm_data,
+            if (!key %in% .fundsr$done_xlm_sets) {
+                xlm_plot <- plot_xlms(xlm_data,
                                      funds_xet,
                                      gg_params = list(gg_params, add_gg_params))
-                ggink(paste0("xlm_", plot_id), xlm_plot, width = width, height = height)
-                .fundsr$done_xlms <- c(.fundsr$done_xlms, key)
+                save_plot(paste0("xlm_", plot_id), xlm_plot, width = width, height = height)
+                .fundsr$done_xlm_sets <- c(.fundsr$done_xlm_sets, key)
             }
         }
     })

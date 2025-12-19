@@ -6,10 +6,11 @@ source("dev/examples/glob_spec.R")
 source("dev/examples/dm_spec.R")
 xlm_dir <- file.path("data", "xlm")
 
+# Download missing files
+download_fund_data(redownload = FALSE)
+
 # Get fund data into tibbles stored in the storage env
-dl_funds(redownload = FALSE) # download only missing funds
-storage <- import_funds()
-fund_index <- get_fund_index() # fund-index map resulting from above import
+storage <- run_data_loaders()
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
 series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
@@ -20,7 +21,7 @@ series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".
 nd <- 365
 diffs <- map(
     list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, fund_index, use_log = .x, silent_skip = TRUE)
+    ~ roll_diffs(series, nd, get_fund_index_map(), use_log = .x, silent_skip = TRUE)
 )
 
 # Get XLM data

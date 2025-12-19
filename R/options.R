@@ -16,11 +16,15 @@
 #'   tickers (sets `fundsr.xetra_map`).
 #' @param inkscape Inkscape executable (path or command name) used by export
 #'   helpers (sets `fundsr.inkscape`).
-#' @param redo_import Logical; default value for forcing re-import of cached
-#'   objects (sets `fundsr.redo_import`).
+#' @param reload Logical; default value for forcing re-import of cached
+#'   objects (sets `fundsr.reload`).
+#' @param fund_urls Named character vector or named list of URLs for fund data
+#'   downloads (sets `fundsr.fund_urls`).
 #'
 #' @return Invisibly returns a named list of the previous values of the options
 #'   that were changed (as returned by `options()`).
+#' @seealso
+#' [add_fund_urls()] to add/update entries in `fundsr.fund_urls`.
 #' @export
 fundsr_options <- function(data_dir = NULL,
                            out_dir = NULL,
@@ -29,7 +33,8 @@ fundsr_options <- function(data_dir = NULL,
                            export_svg = NULL,
                            xetra_map = NULL,
                            inkscape = NULL,
-                           redo_import = NULL) {
+                           reload = NULL,
+                           fund_urls = NULL) {
     set <- list()
 
     if (!is.null(data_dir)) {
@@ -81,11 +86,19 @@ fundsr_options <- function(data_dir = NULL,
         set$fundsr.inkscape <- inkscape
     }
 
-    if (!is.null(redo_import)) {
-        if (!is.logical(redo_import) || length(redo_import) != 1L || is.na(redo_import)) {
-            stop("`redo_import` must be TRUE or FALSE.", call. = FALSE)
+    if (!is.null(reload)) {
+        if (!is.logical(reload) || length(reload) != 1L || is.na(reload)) {
+            stop("`reload` must be TRUE or FALSE.", call. = FALSE)
         }
-        set$fundsr.redo_import <- redo_import
+        set$fundsr.reload <- reload
+    }
+
+    if (!is.null(fund_urls)) {
+        if ((!is.character(fund_urls) && !is.list(fund_urls)) ||
+            is.null(names(fund_urls)) || any(!nzchar(names(fund_urls)))) {
+            stop("`fund_urls` must be a named character vector or named list.", call. = FALSE)
+        }
+        set$fundsr.fund_urls <- fund_urls
     }
 
     if (length(set) == 0L) {
@@ -93,4 +106,33 @@ fundsr_options <- function(data_dir = NULL,
     }
 
     do.call(options, set)
+}
+
+#' Add entries to the fund download list
+#'
+#' Adds one or more named download specifications to the `fundsr.fund_urls`
+#' option. Existing entries are preserved; entries in `x` replace any
+#' existing entries with the same name.
+#'
+#' Names are normalised to uppercase before storing.
+#'
+#' @param x A named character vector mapping download identifiers to URLs.
+#'
+#' @return A list with the previous value of `fundsr.fund_urls`.
+#' @seealso
+#' [fundsr_options()] to set `fundsr.fund_urls` (and other fundsr options) in one call.
+#' [download_fund_data()] to download files from the configured URLs.
+#' @export
+add_fund_urls <- function(x) {
+    stopifnot(is.character(x), !is.null(names(x)), all(nzchar(names(x))))
+
+    names(x) <- toupper(names(x))
+    cur <- getOption("fundsr.fund_urls", character())
+    if (length(cur) && !is.null(names(cur))) {
+        names(cur) <- toupper(names(cur))
+    }
+
+    new <- c(cur, x)
+    new <- new[!duplicated(names(new), fromLast = TRUE)]
+    options(fundsr.fund_urls = new)
 }

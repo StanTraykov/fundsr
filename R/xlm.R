@@ -111,7 +111,7 @@ read_xlm_directory <- function(directory,
 #' a line-and-point plot of XLM values over time.
 #'
 #' @export
-xlm_plot <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL) {
+plot_xlms <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL) {
     data <- if (rgx) {
         xlm_data %>% filter(stringr::str_detect(.data$name, tickers))
     } else {

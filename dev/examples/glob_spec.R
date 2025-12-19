@@ -18,7 +18,7 @@ glob_colors <- function(...) {
 
 # plot specification
 plot_spec <- tribble(
-    ~plot_id, ~title, ~filter,
+    ~plot_id, ~title, ~data_filter,
     ~gg_params, ~width,  ~height,
     ~funds,
 
@@ -37,17 +37,18 @@ plot_spec <- tribble(
 spec_list <- c(spec_list, list(plot_spec))
 
 ##### Data #####
-add_to_dl_list(c(
+add_fund_urls(c(
     IUSQ = "https://www.ishares.com/uk/individual/en/products/251850/ishares-msci-acwi-ucits-etf/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-ACWI-UCITS-ETF-USD-Acc_fund&dataType=fund",
     SPYY = "https://www.ssga.com/ie/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyy-gy.xlsx",
     SPYI = "https://www.ssga.com/uk/en_gb/institutional/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyi-gy.xlsx"
 ))
 
-add_import_fun(function() {
+add_data_loader(function() {
     ####### Indices #######
-    setg("gmlm", get_csv("GMLM.csv"))
-    setg("gmlm-gr", get_csv("GMLM-GR.csv"), add_fi_pairs = set_names("GMLM", "GMLM-GR"))
-    setg("ftaw", get_csv("FTAW.csv"))
+    store_timeseries("gmlm", read_timeseries("GMLM.csv"))
+    store_timeseries("gmlm-gr", read_timeseries("GMLM-GR.csv"),
+                     fund_index_map = set_names("GMLM", "GMLM-GR"))
+    store_timeseries("ftaw", read_timeseries("FTAW.csv"))
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,
          file = "MSCI-NT.xls")

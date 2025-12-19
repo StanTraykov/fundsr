@@ -17,8 +17,8 @@ the fund index map (used to map gross to net indices).}
 \item{file}{Filename of the XLSX file to import.}
 }
 \value{
-Invisibly returns \code{NULL}. Data are stored via \code{setg()}.
+Invisibly returns \code{NULL}. Data are stored via \code{store_timeseries()}.
 }
 \description{
-Wrapper around \code{setg()} and \code{import_xl_data()} for MSCI index files.
+Wrapper around \code{store_timeseries()} and \code{import_xl_data()} for MSCI index files.
 }

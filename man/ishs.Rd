@@ -16,5 +16,5 @@ ishs(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE)
 \item{retrieve_benchmark}{Logical; also import benchmark column.}
 }
 \description{
-Wrapper around \code{fund_imp()} for iShares files.
+Wrapper around \code{load_fund()} for iShares files.
 }

@@ -12,13 +12,11 @@
 #' @export
 #'
 #' @examples
-#' clear_session()
-clear_session <- function() {
-    clear_fund_storage(clear_fund_index = TRUE)
-    clear_import_funs()
-    clear_ink_queue()
-    .fundsr$done_xlms <- character()
+#' reset_state()
+reset_state <- function() {
+    clear_storage(clear_fund_index_map = TRUE)
+    clear_data_loaders()
+    clear_inkscape_queue()
+    .fundsr$done_xlm_sets <- character()
     invisible(NULL)
 }
-
-

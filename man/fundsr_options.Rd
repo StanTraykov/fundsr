@@ -12,7 +12,8 @@ fundsr_options(
   export_svg = NULL,
   xetra_map = NULL,
   inkscape = NULL,
-  redo_import = NULL
+  reload = NULL,
+  fund_urls = NULL
 )
 }
 \arguments{
@@ -34,8 +35,11 @@ tickers (sets \code{fundsr.xetra_map}).}
 \item{inkscape}{Inkscape executable (path or command name) used by export
 helpers (sets \code{fundsr.inkscape}).}
 
-\item{redo_import}{Logical; default value for forcing re-import of cached
-objects (sets \code{fundsr.redo_import}).}
+\item{reload}{Logical; default value for forcing re-import of cached
+objects (sets \code{fundsr.reload}).}
+
+\item{fund_urls}{Named character vector or named list of URLs for fund data
+downloads (sets \code{fundsr.fund_urls}).}
 }
 \value{
 Invisibly returns a named list of the previous values of the options
@@ -47,4 +51,7 @@ Convenience wrapper around \code{options()} for setting common \verb{fundsr.*} o
 \details{
 All arguments default to \code{NULL}. If an argument is left as \code{NULL}, the
 corresponding \verb{fundsr.*} option is left unchanged.
+}
+\seealso{
+\code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
 }
