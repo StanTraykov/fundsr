@@ -1,16 +1,19 @@
 ##### Plots #####
-funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "ACWI-GR", "GMLM-GR")
-title <- c(en = "Global funds + some gross indices",
-           bg = "Глобални фондове + брутни индески")
+phys_h_funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "scwx", "ACWI-GR", "GMLM-GR")
+phys_s_funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "acwia", "acwi", "acwu", "ACWI-GR", "GMLM-GR")
+phys_h_title <- c(en = "Global funds (phys. and hybrid) + some gross indices",
+           bg = "Глобални фондове (физ. и хибридни) + брутни индекси")
+phys_s_title <- c(en = "Global funds (phys. and swap) + some gross indices",
+                  bg = "Глобални фондове (физ. и суап) + брутни индекси")
 spyi_title <- c(en = "SPYI in comparison to a few global funds",
                 bg = "SPYI в сравнение с някои глобални фондове")
 glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
                    "spyy" = "#89AE00",       "vwce" = "#600000",
                    "fwra" = "blue",          "fwia" = "blue",
                    "spyi" = "darkgreen",     "acwi" = "pink",
-                   "acwu" = "lightblue",     "acwia" = "orange",
+                   "acwu" = "#ADD8E6",       "acwia" = "orange",
                    "GMLM-GR" = "grey50",     "ACWI-GR" = "black",
-                   "ACWI_IMI-GR" = "grey50", "scwx" = "#206666",
+                   "ACWI_IMI-GR" = "grey50", "scwx" = "orange",
                    "exus" = "black")
 glob_colors <- function(...) {
     scale_color_manual(values = glob_fund_pal, na.value = "grey70", labels = toupper, ...)
@@ -22,13 +25,21 @@ plot_spec <- tribble(
     ~gg_params, ~width,  ~height,
     ~funds,
 
-    "glob", title, no_filter,
+    "glob_ph", phys_h_title, no_filter,
     glob_colors(), std_w, std_h,
-    funds,
+    phys_h_funds,
 
-    "globZ", title, zoom_filter,
+    "glob_phZ", phys_h_title, zoom_filter,
     glob_colors(), std_w, std_h,
-    funds,
+    phys_h_funds,
+
+    "glob_ps", phys_s_title, no_filter,
+    glob_colors(), std_w, std_h,
+    phys_s_funds,
+
+    "glob_psZ", phys_s_title, zoom_filter,
+    glob_colors(), std_w, std_h,
+    phys_s_funds,
 
     "globI", spyi_title, no_filter,
     glob_colors(), std_w, std_h,
@@ -57,11 +68,16 @@ add_data_loader(function() {
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "MSCI-GR.xls")
 
-    ####### Funds #######
+    # Phys / hybrid
     inve("FWRA", benchmark = "FTAW", retrieve_benchmark = T)
     amun("WEBN", benchmark = "GMLM", file = "NAV History_Amundi Prime All Country World UCITS ETF Acc_IE0003XJA0J9_10_06_2024.xlsx")
     vang("VWCE", benchmark = "FTAW", file = "Historical Prices - Vanguard FTSE All-World UCITS ETF (USD) Accumulating.xlsx")
+    xtra("SCWX", benchmark = "ACWI", file = "HistoricalData-LU2903252349.xlsx")
     spdr("SPYY", benchmark = "ACWI")
     spdr("SPYI", benchmark = "ACWI_IMI")
     ishs("IUSQ", benchmark = "ACWI")
+    # Swap
+    amun("ACWU", benchmark = "ACWI", file = "NAV History_Amundi MSCI All Country World UCITS ETF USD Acc_LU1829220133_03_10_2012.xlsx")
+    amun("ACWI", benchmark = "ACWIEUR", file = "NAV History_Amundi MSCI All Country World UCITS ETF EUR Acc_LU1829220216_03_10_2012.xlsx")
+    ubs("ACWIA", benchmark = "ACWI", file = "UBS_UBS MSCI ACWI SF UCITS ETFPrices.xlsx")
 })
