@@ -14,7 +14,7 @@ glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
                    "acwu" = "#ADD8E6",       "acwia" = "orange",
                    "GMLM-GR" = "grey50",     "ACWI-GR" = "black",
                    "ACWI_IMI-GR" = "grey50", "scwx" = "orange",
-                   "exus" = "black")
+                   "exus" = "black",         "lyy0" = "pink")
 glob_colors <- function(...) {
     scale_color_manual(values = glob_fund_pal, na.value = "grey70", labels = toupper, ...)
 }

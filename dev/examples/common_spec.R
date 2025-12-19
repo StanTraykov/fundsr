@@ -13,7 +13,10 @@ fundsr_options(
     # inkscape = Sys.which("inkscape"), # if it's on PATH
 
     xetra_map = c(
-        fwra = "fwia"
+        fwra = "fwia",
+        acwi = "lyy0",
+        iwda = "eunl",
+        cw8 = "amew"
     )
 )
 spec_list <- list()

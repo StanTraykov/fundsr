@@ -365,7 +365,8 @@ run_plots <- function(rds_cagr,
             if (!key %in% .fundsr$done_xlm_sets) {
                 xlm_plot <- plot_xlms(xlm_data,
                                      funds_xet,
-                                     gg_params = list(gg_params, add_gg_params))
+                                     gg_params = list(gg_params, add_gg_params),
+                                     back_trans = TRUE)
                 save_plot(paste0("xlm_", plot_id), xlm_plot, width = width, height = height)
                 .fundsr$done_xlm_sets <- c(.fundsr$done_xlm_sets, key)
             }
