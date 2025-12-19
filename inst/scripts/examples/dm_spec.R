@@ -9,7 +9,7 @@ gg_par_swap <- fund_colors(breaks = funds_swap,
                            special = c(iwda = "black", sppw = "grey50"))
 # plot specification
 plot_spec <- tribble(
-    ~plot_id, ~title, ~filter,
+    ~plot_id, ~title, ~data_filter,
     ~gg_params, ~width,  ~height,
     ~funds,
 
@@ -32,14 +32,14 @@ plot_spec <- tribble(
 spec_list <- c(spec_list, list(plot_spec))
 
 ##### Data #####
-add_to_dl_list(c(
+add_fund_urls(c(
     IWDA = "https://www.ishares.com/uk/individual/en/products/251882/ishares-msci-world-ucits-etf-acc-fund/1535604580409.ajax?fileType=xls&fileName=iShares-Core-MSCI-World-UCITS-ETF_fund&dataType=fund",
     SPPW = "https://www.ssga.com/uk/en_gb/intermediary/library-content/products/fund-data/etfs/emea/navhist-emea-en-sppw-gy.xlsx",
     WPEA = "https://www.ishares.com/ch/professionals/en/products/335178/fund/1535604580403.ajax?fileType=xls&fileName=iShares-MSCI-World-Swap-PEA-UCITS-ETF-EUR-Acc_fund&dataType=fund",
     IWDS = "https://www.ishares.com/uk/individual/en/products/335184/fund/1535604580409.ajax?fileType=xls&fileName=iShares-MSCI-World-Swap-UCITS-ETF-USD-Acc_fund&dataType=fund"
 ))
 
-add_import_fun(function() {
+add_data_loader(function() {
     ####### Indices #######
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,
