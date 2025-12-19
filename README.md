@@ -37,11 +37,11 @@ add_data_loader(function() {
         spyi = "ACWI_IMI",
         iusq = "ACWI")
     store_timeseries("funds", funds_data, fund_index_map = fi_map)
-    store_timeseries("indices", get_timeseries("indices.csv", time_unit = "ms"))
+    store_timeseries("indices", read_timeseries("indices.csv", time_unit = "ms"))
 })
 run_data_loaders()
 ```
-Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see [`get_csv()`](https://stantraykov.github.io/fundsr/reference/get_csv.html).
+Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.html).
 ## Indices
 ### From fund files
 Some fund providers' files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
