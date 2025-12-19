@@ -91,22 +91,12 @@ Traykov</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr' [...]</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'lubridate'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     date, intersect, setdiff, union</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StanTraykov/fundsr" class="external-link">fundsr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; fundsr loaded.</span></span></code></pre></div>
+<span><span class="co">#&gt; Attaching package: 'lubridate' [...]</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/StanTraykov/fundsr" class="external-link">fundsr</a></span><span class="op">)</span></span></code></pre></div>
 <p>Set up directories.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -194,35 +184,35 @@ Traykov</h4>
 <p>Check contents</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">storage</span><span class="op">[[</span><span class="st">"iusq"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,615 × 3</span></span></span>
+<span><span class="co">#&gt; # A tibble: 3,615 × 3</span></span>
 <span><span class="co">#&gt;    date        iusq  ACWI</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-12-18  107.  431.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-12-17  106.  428.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-12-16  107.  432.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-12-15  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-12-12  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-12-11  109.  437.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-12-10  108.  436.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-12-09  108.  433.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-12-08  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-12-05  108.  435.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,605 more rows</span></span></span>
+<span><span class="co">#&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2025-12-18  107.  431.</span></span>
+<span><span class="co">#&gt;  2 2025-12-17  106.  428.</span></span>
+<span><span class="co">#&gt;  3 2025-12-16  107.  432.</span></span>
+<span><span class="co">#&gt;  4 2025-12-15  108.  434.</span></span>
+<span><span class="co">#&gt;  5 2025-12-12  108.  434.</span></span>
+<span><span class="co">#&gt;  6 2025-12-11  109.  437.</span></span>
+<span><span class="co">#&gt;  7 2025-12-10  108.  436.</span></span>
+<span><span class="co">#&gt;  8 2025-12-09  108.  433.</span></span>
+<span><span class="co">#&gt;  9 2025-12-08  108.  434.</span></span>
+<span><span class="co">#&gt; 10 2025-12-05  108.  435.</span></span>
+<span><span class="co">#&gt; # ℹ 3,605 more rows</span></span>
 <span><span class="va">series</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,336 × 4</span></span></span>
+<span><span class="co">#&gt; # A tibble: 3,336 × 4</span></span>
 <span><span class="co">#&gt;    date        spyy  iusq  ACWI</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2012-12-31  76.7  29.2  115.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2013-01-01  <span style="color: #BB0000;">NA</span>    29.2  115.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2013-01-02  78.4  29.8  118.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2013-01-03  78.3  29.8  118.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2013-01-04  78.5  29.9  118.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2013-01-07  78.3  29.8  118.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2013-01-08  77.9  29.7  117.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2013-01-09  78.2  29.8  118.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2013-01-10  78.8  30.1  119.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2013-01-11  79.0  30.1  119.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,326 more rows</span></span></span>
+<span><span class="co">#&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2012-12-31  76.7  29.2  115.</span></span>
+<span><span class="co">#&gt;  2 2013-01-01  NA    29.2  115.</span></span>
+<span><span class="co">#&gt;  3 2013-01-02  78.4  29.8  118.</span></span>
+<span><span class="co">#&gt;  4 2013-01-03  78.3  29.8  118.</span></span>
+<span><span class="co">#&gt;  5 2013-01-04  78.5  29.9  118.</span></span>
+<span><span class="co">#&gt;  6 2013-01-07  78.3  29.8  118.</span></span>
+<span><span class="co">#&gt;  7 2013-01-08  77.9  29.7  117.</span></span>
+<span><span class="co">#&gt;  8 2013-01-09  78.2  29.8  118.</span></span>
+<span><span class="co">#&gt;  9 2013-01-10  78.8  30.1  119.</span></span>
+<span><span class="co">#&gt; 10 2013-01-11  79.0  30.1  119.</span></span>
+<span><span class="co">#&gt; # ℹ 3,326 more rows</span></span>
 <span><span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   spyy   iusq </span></span>
 <span><span class="co">#&gt; "ACWI" "ACWI"</span></span></code></pre></div>
@@ -287,10 +277,8 @@ PNGs (if option <code>fundsr.internal_png</code> is
 <p>Optional: higher-quality PNG export</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/export_pngs.html">export_pngs</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Executing 'C:/Program Files/Inkscape/bin/inkscape.exe' --actions='export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close'</span></span>
-<span><span class="co">#&gt; Warning in system2(inkscape, args = args): error in running command</span></span>
-<span><span class="co">#&gt; export_pngs: Inkscape returned non-zero exit status: 127</span></span>
-<span><span class="co">#&gt; [1] 127</span></span></code></pre></div>
+<span><span class="co">#&gt; Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"</span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
