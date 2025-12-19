@@ -33,7 +33,7 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data)
+plots <- run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data)
 
 # Optional high-quality PNG export
-# ggexport()
+# export_pngs()
