@@ -1,7 +1,7 @@
 ##### Plots #####
-funds_phys <- c("iwda", "sppw", "xdwd", "mwrd", "uetw", "h4zy", "WORLD-GR")
+funds_phys <- c("iwda", "sppw", "xdwd", "mwrd", "uetw", "h4zy", "f50a", "WORLD-GR", "DMLM-GR")
 title_phys <- "MSCI World phys. funds"
-gg_par_phys <- fund_colors(breaks = funds_phys, special = c(`WORLD-GR` = "black"))
+gg_par_phys <- fund_colors(breaks = funds_phys, special = c(`WORLD-GR` = "black", `DMLM-GR` = "grey50"))
 
 funds_swap <- c("iwda", "sppw", "cw8", "dbxw", "wpea", "cw8u", "wldc", "iwds", "sc0j")
 title_swap <- "MSCI World swap funds (IWDA, SPPW for reference)"
@@ -41,6 +41,9 @@ add_fund_urls(c(
 
 add_data_loader(function() {
     ####### Indices #######
+    store_timeseries("dmlm", read_timeseries("DMLM.csv"))
+    store_timeseries("dmlm-gr", read_timeseries("DMLM-GR.csv"),
+                     fund_index_map = set_names("DMLM", "DMLM-GR"))
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,
          file = "MSCI-NT.xls")
@@ -58,6 +61,7 @@ add_data_loader(function() {
 
     ####### Phys #######
     amun("MWRD", benchmark = "WORLD", file = "NAV History_Amundi Core MSCI World UCITS ETF Acc_IE000BI8OT95_18_01_2024.xlsx")
+    amun("F50A", benchmark = "DMLM", file = "NAV History_Amundi Prime Global UCITS ETF Acc_IE0009DRDY20_13_11_2024.xlsx")
     hsbc("H4ZY", benchmark = "WORLD", file = "NAV_history _ IE000UQND7H4.xlsx")
     ishs("IWDA", benchmark = "WORLD")
     ubs("UETW", benchmark = "WORLD", file = "UBS_UBS Core MSCI World UCITS ETFPrices.xlsx")

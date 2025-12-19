@@ -9,12 +9,12 @@ spyi_title <- c(en = "SPYI in comparison to a few global funds",
                 bg = "SPYI в сравнение с някои глобални фондове")
 glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
                    "spyy" = "#89AE00",       "vwce" = "#600000",
-                   "fwra" = "blue",          "fwia" = "blue",
                    "spyi" = "darkgreen",     "acwi" = "pink",
                    "acwu" = "#ADD8E6",       "acwia" = "orange",
                    "GMLM-GR" = "grey50",     "ACWI-GR" = "black",
                    "ACWI_IMI-GR" = "grey50", "scwx" = "orange",
-                   "exus" = "black")
+                   "fwra" = "blue"
+)
 glob_colors <- function(...) {
     scale_color_manual(values = glob_fund_pal, na.value = "grey70", labels = toupper, ...)
 }
