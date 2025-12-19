@@ -115,17 +115,18 @@
 <h3 id="supported-formats-amundi-hsbc-invesco-ishares-spdr-ubs-xtrackers">Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers)<a class="anchor" aria-label="anchor" href="#supported-formats-amundi-hsbc-invesco-ishares-spdr-ubs-xtrackers"></a>
 </h3>
 <p>Fund providers allow downloading a NAV history in Excel format (even if it’s sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the <a href="https://stantraykov.github.io/fundsr/reference/add_to_dl_list.html" class="external-link"><code>add_to_dl_list()</code></a> and <a href="https://stantraykov.github.io/fundsr/reference/dl_funds.html" class="external-link"><code>dl_funds()</code></a> functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund <code>.xls</code> or <code>.xlsx</code> file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. <code>FWRA.xlsx</code>) it can be imported without specifying a file.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">add_import_fun</span>(<span class="cf">function</span> () {</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">add_data_loader</span>(<span class="cf">function</span> () {</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">inve</span>(<span class="st">"FWRA"</span>, <span class="at">benchmark =</span> <span class="st">"FTAW"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">amun</span>(<span class="st">"WEBN"</span>, <span class="at">benchmark =</span> <span class="st">"GMLM"</span>, <span class="at">file =</span> <span class="st">"NAV History_Amundi Prime All Country World UCITS ETF Acc_IE0003XJA0J9_10_06_2024.xlsx"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">run_data_loaders</span>()</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="other-funds">Other funds<a class="anchor" aria-label="anchor" href="#other-funds"></a>
 </h3>
 <p>Prepare a tibble/dataframe or a CSV file with a date column and one or more data columns that must be lowercase for funds (e.g. <code>sxr8</code>, <code>vwce</code>, <code>spyy</code>) and uppercase for indices (e.g. <code>SP500</code>, <code>FTAW</code>, <code>ACWI</code>). Suppose you have a dataframe <code>funds_data</code> with fund NAVs and a CSV file with index levels. You can import them via:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">add_import_fun</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/add_data_loader.html">add_data_loader</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">fi_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>        fwra <span class="op">=</span> <span class="st">"FTAW"</span>,</span>
 <span>        webn <span class="op">=</span> <span class="st">"GMLM"</span>,</span>
@@ -133,12 +134,13 @@
 <span>        spyy <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
 <span>        spyi <span class="op">=</span> <span class="st">"ACWI_IMI"</span>,</span>
 <span>        iusq <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
-<span>    <span class="fu">setg</span><span class="op">(</span><span class="st">"funds"</span>, <span class="va">funds_data</span>, add_fi_pairs <span class="op">=</span> <span class="va">fi_map</span><span class="op">)</span></span>
-<span>    <span class="fu">setg</span><span class="op">(</span><span class="st">"indices"</span>, <span class="fu">get_csv</span><span class="op">(</span><span class="st">"indices.csv"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="fu"><a href="reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span><span class="st">"funds"</span>, <span class="va">funds_data</span>, fund_index_map <span class="op">=</span> <span class="va">fi_map</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span><span class="st">"indices"</span>, <span class="fu">get_timeseries</span><span class="op">(</span><span class="st">"indices.csv"</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/run_data_loaders.html">run_data_loaders</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see <a href="https://stantraykov.github.io/fundsr/reference/get_csv.html" class="external-link"><code>get_csv()</code></a>. ## Indices ### From fund files Some fund providers’ files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">add_import_fun</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/add_data_loader.html">add_data_loader</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve ACWI (R) from fund file</span></span>
 <span>    <span class="fu"><a href="reference/inve.html">inve</a></span><span class="op">(</span><span class="st">"FWRA"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve FTSE All-World (R) from fund file</span></span>
