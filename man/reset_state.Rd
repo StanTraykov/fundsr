@@ -11,9 +11,9 @@ Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
 Convenience helper that clears mutable internal fundsr state: the fund storage
-(\code{.fundsr_storage}) and fund-index map (\code{.fundsr$fund_index}), the import-function
-registry (\code{.fundsr$import_funs}), the Inkscape export queue (\code{.fundsr$ink_queue}),
-and the XLM bookkeeping vector (\code{.fundsr$done_xlms}).
+(\code{.fundsr_storage}) and fund-index map (\code{.fundsr$fund_index_map}), the import-function
+registry (\code{.fundsr$data_loaders}), the Inkscape export queue (\code{.fundsr$inkscape_queue}),
+and the XLM bookkeeping vector (\code{.fundsr$done_xlm_sets}).
 }
 \examples{
 reset_state()

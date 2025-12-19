@@ -24,7 +24,7 @@ a single unsuffixed column containing the coalesced values. If
 }
 \value{
 A tibble: the full join of all non-late objects, followed by
-sequential left-joins of the late objects. If \code{coalesce_suffixes}
+sequential left-joins of the late objects. If \code{coalesce_suffixed}
 is supplied, suffixed join columns are coalesced into unsuffixed
 base columns as described above.
 }
@@ -58,6 +58,6 @@ warning.
   join_env(e, by = "date")
 
   # Full join with automatic coalescing of x.x / x.y into x
-  join_env(e, by = "date", coalesce_suffixes = c(".x", ".y"))
+  join_env(e, by = "date", coalesce_suffixed = c(".x", ".y"))
 }
 }

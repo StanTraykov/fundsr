@@ -5,7 +5,7 @@
 ### Configuration
 
 - `fundsr_options()` provides a validated wrapper around `options()` for setting common `fundsr.*` options (data directories, export settings, URL registry, and more).
-- `add_fund_urls()` adds/updates the fund download registry (`fundsr.fund_urls`).
+- `add_fund_urls()` adds/updates the fund download registry (option `fundsr.fund_urls`).
 
 ### Import and storage
 
