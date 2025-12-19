@@ -11,9 +11,10 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = FALSE
+    fig.path = "man/figures/",
+    collapse = TRUE,
+    comment = "#>",
+    eval = FALSE
 )
 ```
 
