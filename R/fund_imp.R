@@ -204,7 +204,7 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 #'   `NULL` (the default), no automatic coalescing is performed.
 #'
 #' @return A tibble: the full join of all non-late objects, followed by
-#'   sequential left-joins of the late objects. If `coalesce_suffixes`
+#'   sequential left-joins of the late objects. If `coalesce_suffixed`
 #'   is supplied, suffixed join columns are coalesced into unsuffixed
 #'   base columns as described above.
 #'
@@ -233,7 +233,7 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 #'   join_env(e, by = "date")
 #'
 #'   # Full join with automatic coalescing of x.x / x.y into x
-#'   join_env(e, by = "date", coalesce_suffixes = c(".x", ".y"))
+#'   join_env(e, by = "date", coalesce_suffixed = c(".x", ".y"))
 #' }
 join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
     obj_names <- ls(envir = env, sorted = FALSE)
