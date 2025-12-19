@@ -217,6 +217,11 @@ run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 #> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: recent years
 ```
 
+Files in the `output` directory should look like:
+![CAGR diffs](images/ACWI.png){width=88%}
+![log-ret diffs](images/ACWI_L.png){width=88%}
+![XLM plot](images/xlm_ACWI.png){width=88%}
+
 Plot in another language.
 ```{r}
 Sys.setLanguage("bg")
