@@ -58,11 +58,11 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="add_import_fun.html">add_import_fun()</a></code> </p>
+          <p><code><a href="add_data_loader.html">add_data_loader()</a></code> </p>
         </td>
-        <td><p>Register an import function</p></td>
+        <td><p>Register a data loader</p></td>
       </tr><tr><td>
-          <p><code><a href="add_to_dl_list.html">add_to_dl_list()</a></code> </p>
+          <p><code><a href="add_fund_urls.html">add_fund_urls()</a></code> </p>
         </td>
         <td><p>Add entries to the fund download list</p></td>
       </tr><tr><td>
@@ -70,65 +70,41 @@
         </td>
         <td><p>Import an Amundi fund</p></td>
       </tr><tr><td>
-          <p><code><a href="clear_fund_storage.html">clear_fund_storage()</a></code> </p>
+          <p><code><a href="clear_data_loaders.html">clear_data_loaders()</a></code> </p>
         </td>
-        <td><p>Clear fund storage</p></td>
+        <td><p>Clear registered data loaders</p></td>
       </tr><tr><td>
-          <p><code><a href="clear_import_funs.html">clear_import_funs()</a></code> </p>
-        </td>
-        <td><p>Clear registered import functions</p></td>
-      </tr><tr><td>
-          <p><code><a href="clear_ink_queue.html">clear_ink_queue()</a></code> </p>
+          <p><code><a href="clear_inkscape_queue.html">clear_inkscape_queue()</a></code> </p>
         </td>
         <td><p>Clear queued Inkscape exports</p></td>
       </tr><tr><td>
-          <p><code><a href="clear_session.html">clear_session()</a></code> </p>
+          <p><code><a href="clear_storage.html">clear_storage()</a></code> </p>
         </td>
-        <td><p>Clear fundsr session state</p></td>
+        <td><p>Clear storage</p></td>
       </tr><tr><td>
-          <p><code><a href="dl_funds.html">dl_funds()</a></code> </p>
+          <p><code><a href="download_fund_data.html">download_fund_data()</a></code> </p>
         </td>
         <td><p>Download fund data according to the configured download list</p></td>
       </tr><tr><td>
-          <p><code><a href="fund_imp.html">fund_imp()</a></code> </p>
+          <p><code><a href="export_pngs.html">export_pngs()</a></code> </p>
         </td>
-        <td><p>Import a fund's NAV data and register its benchmark mapping</p></td>
+        <td><p>Export queued SVG files to PNG using Inkscape</p></td>
       </tr><tr><td>
           <p><code><a href="fundsr_options.html">fundsr_options()</a></code> </p>
         </td>
         <td><p>Set fundsr package options</p></td>
       </tr><tr><td>
-          <p><code><a href="get_csv.html">get_csv()</a></code> </p>
-        </td>
-        <td><p>Read a CSV with a date + one or more value (fund NAV/index level) columns.</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_fund_index.html">get_fund_index()</a></code> </p>
+          <p><code><a href="get_fund_index_map.html">get_fund_index_map()</a></code> </p>
         </td>
         <td><p>Get the internal fund index map</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_msci_tsv.html">get_msci_tsv()</a></code> </p>
-        </td>
-        <td><p>Read an MSCI two-column TSV file</p></td>
       </tr><tr><td>
           <p><code><a href="get_storage.html">get_storage()</a></code> </p>
         </td>
         <td><p>Get the internal fund storage</p></td>
       </tr><tr><td>
-          <p><code><a href="ggexport.html">ggexport()</a></code> </p>
-        </td>
-        <td><p>Export queued SVG files to PNG using Inkscape</p></td>
-      </tr><tr><td>
-          <p><code><a href="ggink.html">ggink()</a></code> </p>
-        </td>
-        <td><p>Save a plot as SVG and optionally queue PNG export via Inkscape</p></td>
-      </tr><tr><td>
           <p><code><a href="hsbc.html">hsbc()</a></code> </p>
         </td>
         <td><p>Import an HSBC fund</p></td>
-      </tr><tr><td>
-          <p><code><a href="import_funds.html">import_funds()</a></code> </p>
-        </td>
-        <td><p>Load or refresh the fund storage environment</p></td>
       </tr><tr><td>
           <p><code><a href="inve.html">inve()</a></code> </p>
         </td>
@@ -142,33 +118,61 @@
         </td>
         <td><p>Join all tibbles in an environment with optional late left-joins</p></td>
       </tr><tr><td>
+          <p><code><a href="load_fund.html">load_fund()</a></code> </p>
+        </td>
+        <td><p>Load a fund's NAV data and optionally register its benchmark mapping</p></td>
+      </tr><tr><td>
           <p><code><a href="msci.html">msci()</a></code> </p>
         </td>
         <td><p>Import an MSCI index sheet and register benchmark mappings</p></td>
       </tr><tr><td>
-          <p><code><a href="rd_plot.html">rd_plot()</a></code> </p>
+          <p><code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code> </p>
         </td>
         <td><p>Plot rolling return differences against benchmark</p></td>
+      </tr><tr><td>
+          <p><code><a href="plot_xlms.html">plot_xlms()</a></code> </p>
+        </td>
+        <td><p>Plot Xetra Liquidity Measure (XLM) time series</p></td>
+      </tr><tr><td>
+          <p><code><a href="read_msci_tsv.html">read_msci_tsv()</a></code> </p>
+        </td>
+        <td><p>Read an MSCI two-column TSV file</p></td>
+      </tr><tr><td>
+          <p><code><a href="read_timeseries.html">read_timeseries()</a></code> </p>
+        </td>
+        <td><p>Read a time series file (CSV/TSV) with a date + one or more value columns</p></td>
       </tr><tr><td>
           <p><code><a href="read_xlm_directory.html">read_xlm_directory()</a></code> </p>
         </td>
         <td><p>Read and combine XLM data from multiple Xetra XLSX files</p></td>
       </tr><tr><td>
+          <p><code><a href="reset_state.html">reset_state()</a></code> </p>
+        </td>
+        <td><p>Clear fundsr session state</p></td>
+      </tr><tr><td>
           <p><code><a href="roll_diffs.html">roll_diffs()</a></code> </p>
         </td>
         <td><p>Compute rolling annualized tracking differences (CAGR or log-return)</p></td>
+      </tr><tr><td>
+          <p><code><a href="run_data_loaders.html">run_data_loaders()</a></code> </p>
+        </td>
+        <td><p>Run registered data loaders</p></td>
       </tr><tr><td>
           <p><code><a href="run_plots.html">run_plots()</a></code> </p>
         </td>
         <td><p>Generate and export all configured rolling-difference plots</p></td>
       </tr><tr><td>
-          <p><code><a href="setg.html">setg()</a></code> </p>
+          <p><code><a href="save_plot.html">save_plot()</a></code> </p>
         </td>
-        <td><p>Set or update a cached object in the package storage environment</p></td>
+        <td><p>Save a plot as SVG and optionally queue PNG export via Inkscape</p></td>
       </tr><tr><td>
           <p><code><a href="spdr.html">spdr()</a></code> </p>
         </td>
         <td><p>Import an SPDR fund</p></td>
+      </tr><tr><td>
+          <p><code><a href="store_timeseries.html">store_timeseries()</a></code> </p>
+        </td>
+        <td><p>Store a cached object in the package storage environment</p></td>
       </tr><tr><td>
           <p><code><a href="ubs.html">ubs()</a></code> </p>
         </td>
@@ -177,10 +181,6 @@
           <p><code><a href="vang.html">vang()</a></code> </p>
         </td>
         <td><p>Import a Vanguard fund</p></td>
-      </tr><tr><td>
-          <p><code><a href="xlm_plot.html">xlm_plot()</a></code> </p>
-        </td>
-        <td><p>Plot Xetra Liquidity Measure (XLM) time series</p></td>
       </tr><tr><td>
           <p><code><a href="xtra.html">xtra()</a></code> </p>
         </td>

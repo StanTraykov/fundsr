@@ -68,7 +68,8 @@
 <span>  export_svg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xetra_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  inkscape <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  redo_import <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  reload <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fund_urls <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -108,9 +109,14 @@ tickers (sets <code>fundsr.xetra_map</code>).</p></dd>
 helpers (sets <code>fundsr.inkscape</code>).</p></dd>
 
 
-<dt id="arg-redo-import">redo_import<a class="anchor" aria-label="anchor" href="#arg-redo-import"></a></dt>
+<dt id="arg-reload">reload<a class="anchor" aria-label="anchor" href="#arg-reload"></a></dt>
 <dd><p>Logical; default value for forcing re-import of cached
-objects (sets <code>fundsr.redo_import</code>).</p></dd>
+objects (sets <code>fundsr.reload</code>).</p></dd>
+
+
+<dt id="arg-fund-urls">fund_urls<a class="anchor" aria-label="anchor" href="#arg-fund-urls"></a></dt>
+<dd><p>Named character vector or named list of URLs for fund data
+downloads (sets <code>fundsr.fund_urls</code>).</p></dd>
 
 </dl></div>
     <div id="value">
@@ -122,6 +128,10 @@ that were changed (as returned by <code><a href="https://rdrr.io/r/base/options.
     <h2>Details</h2>
     <p>All arguments default to <code>NULL</code>. If an argument is left as <code>NULL</code>, the
 corresponding <code>fundsr.*</code> option is left unchanged.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="add_fund_urls.html">add_fund_urls()</a></code> to add/update entries in <code>fundsr.fund_urls</code>.</p></div>
     </div>
 
   </div>

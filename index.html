@@ -125,7 +125,7 @@
 </h3>
 <p>Prepare a tibble/dataframe or a CSV file with a date column and one or more data columns that must be lowercase for funds (e.g. <code>sxr8</code>, <code>vwce</code>, <code>spyy</code>) and uppercase for indices (e.g. <code>SP500</code>, <code>FTAW</code>, <code>ACWI</code>). Suppose you have a dataframe <code>funds_data</code> with fund NAVs and a CSV file with index levels. You can import them via:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/add_import_fun.html">add_import_fun</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="fu">add_import_fun</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">fi_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>        fwra <span class="op">=</span> <span class="st">"FTAW"</span>,</span>
 <span>        webn <span class="op">=</span> <span class="st">"GMLM"</span>,</span>
@@ -133,12 +133,12 @@
 <span>        spyy <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
 <span>        spyi <span class="op">=</span> <span class="st">"ACWI_IMI"</span>,</span>
 <span>        iusq <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="reference/setg.html">setg</a></span><span class="op">(</span><span class="st">"funds"</span>, <span class="va">funds_data</span>, add_fi_pairs <span class="op">=</span> <span class="va">fi_map</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="reference/setg.html">setg</a></span><span class="op">(</span><span class="st">"indices"</span>, <span class="fu"><a href="reference/get_csv.html">get_csv</a></span><span class="op">(</span><span class="st">"indices.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">setg</span><span class="op">(</span><span class="st">"funds"</span>, <span class="va">funds_data</span>, add_fi_pairs <span class="op">=</span> <span class="va">fi_map</span><span class="op">)</span></span>
+<span>    <span class="fu">setg</span><span class="op">(</span><span class="st">"indices"</span>, <span class="fu">get_csv</span><span class="op">(</span><span class="st">"indices.csv"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see <a href="https://stantraykov.github.io/fundsr/reference/get_csv.html" class="external-link"><code>get_csv()</code></a>. ## Indices ### From fund files Some fund providers’ files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/add_import_fun.html">add_import_fun</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="fu">add_import_fun</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve ACWI (R) from fund file</span></span>
 <span>    <span class="fu"><a href="reference/inve.html">inve</a></span><span class="op">(</span><span class="st">"FWRA"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve FTSE All-World (R) from fund file</span></span>
