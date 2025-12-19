@@ -24,31 +24,43 @@ run_plots(
 parameters: \code{plot_id}, \code{title}, \code{data_filter}, \code{gg_params}, \code{width},
 \code{height}, \code{funds}.}
 
-\item{xlm_data}{Optional data frame used to produce XLM comparison plots,
-including \code{date}, \code{xlm}, \code{ticker}, and \code{name} columns.}
+\item{xlm_data}{Optional data frame used to produce XLM plots, including
+\code{date}, \code{xlm}, \code{ticker}, and \code{name} columns.}
 
 \item{add_gg_params}{Optional ggplot component (or list of components)
 appended to each generated plot in addition to the per-plot \code{gg_params}
 defined in \code{plot_spec}. Defaults to \code{\link[ggplot2:geom_blank]{ggplot2::geom_blank()}}.}
 }
 \value{
-Invisibly returns \code{NULL}. Plots are saved as a side effect.
+An environment containing ggplot objects. Objects are stored under names
+corresponding to the base filenames used in \code{\link[=save_plot]{save_plot()}}: \code{plot_id} for
+CAGR variants, \code{plot_id_L} for log-return variants, and (when generated)
+\code{xlm_plot_id} for XLM plots.
 }
 \description{
-Iterates over the plot specifications and produces rolling-difference
-plots for both CAGR and log-return variants. Each plot is saved via
-\code{\link[=save_plot]{save_plot()}}, and optional XLM comparison plots may also be generated.
+Iterates over plot specifications and produces rolling-difference plots for
+both CAGR and log-return variants. Each plot is saved via \code{\link[=save_plot]{save_plot()}}, and
+optional XLM plots may also be generated. All generated plot objects are
+stored in an environment and returned.
 }
 \details{
-For each row in \code{plot_spec}, the function constructs both a CAGR-based
-and a log-return-based variant using \code{\link[=plot_roll_diffs]{plot_roll_diffs()}} and writes the
-resulting plots via \code{\link[=save_plot]{save_plot()}}, using a filename suffix to distinguish
-the log-return variant. The \code{plot_spec} is expected to provide columns
-such as \code{plot_id}, \code{title}, \code{data_filter}, \code{gg_params}, \code{width}, \code{height},
-and \code{funds}.
+For each row in \code{plot_spec}, the function constructs both a CAGR-based and a
+log-return-based variant using \code{\link[=plot_roll_diffs]{plot_roll_diffs()}} and writes the resulting
+plots via \code{\link[=save_plot]{save_plot()}}, using a filename suffix (\verb{_L}) to distinguish the
+log-return variant.
 
-If \code{xlm_data} is supplied, a separate Xetra Liquidity Measure (XLM)
-plot is generated once per unique combination of funds, using
-\code{\link[=plot_xlms]{plot_xlms()}}. The mapping from fund tickers to Xetra tickers is taken
-from the option \code{fundsr.xetra_map}.
+If \code{xlm_data} is supplied, an XLM plot is generated once per unique set of
+Xetra tickers using \code{\link[=plot_xlms]{plot_xlms()}}. Fund tickers are mapped to Xetra tickers
+via the \code{fundsr.xetra_map} option. The resulting plot is added to the
+returned environment under \verb{xlm_<plot_id>} and written to disk with the same
+base name, where \verb{<plot_id>} is taken from the first plot specification that
+references that ticker set.
+}
+\examples{
+\dontrun{
+plots <- run_plots(rds_cagr, rds_log, n_days, plot_spec, xlm_data = xlm_data)
+plots[["global"]]
+plots[["global_L"]]
+plots[["xlm_global"]]
+}
 }

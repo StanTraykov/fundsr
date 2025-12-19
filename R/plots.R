@@ -275,9 +275,10 @@ vec_key <- function(x, ignore_order = FALSE) {
 
 #' Generate and export all configured rolling-difference plots
 #'
-#' Iterates over the plot specifications and produces rolling-difference
-#' plots for both CAGR and log-return variants. Each plot is saved via
-#' [save_plot()], and optional XLM comparison plots may also be generated.
+#' Iterates over plot specifications and produces rolling-difference plots for
+#' both CAGR and log-return variants. Each plot is saved via [save_plot()], and
+#' optional XLM plots may also be generated. All generated plot objects are
+#' stored in an environment and returned.
 #'
 #' @param rds_cagr Data frame containing rolling CAGR differences.
 #' @param rds_log Data frame containing rolling log-return differences.
@@ -285,29 +286,40 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' @param plot_spec A data frame or a list of data frames describing plot
 #'   parameters: `plot_id`, `title`, `data_filter`, `gg_params`, `width`,
 #'   `height`, `funds`.
-#' @param xlm_data Optional data frame used to produce XLM comparison plots,
-#'   including `date`, `xlm`, `ticker`, and `name` columns.
+#' @param xlm_data Optional data frame used to produce XLM plots, including
+#'   `date`, `xlm`, `ticker`, and `name` columns.
 #' @param add_gg_params Optional ggplot component (or list of components)
 #'   appended to each generated plot in addition to the per-plot `gg_params`
 #'   defined in `plot_spec`. Defaults to [ggplot2::geom_blank()].
 #'
-#' @return Invisibly returns `NULL`. Plots are saved as a side effect.
+#' @return
+#' An environment containing ggplot objects. Objects are stored under names
+#' corresponding to the base filenames used in [save_plot()]: `plot_id` for
+#' CAGR variants, `plot_id_L` for log-return variants, and (when generated)
+#' `xlm_plot_id` for XLM plots.
 #'
 #' @details
-#' For each row in `plot_spec`, the function constructs both a CAGR-based
-#' and a log-return-based variant using [plot_roll_diffs()] and writes the
-#' resulting plots via [save_plot()], using a filename suffix to distinguish
-#' the log-return variant. The `plot_spec` is expected to provide columns
-#' such as `plot_id`, `title`, `data_filter`, `gg_params`, `width`, `height`,
-#' and `funds`.
+#' For each row in `plot_spec`, the function constructs both a CAGR-based and a
+#' log-return-based variant using [plot_roll_diffs()] and writes the resulting
+#' plots via [save_plot()], using a filename suffix (`_L`) to distinguish the
+#' log-return variant.
 #'
-#' If `xlm_data` is supplied, a separate Xetra Liquidity Measure (XLM)
-#' plot is generated once per unique combination of funds, using
-#' [plot_xlms()]. The mapping from fund tickers to Xetra tickers is taken
-#' from the option `fundsr.xetra_map`.
+#' If `xlm_data` is supplied, an XLM plot is generated once per unique set of
+#' Xetra tickers using [plot_xlms()]. Fund tickers are mapped to Xetra tickers
+#' via the `fundsr.xetra_map` option. The resulting plot is added to the
+#' returned environment under `xlm_<plot_id>` and written to disk with the same
+#' base name, where `<plot_id>` is taken from the first plot specification that
+#' references that ticker set.
 #'
 #' @export
-
+#'
+#' @examples
+#' \dontrun{
+#' plots <- run_plots(rds_cagr, rds_log, n_days, plot_spec, xlm_data = xlm_data)
+#' plots[["global"]]
+#' plots[["global_L"]]
+#' plots[["xlm_global"]]
+#' }
 run_plots <- function(rds_cagr,
                       rds_log,
                       n_days,
@@ -336,7 +348,9 @@ run_plots <- function(rds_cagr,
         plot_spec <- dplyr::bind_rows(lapply(plot_spec, ensure_title_col))
     }
     runs <- tidyr::crossing(plot_spec, variants)
+    plots_env <- new.env(parent = emptyenv())
     .fundsr$done_xlm_sets <- character()
+    xetra_map <- getOption("fundsr.xetra_map", character())
     purrr::pwalk(runs, function(plot_id,
                                 title,
                                 data_filter,
@@ -345,7 +359,7 @@ run_plots <- function(rds_cagr,
                                 height,
                                 funds,
                                 variants) {
-        use_log = variants == "log"
+        use_log <- variants == "log"
         data <- if (use_log) rds_log else rds_cagr
         if (!is.null(data_filter)) data <- data %>% data_filter()
         plot <- plot_roll_diffs(data,
@@ -356,8 +370,9 @@ run_plots <- function(rds_cagr,
                          title_add = title)
         fname <- paste0(plot_id, if (use_log) "_L" else "")
         save_plot(fname, plot, width = width, height = height)
+        plots_env[[fname]] <- plot
+
         if (!is.null(xlm_data)) {
-            xetra_map <- getOption("fundsr.xetra_map")
             funds_xet <- ifelse(funds %in% names(xetra_map),
                                 xetra_map[funds],
                                 funds)
@@ -367,9 +382,12 @@ run_plots <- function(rds_cagr,
                                      funds_xet,
                                      gg_params = list(gg_params, add_gg_params),
                                      back_trans = TRUE)
-                save_plot(paste0("xlm_", plot_id), xlm_plot, width = width, height = height)
+                xlm_fname <- paste0("xlm_", plot_id)
+                save_plot(xlm_fname, xlm_plot, width = width, height = height)
+                plots_env[[xlm_fname]] <- xlm_plot
                 .fundsr$done_xlm_sets <- c(.fundsr$done_xlm_sets, key)
             }
         }
     })
+    plots_env
 }
