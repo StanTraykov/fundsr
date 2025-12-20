@@ -99,7 +99,8 @@ Traykov</h4>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'lubridate' [...]</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/fundsr/" class="external-link">fundsr</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/fundsr/" class="external-link">fundsr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; fundsr loaded.</span></span></code></pre></div>
 <p>Set up directories.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -273,11 +274,7 @@ PNGs (if option <code>fundsr.internal_png</code> is
 <span><span class="va">plot_spec</span> <span class="op">&lt;-</span> <span class="va">plot_spec</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>plot_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">plot_id</span>, <span class="st">"_bg"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/run_plots.html">run_plots</a></span><span class="op">(</span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span>, <span class="va">diffs</span><span class="op">$</span><span class="va">log</span>, <span class="va">nd</span>, <span class="va">plot_spec</span>, <span class="va">xlm_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ</span></span>
-<span><span class="co">#&gt; xml_plot: spyy, iusq</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY &amp; IUSQ</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ: последни години</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY &amp; IUSQ: последни години</span></span></code></pre></div>
+<span><span class="co">#&gt; [...]</span></span></code></pre></div>
 <p>Optional: higher-quality PNG export</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/export_pngs.html">export_pngs</a></span><span class="op">(</span><span class="op">)</span></span>
