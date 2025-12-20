@@ -31,5 +31,5 @@ Suggests:
     rmarkdown,
     svglite
 VignetteBuilder: knitr
-URL: https://github.com/StanTraykov/fundsr
+URL: https://stantraykov.github.io/fundsr/, https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues
