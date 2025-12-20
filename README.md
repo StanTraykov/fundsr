@@ -43,7 +43,7 @@ add_data_loader(function() {
 })
 run_data_loaders()
 ```
-Note: dates in the CSV file must be Unix timestamps (in second or millisecond precision), see [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.html).
+**Note:** Dates in the CSV file must be Unix epoch timestamps (in second or millisecond precision), see [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.html). If your dates are in another format, get the data via `readr::read_csv()` and ensure the dates are parsed either via `read_csv`'s `col_types` argument or later (e.g. mutate using `lubridate::parse_date_time()`).
 ## Indices
 ### From fund files
 Some fund providers' files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
