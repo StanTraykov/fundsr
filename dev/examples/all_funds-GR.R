@@ -3,9 +3,9 @@ library(tidyverse)
 # Config
 fundsr::reset_state()
 source("dev/examples/common_spec.R")
-source("dev/examples/glob_spec.R")
-source("dev/examples/dm_spec.R")
-source("dev/examples/em_spec.R")
+#source("dev/examples/glob-GR_spec.R")
+#source("dev/examples/dm-GR_spec.R")
+source("dev/examples/em-GR_spec.R")
 xlm_dir <- file.path("data", "xlm")
 
 # Download missing files
@@ -34,7 +34,7 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-plots <- run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data)
+plots <- run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data, bmark_type = "gross")
 
 # Optional high-quality PNG export
 # export_pngs()

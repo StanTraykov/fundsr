@@ -185,30 +185,35 @@ clear_inkscape_queue <- function() {
 
 #' Plot rolling return differences against benchmark
 #'
-#' Creates a scatter plot of rolling CAGR or log-return differences for the
-#' selected funds, including quantile-based y-limits, optional title additions,
-#' and customizable ggplot parameters.
+#' Plots rolling annualized tracking differences (CAGR-style or log-return) for
+#' selected funds against their benchmark series. The plot uses quantile-based
+#' y-limits and formats the y-axis in basis points.
 #'
-#' @param data Input data frame containing dates and rolling-difference columns.
-#' @param n_days Window length (in days) used to compute rolling differences.
-#' @param funds Character vector of fund tickers to include.
-#' @param use_log Logical; if `TRUE`, use log-return differences instead of CAGR.
-#' @param gg_params Optional list of additional ggplot layers or modifications.
-#' @param title_add Optional string appended to the title.
-#' @param date_brk Optional date-break specification for the x-axis; computed
-#'   automatically if omitted.
+#' @param data Input data frame containing a `date` column and one rolling-difference
+#'   column per fund, named `<fund>_rd`.
+#' @param n_days Window length (in days) used to compute rolling differences (used
+#'   for labelling).
+#' @param funds Character vector of fund tickers/column prefixes to include.
+#' @param use_log Logical; if `TRUE`, labels the plot as log-return differences.
+#'   If `FALSE`, labels the plot as CAGR differences.
+#' @param gg_params Optional ggplot components to add to the plot.
+#' @param title_add Optional title suffix. Can be a single string or a named
+#'   character vector specifying the title in multiple languages (e.g. `c(en=..., bg=...)`)
+#' @param date_brk Optional date-break specification for the x-axis (e.g. `"3 months"`).
+#'   If `NULL`, it is chosen automatically based on the time span.
 #' @param qprob Two-element numeric vector giving lower and upper quantiles used
-#'   to set the y-axis limits.
+#'   to set the y-axis limits. Defaults to `c(0.005, 0.995)`.
+#' @param bmark_type Benchmark type used in the title: `"net"` or `"gross"`.
 #'
 #' @return A ggplot object.
 #'
 #' @details
-#' The function reshapes input data into long format, computes quantile-based
-#' y-limits, selects appropriate date breaks, and produces a scatter plot of
-#' rolling differences coloured by fund. Additional ggplot layers may be added
-#' via `gg_params`.
+#' The function reshapes `data` to long format, computes y-limits from the
+#' quantiles of the rolling differences (always including 0), and produces a
+#' scatter plot coloured by fund.
 #'
 #' @export
+
 plot_roll_diffs <- function(data,
                       n_days,
                       funds,
@@ -216,13 +221,16 @@ plot_roll_diffs <- function(data,
                       gg_params = NULL,
                       title_add = NULL,
                       date_brk = NULL,
-                      qprob = c(0.005, 0.995)) {
+                      qprob = c(0.005, 0.995),
+                      bmark_type = c("net", "gross")) {
+    bmark_type <- match.arg(bmark_type)
+    bmark_type <- if (bmark_type == "net") gettext("net") else gettext("gross")
     title_add <- pick_user_trans(title_add)
     ttl <- if (is.null(title_add)) "" else paste(":", title_add)
     title_msg <- if (use_log) {
-        gettext("{n_days}d rolling log-return differences vs net benchmark{ttl}")
+        gettext("{n_days}d rolling log-return differences vs {bmark_type} benchmark{ttl}")
     } else {
-        gettext("{n_days}d rolling CAGR differences vs net benchmark{ttl}")
+        gettext("{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}")
     }
     title <- glue(title_msg)
     message(paste("plot_roll_diffs:", title))
@@ -291,21 +299,22 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'
 #' @param rds_cagr Data frame containing rolling CAGR differences.
 #' @param rds_log Data frame containing rolling log-return differences.
-#' @param n_days Rolling-window length in days.
+#' @param n_days Rolling-window length in days (passed to [plot_roll_diffs()] for labelling).
 #' @param plot_spec A data frame or a list of data frames describing plot
-#'   parameters: `plot_id`, `title`, `data_filter`, `gg_params`, `width`,
-#'   `height`, `funds`.
+#'   parameters. Expected columns include: `plot_id`, `title`, `data_filter`,
+#'   `gg_params`, `width`, `height`, `funds`.
 #' @param xlm_data Optional data frame used to produce XLM plots, including
 #'   `date`, `xlm`, `ticker`, and `name` columns.
 #' @param add_gg_params Optional ggplot component (or list of components)
 #'   appended to each generated plot in addition to the per-plot `gg_params`
 #'   defined in `plot_spec`. Defaults to [ggplot2::geom_blank()].
+#' @param bmark_type Benchmark type used in plot titles: `"net"` or `"gross"`.
 #'
 #' @return
 #' An environment containing ggplot objects. Objects are stored under names
 #' corresponding to the base filenames used in [save_plot()]: `plot_id` for
 #' CAGR variants, `plot_id_L` for log-return variants, and (when generated)
-#' `xlm_plot_id` for XLM plots.
+#' `xlm_<plot_id>` for XLM plots.
 #'
 #' @details
 #' For each row in `plot_spec`, the function constructs both a CAGR-based and a
@@ -313,12 +322,16 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' plots via [save_plot()], using a filename suffix (`_L`) to distinguish the
 #' log-return variant.
 #'
+#' If `plot_spec` is provided as a list of data frames, the function binds them
+#' into a single specification. The `title` column may be provided as a list
+#' column (e.g. to keep a multilingual named vector as a single per-row value).
+#'
 #' If `xlm_data` is supplied, an XLM plot is generated once per unique set of
 #' Xetra tickers using [plot_xlms()]. Fund tickers are mapped to Xetra tickers
-#' via the `fundsr.xetra_map` option. The resulting plot is added to the
-#' returned environment under `xlm_<plot_id>` and written to disk with the same
-#' base name, where `<plot_id>` is taken from the first plot specification that
-#' references that ticker set.
+#' via the `fundsr.xetra_map` option (tickers not present in the map are used
+#' as-is). The first plot specification encountered for a given ticker set
+#' determines the base filename `xlm_<plot_id>` used for saving and storing the
+#' resulting XLM plot.
 #'
 #' @export
 #'
@@ -329,12 +342,14 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' plots[["global_L"]]
 #' plots[["xlm_global"]]
 #' }
+
 run_plots <- function(rds_cagr,
                       rds_log,
                       n_days,
                       plot_spec,
                       xlm_data = NULL,
-                      add_gg_params = ggplot2::geom_blank()) {
+                      add_gg_params = ggplot2::geom_blank(),
+                      bmark_type = c("net", "gross")) {
     variants <- c("CAGR", "log")
     if (is.list(plot_spec) && !inherits(plot_spec, "data.frame")) {
         ensure_title_col <- function(df, col = "title") {
@@ -360,6 +375,7 @@ run_plots <- function(rds_cagr,
     plots_env <- new.env(parent = emptyenv())
     .fundsr$done_xlm_sets <- character()
     xetra_map <- getOption("fundsr.xetra_map", character())
+    bmark_type <- match.arg(bmark_type)
     purrr::pwalk(runs, function(plot_id,
                                 title,
                                 data_filter,
@@ -376,7 +392,8 @@ run_plots <- function(rds_cagr,
                          funds = funds,
                          use_log = use_log,
                          gg_params = list(gg_params, add_gg_params),
-                         title_add = title)
+                         title_add = title,
+                         bmark_type = bmark_type)
         fname <- paste0(plot_id, if (use_log) "_L" else "")
         save_plot(fname, plot, width = width, height = height)
         plots_env[[fname]] <- plot

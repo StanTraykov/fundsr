@@ -12,39 +12,45 @@ plot_roll_diffs(
   gg_params = NULL,
   title_add = NULL,
   date_brk = NULL,
-  qprob = c(0.005, 0.995)
+  qprob = c(0.005, 0.995),
+  bmark_type = c("net", "gross")
 )
 }
 \arguments{
-\item{data}{Input data frame containing dates and rolling-difference columns.}
+\item{data}{Input data frame containing a \code{date} column and one rolling-difference
+column per fund, named \verb{<fund>_rd}.}
 
-\item{n_days}{Window length (in days) used to compute rolling differences.}
+\item{n_days}{Window length (in days) used to compute rolling differences (used
+for labelling).}
 
-\item{funds}{Character vector of fund tickers to include.}
+\item{funds}{Character vector of fund tickers/column prefixes to include.}
 
-\item{use_log}{Logical; if \code{TRUE}, use log-return differences instead of CAGR.}
+\item{use_log}{Logical; if \code{TRUE}, labels the plot as log-return differences.
+If \code{FALSE}, labels the plot as CAGR differences.}
 
-\item{gg_params}{Optional list of additional ggplot layers or modifications.}
+\item{gg_params}{Optional ggplot components to add to the plot.}
 
-\item{title_add}{Optional string appended to the title.}
+\item{title_add}{Optional title suffix. Can be a single string or a named
+character vector specifying the title in multiple languages (e.g. \code{c(en=..., bg=...)})}
 
-\item{date_brk}{Optional date-break specification for the x-axis; computed
-automatically if omitted.}
+\item{date_brk}{Optional date-break specification for the x-axis (e.g. \code{"3 months"}).
+If \code{NULL}, it is chosen automatically based on the time span.}
 
 \item{qprob}{Two-element numeric vector giving lower and upper quantiles used
-to set the y-axis limits.}
+to set the y-axis limits. Defaults to \code{c(0.005, 0.995)}.}
+
+\item{bmark_type}{Benchmark type used in the title: \code{"net"} or \code{"gross"}.}
 }
 \value{
 A ggplot object.
 }
 \description{
-Creates a scatter plot of rolling CAGR or log-return differences for the
-selected funds, including quantile-based y-limits, optional title additions,
-and customizable ggplot parameters.
+Plots rolling annualized tracking differences (CAGR-style or log-return) for
+selected funds against their benchmark series. The plot uses quantile-based
+y-limits and formats the y-axis in basis points.
 }
 \details{
-The function reshapes input data into long format, computes quantile-based
-y-limits, selects appropriate date breaks, and produces a scatter plot of
-rolling differences coloured by fund. Additional ggplot layers may be added
-via \code{gg_params}.
+The function reshapes \code{data} to long format, computes y-limits from the
+quantiles of the rolling differences (always including 0), and produces a
+scatter plot coloured by fund.
 }

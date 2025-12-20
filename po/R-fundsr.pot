@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fundsr 0.1.0\n"
-"POT-Creation-Date: 2025-12-10 00:50\n"
+"POT-Creation-Date: 2025-12-20 14:48\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,22 +10,145 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "ggexport: nothing queued."
+msgid "Skipping {fund}: not in df"
 msgstr ""
 
-msgid "Executing {cmd}"
+msgid "Roll {roll_type} for {fund} tracking {index}"
 msgstr ""
 
-msgid "ggexport: Inkscape returned non-zero exit status: {exit_status}"
+msgid "`fun` must be a function."
 msgstr ""
 
-msgid "{n_days}d rolling log-return differences vs net benchmark{ttl}"
+msgid "`fun` must take no arguments."
 msgstr ""
 
-msgid "{n_days}d rolling CAGR differences vs net benchmark{ttl}"
+msgid "Internal registry `.fundsr$data_loaders` must be a list."
 msgstr ""
 
-msgid "rcd_plot:"
+msgid "`clear_fund_index_map` must be TRUE or FALSE."
+msgstr ""
+
+msgid "Fundsr storage environment is not initialised."
+msgstr ""
+
+msgid "`reload` must be TRUE or FALSE."
+msgstr ""
+
+msgid "Fundsr storage is not initialised."
+msgstr ""
+
+msgid "Internal registry `.fundsr$data_loaders` must be a list of functions."
+msgstr ""
+
+msgid "`.fundsr$data_loaders[[%d]]` is not a function."
+msgstr ""
+
+msgid "`.fundsr$data_loaders[[%d]]` must take no arguments."
+msgstr ""
+
+msgid "Joining: {glue::glue_collapse(obj_names, sep = ', ')}"
+msgstr ""
+
+msgid "Objects not found in `env` and ignored in `late`:"
+msgstr ""
+
+msgid ","
+msgstr ""
+
+msgid "No objects left to full_join after excluding `late`."
+msgstr ""
+
+msgid "Downloading '{file}'"
+msgstr ""
+
+msgid "Skipping '{file}': file already exists."
+msgstr ""
+
+msgid "Unsupported file extension for `file`: expected .csv or .tsv (optionally .gz)."
+msgstr ""
+
+msgid "*** Loading:"
+msgstr ""
+
+msgid "No .xls[x] file found for {ticker}."
+msgstr ""
+
+msgid "Multiple .xls[x] files found for {ticker}."
+msgstr ""
+
+msgid "Need benchmark and benchmark_col to retrieve benchmark."
+msgstr ""
+
+msgid "`data_dir` must be a single non-missing string."
+msgstr ""
+
+msgid "`out_dir` must be a single non-missing string."
+msgstr ""
+
+msgid "`px_width` must be a single positive number."
+msgstr ""
+
+msgid "`internal_png` must be TRUE or FALSE."
+msgstr ""
+
+msgid "`export_svg` must be TRUE or FALSE."
+msgstr ""
+
+msgid "`xetra_map` must be a named character vector."
+msgstr ""
+
+msgid "`inkscape` must be a single non-empty string."
+msgstr ""
+
+msgid "`fund_urls` must be a named character vector or named list."
+msgstr ""
+
+msgid "`file` must be a non-empty single string."
+msgstr ""
+
+msgid "`save_png` must be TRUE or FALSE."
+msgstr ""
+
+msgid "`save_svg` must be TRUE or FALSE."
+msgstr ""
+
+msgid "Nothing to do: both `save_svg` and `save_png` are FALSE."
+msgstr ""
+
+msgid "cannot queue Inkscape export; ';' in path(s):\n-"
+msgstr ""
+
+msgid "-"
+msgstr ""
+
+msgid "For PNG saving, `units` must be one of: \"in\", \"cm\", \"mm\"."
+msgstr ""
+
+msgid "export_pngs: nothing queued."
+msgstr ""
+
+msgid "export_pngs: no inkscape executable specified"
+msgstr ""
+
+msgid "Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"
+msgstr ""
+
+msgid "export_pngs: Inkscape returned non-zero exit status: {exit_status}"
+msgstr ""
+
+msgid "net"
+msgstr ""
+
+msgid "gross"
+msgstr ""
+
+msgid "{n_days}d rolling log-return differences vs {bmark_type} benchmark{ttl}"
+msgstr ""
+
+msgid "{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}"
+msgstr ""
+
+msgid "plot_roll_diffs:"
 msgstr ""
 
 msgid "fund"
@@ -37,22 +160,13 @@ msgstr ""
 msgid "rolling CAGR difference (bps)"
 msgstr ""
 
-msgid "Roll {roll_type} for {fund} tracking {index}"
+msgid "`%s` must be character or list."
 msgstr ""
 
-msgid "--Skipping {fund}: not in df"
+msgid "`order` must use only 'd', 'm', 'y' (e.g. 'dmy', 'ymd')."
 msgstr ""
 
-msgid "zzz..."
-msgstr ""
-
-msgid "Skipping download for '%s'"
-msgstr ""
-
-msgid "Storage:"
-msgstr ""
-
-msgid "Need benchmark and benchmark_col to retrieve benchmark."
+msgid "`order` must be a permutation of 'd', 'm', 'y' (length 3, no repeats)."
 msgstr ""
 
 msgid "Attempting readxl on '"
@@ -127,10 +241,10 @@ msgstr ""
 msgid "- Could not uniquely identify the XLM column."
 msgstr ""
 
-msgid "xml_plot:"
+msgid "XLM read: {month_year}"
 msgstr ""
 
-msgid ","
+msgid "plot_xlms:"
 msgstr ""
 
 msgid "Xetra Liquidity Measure (€100K round-trip spread costs)"
