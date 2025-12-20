@@ -10,7 +10,8 @@ run_plots(
   n_days,
   plot_spec,
   xlm_data = NULL,
-  add_gg_params = ggplot2::geom_blank()
+  add_gg_params = ggplot2::geom_blank(),
+  bmark_type = c("net", "gross")
 )
 }
 \arguments{
@@ -18,11 +19,11 @@ run_plots(
 
 \item{rds_log}{Data frame containing rolling log-return differences.}
 
-\item{n_days}{Rolling-window length in days.}
+\item{n_days}{Rolling-window length in days (passed to \code{\link[=plot_roll_diffs]{plot_roll_diffs()}} for labelling).}
 
 \item{plot_spec}{A data frame or a list of data frames describing plot
-parameters: \code{plot_id}, \code{title}, \code{data_filter}, \code{gg_params}, \code{width},
-\code{height}, \code{funds}.}
+parameters. Expected columns include: \code{plot_id}, \code{title}, \code{data_filter},
+\code{gg_params}, \code{width}, \code{height}, \code{funds}.}
 
 \item{xlm_data}{Optional data frame used to produce XLM plots, including
 \code{date}, \code{xlm}, \code{ticker}, and \code{name} columns.}
@@ -30,12 +31,14 @@ parameters: \code{plot_id}, \code{title}, \code{data_filter}, \code{gg_params}, 
 \item{add_gg_params}{Optional ggplot component (or list of components)
 appended to each generated plot in addition to the per-plot \code{gg_params}
 defined in \code{plot_spec}. Defaults to \code{\link[ggplot2:geom_blank]{ggplot2::geom_blank()}}.}
+
+\item{bmark_type}{Benchmark type used in plot titles: \code{"net"} or \code{"gross"}.}
 }
 \value{
 An environment containing ggplot objects. Objects are stored under names
 corresponding to the base filenames used in \code{\link[=save_plot]{save_plot()}}: \code{plot_id} for
 CAGR variants, \code{plot_id_L} for log-return variants, and (when generated)
-\code{xlm_plot_id} for XLM plots.
+\verb{xlm_<plot_id>} for XLM plots.
 }
 \description{
 Iterates over plot specifications and produces rolling-difference plots for
@@ -49,12 +52,16 @@ log-return-based variant using \code{\link[=plot_roll_diffs]{plot_roll_diffs()}}
 plots via \code{\link[=save_plot]{save_plot()}}, using a filename suffix (\verb{_L}) to distinguish the
 log-return variant.
 
+If \code{plot_spec} is provided as a list of data frames, the function binds them
+into a single specification. The \code{title} column may be provided as a list
+column (e.g. to keep a multilingual named vector as a single per-row value).
+
 If \code{xlm_data} is supplied, an XLM plot is generated once per unique set of
 Xetra tickers using \code{\link[=plot_xlms]{plot_xlms()}}. Fund tickers are mapped to Xetra tickers
-via the \code{fundsr.xetra_map} option. The resulting plot is added to the
-returned environment under \verb{xlm_<plot_id>} and written to disk with the same
-base name, where \verb{<plot_id>} is taken from the first plot specification that
-references that ticker set.
+via the \code{fundsr.xetra_map} option (tickers not present in the map are used
+as-is). The first plot specification encountered for a given ticker set
+determines the base filename \verb{xlm_<plot_id>} used for saving and storing the
+resulting XLM plot.
 }
 \examples{
 \dontrun{
