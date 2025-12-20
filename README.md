@@ -11,11 +11,12 @@ pak::pak("StanTraykov/fundsr")
 # Usage
 * [Intro vignette](https://stantraykov.github.io/fundsr/articles/fundsr-intro.html) contains a simple walkthrough comparing IUSQ and SPYY (no data setup needed)
 * `inst/scripts/examples` (e.g. open `.Rproj` file in R Studio after installing the package)
-  * `glob_funds.R` a more comprehensive example featuring global funds but requiring manual index & fund data setup outside the package
-  * `all_funds.R` an example containing the global funds and others
+  * `glob_funds.R` is a more comprehensive example featuring global funds but requiring index & fund data download outside the package
+  * `all_funds.R` and `all_funds-GR.R` feature many more funds for analysis vs net/gross benchmark
 * [Reference](https://stantraykov.github.io/fundsr/reference/index.html)
 
 # Importing data
+Fund and index data are stored in fundsr's storage environment as tibbles / dfs with date columns and one or more value columns. Index level columns must be in upppercase (e.g. `ACWI`, `FTAW`). Fund NAV columns must be in lowercase (e.g. `spyy`, `vwce`).
 ## Funds
 ### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers)
 Fund providers allow downloading a NAV history in Excel format (even if it's sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.html) and [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.html) functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund `.xls` or `.xlsx` file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. `FWRA.xlsx`) it can be imported without specifying a file.
