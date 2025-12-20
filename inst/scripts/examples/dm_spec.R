@@ -1,7 +1,8 @@
 ##### Plots #####
 funds_phys <- c("iwda", "sppw", "xdwd", "mwrd", "uetw", "h4zy", "f50a", "WORLD-GR", "DMLM-GR")
 title_phys <- "MSCI World phys. funds"
-gg_par_phys <- fund_colors(breaks = funds_phys, special = c(`WORLD-GR` = "black", `DMLM-GR` = "grey50"))
+gg_par_phys <- fund_colors(breaks = funds_phys,
+                           special = c(`WORLD-GR` = "black", `DMLM-GR` = "grey50"))
 
 funds_swap <- c("iwda", "sppw", "cw8", "dbxw", "wpea", "cw8u", "wldc", "iwds", "sc0j")
 title_swap <- "MSCI World swap funds (IWDA, SPPW for reference)"

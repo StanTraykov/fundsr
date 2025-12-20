@@ -16,7 +16,11 @@ fundsr_options(
         fwra = "fwia",
         acwi = "lyy0",
         iwda = "eunl",
-        cw8 = "amew"
+        cw8 = "amew",
+        aeem = "amem",
+        lem = "lym7",
+        iema = "eunm",
+        emim = "is3n"
     )
 )
 spec_list <- list()
@@ -43,7 +47,7 @@ fund_colors <- function(breaks,
         stop("`breaks` must be supplied.", call. = FALSE)
     }
     breaks <- as.character(breaks)
-    if (is.null(special)) special <- character()
+    if (is.null(special)) special <- set_names(character(), character())
     if (!is.character(special) || is.null(names(special)) || any(!nzchar(names(special)))) {
         stop("`special` must be NULL or a named character vector, e.g. c(foo = \"black\").",
              call. = FALSE)
