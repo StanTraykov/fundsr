@@ -1,8 +1,7 @@
 ##### Plots #####
 funds_phys2 <- c("emim", "xmme", "aeme", "emmusc", "iema", "spym", "pram")
 title_phys2 <- "EM phys. funds (-H4Z3)"
-gg_par_phys2 <- fund_colors(breaks = funds_phys2,
-                            special = c(`EM-GR` = "black", `EMLM-GR` = "grey40", `EM_IMI-GR` = "grey75"))
+gg_par_phys2 <- fund_colors(breaks = funds_phys2)
 
 funds_swap <- c("aeem", "auem", "lem", "leml", "xmem", "emsm", "emgeas", "emim", "lema")
 title_swap <- "EM swap funds (EMIM for reference)"
