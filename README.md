@@ -3,8 +3,13 @@
 fundsr imports fund NAVs and index levels and creates tracking difference plots (CAGR and log-return). Plotting Xetra liquidity data (XLM) is also supported.
 
 # Installation
-``` r
+```r
 # install.packages("pak")
+
+# Stable: latest release
+pak::pak("StanTraykov/fundsr@*release")
+
+# Development: (main branch)
 pak::pak("StanTraykov/fundsr")
 ```
 
