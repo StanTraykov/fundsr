@@ -4,8 +4,8 @@ library(fundsr)
 # Config
 fundsr::reset_state()
 source("common_spec.R")
-#source("glob-GR_spec.R")
-#source("dm-GR_spec.R")
+source("glob-GR_spec.R")
+source("dm-GR_spec.R")
 source("em-GR_spec.R")
 xlm_dir <- file.path("data", "xlm")
 
@@ -16,7 +16,7 @@ download_fund_data(redownload = FALSE)
 storage <- run_data_loaders()
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
-series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+series <- join_env(storage, by = "date") %>%
     filter(date >= as_date("2012-12-29")) %>%
     arrange(date)
 
