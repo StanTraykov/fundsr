@@ -111,12 +111,20 @@
 <div class="section level1">
 <h1 id="importing-data">Importing data<a class="anchor" aria-label="anchor" href="#importing-data"></a>
 </h1>
-<p>Fund and index data are stored in fundsr’s storage environment as tibbles / dfs with date columns and one or more value columns. Index level columns must be in upppercase (e.g. <code>ACWI</code>, <code>FTAW</code>). Fund NAV columns must be in lowercase (e.g. <code>spyy</code>, <code>vwce</code>). ## Funds ### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers) Fund providers allow downloading a NAV history in Excel format (even if it’s sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the <a href="https://stantraykov.github.io/fundsr/reference/add_fund_urls.html" class="external-link"><code>add_fund_urls()</code></a> and <a href="https://stantraykov.github.io/fundsr/reference/download_fund_data.html" class="external-link"><code>download_fund_data()</code></a> functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund <code>.xls</code> or <code>.xlsx</code> file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. <code>FWRA.xlsx</code>) it can be imported without specifying a file.</p>
+<p>Fund and index data are stored in fundsr’s storage environment as tibbles / dfs with date columns and one or more value columns. Index level columns must be in upppercase (e.g. <code>ACWI</code>, <code>FTAW</code>). Fund NAV columns must be in lowercase (e.g. <code>spyy</code>, <code>vwce</code>).</p>
+<div class="section level2">
+<h2 id="funds">Funds<a class="anchor" aria-label="anchor" href="#funds"></a>
+</h2>
+<div class="section level3">
+<h3 id="supported-formats-amundi-hsbc-invesco-ishares-spdr-ubs-xtrackers">Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers)<a class="anchor" aria-label="anchor" href="#supported-formats-amundi-hsbc-invesco-ishares-spdr-ubs-xtrackers"></a>
+</h3>
+<p>Fund providers allow downloading a NAV history in Excel format (even if it’s sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the <a href="https://stantraykov.github.io/fundsr/reference/add_fund_urls.html" class="external-link"><code>add_fund_urls()</code></a> and <a href="https://stantraykov.github.io/fundsr/reference/download_fund_data.html" class="external-link"><code>download_fund_data()</code></a> functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund <code>.xls</code> or <code>.xlsx</code> file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. <code>FWRA.xlsx</code>) it can be imported without specifying a file.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">add_data_loader</span>(<span class="cf">function</span> () {</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">inve</span>(<span class="st">"FWRA"</span>, <span class="at">benchmark =</span> <span class="st">"FTAW"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">amun</span>(<span class="st">"WEBN"</span>, <span class="at">benchmark =</span> <span class="st">"GMLM"</span>, <span class="at">file =</span> <span class="st">"NAV History_Amundi Prime All Country World UCITS ETF Acc_IE0003XJA0J9_10_06_2024.xlsx"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>}</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">run_data_loaders</span>()</span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="other-funds">Other funds<a class="anchor" aria-label="anchor" href="#other-funds"></a>
 </h3>
@@ -134,14 +142,34 @@
 <span>    <span class="fu"><a href="reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span><span class="st">"indices"</span>, <span class="fu"><a href="reference/read_timeseries.html">read_timeseries</a></span><span class="op">(</span><span class="st">"indices.csv"</span>, time_unit <span class="op">=</span> <span class="st">"ms"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/run_data_loaders.html">run_data_loaders</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Note:</strong> Dates in the CSV file must be Unix epoch timestamps (in second or millisecond precision), see <a href="https://stantraykov.github.io/fundsr/reference/read_timeseries.html" class="external-link"><code>read_timeseries()</code></a>. If your dates are in another format, get the data via <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> and ensure the dates are parsed either via <code>read_csv</code>‘s <code>col_types</code> argument or later (e.g. mutate using <code><a href="https://lubridate.tidyverse.org/reference/parse_date_time.html" class="external-link">lubridate::parse_date_time()</a></code>). ## Indices ### From fund files Some fund providers’ files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.</p>
+<p><strong>Note:</strong> Dates in the CSV file must be Unix epoch timestamps (in second or millisecond precision), see <a href="https://stantraykov.github.io/fundsr/reference/read_timeseries.html" class="external-link"><code>read_timeseries()</code></a>. If your dates are in another format, get the data via <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> and ensure the dates are parsed either via <code>read_csv</code>’s <code>col_types</code> argument or later (e.g. mutate using <code><a href="https://lubridate.tidyverse.org/reference/parse_date_time.html" class="external-link">lubridate::parse_date_time()</a></code>).</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="indices">Indices<a class="anchor" aria-label="anchor" href="#indices"></a>
+</h2>
+<div class="section level3">
+<h3 id="from-fund-files">From fund files<a class="anchor" aria-label="anchor" href="#from-fund-files"></a>
+</h3>
+<p>Some fund providers’ files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/add_data_loader.html">add_data_loader</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve ACWI (R) from fund file</span></span>
 <span>    <span class="fu"><a href="reference/inve.html">inve</a></span><span class="op">(</span><span class="st">"FWRA"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># retrieve FTSE All-World (R) from fund file</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>Index series retrieved in this way may have holes (e.g. fund domicile holidays and such) that can potentially remove data points for funds that did publish a NAV for that day (e.g. different domicile). The overall effect on plots is negligible, however. ### MSCI MSCI provides <a href="https://www-cdn.msci.com/web/msci/index-tools/end-of-day-index-data-search" class="external-link">end-of-day level downloads</a>. These can be imported by the provided <a href="https://stantraykov.github.io/fundsr/reference/msci.html" class="external-link"><code>msci()</code></a> function. ### FTSE &amp; Solactive These index providers make it more difficult to get index levels for free.</p>
+<p>Index series retrieved in this way may have holes (e.g. fund domicile holidays and such) that can potentially remove data points for funds that did publish a NAV for that day (e.g. different domicile). The overall effect on plots is negligible, however.</p>
+</div>
+<div class="section level3">
+<h3 id="msci">MSCI<a class="anchor" aria-label="anchor" href="#msci"></a>
+</h3>
+<p>MSCI provides <a href="https://www-cdn.msci.com/web/msci/index-tools/end-of-day-index-data-search" class="external-link">end-of-day level downloads</a>. These can be imported by the provided <a href="https://stantraykov.github.io/fundsr/reference/msci.html" class="external-link"><code>msci()</code></a> function.</p>
+</div>
+<div class="section level3">
+<h3 id="ftse--solactive">FTSE &amp; Solactive<a class="anchor" aria-label="anchor" href="#ftse--solactive"></a>
+</h3>
+<p>These index providers make it more difficult to get index levels for free.</p>
+</div>
 </div>
 </div>
 <div class="section level1">
