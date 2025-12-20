@@ -27,6 +27,7 @@ library(lubridate)
 #> 
 #> Attaching package: 'lubridate' [...]
 library(fundsr)
+#> fundsr loaded.
 ```
 
 Set up directories.
@@ -228,11 +229,7 @@ Sys.setLanguage("bg")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
-#> xml_plot: spyy, iusq
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: последни години
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: последни години
+#> [...]
 ```
 
 Optional: higher-quality PNG export
