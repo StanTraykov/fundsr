@@ -67,7 +67,6 @@ fund_colors <- function(breaks,
     )
 }
 
-
 net_idx_trans <- c(
     WORLD = "^WORLD Standard",
     ACWI = "^ACWI Standard",
@@ -78,9 +77,15 @@ net_idx_trans <- c(
     USA = "^USA Standard",
     EUR = "^EUROPE Standard",
     PACxJPN = "^PACIFIC ex JAPAN Standard",
-    JPN = "^JAPAN Standard",
-    JPN_IMI = "^JAPAN IMI",
-    WxUSPAR = "^WORLD EX USA CLIMATE PARIS ALIGNED Standard"
+    JAPAN = "^JAPAN Standard",
+    JP_IMI = "^JAPAN IMI",
+    WxUSPAR = "^WORLD EX USA CLIMATE PARIS ALIGNED Standard",
+    CHINA = "^CHINA Standard",
+    TAIWAN = "^TAIWAN Standard",
+    INDIA = "^INDIA Standard",
+    KOREA = "^KOREA Standard",
+    BRAZIL = "^BRAZIL Standard",
+    S_AFR = "^SOUTH AFRICA Standard"
 )
 gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
 net_idx_trans_ccy <- function(ccy) {
