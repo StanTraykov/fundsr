@@ -75,7 +75,8 @@ stored in an environment and returned.</p>
 <span>  <span class="va">n_days</span>,</span>
 <span>  <span class="va">plot_spec</span>,</span>
 <span>  xlm_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  add_gg_params <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">geom_blank</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  add_gg_params <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">geom_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  bmark_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"net"</span>, <span class="st">"gross"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,13 +93,13 @@ stored in an environment and returned.</p>
 
 
 <dt id="arg-n-days">n_days<a class="anchor" aria-label="anchor" href="#arg-n-days"></a></dt>
-<dd><p>Rolling-window length in days.</p></dd>
+<dd><p>Rolling-window length in days (passed to <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code> for labelling).</p></dd>
 
 
 <dt id="arg-plot-spec">plot_spec<a class="anchor" aria-label="anchor" href="#arg-plot-spec"></a></dt>
 <dd><p>A data frame or a list of data frames describing plot
-parameters: <code>plot_id</code>, <code>title</code>, <code>data_filter</code>, <code>gg_params</code>, <code>width</code>,
-<code>height</code>, <code>funds</code>.</p></dd>
+parameters. Expected columns include: <code>plot_id</code>, <code>title</code>, <code>data_filter</code>,
+<code>gg_params</code>, <code>width</code>, <code>height</code>, <code>funds</code>.</p></dd>
 
 
 <dt id="arg-xlm-data">xlm_data<a class="anchor" aria-label="anchor" href="#arg-xlm-data"></a></dt>
@@ -111,13 +112,17 @@ parameters: <code>plot_id</code>, <code>title</code>, <code>data_filter</code>, 
 appended to each generated plot in addition to the per-plot <code>gg_params</code>
 defined in <code>plot_spec</code>. Defaults to <code><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">ggplot2::geom_blank()</a></code>.</p></dd>
 
+
+<dt id="arg-bmark-type">bmark_type<a class="anchor" aria-label="anchor" href="#arg-bmark-type"></a></dt>
+<dd><p>Benchmark type used in plot titles: <code>"net"</code> or <code>"gross"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>An environment containing ggplot objects. Objects are stored under names
 corresponding to the base filenames used in <code><a href="save_plot.html">save_plot()</a></code>: <code>plot_id</code> for
 CAGR variants, <code>plot_id_L</code> for log-return variants, and (when generated)
-<code>xlm_plot_id</code> for XLM plots.</p>
+<code>xlm_&lt;plot_id&gt;</code> for XLM plots.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -125,12 +130,15 @@ CAGR variants, <code>plot_id_L</code> for log-return variants, and (when generat
 log-return-based variant using <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code> and writes the resulting
 plots via <code><a href="save_plot.html">save_plot()</a></code>, using a filename suffix (<code>_L</code>) to distinguish the
 log-return variant.</p>
+<p>If <code>plot_spec</code> is provided as a list of data frames, the function binds them
+into a single specification. The <code>title</code> column may be provided as a list
+column (e.g. to keep a multilingual named vector as a single per-row value).</p>
 <p>If <code>xlm_data</code> is supplied, an XLM plot is generated once per unique set of
 Xetra tickers using <code><a href="plot_xlms.html">plot_xlms()</a></code>. Fund tickers are mapped to Xetra tickers
-via the <code>fundsr.xetra_map</code> option. The resulting plot is added to the
-returned environment under <code>xlm_&lt;plot_id&gt;</code> and written to disk with the same
-base name, where <code>&lt;plot_id&gt;</code> is taken from the first plot specification that
-references that ticker set.</p>
+via the <code>fundsr.xetra_map</code> option (tickers not present in the map are used
+as-is). The first plot specification encountered for a given ticker set
+determines the base filename <code>xlm_&lt;plot_id&gt;</code> used for saving and storing the
+resulting XLM plot.</p>
     </div>
 
     <div id="ref-examples">
