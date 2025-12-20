@@ -17,7 +17,9 @@ pak::pak("StanTraykov/fundsr")
 
 # Importing data
 Fund and index data are stored in fundsr's storage environment as tibbles / dfs with date columns and one or more value columns. Index level columns must be in upppercase (e.g. `ACWI`, `FTAW`). Fund NAV columns must be in lowercase (e.g. `spyy`, `vwce`).
+
 ## Funds
+
 ### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers)
 Fund providers allow downloading a NAV history in Excel format (even if it's sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.html) and [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.html) functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund `.xls` or `.xlsx` file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. `FWRA.xlsx`) it can be imported without specifying a file.
 ```r
@@ -27,6 +29,7 @@ amun("WEBN", benchmark = "GMLM", file = "NAV History_Amundi Prime All Country Wo
 }
 run_data_loaders()
 ```
+
 ### Other funds
 Prepare a tibble/dataframe or a CSV file with a date column and one or more data columns that must be lowercase for funds (e.g. `sxr8`, `vwce`, `spyy`) and uppercase for indices (e.g. `SP500`, `FTAW`, `ACWI`). Suppose you have a dataframe ``funds_data`` with fund NAVs and a CSV file with index levels. You can import them via:
 ```r
@@ -44,8 +47,11 @@ add_data_loader(function() {
 run_data_loaders()
 ```
 **Note:** Dates in the CSV file must be Unix epoch timestamps (in second or millisecond precision), see [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.html). If your dates are in another format, get the data via `readr::read_csv()` and ensure the dates are parsed either via `read_csv`'s `col_types` argument or later (e.g. mutate using `lubridate::parse_date_time()`).
+
 ## Indices
+
 ### From fund files
+
 Some fund providers' files include index series. These can be retrieved when importing the fund (supported for iShares, Xtrackers, Invesco), e.g.
 ```r
 add_data_loader(function() {
@@ -55,8 +61,10 @@ add_data_loader(function() {
 })
 ```
 Index series retrieved in this way may have holes (e.g. fund domicile holidays and such) that can potentially remove data points for funds that did publish a NAV for that day (e.g. different domicile). The overall effect on plots is negligible, however.
+
 ### MSCI
 MSCI provides [end-of-day level downloads](https://www-cdn.msci.com/web/msci/index-tools/end-of-day-index-data-search). These can be imported by the provided [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.html) function.
+
 ### FTSE & Solactive
 These index providers make it more difficult to get index levels for free.
 
