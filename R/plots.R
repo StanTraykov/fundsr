@@ -80,10 +80,19 @@ save_plot <- function(file,
             width = width,
             units = units
         )
+        bad <- grepl(";", c(svgf, pngf), fixed = TRUE)
+        if (any(bad)) {
+            bad_items <- unique(c(svgf, pngf)[bad])
+            stop(
+                "cannot queue Inkscape export; ';' in path(s):\n- ",
+                paste(bad_items, collapse = "\n- "),
+                call. = FALSE
+            )
+        }
         a <- glue(
             "file-open:{svgf};export-filename:{pngf};export-width:{px_width};export-do;file-close"
         )
-        if (is.null(.fundsr$inkscape_queue)) .fundsr$inkscape_queue <- character()
+        if (is.null(.fundsr$inkscape_queue)) clear_inkscape_queue()
         .fundsr$inkscape_queue[file] <- a
     }
 
@@ -143,7 +152,7 @@ export_pngs <- function() {
     message(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"))
     exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
-        .fundsr$inkscape_queue <- character()
+        clear_inkscape_queue()
     } else {
         message(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"))
     }
