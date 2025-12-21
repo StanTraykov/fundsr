@@ -1,8 +1,13 @@
 # Compare net indices vs gross indices
 library(tidyverse)
 
+# Reset state
+fun_id <- "examples_em_topc"
+if (!exists("funiverse") || !identical(funiverse, fun_id))
+    fundsr::reset_state()
+funiverse <- fun_id
+
 # Config
-fundsr::reset_state()
 source("dev/examples/common_spec.R")
 source("dev/examples/em_topc_spec.R")
 
