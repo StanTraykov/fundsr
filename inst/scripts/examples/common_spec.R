@@ -20,7 +20,8 @@ fundsr_options(
         aeem = "amem",
         lem = "lym7",
         iema = "eunm",
-        emim = "is3n"
+        emim = "is3n",
+        spxs = "p500"
     )
 )
 spec_list <- list()
