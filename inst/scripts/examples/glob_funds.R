@@ -2,6 +2,7 @@ library(tidyverse)
 library(fundsr)
 
 # Config
+fundsr::reset_state() # just in case
 source("common_spec.R")
 source("glob_spec.R")
 xlm_dir <- file.path("data", "xlm")

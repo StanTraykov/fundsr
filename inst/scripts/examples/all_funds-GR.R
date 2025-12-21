@@ -1,8 +1,13 @@
 library(tidyverse)
 library(fundsr)
 
+# Reset state
+fun_id <- "examples_all_funds-GR"
+if (!exists("funiverse") || !identical(funiverse, fun_id))
+    fundsr::reset_state()
+funiverse <- fun_id
+
 # Config
-fundsr::reset_state()
 source("common_spec.R")
 source("glob-GR_spec.R")
 source("dm-GR_spec.R")

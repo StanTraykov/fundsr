@@ -2,8 +2,13 @@
 library(tidyverse)
 library(fundsr)
 
+# Reset state
+fun_id <- "examples_em_topc"
+if (!exists("funiverse") || !identical(funiverse, fun_id))
+    fundsr::reset_state()
+funiverse <- fun_id
+
 # Config
-fundsr::reset_state()
 source("common_spec.R")
 source("em_topc_spec.R")
 
