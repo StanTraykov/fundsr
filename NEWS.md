@@ -1,5 +1,9 @@
 # fundsr (development version)
 
+- fix BG translation: y axis label on log-return charts
+- add more example scripts; translate more index names in common_spec
+- translate examples (add BG titles)
+
 # fundsr 0.1.0
 
 ## Initial release
