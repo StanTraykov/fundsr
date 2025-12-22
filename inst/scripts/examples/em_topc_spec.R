@@ -1,6 +1,9 @@
 ##### Plots #####
 idx <- c("CHINA", "TAIWAN", "INDIA", "KOREA", "BRAZIL", "S_AFR")
-title <- "EM net indices"
+title <- c(
+    en = "EM net indices",
+    bg = "нетни индески за разв. п-ри"
+)
 gg_par <- fund_colors(breaks = idx)
 
 # plot specification

@@ -1,6 +1,9 @@
 ##### Plots #####
 funds <- c("sxr8", "spxs", "vuaa", "spyl", "i500", "xd9u", "sc0h", "USA-GR")
-title <- "USA funds (selection)"
+title <- c(
+    en = "USA funds (selection)",
+    bg = "фондове за САЩ (селекция)"
+)
 us_sel_pal <- c("sc0h" = "#11569B",
                 "i500" = "#ED0000",
                 "sxr8" = "#118200",
