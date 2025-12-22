@@ -9,10 +9,10 @@ fundsr imports fund NAVs and index levels and creates tracking difference plots 
 ```r
 # install.packages("pak")
 
-# Stable: latest release
+# Stable (latest release):
 pak::pak("StanTraykov/fundsr@*release")
 
-# Development: (main branch)
+# Development:
 pak::pak("StanTraykov/fundsr")
 ```
 

@@ -160,7 +160,7 @@ msgid "fund"
 msgstr "фонд"
 
 msgid "rolling annualized log-return difference (bps)"
-msgstr "плъзгаща се разлика в CAGR (bps)"
+msgstr "плъзг. разлика в анюализирана log доходност (bps)"
 
 msgid "rolling CAGR difference (bps)"
 msgstr "плъзгаща се разлика в CAGR (bps)"
