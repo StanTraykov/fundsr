@@ -4,9 +4,10 @@ source("common_spec.R")
 
 specs <- tribble(
     ~population, ~sex, ~age,
-    "NLD",   "m",   52L,
-    "IRL",   "m",   52L,
-    "NZL_MA",    "f",   32L,
+    "GBR_NP", "m", 42L,
+    "NLD",   "m",   42L,
+    "IRL",   "m",   42L,
+    "NZL_MA",    "f",   42L,
     "DEUTNP",    "m",   42L,
 )
 
