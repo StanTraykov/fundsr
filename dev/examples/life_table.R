@@ -5,6 +5,7 @@ specs <- tribble(
     ~population, ~sex, ~age,
     "GBR_NP", "m", 42L,
     "NLD",   "m",   42L,
+    "NLD",   "f",   42L,
     "IRL",   "m",   42L,
     "NZL_MA",    "f",   42L,
     "DEUTNP",    "m",   42L,
@@ -18,7 +19,7 @@ specs %>%
         lt = if_else(sex == "m", list(lt_m), list(lt_f)),
         ca = pmap(list(lt, population, age), chance_alive),
         p  = pmap(list(ca, sex, population), plot_chance_alive),
-        file_id = glue("CA_{population}_{sex}_{age}")
+        file_id = glue("srv_{population}_{sex}_{age}")
     ) %>%
     select(file_id, p) %>%
     pwalk(\(file_id, p) save_plot(file_id, p, height = std_h, width = std_w, px_width = 1700))
