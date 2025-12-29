@@ -28,7 +28,7 @@ Fund and index data are stored in fundsr's storage environment as tibbles / dfs 
 
 ## Funds
 
-### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Xtrackers)
+### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Vanguard, Xtrackers)
 Fund providers allow downloading a NAV history in Excel format (even if it's sometimes incomplete). iShares and SPDR downloads can be automated easily and fundsr supports this via the [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.html) and [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.html) functions—see the intro vignette for more info. For the others, manual downloads (or non-trivial automation) seem necessary. In this case, the fund `.xls` or `.xlsx` file must be made available to fundsr in the data directory. If the filename matches the ticker (e.g. `FWRA.xlsx`) it can be imported without specifying a file.
 ```r
 add_data_loader(function () {
