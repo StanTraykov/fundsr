@@ -11,6 +11,7 @@
 <url><loc>/reference/add_fund_urls.html</loc></url>
 <url><loc>/reference/amun.html</loc></url>
 <url><loc>/reference/chance_alive.html</loc></url>
+<url><loc>/reference/chance_alive_es_aasmr.html</loc></url>
 <url><loc>/reference/clear_data_loaders.html</loc></url>
 <url><loc>/reference/clear_inkscape_queue.html</loc></url>
 <url><loc>/reference/clear_storage.html</loc></url>
@@ -29,8 +30,10 @@
 <url><loc>/reference/make_date_fmts.html</loc></url>
 <url><loc>/reference/msci.html</loc></url>
 <url><loc>/reference/plot_chance_alive.html</loc></url>
+<url><loc>/reference/plot_chance_alive_es_aasmr.html</loc></url>
 <url><loc>/reference/plot_roll_diffs.html</loc></url>
 <url><loc>/reference/plot_xlms.html</loc></url>
+<url><loc>/reference/read_es_aasmr.html</loc></url>
 <url><loc>/reference/read_life_table.html</loc></url>
 <url><loc>/reference/read_msci_tsv.html</loc></url>
 <url><loc>/reference/read_timeseries.html</loc></url>
