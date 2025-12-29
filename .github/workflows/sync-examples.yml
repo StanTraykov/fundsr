@@ -42,14 +42,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          if git diff --quiet; then
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A inst/scripts/examples
+
+          if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
 
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add inst/scripts/examples
           git commit -m "Sync inst/scripts/examples from dev/examples/"
           git push
