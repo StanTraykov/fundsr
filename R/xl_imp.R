@@ -152,7 +152,7 @@ import_xl_data <- function(xl_file,
     raw_data <- read_excel_or_xml(file_path = xl_file, sheet = data_sheet)
 
     # 2) Remove columns entirely NA
-    raw_data <- dplyr::select(raw_data, dplyr::where(~ any(!is.na(.x))))
+    raw_data <- select(raw_data, where(~ any(!is.na(.x))))
 
     # 3) Find row containing date_field_name
     row_header_idx <- which(apply(raw_data, 1, function(x) {
@@ -181,7 +181,7 @@ import_xl_data <- function(xl_file,
         (\(x) ifelse(x == "", "...", x))() %>%
         make.unique(sep = "_")
 
-    data_raw <- dplyr::slice(raw_data, (row_header_idx + 1):nrow(raw_data))
+    data_raw <- slice(raw_data, (row_header_idx + 1):nrow(raw_data))
 
     if (length(header_values) != ncol(data_raw)) {
         if (length(header_values) > ncol(data_raw)) {
@@ -200,7 +200,7 @@ import_xl_data <- function(xl_file,
     }
     date_col_idx <- date_col_idx[1]
     old_date_name <- names(data_raw)[date_col_idx]
-    data_raw <- dplyr::rename(data_raw, date = !!old_date_name)
+    data_raw <- rename(data_raw, date = !!old_date_name)
 
     # 6) Parse date, drop trailing junk
     if (is.numeric(data_raw$date)) {
@@ -223,7 +223,7 @@ import_xl_data <- function(xl_file,
         safe_dates <- safe_dates[seq_len(first_junk - 1)]
     }
     data_raw$parsed_date <- safe_dates[seq_len(nrow(data_raw))]
-    data_raw <- dplyr::filter(data_raw, !is.na(.data$parsed_date))
+    data_raw <- filter(data_raw, !is.na(.data$parsed_date))
     data_raw$date <- data_raw$parsed_date
     data_raw$parsed_date <- NULL
 
@@ -239,11 +239,11 @@ import_xl_data <- function(xl_file,
             } else {
                 newn <- c(.x, paste0(.x, seq(2, length(idx))))
             }
-            dplyr::tibble(old_name = names(data_raw)[idx], new_name = newn)
+            tibble(old_name = names(data_raw)[idx], new_name = newn)
         }
     ) %>%
         purrr::compact() %>%
-        dplyr::bind_rows()
+        bind_rows()
 
     keep_cols <- c("date", matched_cols$old_name)
     keep_cols <- unique(keep_cols)
@@ -251,7 +251,7 @@ import_xl_data <- function(xl_file,
 
     if (nrow(matched_cols) > 0) {
         nm <- stats::setNames(matched_cols$old_name, matched_cols$new_name)
-        data_subset <- dplyr::rename(data_subset, !!!nm)
+        data_subset <- rename(data_subset, !!!nm)
     }
 
     # 8) Convert `date` to Date, attempt numeric for others

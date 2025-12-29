@@ -369,7 +369,7 @@ run_plots <- function(rds_cagr,
             }
             stop(sprintf("`%s` must be character or list.", col), call. = FALSE)
         }
-        plot_spec <- dplyr::bind_rows(lapply(plot_spec, ensure_title_col))
+        plot_spec <- bind_rows(lapply(plot_spec, ensure_title_col))
     }
     runs <- tidyr::crossing(plot_spec, variants)
     plots_env <- new.env(parent = emptyenv())

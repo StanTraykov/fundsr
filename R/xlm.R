@@ -149,7 +149,7 @@ plot_xlms <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL, back_tra
             inv <- set_names(names(xetra_map), unname(xetra_map)) # xetra -> internal
             data <- data %>%
                 mutate(
-                    ticker = dplyr::if_else(
+                    ticker = if_else(
                         .data$ticker %in% names(inv),
                         unname(inv[.data$ticker]),
                         .data$ticker

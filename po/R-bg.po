@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fundsr 0.1.0\n"
-"POT-Creation-Date: 2025-12-29 04:29\n"
+"POT-Creation-Date: 2025-12-29 10:41\n"
 "PO-Revision-Date: 2025-12-09 12:00+EET\n"
 "Last-Translator: Stanislav Traykov <st@gmuf.com>\n"
 "Language-Team: Stanislav Traykov <st@gmuf.com>\n"
@@ -109,6 +109,39 @@ msgstr "преживяемост"
 
 msgid "data"
 msgstr "данни"
+
+msgid "`sex` must be 'm' or 'f'."
+msgstr ""
+
+msgid "No rows for given geo/sex in `es`."
+msgstr ""
+
+msgid "Filtered data contains multiple geo codes; check parsing."
+msgstr ""
+
+msgid "Missing mx at baseline (Year, Age) for"
+msgstr ""
+
+msgid "."
+msgstr ""
+
+msgid "baseline"
+msgstr "базов сценарий"
+
+msgid "lower mortality"
+msgstr "по-ниска смъртност"
+
+#
+msgid "Survival by age per EUROPOP2023 projection"
+msgstr "Преживяемост по възраст според прогноза EUROPOP2023"
+
+#
+msgid "{population} · {sex_label} · age {age_min} · start year {start_year}"
+msgstr ""
+"{population} · {sex_label} · възраст {age_min} · начална година {start_year}"
+
+msgid "projection"
+msgstr "прогноза"
 
 msgid "`data_dir` must be a single non-missing string."
 msgstr ""

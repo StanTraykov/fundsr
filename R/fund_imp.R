@@ -175,7 +175,7 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 
         df <- df %>%
             mutate(
-                !!b := dplyr::coalesce(.data[[cx]], .data[[cy]]),
+                !!b := coalesce(.data[[cx]], .data[[cy]]),
                 .keep = "unused"
             )
     }
@@ -255,11 +255,11 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
     }
 
     main_list <- mget(main_names, envir = env)
-    j <- purrr::reduce(main_list, dplyr::full_join, by = by)
+    j <- purrr::reduce(main_list, full_join, by = by)
 
     if (length(late) > 0L) {
         late_list <- mget(late, envir = env)
-        j <- purrr::reduce(late_list, dplyr::left_join, .init = j, by = by)
+        j <- purrr::reduce(late_list, left_join, .init = j, by = by)
     }
 
     if (!is.null(coalesce_suffixed))
