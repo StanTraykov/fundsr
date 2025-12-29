@@ -7,9 +7,8 @@ specs <- tribble(
     "GBR_NP", "m", 42L,
     "NLD",   "m",   42L,
     "NLD",   "f",   42L,
-    "IRL",   "m",   42L,
-    "NZL_MA",    "f",   42L,
-    "DEUTNP",    "m",   42L,
+    "BGR",   "m",   42L,
+    "BGR",   "f",   42L
 )
 
 lt_m <- read_life_table(file.path("data", "life"), "m", look_back = 20)
