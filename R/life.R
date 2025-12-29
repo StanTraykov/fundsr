@@ -120,7 +120,7 @@ chance_alive <- function(lt, pop_name, age0) {
 plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
     stopifnot(all(c("Year", "Age", "chance_alive") %in% names(ca)))
     sex <- match.arg(sex)
-    sex_label <- if (sex == "m") "male" else "female"
+    sex_label <- if (sex == "m") gettext("male") else gettext("female")
     year_max <- max(ca[["Year"]], na.rm = TRUE)
     age_min <- min(ca[["Age"]], na.rm = TRUE)
     age_max <- max(ca[["Age"]], na.rm = TRUE)
@@ -148,11 +148,11 @@ plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
                                     expand = ggplot2::expansion(mult = c(0, 0), add = c(0, 0))) +
         ggplot2::scale_y_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0, 1)) +
         ggplot2::labs(
-            title = "Chance alive by age",
-            subtitle = glue("{population} \u00b7 {sex_label} \u00b7 age {age_min} \u00b7 latest data from {year_max} (black line)"),
-            x = "age",
-            y = "chance alive",
-            color = "data"
+            title = gettext("Survival by age per HMD life table"),
+            subtitle = glue(gettext("{population} \u00b7 {sex_label} \u00b7 age {age_min} \u00b7 latest data from {year_max} (black line)")),
+            x = gettext("age"),
+            y = gettext("survival"),
+            color = gettext("data")
         ) +
         ggplot2::coord_cartesian(clip = "off") +
         ggplot2::theme_minimal() +

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fundsr 0.1.0.9000\n"
-"POT-Creation-Date: 2025-12-22 13:16\n"
+"POT-Creation-Date: 2025-12-29 04:29\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,6 +77,30 @@ msgid "Multiple .xls[x] files found for {ticker}."
 msgstr ""
 
 msgid "Need benchmark and benchmark_col to retrieve benchmark."
+msgstr ""
+
+msgid "`age0` not found for `pop_name` in `lt$Age`."
+msgstr ""
+
+msgid "male"
+msgstr ""
+
+msgid "female"
+msgstr ""
+
+msgid "Survival by age per HMD life table"
+msgstr ""
+
+msgid "{population} · {sex_label} · age {age_min} · latest data from {year_max} (black line)"
+msgstr ""
+
+msgid "age"
+msgstr ""
+
+msgid "survival"
+msgstr ""
+
+msgid "data"
 msgstr ""
 
 msgid "`data_dir` must be a single non-missing string."

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fundsr 0.1.0\n"
-"POT-Creation-Date: 2025-12-20 14:48\n"
+"POT-Creation-Date: 2025-12-29 04:29\n"
 "PO-Revision-Date: 2025-12-09 12:00+EET\n"
 "Last-Translator: Stanislav Traykov <st@gmuf.com>\n"
 "Language-Team: Stanislav Traykov <st@gmuf.com>\n"
@@ -82,6 +82,34 @@ msgstr ""
 msgid "Need benchmark and benchmark_col to retrieve benchmark."
 msgstr ""
 
+msgid "`age0` not found for `pop_name` in `lt$Age`."
+msgstr ""
+
+msgid "male"
+msgstr "мъж"
+
+msgid "female"
+msgstr "жена"
+
+msgid "Survival by age per HMD life table"
+msgstr "Преживяемост по възраст според таблиците на HMD"
+
+msgid ""
+"{population} · {sex_label} · age {age_min} · latest data from {year_max} "
+"(black line)"
+msgstr ""
+"{population} · {sex_label} · възраст {age_min} · последни данни от "
+"{year_max} (черна линия)"
+
+msgid "age"
+msgstr "възраст"
+
+msgid "survival"
+msgstr "преживяемост"
+
+msgid "data"
+msgstr "данни"
+
 msgid "`data_dir` must be a single non-missing string."
 msgstr ""
 
@@ -148,10 +176,13 @@ msgid "gross"
 msgstr "брутен"
 
 msgid "{n_days}d rolling log-return differences vs {bmark_type} benchmark{ttl}"
-msgstr "{n_days}-дневни плъзгащи се разлики в log доходност спрямо {bmark_type} индекс{ttl}"
+msgstr ""
+"{n_days}-дневни плъзгащи се разлики в log доходност спрямо {bmark_type} "
+"индекс{ttl}"
 
 msgid "{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}"
-msgstr "{n_days}-дневни плъзгащи се CAGR разлики спрямо {bmark_type} индекс{ttl}"
+msgstr ""
+"{n_days}-дневни плъзгащи се CAGR разлики спрямо {bmark_type} индекс{ttl}"
 
 msgid "plot_roll_diffs:"
 msgstr ""
