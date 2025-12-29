@@ -1,3 +1,29 @@
+#' Read HMD period life tables (1x1) from disk
+#'
+#' Reads a Human Mortality Database (HMD) period life table file (1x1, by single
+#' year of age) for the selected sex and returns only the last `look_back`
+#' years based on the latest year present in the file. The open-ended age group
+#' (e.g. `"110+"`) is parsed as its numeric lower bound (e.g. `110`).
+#'
+#' @param directory Directory containing the HMD life table files (e.g.
+#'   `"mltper_1x1.txt"` / `"fltper_1x1.txt"` or `"mltper_1x1.txt"` / `"fltper_1x1.txt"`
+#'   depending on your naming convention). This function expects files named
+#'   `paste0(sex, "ltper_1x1.txt")`, where `sex` is `"m"` or `"f"`.
+#' @param sex Sex code: `"m"` (male) or `"f"` (female).
+#' @param look_back Number of most recent years to keep (inclusive of the latest
+#'   available year). Must be >= 1.
+#'
+#' @return A tibble with columns:
+#'   `PopName`, `Year`, `Age`, `mx`, `qx`, `ax`, `lx`, `dx`, `Lx`, `Tx`, `ex`.
+#'   `Age` is returned as integer.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' lt_m <- read_life_table(file.path("data", "life"), sex = "m", look_back = 20)
+#' lt_m %>% dplyr::distinct(PopName) %>% dplyr::arrange(PopName)
+#' }
 read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
     sex <- match.arg(sex)
     look_back <- max(1L, as.integer(look_back))
@@ -28,6 +54,30 @@ read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
     lt %>% filter(.data[["Year"]] >= year_min)
 }
 
+#' Compute conditional survival (chance alive) by age
+#'
+#' Computes the conditional probability of being alive at each age `x >= age0`,
+#' given survival to `age0`, from an HMD-style period life table. For each year,
+#' the returned series is:
+#' `chance_alive(x | age0) = lx(x) / lx(age0)`.
+#'
+#' @param lt A life table tibble as returned by [read_life_table()], containing
+#'   at least `PopName`, `Year`, `Age`, and `lx`.
+#' @param pop_name Population code (HMD `PopName`) to filter within `lt`
+#'   (e.g. `"BGR"`, `"USA"`, `"DEUTNP"`).
+#' @param age0 Baseline age (integer). Returned ages start at `age0`.
+#'
+#' @return A tibble with columns `Year`, `Age`, and `chance_alive`, sorted by
+#'   `Year` then `Age`.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' lt_m <- read_life_table(file.path("data", "life"), sex = "m", look_back = 10)
+#' ca <- chance_alive(lt_m, pop_name = "BGR", age0 = 27)
+#' ca
+#' }
 chance_alive <- function(lt, pop_name, age0) {
     age0 <- as.integer(age0)
     lt_pop <- lt %>% filter(.data[["PopName"]] == pop_name)
@@ -43,7 +93,30 @@ chance_alive <- function(lt, pop_name, age0) {
         arrange(.data[["Year"]], .data[["Age"]])
 }
 
-
+#' Plot chance alive by age
+#'
+#' Plots conditional survival curves produced by [chance_alive()]. The most
+#' recent year is highlighted in black; earlier years are shown with a
+#' teal-to-orange-to-light gradient. Horizontal reference lines mark 10% and 5%
+#' survival levels.
+#'
+#' @param ca A tibble as returned by [chance_alive()], with columns `Year`, `Age`,
+#'   and `chance_alive`.
+#' @param sex Sex code: `"m"` (male) or `"f"` (female). Used for labeling.
+#' @param population Population label/code to display in the subtitle (e.g.
+#'   `"BGR"`, `"USA"`, `"DEUTNP"`).
+#'
+#' @return A ggplot object.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' lt_m <- read_life_table(file.path("data", "life"), sex = "m", look_back = 10)
+#' ca <- chance_alive(lt_m, pop_name = "BGR", age0 = 27)
+#' p <- plot_chance_alive(ca, sex = "m", population = "BGR")
+#' p
+#' }
 plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
     stopifnot(all(c("Year", "Age", "chance_alive") %in% names(ca)))
     sex <- match.arg(sex)
