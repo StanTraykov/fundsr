@@ -246,7 +246,21 @@ plot_roll_diffs <- function(data,
     qlims <- stats::quantile(cdata$roll_diff,
                       probs = qprob,
                       na.rm = TRUE)
-    y_lims <- range(c(qlims, 0))
+    # force-include last 30 days (even if outside quantiles)
+    cutoff <- max(cdata$date, na.rm = TRUE) - lubridate::days(30)
+    recent_range <- cdata %>%
+        filter(.data$date >= cutoff) %>%
+        summarize(
+            lo = suppressWarnings(min(.data$roll_diff, na.rm = TRUE)),
+            hi = suppressWarnings(max(.data$roll_diff, na.rm = TRUE))
+        )
+    recent_lo <- recent_range$lo
+    recent_hi <- recent_range$hi
+    if (!is.finite(recent_lo) || !is.finite(recent_hi)) {
+        recent_lo <- NA_real_
+        recent_hi <- NA_real_
+    }
+    y_lims <- range(c(qlims, 0, recent_lo, recent_hi), na.rm = TRUE)
     p <- ggplot2::ggplot(cdata,
                          ggplot2::aes(x = .data$date, y = .data$roll_diff, color = .data$fund)) +
         ggplot2::geom_point(alpha = 0.5, size = 1.5) +
