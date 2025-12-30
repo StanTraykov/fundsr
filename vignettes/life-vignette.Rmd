@@ -16,8 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Setup
-
+## Setup
 ```{r setup}
 library(fundsr)
 
@@ -79,7 +78,6 @@ estat_proj_23naasmr.tsv.gz  fltper_1x1.txt.gz  mltper_1x1.txt.gz
 ```
 
 ## Plot survival chances per HMD life tables
-
 ```{r}
 # Dutch male, age 42
 
@@ -121,8 +119,8 @@ save_plot("es_plot", es_p, width = 11, height = 7, px_width = 1700)
 ```{r, fig.width=11, fig.height=7, out.width="88%", fig.align="center"}
 es_p
 ```
-## Optional: export PNGs via Inkscape
 
+## Optional: export PNGs via Inkscape
 ```{r}
 # export_pngs()
 ```
