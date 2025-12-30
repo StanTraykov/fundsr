@@ -256,20 +256,27 @@ Corresponding SVG files should be in the `output` directory.
 ## Plot in another language
 
 ``` r
-Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8")
+Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems; may issue warning on others
 #> [1] "bg_BG.UTF-8"
+Sys.setLanguage("bg")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
+#> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ
 #> plot_xlms: spyy, iusq
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: recent years
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: recent years
+#> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ
+#> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ: последни години
+#> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ: последни години
 bg_p[["ACWIz_bg_L"]]
 ```
 
 ![](fundsr-intro_files/figure-html/unnamed-chunk-15-1.png)
+
+``` r
+bg_p[["xlm_ACWI_bg"]]
+```
+
+![](fundsr-intro_files/figure-html/unnamed-chunk-15-2.png)
 
 ## Optional: higher-quality PNG export
 
