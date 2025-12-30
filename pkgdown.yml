@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   fundsr-intro: fundsr-intro.html
   life-vignette: life-vignette.html
-last_built: 2025-12-30T05:22Z
+last_built: 2025-12-30T05:42Z
 urls:
   reference: https://stantraykov.github.io/fundsr/reference
   article: https://stantraykov.github.io/fundsr/articles
