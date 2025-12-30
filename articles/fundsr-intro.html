@@ -172,7 +172,7 @@ Traykov</h4>
 <span><span class="co">#&gt; *** Loading: iusq</span></span>
 <span><span class="co">#&gt; Attempting readxl on 'data/funds/IUSQ.xls'...</span></span>
 <span><span class="co">#&gt; readxl failed. Attempting parse as Excel 2003 XML...</span></span>
-<span><span class="co">#&gt; Returning 3619 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').</span></span></code></pre></div>
+<span><span class="co">#&gt; Returning 3620 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').</span></span></code></pre></div>
 <p>Join the environment into a big tibble, cut off &amp; sort</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_env.html">join_env</a></span><span class="op">(</span><span class="va">storage</span>, by <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -182,20 +182,20 @@ Traykov</h4>
 <p>Check contents</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">storage</span><span class="op">[[</span><span class="st">"iusq"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,619 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,620 × 3</span></span></span>
 <span><span class="co">#&gt;    date        iusq  ACWI</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-12-24  109.  440.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-12-23  109.  439.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-12-22  109.  437.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-12-19  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-12-18  107.  431.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-12-17  106.  428.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-12-16  107.  432.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-12-15  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-12-12  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-12-11  109.  437.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,609 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-12-29  109.   <span style="color: #BB0000;">NA</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-12-24  109.  440.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-12-23  109.  439.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-12-22  109.  437.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-12-19  108.  434.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-12-18  107.  431.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-12-17  106.  428.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-12-16  107.  432.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-12-15  108.  434.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-12-12  108.  434.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,610 more rows</span></span></span>
 <span><span class="va">series</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,341 × 4</span></span></span>
 <span><span class="co">#&gt;    date        spyy  iusq  ACWI</span></span>
@@ -263,8 +263,7 @@ PNG export using Inkscape (see blow). It may also output lower-quality
 PNGs (if option <code>fundsr.internal_png</code> is
 <code>TRUE</code>).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/gettext.html" class="external-link">Sys.setLanguage</a></span><span class="op">(</span><span class="st">"en"</span><span class="op">)</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_plots.html">run_plots</a></span><span class="op">(</span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span>, <span class="va">diffs</span><span class="op">$</span><span class="va">log</span>, <span class="va">nd</span>, <span class="va">plot_spec</span>, <span class="va">xlm_data</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_plots.html">run_plots</a></span><span class="op">(</span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span>, <span class="va">diffs</span><span class="op">$</span><span class="va">log</span>, <span class="va">nd</span>, <span class="va">plot_spec</span>, <span class="va">xlm_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ</span></span>
 <span><span class="co">#&gt; plot_xlms: spyy, iusq</span></span>
 <span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY &amp; IUSQ</span></span>
@@ -293,15 +292,16 @@ directory.</p>
 <h2 id="plot-in-another-language">Plot in another language<a class="anchor" aria-label="anchor" href="#plot-in-another-language"></a>
 </h2>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/gettext.html" class="external-link">Sys.setLanguage</a></span><span class="op">(</span><span class="st">"bg"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/locales.html" class="external-link">Sys.setlocale</a></span><span class="op">(</span><span class="st">"LC_MESSAGES"</span>, <span class="st">"bg_BG.UTF-8"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "bg_BG.UTF-8"</span></span>
 <span><span class="va">plot_spec</span> <span class="op">&lt;-</span> <span class="va">plot_spec</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>plot_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">plot_id</span>, <span class="st">"_bg"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">bg_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_plots.html">run_plots</a></span><span class="op">(</span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span>, <span class="va">diffs</span><span class="op">$</span><span class="va">log</span>, <span class="va">nd</span>, <span class="va">plot_spec</span>, <span class="va">xlm_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ</span></span>
 <span><span class="co">#&gt; plot_xlms: spyy, iusq</span></span>
 <span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY &amp; IUSQ</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ: последни години</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY &amp; IUSQ: последни години</span></span>
+<span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ: recent years</span></span>
+<span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY &amp; IUSQ: recent years</span></span>
 <span><span class="va">bg_p</span><span class="op">[[</span><span class="st">"ACWIz_bg_L"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p><img src="fundsr-intro_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="88%" style="display: block; margin: auto;"></p>
 </div>

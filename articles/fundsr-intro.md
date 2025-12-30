@@ -120,7 +120,7 @@ storage <- run_data_loaders() # call registered data loaders
 #> *** Loading: iusq
 #> Attempting readxl on 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
-#> Returning 3619 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
+#> Returning 3620 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
 ```
 
 Join the environment into a big tibble, cut off & sort
@@ -136,20 +136,20 @@ Check contents
 
 ``` r
 storage[["iusq"]]
-#> # A tibble: 3,619 × 3
+#> # A tibble: 3,620 × 3
 #>    date        iusq  ACWI
 #>    <date>     <dbl> <dbl>
-#>  1 2025-12-24  109.  440.
-#>  2 2025-12-23  109.  439.
-#>  3 2025-12-22  109.  437.
-#>  4 2025-12-19  108.  434.
-#>  5 2025-12-18  107.  431.
-#>  6 2025-12-17  106.  428.
-#>  7 2025-12-16  107.  432.
-#>  8 2025-12-15  108.  434.
-#>  9 2025-12-12  108.  434.
-#> 10 2025-12-11  109.  437.
-#> # ℹ 3,609 more rows
+#>  1 2025-12-29  109.   NA 
+#>  2 2025-12-24  109.  440.
+#>  3 2025-12-23  109.  439.
+#>  4 2025-12-22  109.  437.
+#>  5 2025-12-19  108.  434.
+#>  6 2025-12-18  107.  431.
+#>  7 2025-12-17  106.  428.
+#>  8 2025-12-16  107.  432.
+#>  9 2025-12-15  108.  434.
+#> 10 2025-12-12  108.  434.
+#> # ℹ 3,610 more rows
 series
 #> # A tibble: 3,341 × 4
 #>    date        spyy  iusq  ACWI
@@ -217,7 +217,6 @@ export using Inkscape (see blow). It may also output lower-quality PNGs
 (if option `fundsr.internal_png` is `TRUE`).
 
 ``` r
-Sys.setLanguage("en")
 p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 #> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
 #> plot_xlms: spyy, iusq
@@ -257,15 +256,16 @@ Corresponding SVG files should be in the `output` directory.
 ## Plot in another language
 
 ``` r
-Sys.setLanguage("bg")
+Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8")
+#> [1] "bg_BG.UTF-8"
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 #> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
 #> plot_xlms: spyy, iusq
 #> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: последни години
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: последни години
+#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: recent years
+#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: recent years
 bg_p[["ACWIz_bg_L"]]
 ```
 
