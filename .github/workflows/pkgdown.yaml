@@ -39,6 +39,13 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
+      # Needed for vignette output
+      - name: Enable bg_BG.UTF-8 locale
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y locales
+          sudo locale-gen bg_BG.UTF-8
+
       # Decide whether to do a light build (no vignettes) or full build (incl. vignettes)
       - name: Detect full pkgdown build
         id: detect_full

@@ -153,7 +153,6 @@ plot_spec <- tribble(
 ## Run!
 Run the plots! This outputs SVG files and queues plots for optional PNG export using Inkscape (see blow). It may also output lower-quality PNGs (if option `fundsr.internal_png` is `TRUE`).
 ```{r}
-Sys.setLanguage("en")
 p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 ```
 
@@ -169,7 +168,7 @@ Corresponding SVG files should be in the `output` directory.
 
 ## Plot in another language
 ```{r, fig.width=11, fig.height=7, out.width="88%", fig.align="center"}
-Sys.setLanguage("bg")
+Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
