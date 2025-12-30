@@ -116,11 +116,13 @@ save_plot("es_plot", es_p, width = 11, height = 7, px_width = 1700)
 ```
 
 ### Output
+
 ```{r, fig.width=11, fig.height=7, out.width="88%", fig.align="center"}
 es_p
 ```
 
 ## Optional: export PNGs via Inkscape
+
 ```{r}
 # export_pngs()
 ```
