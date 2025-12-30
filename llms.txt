@@ -1,0 +1,237 @@
+# Overview
+
+![combined plots](reference/figures/combined.png) fundsr imports fund
+NAVs and index levels and creates tracking difference plots (CAGR and
+log-return). Plotting Xetra liquidity data (XLM) is also supported.
+
+# Installation
+
+``` r
+# install.packages("pak")
+
+# Stable (latest release):
+pak::pak("StanTraykov/fundsr@*release")
+
+# Development:
+pak::pak("StanTraykov/fundsr")
+```
+
+# Usage
+
+- [Intro
+  vignette](https://stantraykov.github.io/fundsr/articles/fundsr-intro.html)
+  contains a simple walkthrough comparing IUSQ and SPYY (no data setup
+  needed)
+- `inst/scripts/examples` (e.g. open `.Rproj` file in R Studio after
+  installing the package)
+  - `glob_funds.R` is a more comprehensive example featuring global
+    funds but requiring index & fund data download outside the package
+  - `all_funds.R` and `all_funds-GR.R` feature many more funds for
+    analysis vs net/gross benchmark
+- [Reference](https://stantraykov.github.io/fundsr/reference/index.html)
+
+# Importing data
+
+Fund and index data are stored in fundsr’s storage environment as
+tibbles / dfs with date columns and one or more value columns. Index
+level columns must be in upppercase (e.g. `ACWI`, `FTAW`). Fund NAV
+columns must be in lowercase (e.g. `spyy`, `vwce`).
+
+## Funds
+
+### Supported formats (Amundi, HSBC, Invesco, iShares, SPDR, UBS, Vanguard, Xtrackers)
+
+Fund providers allow downloading a NAV history in Excel format (even if
+it’s sometimes incomplete). iShares and SPDR downloads can be automated
+easily and fundsr supports this via the
+[`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.html)
+and
+[`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.html)
+functions—see the intro vignette for more info. For the others, manual
+downloads (or non-trivial automation) seem necessary. In this case, the
+fund `.xls` or `.xlsx` file must be made available to fundsr in the data
+directory. If the filename matches the ticker (e.g. `FWRA.xlsx`) it can
+be imported without specifying a file.
+
+``` r
+add_data_loader(function () {
+inve("FWRA", benchmark = "FTAW")
+amun("WEBN", benchmark = "GMLM", file = "NAV History_Amundi Prime All Country World UCITS ETF Acc_IE0003XJA0J9_10_06_2024.xlsx")
+}
+run_data_loaders()
+```
+
+### Other funds
+
+Prepare a tibble/dataframe or a CSV file with a date column and one or
+more data columns that must be lowercase for funds (e.g. `sxr8`, `vwce`,
+`spyy`) and uppercase for indices (e.g. `SP500`, `FTAW`, `ACWI`).
+Suppose you have a dataframe `funds_data` with fund NAVs and a CSV file
+with index levels. You can import them via:
+
+``` r
+add_data_loader(function() {
+    fi_map <- c(
+        fwra = "FTAW",
+        webn = "GMLM",
+        vwce = "FTAW", 
+        spyy = "ACWI",
+        spyi = "ACWI_IMI",
+        iusq = "ACWI")
+    store_timeseries("funds", funds_data, fund_index_map = fi_map)
+    store_timeseries("indices", read_timeseries("indices.csv", time_unit = "ms"))
+})
+run_data_loaders()
+```
+
+**Note:** Dates in the CSV file must be Unix epoch timestamps (in second
+or millisecond precision), see
+[`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.html).
+If your dates are in another format, get the data via
+[`readr::read_csv()`](https://readr.tidyverse.org/reference/read_delim.html)
+and ensure the dates are parsed either via `read_csv`’s `col_types`
+argument or later (e.g. mutate using
+[`lubridate::parse_date_time()`](https://lubridate.tidyverse.org/reference/parse_date_time.html)).
+
+## Indices
+
+### From fund files
+
+Some fund providers’ files include index series. These can be retrieved
+when importing the fund (supported for iShares, Xtrackers, Invesco),
+e.g.
+
+``` r
+add_data_loader(function() {
+    spdr("SPYY", benchmark = "ACWI")
+    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = TRUE) # retrieve ACWI (R) from fund file
+    inve("FWRA", benchmark = "FTAW", retrieve_benchmark = TRUE) # retrieve FTSE All-World (R) from fund file
+})
+```
+
+Index series retrieved in this way may have holes (e.g. fund domicile
+holidays and such) that can potentially remove data points for funds
+that did publish a NAV for that day (e.g. different domicile). The
+overall effect on plots is negligible, however.
+
+### MSCI
+
+MSCI provides [end-of-day level
+downloads](https://www-cdn.msci.com/web/msci/index-tools/end-of-day-index-data-search).
+These can be imported by the provided
+[`msci()`](https://stantraykov.github.io/fundsr/reference/msci.html)
+function.
+
+### FTSE & Solactive
+
+These index providers make it more difficult to get index levels for
+free.
+
+# Disclaimer
+
+This project is provided for informational and analytical purposes
+(commentary and performance comparison). Charts and statistics shown are
+derived measures (e.g., tracking differences/return differentials) and
+are not intended to reproduce or redistribute underlying benchmark or
+index datasets. Any third-party material, where present, is shown only
+as necessary for identification and discussion and is provided as
+low-resolution raster images (not high-resolution or vector graphics) to
+prevent reuse as a substitute for source data. All trademarks and
+registered trademarks are the property of their respective owners.
+References to products, indices, and providers are for identification
+purposes only and do not imply endorsement or affiliation. Use is
+intended to fall within applicable copyright exceptions/limitations
+(such as quotation for criticism/review), to the extent permitted by
+law.
+
+# Package index
+
+## All functions
+
+- [`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md)
+  : Register a data loader
+- [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.md)
+  : Add entries to the fund download list
+- [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md) :
+  Import an Amundi fund
+- [`chance_alive()`](https://stantraykov.github.io/fundsr/reference/chance_alive.md)
+  : Compute conditional survival (chance alive) by age
+- [`chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/chance_alive_es_aasmr.md)
+  : Compute cohort-style survival from Eurostat EUROPOP2023 mortality
+  assumptions
+- [`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md)
+  : Clear registered data loaders
+- [`clear_inkscape_queue()`](https://stantraykov.github.io/fundsr/reference/clear_inkscape_queue.md)
+  : Clear queued Inkscape exports
+- [`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md)
+  : Clear storage
+- [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.md)
+  : Download fund data according to the configured download list
+- [`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md)
+  : Export queued SVG files to PNG using Inkscape
+- [`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md)
+  : Set fundsr package options
+- [`get_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/get_fund_index_map.md)
+  : Get the internal fund index map
+- [`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md)
+  : Get the internal fund storage
+- [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md) :
+  Import an HSBC fund
+- [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md) :
+  Import an Invesco fund
+- [`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md) :
+  Import an iShares fund
+- [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
+  : Join all tibbles in an environment with optional late left-joins
+- [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
+  : Load a fund's NAV data and optionally register its benchmark mapping
+- [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md) :
+  Import an MSCI index sheet and register benchmark mappings
+- [`plot_chance_alive()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive.md)
+  : Plot chance alive by age
+- [`plot_chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive_es_aasmr.md)
+  : Plot cohort-style survival from Eurostat EUROPOP2023 assumptions
+- [`plot_roll_diffs()`](https://stantraykov.github.io/fundsr/reference/plot_roll_diffs.md)
+  : Plot rolling return differences against benchmark
+- [`plot_xlms()`](https://stantraykov.github.io/fundsr/reference/plot_xlms.md)
+  : Plot Xetra Liquidity Measure (XLM) time series
+- [`read_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/read_es_aasmr.md)
+  : Read Eurostat EUROPOP2023 mortality-assumption table (proj_23naasmr)
+- [`read_life_table()`](https://stantraykov.github.io/fundsr/reference/read_life_table.md)
+  : Read HMD period life tables (1x1) from disk
+- [`read_msci_tsv()`](https://stantraykov.github.io/fundsr/reference/read_msci_tsv.md)
+  : Read an MSCI two-column TSV file
+- [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md)
+  : Read a time series file (CSV/TSV) with a date + one or more value
+  columns
+- [`read_xlm_directory()`](https://stantraykov.github.io/fundsr/reference/read_xlm_directory.md)
+  : Read and combine XLM data from multiple Xetra XLSX files
+- [`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)
+  : Clear fundsr session state
+- [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
+  : Compute rolling annualized tracking differences (CAGR or log-return)
+- [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)
+  : Run registered data loaders
+- [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
+  : Generate and export all configured rolling-difference plots
+- [`save_plot()`](https://stantraykov.github.io/fundsr/reference/save_plot.md)
+  : Save a plot as SVG and optionally queue PNG export via Inkscape
+- [`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md) :
+  Import an SPDR fund
+- [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
+  : Store a cached object in the package storage environment
+- [`ubs()`](https://stantraykov.github.io/fundsr/reference/ubs.md) :
+  Import a UBS fund
+- [`vang()`](https://stantraykov.github.io/fundsr/reference/vang.md) :
+  Import a Vanguard fund
+- [`xtra()`](https://stantraykov.github.io/fundsr/reference/xtra.md) :
+  Import an Xtrackers fund
+
+# Articles
+
+### All vignettes
+
+- [fundsr-intro: Rolling differences and Xetra liquidity
+  plots](https://stantraykov.github.io/fundsr/articles/fundsr-intro.md):
+- [life: Survival chances for financial
+  planning](https://stantraykov.github.io/fundsr/articles/life-vignette.md):
