@@ -22,6 +22,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,6 +39,7 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
+      # Decide whether to do a light build (no vignettes) or full build (incl. vignettes)
       - name: Detect full pkgdown build
         id: detect_full
         shell: Rscript {0}
@@ -60,23 +62,31 @@ jobs:
           cat("Full build?:", full, "\n")
 
           out <- Sys.getenv("GITHUB_OUTPUT")
-          writeLines(sprintf("full=%s", if (full) "true" else "false"), out, useBytes = TRUE)
+          cat(
+            sprintf("full=%s\n", if (full) "true" else "false"),
+            file = out,
+            append = TRUE
+          )
 
-      # Light site build: home, reference, news, search — NO vignettes
+      # Light site build: home, reference, news, search — NO vignettes/articles
       - name: Build light site (no vignettes)
         if: steps.detect_full.outputs.full == 'false'
         shell: Rscript {0}
         run: |
-          pkgdown::build_home(preview = FALSE, new_process = FALSE)
-          pkgdown::build_reference(preview = FALSE, new_process = FALSE)
-          pkgdown::build_news(preview = FALSE, new_process = FALSE)
+          pkgdown::build_home(preview = FALSE)
+          pkgdown::build_reference(preview = FALSE)
+          pkgdown::build_news(preview = FALSE)
           pkgdown::build_search_index()
 
       # Full site build: includes vignettes/articles
       - name: Build full site (incl. vignettes)
         if: steps.detect_full.outputs.full == 'true'
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
+        run: |
+          pkgdown::build_site_github_pages(
+            new_process = FALSE,
+            install = FALSE
+          )
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
