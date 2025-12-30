@@ -92,6 +92,8 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
-          clean: true
+          # Full builds: clean = true (reset gh-pages to current docs)
+          # Light builds: clean = false (keep old files like articles/)
+          clean: ${{ steps.detect_full.outputs.full == 'true' }}
           branch: gh-pages
           folder: docs
