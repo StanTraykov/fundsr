@@ -168,11 +168,13 @@ Corresponding SVG files should be in the `output` directory.
 
 ## Plot in another language
 ```{r, fig.width=11, fig.height=7, out.width="88%", fig.align="center"}
-Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8")
+Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems; may issue warning on others
+Sys.setLanguage("bg")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 bg_p[["ACWIz_bg_L"]]
+bg_p[["xlm_ACWI_bg"]]
 ```
 
 ## Optional: higher-quality PNG export
