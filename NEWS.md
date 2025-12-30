@@ -1,6 +1,6 @@
 # fundsr (development version)
 
-## rolling towards 0.2.0
+## Survival plots, examples, fixes
 
 ### Add survival plots (empirical HMD and projected EUROPOP2023)
 
