@@ -62,10 +62,10 @@ jobs:
           cat("Full build?:", full, "\n")
 
           out <- Sys.getenv("GITHUB_OUTPUT")
-          cat(
-            sprintf("full=%s\n", if (full) "true" else "false"),
-            file = out,
-            append = TRUE
+          writeLines(
+            sprintf("full=%s", if (full) "true" else "false"),
+            out,
+            useBytes = TRUE
           )
 
       # Light site build: home, reference, news, search — NO vignettes/articles
@@ -76,7 +76,7 @@ jobs:
           pkgdown::build_home(preview = FALSE)
           pkgdown::build_reference(preview = FALSE, devel = FALSE)
           pkgdown::build_news(preview = FALSE)
-          pkgdown::build_search_index()
+          pkgdown::build_search()
 
       # Full site build: includes vignettes/articles
       - name: Build full site (incl. vignettes)
