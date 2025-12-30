@@ -74,7 +74,7 @@ jobs:
         shell: Rscript {0}
         run: |
           pkgdown::build_home(preview = FALSE)
-          pkgdown::build_reference(preview = FALSE)
+          pkgdown::build_reference(preview = FALSE, devel = FALSE)
           pkgdown::build_news(preview = FALSE)
           pkgdown::build_search_index()
 
