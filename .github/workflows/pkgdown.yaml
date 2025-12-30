@@ -85,7 +85,7 @@ jobs:
         run: |
           pkgdown::build_site_github_pages(
             new_process = FALSE,
-            install = FALSE
+            install = TRUE
           )
 
       - name: Deploy to GitHub pages 🚀

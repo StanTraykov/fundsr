@@ -1,5 +1,11 @@
 # fundsr (development version)
 
+## rolling towards 0.2.0
+
+### Add survival plots (empirical HMD and projected EUROPOP2023)
+
+### Examples, translations, vignettes
+- add life vignette
 - fix BG translation: y axis label on log-return charts
 - add more example scripts; translate more index names in common_spec
 - translate examples (add BG titles)
