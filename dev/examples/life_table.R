@@ -3,11 +3,11 @@ source("dev/examples/common_spec.R")
 
 specs <- tribble(
     ~population, ~sex, ~age,
-    "GBR_NP", "m", 42L,
-    "NLD",   "m",   42L,
-    "NLD",   "f",   42L,
-    "BGR",   "m",   42L,
-    "BGR",   "f",   42L
+    "GBR_NP",  "m",   42L,
+    "NLD",     "m",   42L,
+    "NLD",     "f",   42L,
+    "BGR",     "m",   42L,
+    "BGR",     "f",   42L
 )
 
 lt_m <- read_life_table(file.path("data", "life"), "m", look_back = 20)

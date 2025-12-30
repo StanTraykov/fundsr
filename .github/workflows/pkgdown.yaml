@@ -24,6 +24,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -36,7 +38,43 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
-      - name: Build site
+      - name: Detect full pkgdown build
+        id: detect_full
+        shell: Rscript {0}
+        run: |
+          # Default: light build unless trigger file changed
+          full <- FALSE
+
+          files <- tryCatch(
+            system('git diff --name-only HEAD^..HEAD', intern = TRUE),
+            error = function(e) character()
+          )
+
+          cat("Changed files:\n")
+          if (length(files)) print(files) else cat("(none detected)\n")
+
+          if ("dev/force-full-pkgdown" %in% files) {
+            full <- TRUE
+          }
+
+          cat("Full build?:", full, "\n")
+
+          out <- Sys.getenv("GITHUB_OUTPUT")
+          writeLines(sprintf("full=%s", if (full) "true" else "false"), out, useBytes = TRUE)
+
+      # Light site build: home, reference, news, search — NO vignettes
+      - name: Build light site (no vignettes)
+        if: steps.detect_full.outputs.full == 'false'
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_home(preview = FALSE, new_process = FALSE)
+          pkgdown::build_reference(preview = FALSE, new_process = FALSE)
+          pkgdown::build_news(preview = FALSE, new_process = FALSE)
+          pkgdown::build_search_index()
+
+      # Full site build: includes vignettes/articles
+      - name: Build full site (incl. vignettes)
+        if: steps.detect_full.outputs.full == 'true'
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 

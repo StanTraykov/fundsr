@@ -5,10 +5,9 @@
 #' years based on the latest year present in the file. The open-ended age group
 #' (e.g. `"110+"`) is parsed as its numeric lower bound (e.g. `110`).
 #'
-#' @param directory Directory containing the HMD life table files (e.g.
-#'   `"mltper_1x1.txt"` / `"fltper_1x1.txt"` or `"mltper_1x1.txt"` / `"fltper_1x1.txt"`
-#'   depending on your naming convention). This function expects files named
-#'   `paste0(sex, "ltper_1x1.txt")`, where `sex` is `"m"` or `"f"`.
+#' @param directory Directory containing the HMD life table files
+#'   (`"mltper_1x1.txt"` / `"fltper_1x1.txt"` or gzipped variants
+#'   `"mltper_1x1.txt.gz"` / `"fltper_1x1.txt.gz"`).
 #' @param sex Sex code: `"m"` (male) or `"f"` (female).
 #' @param look_back Number of most recent years to keep (inclusive of the latest
 #'   available year). Must be >= 1.
@@ -27,28 +26,46 @@
 read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
     sex <- match.arg(sex)
     look_back <- max(1L, as.integer(look_back))
-    file <- file.path(directory, paste0(sex, "ltper_1x1.txt"))
-    lt <- readr::read_table(file,
-                            skip = 2,
-                            na = ".",
-                            col_types = readr::cols(
-                                PopName = readr::col_character(),
-                                Year    = readr::col_integer(),
-                                Age     = readr::col_character(),
-                                mx      = readr::col_double(),
-                                qx      = readr::col_double(),
-                                ax      = readr::col_double(),
-                                lx      = readr::col_double(),
-                                dx      = readr::col_double(),
-                                Lx      = readr::col_double(),
-                                Tx      = readr::col_double(),
-                                ex      = readr::col_double()
-                            ),
-                            show_col_types = FALSE) %>%
+
+    base <- file.path(directory, paste0(sex, "ltper_1x1"))
+    candidates <- c(paste0(base, ".txt"), paste0(base, ".txt.gz"))
+    existing <- candidates[file.exists(candidates)]
+
+    if (length(existing) == 0L) {
+        stop(
+            "No life table file found for sex '", sex, "' in '", directory,
+            "'. Expected one of: ", paste(basename(candidates), collapse = ", "),
+            call. = FALSE
+        )
+    }
+
+    file <- existing[[1L]]
+
+    lt <- readr::read_table(
+        file,
+        skip = 2,
+        na = ".",
+        col_types = readr::cols(
+            PopName = readr::col_character(),
+            Year    = readr::col_integer(),
+            Age     = readr::col_character(),
+            mx      = readr::col_double(),
+            qx      = readr::col_double(),
+            ax      = readr::col_double(),
+            lx      = readr::col_double(),
+            dx      = readr::col_double(),
+            Lx      = readr::col_double(),
+            Tx      = readr::col_double(),
+            ex      = readr::col_double()
+        ),
+        show_col_types = FALSE
+    ) %>%
         mutate(Age = as.integer(readr::parse_number(.data[["Age"]])))
+
     if (nrow(lt) == 0L) {
         return(lt)
     }
+
     year_max <- max(lt[["Year"]], na.rm = TRUE)
     year_min <- year_max - as.integer(look_back) + 1L
     lt %>% filter(.data[["Year"]] >= year_min)

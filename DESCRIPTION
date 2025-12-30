@@ -1,11 +1,11 @@
 Type: Package
 Package: fundsr
-Title: Plot rolling differences (CAGR, log) and Xetra liquidity plots
+Title: UCITS ETF rolling differences (CAGR, log), liquidity, and other financial planning plots
 Version: 0.1.0.9000
 Authors@R: 
     person("Stanislav", "Traykov", , "st@gmuf.com", role = c("aut", "cre"))
 Description: Small tidyverse-based framework for importing & plotting
-    UCITS ETF/index/liquidity data.
+    UCITS ETF/index/liquidity data, survival curves and other plots related to financial planning.
 License: MIT + file LICENSE
 Imports: 
     dplyr,

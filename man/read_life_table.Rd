@@ -7,10 +7,9 @@
 read_life_table(directory, sex = c("f", "m"), look_back = 20)
 }
 \arguments{
-\item{directory}{Directory containing the HMD life table files (e.g.
-\code{"mltper_1x1.txt"} / \code{"fltper_1x1.txt"} or \code{"mltper_1x1.txt"} / \code{"fltper_1x1.txt"}
-depending on your naming convention). This function expects files named
-\code{paste0(sex, "ltper_1x1.txt")}, where \code{sex} is \code{"m"} or \code{"f"}.}
+\item{directory}{Directory containing the HMD life table files
+(\code{"mltper_1x1.txt"} / \code{"fltper_1x1.txt"} or gzipped variants
+\code{"mltper_1x1.txt.gz"} / \code{"fltper_1x1.txt.gz"}).}
 
 \item{sex}{Sex code: \code{"m"} (male) or \code{"f"} (female).}
 
