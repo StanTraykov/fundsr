@@ -92,7 +92,7 @@ If <code>FALSE</code>, labels the plot as CAGR differences.</p></dd>
 
 <dt id="arg-title-add">title_add<a class="anchor" aria-label="anchor" href="#arg-title-add"></a></dt>
 <dd><p>Optional title suffix. Can be a single string or a named
-character vector specifying the title in multiple languages (e.g. <code>c(en=..., bg=...)</code>)</p></dd>
+character vector specifying the title in multiple languages (e.g. <code>c(en=..., bg=...)</code>).</p></dd>
 
 
 <dt id="arg-date-brk">date_brk<a class="anchor" aria-label="anchor" href="#arg-date-brk"></a></dt>
@@ -102,7 +102,7 @@ If <code>NULL</code>, it is chosen automatically based on the time span.</p></dd
 
 <dt id="arg-qprob">qprob<a class="anchor" aria-label="anchor" href="#arg-qprob"></a></dt>
 <dd><p>Two-element numeric vector giving lower and upper quantiles used
-to set the y-axis limits. Defaults to <code>c(0.005, 0.995)</code>.</p></dd>
+to set the baseline y-axis limits. Defaults to <code>c(0.005, 0.995)</code>.</p></dd>
 
 
 <dt id="arg-bmark-type">bmark_type<a class="anchor" aria-label="anchor" href="#arg-bmark-type"></a></dt>
@@ -115,9 +115,12 @@ to set the y-axis limits. Defaults to <code>c(0.005, 0.995)</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function reshapes <code>data</code> to long format, computes y-limits from the
-quantiles of the rolling differences (always including 0), and produces a
-scatter plot coloured by fund.</p>
+    <p>The function reshapes <code>data</code> to long format and produces a scatter plot coloured
+by fund. The y-axis limits are primarily determined from quantiles of the rolling
+differences (as specified by <code>qprob</code>), always including 0.</p>
+<p>To avoid clipping recent extremes, the y-limits are expanded (if needed) to also
+include the full range observed in the most recent 30 days of data, even when
+those values fall outside the <code>qprob</code> quantiles.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
