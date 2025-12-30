@@ -198,22 +198,25 @@ clear_inkscape_queue <- function() {
 #'   If `FALSE`, labels the plot as CAGR differences.
 #' @param gg_params Optional ggplot components to add to the plot.
 #' @param title_add Optional title suffix. Can be a single string or a named
-#'   character vector specifying the title in multiple languages (e.g. `c(en=..., bg=...)`)
+#'   character vector specifying the title in multiple languages (e.g. `c(en=..., bg=...)`).
 #' @param date_brk Optional date-break specification for the x-axis (e.g. `"3 months"`).
 #'   If `NULL`, it is chosen automatically based on the time span.
 #' @param qprob Two-element numeric vector giving lower and upper quantiles used
-#'   to set the y-axis limits. Defaults to `c(0.005, 0.995)`.
+#'   to set the baseline y-axis limits. Defaults to `c(0.005, 0.995)`.
 #' @param bmark_type Benchmark type used in the title: `"net"` or `"gross"`.
 #'
 #' @return A ggplot object.
 #'
 #' @details
-#' The function reshapes `data` to long format, computes y-limits from the
-#' quantiles of the rolling differences (always including 0), and produces a
-#' scatter plot coloured by fund.
+#' The function reshapes `data` to long format and produces a scatter plot coloured
+#' by fund. The y-axis limits are primarily determined from quantiles of the rolling
+#' differences (as specified by `qprob`), always including 0.
+#'
+#' To avoid clipping recent extremes, the y-limits are expanded (if needed) to also
+#' include the full range observed in the most recent 30 days of data, even when
+#' those values fall outside the `qprob` quantiles.
 #'
 #' @export
-
 plot_roll_diffs <- function(data,
                       n_days,
                       funds,

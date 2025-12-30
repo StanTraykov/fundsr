@@ -1,25 +1,26 @@
 # fundsr (development version)
 
-## Survival plots, examples, fixes
+## Survival plots
+- empirical via HMD
+- projected via EUROPOP2023
 
-### Add survival plots (empirical HMD and projected EUROPOP2023)
+## Fixes
+- ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)
+- fix Bulgarian translation: y-axis label on log-return charts
 
-### Examples, translations, vignettes
+## Vignettes, examples, translations
 - add life vignette
-- fix BG translation: y axis label on log-return charts
 - add more example scripts; translate more index names in common_spec
 - translate examples (add BG titles)
 
 # fundsr 0.1.0
 
-## Initial release
-
-### Configuration
+## Configuration
 
 - `fundsr_options()` provides a validated wrapper around `options()` for setting common `fundsr.*` options (data directories, export settings, URL registry, and more).
 - `add_fund_urls()` adds/updates the fund download registry (option `fundsr.fund_urls`).
 
-### Import and storage
+## Import and storage
 
 - Internal caching/storage for imported time series via a storage environment (`get_storage()`, `clear_storage()`, `store_timeseries()`), with optional forced refresh via `options(fundsr.reload = TRUE)`.
 - Extensible data-loader framework for imports (`add_data_loader()`, `run_data_loaders()`, `clear_data_loaders()`).
@@ -33,11 +34,11 @@
   `ishs()` (iShares), `spdr()` (SPDR), `xtra()` (Xtrackers), `amun()` (Amundi), `inve()` (Invesco), `vang()` (Vanguard), `ubs()` (UBS), `hsbc()` (HSBC).
 - `join_env()` combines multiple tables stored in an environment, with optional “late” left-joins and optional coalescing of `.x`/`.y` join columns.
 
-### Rolling differences
+## Rolling differences
 
 - `roll_diffs()` computes rolling, annualized tracking differences for fund–index pairs with either log-return or CAGR-style variants, producing `<fund>_rd` columns.
 
-### Plotting and export
+## Plotting and export
 
 - `plot_roll_diffs()` visualizes rolling tracking-difference series with quantile-based y-limits and bps axis labeling.
 - `run_plots()` generates plot sets from a specification, producing both CAGR and log-return variants.
@@ -45,11 +46,11 @@
 - Optional direct PNG export via `ggplot2::ggsave()` without Inkscape (lower quality; controlled by `fundsr.internal_png`).
 - Xetra Liquidity Measure (XLM) support: read and plot XLM time series (`read_xlm_directory()`, `plot_xlms()`), with optional back-translation of displayed tickers using `options(fundsr.xetra_map)`.
 
-### Internationalization
+## Internationalization
 
 - Chart elements are available in two languages (English and Bulgarian), with language selection based on `LANGUAGE` / `LC_MESSAGES`.
 - Language-aware user-supplied strings are supported via named vectors keyed by language code.
 
-### Utilities
+## Utilities
 
 - `reset_state()` clears cached storage, loader registry, queued exports, and XLM bookkeeping for the current session.
