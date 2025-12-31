@@ -40,14 +40,21 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="fundsr-development-version">fundsr (development version)<a class="anchor" aria-label="anchor" href="#fundsr-development-version"></a></h2>
 <div class="section level3">
+<h3 id="neater-grossnet-index-handling-development-version">Neater gross/net index handling<a class="anchor" aria-label="anchor" href="#neater-grossnet-index-handling-development-version"></a></h3>
+<ul><li>add index_level parameter to roll_diffs</li>
+<li>add suffix parameter to run_plots</li>
+</ul></div>
+<div class="section level3">
 <h3 id="survival-plots-development-version">Survival plots<a class="anchor" aria-label="anchor" href="#survival-plots-development-version"></a></h3>
 <ul><li>empirical via HMD</li>
 <li>projected via EUROPOP2023</li>
 </ul></div>
 <div class="section level3">
 <h3 id="fixes-development-version">Fixes<a class="anchor" aria-label="anchor" href="#fixes-development-version"></a></h3>
-<ul><li>ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)</li>
+<ul><li>skip unavailable funds, indices when calculating differences</li>
+<li>ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)</li>
 <li>make roll_diff skip benchmarks (in addition to funds) that are not found in supplied df</li>
+<li>XLM bookkeeping to avoid repetitions now persistent across run_plots() calls</li>
 </ul></div>
 <div class="section level3">
 <h3 id="vignettes-examples-translations-development-version">Vignettes, examples, translations<a class="anchor" aria-label="anchor" href="#vignettes-examples-translations-development-version"></a></h3>
