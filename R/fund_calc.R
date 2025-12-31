@@ -28,7 +28,8 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
 #' @param annual_days Number of days used for annualization. Defaults to
 #'   `365`.
 #' @param silent_skip Logical; whether to show messages when skipping
-#'   funds that are in `fund_index_map` but not in `df`. Defaults to `FALSE`.
+#'   funds due to missing fund or tracked benchmark column in df.
+#'   Defaults to `FALSE`.
 #'
 #' @return A data frame like `df` with one additional column per fund,
 #'   named `<fund>_rd`, containing the rolling tracking differences.
@@ -66,6 +67,12 @@ roll_diffs <- function(df,
         if (!(fund %in% names(df))) {
             if (!isTRUE(silent_skip)) {
                 message(glue("Skipping {fund}: not in df"))
+            }
+            next
+        }
+        if (!(index %in% names(df))) {
+            if (!isTRUE(silent_skip)) {
+                message(glue("Skipping {fund}: tracked index {index} not in df"))
             }
             next
         }

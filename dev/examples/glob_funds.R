@@ -1,7 +1,8 @@
 library(tidyverse)
 
 # Config
-fundsr::reset_state() # just in case
+fundsr::reset_state()
+spec_list <- list()
 source("dev/examples/common_spec.R")
 source("dev/examples/glob_spec.R")
 xlm_dir <- file.path("data", "xlm")

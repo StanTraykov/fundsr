@@ -33,7 +33,8 @@ Defaults to \code{TRUE}.}
 \code{365}.}
 
 \item{silent_skip}{Logical; whether to show messages when skipping
-funds that are in \code{fund_index_map} but not in \code{df}. Defaults to \code{FALSE}.}
+funds due to missing fund or tracked benchmark column in df.
+Defaults to \code{FALSE}.}
 }
 \value{
 A data frame like \code{df} with one additional column per fund,
