@@ -24,13 +24,11 @@ Imports:
     rlang,
     scales
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
     rmarkdown,
     svglite
-VignetteBuilder: knitr
 URL: https://stantraykov.github.io/fundsr/, https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues
