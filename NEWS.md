@@ -6,12 +6,15 @@
 
 ## Fixes
 - ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)
-- fix Bulgarian translation: y-axis label on log-return charts
+- make roll_diff skip benchmarks (in addition to funds) that are not found in supplied df
 
 ## Vignettes, examples, translations
 - add life vignette
+- add DM ex USA funds 
 - add more example scripts; translate more index names in common_spec
-- translate examples (add BG titles)
+- fix glob_funds example to include EUR indices
+- fix Bulgarian translation: wrong y-axis label on log-return charts
+- translate all examples to Bulgarian
 
 # fundsr 0.1.0
 

@@ -173,7 +173,7 @@ Sys.setLanguage("bg")
 plot_spec <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
-bg_p[["ACWIz_bg_L"]]
+bg_p[["ACWI_bg_L"]]
 bg_p[["xlm_ACWI_bg"]]
 ```
 
