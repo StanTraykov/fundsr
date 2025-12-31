@@ -6,6 +6,7 @@ fun_id <- "examples_all_funds"
 if (!exists("funiverse") || !identical(funiverse, fun_id))
     fundsr::reset_state()
 funiverse <- fun_id
+spec_list <- list()
 
 # Config
 source("common_spec.R")
@@ -13,6 +14,7 @@ source("glob_spec.R")
 source("dm_spec.R")
 source("em_spec.R")
 source("usa_sel_spec.R")
+source("exus_spec.R")
 xlm_dir <- file.path("data", "xlm")
 
 # Download missing files

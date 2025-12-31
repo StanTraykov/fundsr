@@ -67,6 +67,13 @@ add_data_loader(function() {
          col_trans = gross_idx_trans,
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "MSCI-GR.xls")
+    msci(var_name = "msci-nt-eur",
+         col_trans = net_idx_trans_ccy("EUR"),
+         file = "MSCI-NT-EUR.xls")
+    msci(var_name = "msci-gr-eur",
+         col_trans = gross_idx_trans_ccy("EUR"),
+         benchmarks = set_names(names(net_idx_trans_ccy("EUR")), names(gross_idx_trans_ccy("EUR"))),
+         file = "MSCI-GR-EUR.xls")
 
     # Phys / hybrid
     inve("FWRA", benchmark = "FTAW", retrieve_benchmark = T)
