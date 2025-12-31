@@ -116,11 +116,11 @@ storage <- run_data_loaders() # call registered data loaders
 #> *** Loading: spyy
 #> Attempting readxl on 'data/funds/SPYY.xlsx'...
 #> readxl succeeded. Returning data.
-#> Returning 3726 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').
+#> Returning 3727 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').
 #> *** Loading: iusq
 #> Attempting readxl on 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
-#> Returning 3620 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
+#> Returning 3621 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
 ```
 
 Join the environment into a big tibble, cut off & sort
@@ -136,22 +136,22 @@ Check contents
 
 ``` r
 storage[["iusq"]]
-#> # A tibble: 3,620 × 3
+#> # A tibble: 3,621 × 3
 #>    date        iusq  ACWI
 #>    <date>     <dbl> <dbl>
-#>  1 2025-12-29  109.   NA 
-#>  2 2025-12-24  109.  440.
-#>  3 2025-12-23  109.  439.
-#>  4 2025-12-22  109.  437.
-#>  5 2025-12-19  108.  434.
-#>  6 2025-12-18  107.  431.
-#>  7 2025-12-17  106.  428.
-#>  8 2025-12-16  107.  432.
-#>  9 2025-12-15  108.  434.
-#> 10 2025-12-12  108.  434.
-#> # ℹ 3,610 more rows
+#>  1 2025-12-30  109.   NA 
+#>  2 2025-12-29  109.  440.
+#>  3 2025-12-24  109.  440.
+#>  4 2025-12-23  109.  439.
+#>  5 2025-12-22  109.  437.
+#>  6 2025-12-19  108.  434.
+#>  7 2025-12-18  107.  431.
+#>  8 2025-12-17  106.  428.
+#>  9 2025-12-16  107.  432.
+#> 10 2025-12-15  108.  434.
+#> # ℹ 3,611 more rows
 series
-#> # A tibble: 3,341 × 4
+#> # A tibble: 3,342 × 4
 #>    date        spyy  iusq  ACWI
 #>    <date>     <dbl> <dbl> <dbl>
 #>  1 2012-12-31  76.7  29.2  115.
@@ -164,7 +164,7 @@ series
 #>  8 2013-01-09  78.2  29.8  118.
 #>  9 2013-01-10  78.8  30.1  119.
 #> 10 2013-01-11  79.0  30.1  119.
-#> # ℹ 3,331 more rows
+#> # ℹ 3,332 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"

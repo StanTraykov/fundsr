@@ -49,8 +49,8 @@ roll_diffs(
 
 - silent_skip:
 
-  Logical; whether to show messages when skipping funds that are in
-  `fund_index_map` but not in `df`. Defaults to `FALSE`.
+  Logical; whether to show messages when skipping funds due to missing
+  fund or tracked benchmark column in df. Defaults to `FALSE`.
 
 ## Value
 

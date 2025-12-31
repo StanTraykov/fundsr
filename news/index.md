@@ -2,22 +2,26 @@
 
 ## fundsr (development version)
 
-### Survival plots, examples, fixes
+### Survival plots
 
-#### Add survival plots (empirical HMD and projected EUROPOP2023)
+- empirical via HMD
+- projected via EUROPOP2023
 
-#### Examples, translations, vignettes
+### Fixes
+
+- ensure y-limits in rolling-difference plots include the last 30 days
+  (even if outside quantiles)
+- fix Bulgarian translation: y-axis label on log-return charts
+
+### Vignettes, examples, translations
 
 - add life vignette
-- fix BG translation: y axis label on log-return charts
 - add more example scripts; translate more index names in common_spec
 - translate examples (add BG titles)
 
 ## fundsr 0.1.0
 
-### Initial release
-
-#### Configuration
+### Configuration
 
 - [`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md)
   provides a validated wrapper around
@@ -27,7 +31,7 @@
 - [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.md)
   adds/updates the fund download registry (option `fundsr.fund_urls`).
 
-#### Import and storage
+### Import and storage
 
 - Internal caching/storage for imported time series via a storage
   environment
@@ -74,14 +78,14 @@
   combines multiple tables stored in an environment, with optional
   “late” left-joins and optional coalescing of `.x`/`.y` join columns.
 
-#### Rolling differences
+### Rolling differences
 
 - [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
   computes rolling, annualized tracking differences for fund–index pairs
   with either log-return or CAGR-style variants, producing `<fund>_rd`
   columns.
 
-#### Plotting and export
+### Plotting and export
 
 - [`plot_roll_diffs()`](https://stantraykov.github.io/fundsr/reference/plot_roll_diffs.md)
   visualizes rolling tracking-difference series with quantile-based
@@ -106,14 +110,14 @@
   with optional back-translation of displayed tickers using
   `options(fundsr.xetra_map)`.
 
-#### Internationalization
+### Internationalization
 
 - Chart elements are available in two languages (English and Bulgarian),
   with language selection based on `LANGUAGE` / `LC_MESSAGES`.
 - Language-aware user-supplied strings are supported via named vectors
   keyed by language code.
 
-#### Utilities
+### Utilities
 
 - [`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)
   clears cached storage, loader registry, queued exports, and XLM

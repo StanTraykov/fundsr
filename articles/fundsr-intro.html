@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2025-12-30</h4>
+            <h4 data-toc-skip class="date">2025-12-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/fundsr-intro.Rmd" class="external-link"><code>vignettes/fundsr-intro.Rmd</code></a></small>
       <div class="d-none name"><code>fundsr-intro.Rmd</code></div>
@@ -168,11 +168,11 @@ Traykov</h4>
 <span><span class="co">#&gt; *** Loading: spyy</span></span>
 <span><span class="co">#&gt; Attempting readxl on 'data/funds/SPYY.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; Returning 3726 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').</span></span>
+<span><span class="co">#&gt; Returning 3727 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').</span></span>
 <span><span class="co">#&gt; *** Loading: iusq</span></span>
 <span><span class="co">#&gt; Attempting readxl on 'data/funds/IUSQ.xls'...</span></span>
 <span><span class="co">#&gt; readxl failed. Attempting parse as Excel 2003 XML...</span></span>
-<span><span class="co">#&gt; Returning 3620 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').</span></span></code></pre></div>
+<span><span class="co">#&gt; Returning 3621 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').</span></span></code></pre></div>
 <p>Join the environment into a big tibble, cut off &amp; sort</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/join_env.html">join_env</a></span><span class="op">(</span><span class="va">storage</span>, by <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -182,22 +182,22 @@ Traykov</h4>
 <p>Check contents</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">storage</span><span class="op">[[</span><span class="st">"iusq"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,620 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,621 × 3</span></span></span>
 <span><span class="co">#&gt;    date        iusq  ACWI</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-12-29  109.   <span style="color: #BB0000;">NA</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-12-24  109.  440.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-12-23  109.  439.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-12-22  109.  437.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-12-19  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-12-18  107.  431.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-12-17  106.  428.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-12-16  107.  432.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-12-15  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-12-12  108.  434.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,610 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2025-12-30  109.   <span style="color: #BB0000;">NA</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2025-12-29  109.  440.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2025-12-24  109.  440.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2025-12-23  109.  439.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2025-12-22  109.  437.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2025-12-19  108.  434.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2025-12-18  107.  431.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2025-12-17  106.  428.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2025-12-16  107.  432.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2025-12-15  108.  434.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,611 more rows</span></span></span>
 <span><span class="va">series</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,341 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3,342 × 4</span></span></span>
 <span><span class="co">#&gt;    date        spyy  iusq  ACWI</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2012-12-31  76.7  29.2  115.</span></span>
@@ -210,7 +210,7 @@ Traykov</h4>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2013-01-09  78.2  29.8  118.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2013-01-10  78.8  30.1  119.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2013-01-11  79.0  30.1  119.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,331 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3,332 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   spyy   iusq </span></span>
 <span><span class="co">#&gt; "ACWI" "ACWI"</span></span></code></pre></div>
