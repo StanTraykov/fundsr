@@ -264,6 +264,7 @@ plot_roll_diffs <- function(data,
         recent_hi <- NA_real_
     }
     y_lims <- range(c(qlims, 0, recent_lo, recent_hi), na.rm = TRUE)
+
     p <- ggplot2::ggplot(cdata,
                          ggplot2::aes(x = .data$date, y = .data$roll_diff, color = .data$fund)) +
         ggplot2::geom_point(alpha = 0.5, size = 1.5) +
@@ -321,23 +322,28 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'   parameters. Expected columns include: `plot_id`, `title`, `data_filter`,
 #'   `gg_params`, `width`, `height`, `funds`.
 #' @param xlm_data Optional data frame used to produce XLM plots, including
-#'   `date`, `xlm`, `ticker`, and `name` columns.
+#'   `date`, `xlm`, `ticker`, and `name` columns. Defaults to `NULL`.
 #' @param add_gg_params Optional ggplot component (or list of components)
 #'   appended to each generated plot in addition to the per-plot `gg_params`
 #'   defined in `plot_spec`. Defaults to [ggplot2::geom_blank()].
 #' @param bmark_type Benchmark type used in plot titles: `"net"` or `"gross"`.
+#' @param suffix Character string appended to each `plot_id` when constructing
+#'   filenames and names in the returned environment. Defaults to `""`.
 #'
 #' @return
 #' An environment containing ggplot objects. Objects are stored under names
-#' corresponding to the base filenames used in [save_plot()]: `plot_id` for
-#' CAGR variants, `plot_id_L` for log-return variants, and (when generated)
-#' `xlm_<plot_id>` for XLM plots.
+#' corresponding to the base filenames used in [save_plot()]:
+#'
+#' * `plot_id{suffix}` for the CAGR variant,
+#' * `plot_id{suffix}_L` for the log-return variant,
+#' * and (when generated) `xlm_plot_id{suffix}` for XLM plots.
 #'
 #' @details
 #' For each row in `plot_spec`, the function constructs both a CAGR-based and a
 #' log-return-based variant using [plot_roll_diffs()] and writes the resulting
 #' plots via [save_plot()], using a filename suffix (`_L`) to distinguish the
-#' log-return variant.
+#' log-return variant. The optional `suffix` is appended to `plot_id` before
+#' filenames (and environment keys) are formed.
 #'
 #' If `plot_spec` is provided as a list of data frames, the function binds them
 #' into a single specification. The `title` column may be provided as a list
@@ -347,8 +353,8 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' Xetra tickers using [plot_xlms()]. Fund tickers are mapped to Xetra tickers
 #' via the `fundsr.xetra_map` option (tickers not present in the map are used
 #' as-is). The first plot specification encountered for a given ticker set
-#' determines the base filename `xlm_<plot_id>` used for saving and storing the
-#' resulting XLM plot.
+#' determines the base filename `xlm_<plot_id{suffix}>` used for saving and
+#' storing the resulting XLM plot.
 #'
 #' @export
 #'
@@ -359,14 +365,14 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' plots[["global_L"]]
 #' plots[["xlm_global"]]
 #' }
-
 run_plots <- function(rds_cagr,
                       rds_log,
                       n_days,
                       plot_spec,
                       xlm_data = NULL,
                       add_gg_params = ggplot2::geom_blank(),
-                      bmark_type = c("net", "gross")) {
+                      bmark_type = c("net", "gross"),
+                      suffix = "") {
     variants <- c("CAGR", "log")
     if (is.list(plot_spec) && !inherits(plot_spec, "data.frame")) {
         ensure_title_col <- function(df, col = "title") {
@@ -390,7 +396,6 @@ run_plots <- function(rds_cagr,
     }
     runs <- tidyr::crossing(plot_spec, variants)
     plots_env <- new.env(parent = emptyenv())
-    .fundsr$done_xlm_sets <- character()
     xetra_map <- getOption("fundsr.xetra_map", character())
     bmark_type <- match.arg(bmark_type)
     purrr::pwalk(runs, function(plot_id,
@@ -401,6 +406,7 @@ run_plots <- function(rds_cagr,
                                 height,
                                 funds,
                                 variants) {
+        plot_id <- paste0(plot_id, suffix)
         use_log <- variants == "log"
         data <- if (use_log) rds_log else rds_cagr
         if (!is.null(data_filter)) data <- data %>% data_filter()

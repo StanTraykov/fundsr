@@ -1,8 +1,8 @@
 longer <- function(df, funds, sfx, values_to, names_to = "fund") {
     df %>%
-        select(all_of(c("date", paste0(funds, sfx)))) %>%
+        select(any_of(c("date", paste0(funds, sfx)))) %>%
         tidyr::pivot_longer(
-            cols = where(is.numeric),
+            cols = -date,
             names_to = names_to,
             values_to = values_to,
             names_pattern = paste0("(.+)", sfx),
@@ -10,7 +10,7 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
         )
 }
 
-##' Compute rolling annualized tracking differences (CAGR or log-return)
+#' Compute rolling annualized tracking differences (CAGR or log-return)
 #'
 #' For each fund–index pair in `fund_index_map`, computes a rolling,
 #' annualized tracking-difference series over a backward window of
@@ -20,36 +20,51 @@ longer <- function(df, funds, sfx, values_to, names_to = "fund") {
 #'   benchmark/index columns referenced in `fund_index_map`.
 #' @param n_days Rolling lookback window in calendar days.
 #' @param fund_index_map Named character vector mapping fund column names
-#'   to their corresponding benchmark/index column names.
+#'   to their corresponding benchmark/index base column names.
 #' @param date_col Name of the date column in `df`. Defaults to `"date"`.
 #' @param use_log Logical; if `TRUE`, computes **log-return tracking
 #'   differences**. If `FALSE`, computes **CAGR tracking differences**.
 #'   Defaults to `TRUE`.
+#' @param index_level Character; which index level to use. One of
+#'   `"net"` or `"gross"`. If `"gross"`, `gross_suffix` is appended to the
+#'   mapped index base name before lookup in `df`. Defaults to `"net"`.
 #' @param annual_days Number of days used for annualization. Defaults to
 #'   `365`.
-#' @param silent_skip Logical; whether to show messages when skipping
-#'   funds due to missing fund or tracked benchmark column in df.
-#'   Defaults to `FALSE`.
+#' @param silent_skip Logical; whether to suppress messages when skipping
+#'   fund–index pairs due to missing columns or self-tracking. Defaults to
+#'   `FALSE`.
+#' @param gross_suffix Character; suffix appended to the mapped index base
+#'   name when `index_level = "gross"`. Defaults to `"-GR"`.
 #'
-#' @return A data frame like `df` with one additional column per fund,
-#'   named `<fund>_rd`, containing the rolling tracking differences.
+#' @return A data frame like `df` with one additional column per processed
+#'   fund, named `<fund>_rd`, containing the rolling tracking differences.
 #'
 #' @details
-#' For each fund–index pair, the function locates a start point
-#' `n_days` (or more) before each observation and computes:
+#' For each fund–index pair, the function locates an anchor observation at
+#' least `n_days` before each date (using the last available non-missing
+#' fund+index point at or before `date - n_days`) and computes an
+#' annualized tracking difference using the elapsed calendar days
+#' \eqn{t - t_0}.
 #'
 #' * **log-return difference**
-#'   \deqn{ ( \ln(f_{t}/f_{t_0}) - \ln(i_{t}/i_{t_0}) ) \times
+#'   \deqn{ \left[\ln\left(\frac{f_t}{f_{t_0}}\right) -
+#'          \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times
 #'          \frac{annual\_days}{t - t_0} }
 #'
 #' * **CAGR difference**
-#'   \deqn{ f^{annual\_days/(t - t_0)} - i^{annual\_days/(t - t_0)} }
+#'   \deqn{ \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/(t - t_0)} -
+#'          \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/(t - t_0)} }
 #'
 #' where \eqn{f} and \eqn{i} are fund and index values, respectively.
 #'
+#' Pairs are skipped (optionally with a message) if the fund column is not
+#' present in `df`, the corresponding index column is not present (after
+#' applying `index_level`/`gross_suffix`), or if the mapping implies
+#' self-tracking (fund column equals index column).
+#'
 #' The tracking difference is `NA` whenever the anchor point is missing,
-#' the values are invalid (e.g., non-positive for log mode), or no past
-#' observation lies within the required window.
+#' the required values are invalid (e.g., non-positive in log mode), or no
+#' past observation lies far enough back to satisfy the lookback window.
 #'
 #' @export
 roll_diffs <- function(df,
@@ -57,12 +72,17 @@ roll_diffs <- function(df,
                        fund_index_map,
                        date_col = "date",
                        use_log = TRUE,
+                       index_level = c("net", "gross"),
                        annual_days = 365,
-                       silent_skip = FALSE) {
+                       silent_skip = FALSE,
+                       gross_suffix = "-GR") {
+    index_level <- match.arg(index_level)
     df <- df %>%
         mutate(.date_num = as.numeric(.data[[date_col]]))
     for (fund in names(fund_index_map)) {
         index <- fund_index_map[[fund]]
+        if (index_level == "gross")
+            index <- paste0(index, gross_suffix)
         roll_type <- if (use_log) "log-ret" else "CAGR"
         if (!(fund %in% names(df))) {
             if (!isTRUE(silent_skip)) {
@@ -73,6 +93,12 @@ roll_diffs <- function(df,
         if (!(index %in% names(df))) {
             if (!isTRUE(silent_skip)) {
                 message(glue("Skipping {fund}: tracked index {index} not in df"))
+            }
+            next
+        }
+        if (fund == index) {
+            if (!isTRUE(silent_skip)) {
+                message(glue("Skipping {index}: self-tracking"))
             }
             next
         }
