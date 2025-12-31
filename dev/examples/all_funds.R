@@ -1,11 +1,5 @@
 library(tidyverse)
 
-# Reset state
-fun_id <- "examples_all_funds"
-if (!exists("funiverse") || !identical(funiverse, fun_id))
-    fundsr::reset_state()
-funiverse <- fun_id
-
 # Config
 source("dev/examples/common_spec.R")
 # Specs

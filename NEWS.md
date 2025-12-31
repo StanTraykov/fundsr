@@ -1,12 +1,18 @@
 # fundsr (development version)
 
+## Neater gross/net index handling
+- add index_level parameter to roll_diffs
+- add suffix parameter to run_plots
+
 ## Survival plots
 - empirical via HMD
 - projected via EUROPOP2023
 
 ## Fixes
+- skip unavailable funds, indices when calculating differences
 - ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)
 - make roll_diff skip benchmarks (in addition to funds) that are not found in supplied df
+- XLM bookkeeping to avoid repetitions now persistent across run_plots() calls
 
 ## Vignettes, examples, translations
 - add life vignette
