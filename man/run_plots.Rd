@@ -12,7 +12,8 @@ run_plots(
   xlm_data = NULL,
   add_gg_params = ggplot2::geom_blank(),
   bmark_type = c("net", "gross"),
-  suffix = ""
+  suffix = "",
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ defined in \code{plot_spec}. Defaults to \code{\link[ggplot2:geom_blank]{ggplot2
 
 \item{suffix}{Character string appended to each \code{plot_id} when constructing
 filenames and names in the returned environment. Defaults to \code{""}.}
+
+\item{...}{Additional arguments passed to \code{\link[=plot_roll_diffs]{plot_roll_diffs()}}.}
 }
 \value{
 An environment containing ggplot objects. Objects are stored under names
@@ -58,7 +61,8 @@ For each row in \code{plot_spec}, the function constructs both a CAGR-based and 
 log-return-based variant using \code{\link[=plot_roll_diffs]{plot_roll_diffs()}} and writes the resulting
 plots via \code{\link[=save_plot]{save_plot()}}, using a filename suffix (\verb{_L}) to distinguish the
 log-return variant. The optional \code{suffix} is appended to \code{plot_id} before
-filenames (and environment keys) are formed.
+filenames (and environment keys) are formed. Additional arguments in \code{...}
+are forwarded to \code{\link[=plot_roll_diffs]{plot_roll_diffs()}}.
 
 If \code{plot_spec} is provided as a list of data frames, the function binds them
 into a single specification. The \code{title} column may be provided as a list

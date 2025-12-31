@@ -1,47 +1,49 @@
-#' Save a plot as SVG and optionally queue PNG export via Inkscape
+#' Save a plot as SVG and optionally save PNG immediately
 #'
-#' When `save_svg = TRUE`, saves `plot` as an SVG file and appends an Inkscape
-#' export command to the internal queue (`.fundsr$inkscape_queue`) so PNG generation
-#' can be performed later in batch (via `export_pngs()`).
-#'
-#' Optionally, when `save_png = TRUE`, the function also saves a PNG immediately
-#' via `ggplot2::ggsave()` (independently of queueing).
+#' Saves `plot` as an SVG file when `save_svg = TRUE`. When an SVG is saved, an
+#' Inkscape export action is also queued so PNG generation can be performed later
+#' in batch via [export_pngs()]. Optionally, when `save_png = TRUE`, the function
+#' also saves a PNG immediately via [ggplot2::ggsave()] (independently of queueing).
 #'
 #' @param file Base filename (without extension) used for output files.
 #' @param plot A plot object (typically a ggplot) to be saved.
-#' @param px_width Width in pixels for the queued Inkscape PNG export, and (if
-#'   `save_png = TRUE`) the target PNG pixel width used to compute the DPI.
-#'   Defaults to `getOption("fundsr.px_width", 1300)`.
+#' @param px_width Target width in pixels for PNG output. Used as the queued
+#'   Inkscape `export-width`, and (if `save_png = TRUE`) used to compute the DPI
+#'   for immediate PNG saving. Defaults to `getOption("fundsr.px_width", 1300)`.
 #' @param height Height of the saved plot in `units`. Defaults to `12`.
 #' @param width Width of the saved plot in `units`. Defaults to `12`.
 #' @param units Units for `width`/`height` (e.g. `"in"`). Defaults to `"in"`.
-#'   Note: for immediate PNG saving, only `"in"`, `"cm"`, and `"mm"` are supported
-#'   (to compute DPI from `px_width`).
+#'   For immediate PNG saving, only `"in"`, `"cm"`, and `"mm"` are supported (to
+#'   compute DPI from `px_width`).
 #' @param out_dir Output directory where files are written. Defaults to
 #'   `getOption("fundsr.out_dir", "output")`.
 #' @param save_png Logical scalar; if `TRUE`, also saves a PNG immediately.
 #'   Defaults to `getOption("fundsr.internal_png", FALSE)`.
 #' @param save_svg Logical scalar; if `TRUE`, saves the SVG and queues an
-#'   Inkscape export command. Defaults to `getOption("fundsr.export_svg", TRUE)`.
+#'   Inkscape export action. Defaults to `getOption("fundsr.export_svg", TRUE)`.
+#' @param background Background color used for immediate PNG saving via
+#'   [ggplot2::ggsave()] (`bg`). Defaults to `"white"`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
 #' @details
-#' If `save_svg = TRUE`, the SVG is written as `"{file}.svg"` and an Inkscape
-#' action string is stored as `.fundsr$inkscape_queue[file]` for later batch export to
-#' `"{file}.png"` at `px_width` pixels wide.
+#' If `save_svg = TRUE`, the SVG is written as `"{file}.svg"`. An Inkscape action
+#' string is then stored in `.fundsr$inkscape_queue[file]` so the SVG can later be
+#' exported to `"{file}.png"` at `px_width` pixels wide when [export_pngs()] is run.
+#'
+#' Queueing is refused if either output path contains a semicolon (`;`), since
+#' Inkscape actions are separated by semicolons.
 #'
 #' If `save_png = TRUE`, a PNG is also written immediately as `"{file}.png"`.
 #' The PNG uses the same `width`, `height`, and `units` as the SVG, and sets
 #' `dpi = px_width / width_in` so that the pixel width is approximately
-#' `px_width` while keeping the same physical-size typography. The PNG background
-#' is set to white.
+#' `px_width` while keeping comparable physical-size typography across outputs.
+#' The PNG background is set via `background`.
 #'
 #' If both `save_svg` and `save_png` are `FALSE`, the function issues a warning
 #' and returns without writing files or queueing exports.
 #'
 #' @export
-
 save_plot <- function(file,
                   plot,
                   px_width = getOption("fundsr.px_width", 1300),
@@ -50,7 +52,8 @@ save_plot <- function(file,
                   units = "in",
                   out_dir = getOption("fundsr.out_dir", "output"),
                   save_png = getOption("fundsr.internal_png", FALSE),
-                  save_svg = getOption("fundsr.export_svg", TRUE)) {
+                  save_svg = getOption("fundsr.export_svg", TRUE),
+                  background = "white") {
 
     if (!is.character(file) || length(file) != 1L || !nzchar(file)) {
         stop("`file` must be a non-empty single string.", call. = FALSE)
@@ -112,7 +115,7 @@ save_plot <- function(file,
             height = height,
             units = units,
             dpi = dpi,
-            bg = "white",
+            bg = background,
             limitsize = FALSE
         )
     }
@@ -125,18 +128,26 @@ save_plot <- function(file,
 #' Processes all pending items in the internal Inkscape export queue and
 #' invokes Inkscape to generate PNG files from previously saved SVGs.
 #'
-#' @return The exit status returned by the system call to Inkscape.
-#'   Invisibly returns `NULL` if no items are queued.
+#' @param background Background color to use for PNG export (passed to Inkscape
+#'   as `export-background`). If `NULL`, no `export-background` action is added.
+#'   Defaults to `"white"`.
+#'
+#' @return
+#' The exit status returned by the call to Inkscape (0 indicates success).
+#' Invisibly returns `NULL` if no items are queued or if no Inkscape executable
+#' is configured.
 #'
 #' @details
-#' This function collects all queued Inkscape actions stored in
-#' `.fundsr$inkscape_queue`, constructs a single Inkscape command using the
-#' executable specified by the `fundsr.inkscape` option, and executes it
-#' via `system()`. On success, the queue is cleared. On failure, the queue
-#' is preserved and a message is printed.
+#' This function reads queued Inkscape actions from `.fundsr$inkscape_queue`,
+#' optionally prepends an `export-background:{background}` action, and executes
+#' Inkscape using the executable path in the `fundsr.inkscape` option via
+#' [base::system2()].
+#'
+#' On success, the queue is cleared via [clear_inkscape_queue()]. On failure,
+#' the queue is left intact and a message is printed.
 #'
 #' @export
-export_pngs <- function() {
+export_pngs <- function(background = "white") {
     if (length(.fundsr$inkscape_queue) == 0) {
         message("export_pngs: nothing queued.")
         return(invisible(NULL))
@@ -147,7 +158,9 @@ export_pngs <- function() {
         return(invisible(NULL))
     }
     acts <- paste(.fundsr$inkscape_queue, collapse = ";")
-    acts <- paste0('export-background:white;', acts)
+    if (!is.null(background)) {
+        acts <- paste0(glue('export-background:{background};'), acts)
+    }
     args <- c(sprintf('--actions=%s', shQuote(acts)))
     message(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"))
     exit_status <- system2(inkscape, args = args)
@@ -329,6 +342,7 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' @param bmark_type Benchmark type used in plot titles: `"net"` or `"gross"`.
 #' @param suffix Character string appended to each `plot_id` when constructing
 #'   filenames and names in the returned environment. Defaults to `""`.
+#' @param ... Additional arguments passed to [plot_roll_diffs()].
 #'
 #' @return
 #' An environment containing ggplot objects. Objects are stored under names
@@ -343,7 +357,8 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' log-return-based variant using [plot_roll_diffs()] and writes the resulting
 #' plots via [save_plot()], using a filename suffix (`_L`) to distinguish the
 #' log-return variant. The optional `suffix` is appended to `plot_id` before
-#' filenames (and environment keys) are formed.
+#' filenames (and environment keys) are formed. Additional arguments in `...`
+#' are forwarded to [plot_roll_diffs()].
 #'
 #' If `plot_spec` is provided as a list of data frames, the function binds them
 #' into a single specification. The `title` column may be provided as a list
@@ -372,7 +387,8 @@ run_plots <- function(rds_cagr,
                       xlm_data = NULL,
                       add_gg_params = ggplot2::geom_blank(),
                       bmark_type = c("net", "gross"),
-                      suffix = "") {
+                      suffix = "",
+                      ...) {
     variants <- c("CAGR", "log")
     if (is.list(plot_spec) && !inherits(plot_spec, "data.frame")) {
         ensure_title_col <- function(df, col = "title") {
@@ -416,7 +432,8 @@ run_plots <- function(rds_cagr,
                          use_log = use_log,
                          gg_params = list(gg_params, add_gg_params),
                          title_add = title,
-                         bmark_type = bmark_type)
+                         bmark_type = bmark_type,
+                         ...)
         fname <- paste0(plot_id, if (use_log) "_L" else "")
         save_plot(fname, plot, width = width, height = height)
         plots_env[[fname]] <- plot

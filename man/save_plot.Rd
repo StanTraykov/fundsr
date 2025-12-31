@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{save_plot}
 \alias{save_plot}
-\title{Save a plot as SVG and optionally queue PNG export via Inkscape}
+\title{Save a plot as SVG and optionally save PNG immediately}
 \usage{
 save_plot(
   file,
@@ -13,7 +13,8 @@ save_plot(
   units = "in",
   out_dir = getOption("fundsr.out_dir", "output"),
   save_png = getOption("fundsr.internal_png", FALSE),
-  save_svg = getOption("fundsr.export_svg", TRUE)
+  save_svg = getOption("fundsr.export_svg", TRUE),
+  background = "white"
 )
 }
 \arguments{
@@ -21,17 +22,17 @@ save_plot(
 
 \item{plot}{A plot object (typically a ggplot) to be saved.}
 
-\item{px_width}{Width in pixels for the queued Inkscape PNG export, and (if
-\code{save_png = TRUE}) the target PNG pixel width used to compute the DPI.
-Defaults to \code{getOption("fundsr.px_width", 1300)}.}
+\item{px_width}{Target width in pixels for PNG output. Used as the queued
+Inkscape \code{export-width}, and (if \code{save_png = TRUE}) used to compute the DPI
+for immediate PNG saving. Defaults to \code{getOption("fundsr.px_width", 1300)}.}
 
 \item{height}{Height of the saved plot in \code{units}. Defaults to \code{12}.}
 
 \item{width}{Width of the saved plot in \code{units}. Defaults to \code{12}.}
 
 \item{units}{Units for \code{width}/\code{height} (e.g. \code{"in"}). Defaults to \code{"in"}.
-Note: for immediate PNG saving, only \code{"in"}, \code{"cm"}, and \code{"mm"} are supported
-(to compute DPI from \code{px_width}).}
+For immediate PNG saving, only \code{"in"}, \code{"cm"}, and \code{"mm"} are supported (to
+compute DPI from \code{px_width}).}
 
 \item{out_dir}{Output directory where files are written. Defaults to
 \code{getOption("fundsr.out_dir", "output")}.}
@@ -40,29 +41,33 @@ Note: for immediate PNG saving, only \code{"in"}, \code{"cm"}, and \code{"mm"} a
 Defaults to \code{getOption("fundsr.internal_png", FALSE)}.}
 
 \item{save_svg}{Logical scalar; if \code{TRUE}, saves the SVG and queues an
-Inkscape export command. Defaults to \code{getOption("fundsr.export_svg", TRUE)}.}
+Inkscape export action. Defaults to \code{getOption("fundsr.export_svg", TRUE)}.}
+
+\item{background}{Background color used for immediate PNG saving via
+\code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (\code{bg}). Defaults to \code{"white"}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-When \code{save_svg = TRUE}, saves \code{plot} as an SVG file and appends an Inkscape
-export command to the internal queue (\code{.fundsr$inkscape_queue}) so PNG generation
-can be performed later in batch (via \code{export_pngs()}).
+Saves \code{plot} as an SVG file when \code{save_svg = TRUE}. When an SVG is saved, an
+Inkscape export action is also queued so PNG generation can be performed later
+in batch via \code{\link[=export_pngs]{export_pngs()}}. Optionally, when \code{save_png = TRUE}, the function
+also saves a PNG immediately via \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (independently of queueing).
 }
 \details{
-Optionally, when \code{save_png = TRUE}, the function also saves a PNG immediately
-via \code{ggplot2::ggsave()} (independently of queueing).
+If \code{save_svg = TRUE}, the SVG is written as \code{"{file}.svg"}. An Inkscape action
+string is then stored in \code{.fundsr$inkscape_queue[file]} so the SVG can later be
+exported to \code{"{file}.png"} at \code{px_width} pixels wide when \code{\link[=export_pngs]{export_pngs()}} is run.
 
-If \code{save_svg = TRUE}, the SVG is written as \code{"{file}.svg"} and an Inkscape
-action string is stored as \code{.fundsr$inkscape_queue[file]} for later batch export to
-\code{"{file}.png"} at \code{px_width} pixels wide.
+Queueing is refused if either output path contains a semicolon (\verb{;}), since
+Inkscape actions are separated by semicolons.
 
 If \code{save_png = TRUE}, a PNG is also written immediately as \code{"{file}.png"}.
 The PNG uses the same \code{width}, \code{height}, and \code{units} as the SVG, and sets
 \code{dpi = px_width / width_in} so that the pixel width is approximately
-\code{px_width} while keeping the same physical-size typography. The PNG background
-is set to white.
+\code{px_width} while keeping comparable physical-size typography across outputs.
+The PNG background is set via \code{background}.
 
 If both \code{save_svg} and \code{save_png} are \code{FALSE}, the function issues a warning
 and returns without writing files or queueing exports.

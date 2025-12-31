@@ -4,20 +4,28 @@
 \alias{export_pngs}
 \title{Export queued SVG files to PNG using Inkscape}
 \usage{
-export_pngs()
+export_pngs(background = "white")
+}
+\arguments{
+\item{background}{Background color to use for PNG export (passed to Inkscape
+as \code{export-background}). If \code{NULL}, no \code{export-background} action is added.
+Defaults to \code{"white"}.}
 }
 \value{
-The exit status returned by the system call to Inkscape.
-Invisibly returns \code{NULL} if no items are queued.
+The exit status returned by the call to Inkscape (0 indicates success).
+Invisibly returns \code{NULL} if no items are queued or if no Inkscape executable
+is configured.
 }
 \description{
 Processes all pending items in the internal Inkscape export queue and
 invokes Inkscape to generate PNG files from previously saved SVGs.
 }
 \details{
-This function collects all queued Inkscape actions stored in
-\code{.fundsr$inkscape_queue}, constructs a single Inkscape command using the
-executable specified by the \code{fundsr.inkscape} option, and executes it
-via \code{system()}. On success, the queue is cleared. On failure, the queue
-is preserved and a message is printed.
+This function reads queued Inkscape actions from \code{.fundsr$inkscape_queue},
+optionally prepends an \code{export-background:{background}} action, and executes
+Inkscape using the executable path in the \code{fundsr.inkscape} option via
+\code{\link[base:system2]{base::system2()}}.
+
+On success, the queue is cleared via \code{\link[=clear_inkscape_queue]{clear_inkscape_queue()}}. On failure,
+the queue is left intact and a message is printed.
 }
