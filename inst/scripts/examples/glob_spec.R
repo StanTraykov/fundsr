@@ -1,10 +1,10 @@
 ##### Plots #####
 phys_h_funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "scwx", "ACWI-GR", "GMLM-GR")
 phys_s_funds <- c("spyy", "iusq", "vwce", "fwra", "webn", "acwia", "acwi", "acwu", "ACWI-GR", "GMLM-GR")
-phys_h_title <- c(en = "Global funds (phys. and hybrid) + some gross indices",
-           bg = "Глобални фондове (физ. и хибридни) + брутни индекси")
-phys_s_title <- c(en = "Global funds (phys. and swap) + some gross indices",
-                  bg = "Глобални фондове (физ. и суап) + брутни индекси")
+phys_h_title <- c(en = "Global funds (phys. and hybrid)",
+           bg = "Глобални фондове (физ. и хибридни)")
+phys_s_title <- c(en = "Global funds (phys. and swap)",
+                  bg = "Глобални фондове (физ. и суап)")
 spyi_title <- c(en = "SPYI in comparison to a few global funds",
                 bg = "SPYI в сравнение с някои глобални фондове")
 glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
