@@ -61,7 +61,8 @@ stored in an environment and returned.</p>
 <span>  xlm_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  add_gg_params <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">geom_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  bmark_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"net"</span>, <span class="st">"gross"</span><span class="op">)</span>,</span>
-<span>  suffix <span class="op">=</span> <span class="st">""</span></span>
+<span>  suffix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -106,6 +107,10 @@ defined in <code>plot_spec</code>. Defaults to <code><a href="https://ggplot2.ti
 <dd><p>Character string appended to each <code>plot_id</code> when constructing
 filenames and names in the returned environment. Defaults to <code>""</code>.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Additional arguments passed to <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -120,7 +125,8 @@ corresponding to the base filenames used in <code><a href="save_plot.html">save_
 log-return-based variant using <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code> and writes the resulting
 plots via <code><a href="save_plot.html">save_plot()</a></code>, using a filename suffix (<code>_L</code>) to distinguish the
 log-return variant. The optional <code>suffix</code> is appended to <code>plot_id</code> before
-filenames (and environment keys) are formed.</p>
+filenames (and environment keys) are formed. Additional arguments in <code>...</code>
+are forwarded to <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code>.</p>
 <p>If <code>plot_spec</code> is provided as a list of data frames, the function binds them
 into a single specification. The <code>title</code> column may be provided as a list
 column (e.g. to keep a multilingual named vector as a single per-row value).</p>

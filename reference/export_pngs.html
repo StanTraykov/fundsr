@@ -47,21 +47,33 @@ invokes Inkscape to generate PNG files from previously saved SVGs.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">export_pngs</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">export_pngs</span><span class="op">(</span>background <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
+<dl><dt id="arg-background">background<a class="anchor" aria-label="anchor" href="#arg-background"></a></dt>
+<dd><p>Background color to use for PNG export (passed to Inkscape
+as <code>export-background</code>). If <code>NULL</code>, no <code>export-background</code> action is added.
+Defaults to <code>"white"</code>.</p></dd>
+
+</dl></div>
+    <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The exit status returned by the system call to Inkscape.
-Invisibly returns <code>NULL</code> if no items are queued.</p>
+    <p>The exit status returned by the call to Inkscape (0 indicates success).
+Invisibly returns <code>NULL</code> if no items are queued or if no Inkscape executable
+is configured.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function collects all queued Inkscape actions stored in
-<code>.fundsr$inkscape_queue</code>, constructs a single Inkscape command using the
-executable specified by the <code>fundsr.inkscape</code> option, and executes it
-via <code><a href="https://rdrr.io/r/base/system.html" class="external-link">system()</a></code>. On success, the queue is cleared. On failure, the queue
-is preserved and a message is printed.</p>
+    <p>This function reads queued Inkscape actions from <code>.fundsr$inkscape_queue</code>,
+optionally prepends an <code>export-background:{background}</code> action, and executes
+Inkscape using the executable path in the <code>fundsr.inkscape</code> option via
+<code><a href="https://rdrr.io/r/base/system2.html" class="external-link">base::system2()</a></code>.</p>
+<p>On success, the queue is cleared via <code><a href="clear_inkscape_queue.html">clear_inkscape_queue()</a></code>. On failure,
+the queue is left intact and a message is printed.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
