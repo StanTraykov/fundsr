@@ -56,8 +56,10 @@ annualized tracking-difference series over a backward window of
 <span>  <span class="va">fund_index_map</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>  use_log <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  index_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"net"</span>, <span class="st">"gross"</span><span class="op">)</span>,</span>
 <span>  annual_days <span class="op">=</span> <span class="fl">365</span>,</span>
-<span>  silent_skip <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  silent_skip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  gross_suffix <span class="op">=</span> <span class="st">"-GR"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,7 +78,7 @@ benchmark/index columns referenced in <code>fund_index_map</code>.</p></dd>
 
 <dt id="arg-fund-index-map">fund_index_map<a class="anchor" aria-label="anchor" href="#arg-fund-index-map"></a></dt>
 <dd><p>Named character vector mapping fund column names
-to their corresponding benchmark/index column names.</p></dd>
+to their corresponding benchmark/index base column names.</p></dd>
 
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
@@ -89,34 +91,54 @@ differences</strong>. If <code>FALSE</code>, computes <strong>CAGR tracking diff
 Defaults to <code>TRUE</code>.</p></dd>
 
 
+<dt id="arg-index-level">index_level<a class="anchor" aria-label="anchor" href="#arg-index-level"></a></dt>
+<dd><p>Character; which index level to use. One of
+<code>"net"</code> or <code>"gross"</code>. If <code>"gross"</code>, <code>gross_suffix</code> is appended to the
+mapped index base name before lookup in <code>df</code>. Defaults to <code>"net"</code>.</p></dd>
+
+
 <dt id="arg-annual-days">annual_days<a class="anchor" aria-label="anchor" href="#arg-annual-days"></a></dt>
 <dd><p>Number of days used for annualization. Defaults to
 <code>365</code>.</p></dd>
 
 
 <dt id="arg-silent-skip">silent_skip<a class="anchor" aria-label="anchor" href="#arg-silent-skip"></a></dt>
-<dd><p>Logical; whether to show messages when skipping
-funds due to missing fund or tracked benchmark column in df.
-Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>Logical; whether to suppress messages when skipping
+fund–index pairs due to missing columns or self-tracking. Defaults to
+<code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-gross-suffix">gross_suffix<a class="anchor" aria-label="anchor" href="#arg-gross-suffix"></a></dt>
+<dd><p>Character; suffix appended to the mapped index base
+name when <code>index_level = "gross"</code>. Defaults to <code>"-GR"</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame like <code>df</code> with one additional column per fund,
-named <code>&lt;fund&gt;_rd</code>, containing the rolling tracking differences.</p>
+    <p>A data frame like <code>df</code> with one additional column per processed
+fund, named <code>&lt;fund&gt;_rd</code>, containing the rolling tracking differences.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For each fund–index pair, the function locates a start point
-<code>n_days</code> (or more) before each observation and computes:</p><ul><li><p><strong>log-return difference</strong>
-$$ ( \ln(f_{t}/f_{t_0}) - \ln(i_{t}/i_{t_0}) ) \times
+    <p>For each fund–index pair, the function locates an anchor observation at
+least <code>n_days</code> before each date (using the last available non-missing
+fund+index point at or before <code>date - n_days</code>) and computes an
+annualized tracking difference using the elapsed calendar days
+\(t - t_0\).</p><ul><li><p><strong>log-return difference</strong>
+$$ \left[\ln\left(\frac{f_t}{f_{t_0}}\right) -
+         \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times
          \frac{annual\_days}{t - t_0} $$</p></li>
 <li><p><strong>CAGR difference</strong>
-$$ f^{annual\_days/(t - t_0)} - i^{annual\_days/(t - t_0)} $$</p></li>
+$$ \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/(t - t_0)} -
+         \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/(t - t_0)} $$</p></li>
 </ul><p>where \(f\) and \(i\) are fund and index values, respectively.</p>
+<p>Pairs are skipped (optionally with a message) if the fund column is not
+present in <code>df</code>, the corresponding index column is not present (after
+applying <code>index_level</code>/<code>gross_suffix</code>), or if the mapping implies
+self-tracking (fund column equals index column).</p>
 <p>The tracking difference is <code>NA</code> whenever the anchor point is missing,
-the values are invalid (e.g., non-positive for log mode), or no past
-observation lies within the required window.</p>
+the required values are invalid (e.g., non-positive in log mode), or no
+past observation lies far enough back to satisfy the lookback window.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
