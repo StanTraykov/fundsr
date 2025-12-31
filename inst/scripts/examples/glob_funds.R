@@ -3,7 +3,6 @@ library(fundsr)
 
 # Config
 fundsr::reset_state()
-spec_list <- list()
 source("common_spec.R")
 source("glob_spec.R")
 xlm_dir <- file.path("data", "xlm")

@@ -9,7 +9,7 @@ gg_par_phys <- fund_colors(breaks = funds_phys)
 funds_phys2 <- c("emim", "xmme", "aeme", "emmusc", "iema", "spym", "pram", "EM-GR", "EMLM-GR", "EM_IMI-GR")
 title_phys2 <- c(
     en = "ЕМ phys. funds (-H4Z3)",
-    bg = "физ. фондове за възн.п. (-H4Z3) + брутни индекси"
+    bg = "физ. фондове за възн.п. (-H4Z3)"
 )
 gg_par_phys2 <- fund_colors(breaks = funds_phys2,
                             special = c(`EM-GR` = "black", `EMLM-GR` = "grey40", `EM_IMI-GR` = "grey75"))
