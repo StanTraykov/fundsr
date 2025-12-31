@@ -16,6 +16,16 @@ pak::pak("StanTraykov/fundsr@*release")
 pak::pak("StanTraykov/fundsr")
 ```
 
+### From my r-universe (binary builds)
+[![fundsr status badge](https://stantraykov.r-universe.dev/fundsr/badges/version)](https://stantraykov.r-universe.dev/fundsr)
+```r
+install.packages(
+  "fundsr",
+  repos = c("https://stantraykov.r-universe.dev",
+            "https://cloud.r-project.org")
+)
+```
+
 # Usage
 * [Intro vignette](https://stantraykov.github.io/fundsr/articles/fundsr-intro.html) contains a simple walkthrough comparing IUSQ and SPYY (no data setup needed)
 * `inst/scripts/examples` (e.g. open `.Rproj` file in R Studio after installing the package)
