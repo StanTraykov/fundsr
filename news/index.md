@@ -2,6 +2,19 @@
 
 ## fundsr (development version)
 
+### Refactor `roll_diffs()`
+
+- much faster
+- always calculates CAGR & log differences
+- returns a list of dataframes (no longer including original data)
+
+### Better gross/net index handling
+
+- add index_level parameter to
+  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
+- add suffix parameter to
+  [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
+
 ### Survival plots
 
 - empirical via HMD
@@ -9,15 +22,26 @@
 
 ### Fixes
 
+- skip unavailable funds, indices when calculating differences
 - ensure y-limits in rolling-difference plots include the last 30 days
   (even if outside quantiles)
-- fix Bulgarian translation: y-axis label on log-return charts
+- make
+  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
+  skip benchmarks (in addition to funds) that are not found in supplied
+  df
+- XLM bookkeeping to avoid repetitions now persistent across
+  [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
+  calls
+- more robust gg_params list flattening
 
 ### Vignettes, examples, translations
 
 - add life vignette
+- add DM ex USA funds
 - add more example scripts; translate more index names in common_spec
-- translate examples (add BG titles)
+- fix glob_funds example to include EUR indices
+- fix Bulgarian translation: wrong y-axis label on log-return charts
+- translate all examples to Bulgarian
 
 ## fundsr 0.1.0
 

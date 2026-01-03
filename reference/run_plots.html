@@ -54,8 +54,7 @@ stored in an environment and returned.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_plots</span><span class="op">(</span></span>
-<span>  <span class="va">rds_cagr</span>,</span>
-<span>  <span class="va">rds_log</span>,</span>
+<span>  <span class="va">roll_diffs</span>,</span>
 <span>  <span class="va">n_days</span>,</span>
 <span>  <span class="va">plot_spec</span>,</span>
 <span>  xlm_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -70,16 +69,14 @@ stored in an environment and returned.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-rds-cagr">rds_cagr<a class="anchor" aria-label="anchor" href="#arg-rds-cagr"></a></dt>
-<dd><p>Data frame containing rolling CAGR differences.</p></dd>
-
-
-<dt id="arg-rds-log">rds_log<a class="anchor" aria-label="anchor" href="#arg-rds-log"></a></dt>
-<dd><p>Data frame containing rolling log-return differences.</p></dd>
+<dl><dt id="arg-roll-diffs">roll_diffs<a class="anchor" aria-label="anchor" href="#arg-roll-diffs"></a></dt>
+<dd><p>A list of length 2 containing data frames, named <code>cagr</code>
+and <code>log</code> (CAGR differences and log-return differences).</p></dd>
 
 
 <dt id="arg-n-days">n_days<a class="anchor" aria-label="anchor" href="#arg-n-days"></a></dt>
-<dd><p>Rolling-window length in days (passed to <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code> for labelling).</p></dd>
+<dd><p>Rolling-window length in days (passed to <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code>
+for labelling).</p></dd>
 
 
 <dt id="arg-plot-spec">plot_spec<a class="anchor" aria-label="anchor" href="#arg-plot-spec"></a></dt>
@@ -141,7 +138,7 @@ storing the resulting XLM plot.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">run_plots</span><span class="op">(</span><span class="va">rds_cagr</span>, <span class="va">rds_log</span>, <span class="va">n_days</span>, <span class="va">plot_spec</span>, xlm_data <span class="op">=</span> <span class="va">xlm_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">run_plots</span><span class="op">(</span><span class="va">roll_diffs</span>, <span class="va">n_days</span>, <span class="va">plot_spec</span>, xlm_data <span class="op">=</span> <span class="va">xlm_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">plots</span><span class="op">[[</span><span class="st">"global"</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">plots</span><span class="op">[[</span><span class="st">"global_L"</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">plots</span><span class="op">[[</span><span class="st">"xlm_global"</span><span class="op">]</span><span class="op">]</span></span></span>

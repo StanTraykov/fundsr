@@ -1,9 +1,13 @@
-# Save a plot as SVG and optionally queue PNG export via Inkscape
+# Save a plot as SVG and optionally save PNG immediately
 
-When `save_svg = TRUE`, saves `plot` as an SVG file and appends an
-Inkscape export command to the internal queue (`.fundsr$inkscape_queue`)
-so PNG generation can be performed later in batch (via
-[`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md)).
+Saves `plot` as an SVG file when `save_svg = TRUE`. When an SVG is
+saved, an Inkscape export action is also queued so PNG generation can be
+performed later in batch via
+[`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md).
+Optionally, when `save_png = TRUE`, the function also saves a PNG
+immediately via
+[`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
+(independently of queueing).
 
 ## Usage
 
@@ -17,7 +21,8 @@ save_plot(
   units = "in",
   out_dir = getOption("fundsr.out_dir", "output"),
   save_png = getOption("fundsr.internal_png", FALSE),
-  save_svg = getOption("fundsr.export_svg", TRUE)
+  save_svg = getOption("fundsr.export_svg", TRUE),
+  background = "white"
 )
 ```
 
@@ -33,9 +38,10 @@ save_plot(
 
 - px_width:
 
-  Width in pixels for the queued Inkscape PNG export, and (if
-  `save_png = TRUE`) the target PNG pixel width used to compute the DPI.
-  Defaults to `getOption("fundsr.px_width", 1300)`.
+  Target width in pixels for PNG output. Used as the queued Inkscape
+  `export-width`, and (if `save_png = TRUE`) used to compute the DPI for
+  immediate PNG saving. Defaults to
+  `getOption("fundsr.px_width", 1300)`.
 
 - height:
 
@@ -47,9 +53,9 @@ save_plot(
 
 - units:
 
-  Units for `width`/`height` (e.g. `"in"`). Defaults to `"in"`. Note:
-  for immediate PNG saving, only `"in"`, `"cm"`, and `"mm"` are
-  supported (to compute DPI from `px_width`).
+  Units for `width`/`height` (e.g. `"in"`). Defaults to `"in"`. For
+  immediate PNG saving, only `"in"`, `"cm"`, and `"mm"` are supported
+  (to compute DPI from `px_width`).
 
 - out_dir:
 
@@ -64,7 +70,13 @@ save_plot(
 - save_svg:
 
   Logical scalar; if `TRUE`, saves the SVG and queues an Inkscape export
-  command. Defaults to `getOption("fundsr.export_svg", TRUE)`.
+  action. Defaults to `getOption("fundsr.export_svg", TRUE)`.
+
+- background:
+
+  Background color used for immediate PNG saving via
+  [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
+  (`bg`). Defaults to `"white"`.
 
 ## Value
 
@@ -72,20 +84,21 @@ Invisibly returns `NULL`. Called for side effects.
 
 ## Details
 
-Optionally, when `save_png = TRUE`, the function also saves a PNG
-immediately via
-[`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
-(independently of queueing).
+If `save_svg = TRUE`, the SVG is written as `"{file}.svg"`. An Inkscape
+action string is then stored in `.fundsr$inkscape_queue[file]` so the
+SVG can later be exported to `"{file}.png"` at `px_width` pixels wide
+when
+[`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md)
+is run.
 
-If `save_svg = TRUE`, the SVG is written as `"{file}.svg"` and an
-Inkscape action string is stored as `.fundsr$inkscape_queue[file]` for
-later batch export to `"{file}.png"` at `px_width` pixels wide.
+Queueing is refused if either output path contains a semicolon (`;`),
+since Inkscape actions are separated by semicolons.
 
 If `save_png = TRUE`, a PNG is also written immediately as
 `"{file}.png"`. The PNG uses the same `width`, `height`, and `units` as
 the SVG, and sets `dpi = px_width / width_in` so that the pixel width is
-approximately `px_width` while keeping the same physical-size
-typography. The PNG background is set to white.
+approximately `px_width` while keeping comparable physical-size
+typography across outputs. The PNG background is set via `background`.
 
 If both `save_svg` and `save_png` are `FALSE`, the function issues a
 warning and returns without writing files or queueing exports.

@@ -116,18 +116,18 @@ storage <- run_data_loaders() # call registered data loaders
 #> *** Loading: spyy
 #> Attempting readxl on 'data/funds/SPYY.xlsx'...
 #> readxl succeeded. Returning data.
-#> Returning 3727 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').
+#> Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').
 #> *** Loading: iusq
 #> Attempting readxl on 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
-#> Returning 3621 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
+#> Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
 ```
 
 Join the environment into a big tibble, cut off & sort
 
 ``` r
 series <- join_env(storage, by = "date") %>%
-    filter(date >= as_date("2012-12-29")) %>%
+    filter(date >= as_date("2013-01-01")) %>%
     arrange(date)
 #> Joining: spyy, iusq
 ```
@@ -136,35 +136,35 @@ Check contents
 
 ``` r
 storage[["iusq"]]
-#> # A tibble: 3,621 × 3
+#> # A tibble: 3,623 × 3
 #>    date        iusq  ACWI
 #>    <date>     <dbl> <dbl>
-#>  1 2025-12-30  109.   NA 
-#>  2 2025-12-29  109.  440.
-#>  3 2025-12-24  109.  440.
-#>  4 2025-12-23  109.  439.
-#>  5 2025-12-22  109.  437.
-#>  6 2025-12-19  108.  434.
-#>  7 2025-12-18  107.  431.
-#>  8 2025-12-17  106.  428.
-#>  9 2025-12-16  107.  432.
-#> 10 2025-12-15  108.  434.
-#> # ℹ 3,611 more rows
+#>  1 2026-01-02  109.   NA 
+#>  2 2025-12-31  109.  437.
+#>  3 2025-12-30  109.  439.
+#>  4 2025-12-29  109.  440.
+#>  5 2025-12-24  109.  440.
+#>  6 2025-12-23  109.  439.
+#>  7 2025-12-22  109.  437.
+#>  8 2025-12-19  108.  434.
+#>  9 2025-12-18  107.  431.
+#> 10 2025-12-17  106.  428.
+#> # ℹ 3,613 more rows
 series
-#> # A tibble: 3,342 × 4
+#> # A tibble: 3,343 × 4
 #>    date        spyy  iusq  ACWI
 #>    <date>     <dbl> <dbl> <dbl>
-#>  1 2012-12-31  76.7  29.2  115.
-#>  2 2013-01-01  NA    29.2  115.
-#>  3 2013-01-02  78.4  29.8  118.
-#>  4 2013-01-03  78.3  29.8  118.
-#>  5 2013-01-04  78.5  29.9  118.
-#>  6 2013-01-07  78.3  29.8  118.
-#>  7 2013-01-08  77.9  29.7  117.
-#>  8 2013-01-09  78.2  29.8  118.
-#>  9 2013-01-10  78.8  30.1  119.
-#> 10 2013-01-11  79.0  30.1  119.
-#> # ℹ 3,332 more rows
+#>  1 2013-01-01  NA    29.2  115.
+#>  2 2013-01-02  78.4  29.8  118.
+#>  3 2013-01-03  78.3  29.8  118.
+#>  4 2013-01-04  78.5  29.9  118.
+#>  5 2013-01-07  78.3  29.8  118.
+#>  6 2013-01-08  77.9  29.7  117.
+#>  7 2013-01-09  78.2  29.8  118.
+#>  8 2013-01-10  78.8  30.1  119.
+#>  9 2013-01-11  79.0  30.1  119.
+#> 10 2013-01-14  79.0  30.1  119.
+#> # ℹ 3,333 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
@@ -174,14 +174,9 @@ get_fund_index_map()
 
 ``` r
 nd <- 365
-diffs <- purrr::map(
-    list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, get_fund_index_map(), use_log = .x)
-)
-#> Roll CAGR for spyy tracking ACWI
-#> Roll CAGR for iusq tracking ACWI
-#> Roll log-ret for spyy tracking ACWI
-#> Roll log-ret for iusq tracking ACWI
+diffs <- roll_diffs(series, nd, get_fund_index_map())
+#> Roll diffs spyy -> ACWI
+#> Roll diffs iusq -> ACWI
 ```
 
 ## Plot specs
@@ -217,7 +212,7 @@ export using Inkscape (see blow). It may also output lower-quality PNGs
 (if option `fundsr.internal_png` is `TRUE`).
 
 ``` r
-p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
+p <- run_plots(diffs, nd, plot_spec, xlm_data)
 #> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
 #> plot_xlms: spyy, iusq
 #> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
@@ -231,52 +226,50 @@ p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
 p[["ACWI"]]
 ```
 
-![](fundsr-intro_files/figure-html/unnamed-chunk-14-1.png)
+![](fundsr-intro_files/figure-html/acwi-plots-1.png)
 
 ``` r
 p[["ACWI_L"]]
 ```
 
-![](fundsr-intro_files/figure-html/unnamed-chunk-14-2.png)
+![](fundsr-intro_files/figure-html/acwi-plots-2.png)
 
 ``` r
 p[["ACWIz_L"]]
 ```
 
-![](fundsr-intro_files/figure-html/unnamed-chunk-14-3.png)
+![](fundsr-intro_files/figure-html/acwi-plots-3.png)
 
 ``` r
 p[["xlm_ACWI"]]
 ```
 
-![](fundsr-intro_files/figure-html/unnamed-chunk-14-4.png)
+![](fundsr-intro_files/figure-html/acwi-plots-4.png)
 
 Corresponding SVG files should be in the `output` directory.
 
 ## Plot in another language
 
 ``` r
-Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems; may issue warning on others
+Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems
 #> [1] "bg_BG.UTF-8"
 Sys.setLanguage("bg")
-plot_spec <- plot_spec %>%
+plot_spec_bg <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
-bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
+bg_p <- run_plots(diffs, nd, plot_spec_bg, xlm_data)
 #> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ
-#> plot_xlms: spyy, iusq
 #> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ
 #> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ: последни години
 #> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ: последни години
 bg_p[["ACWIz_bg_L"]]
 ```
 
-![](fundsr-intro_files/figure-html/unnamed-chunk-15-1.png)
+![](fundsr-intro_files/figure-html/acwi-bg-plots-1.png)
 
 ``` r
 bg_p[["xlm_ACWI_bg"]]
+#> NULL
 ```
-
-![](fundsr-intro_files/figure-html/unnamed-chunk-15-2.png)
 
 ## Optional: higher-quality PNG export
 

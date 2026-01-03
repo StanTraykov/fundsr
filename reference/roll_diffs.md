@@ -1,8 +1,8 @@
-# Compute rolling annualized tracking differences (CAGR or log-return)
+# Rolling annualized tracking differences
 
-For each fund–index pair in `fund_index_map`, computes a rolling,
-annualized tracking-difference series over a backward window of
-`n_days`. The result is added as new columns named `<fund>_rd`.
+For each fund–index pair in `fund_index_map`, computes rolling,
+annualized tracking differences over a backward-looking window of
+`n_days` calendar days. Both log-return and CAGR forms are returned.
 
 ## Usage
 
@@ -12,9 +12,10 @@ roll_diffs(
   n_days,
   fund_index_map,
   date_col = "date",
-  use_log = TRUE,
+  index_level = c("net", "gross"),
   annual_days = 365,
-  silent_skip = FALSE
+  messages = c("roll", "skip"),
+  gross_suffix = "-GR"
 )
 ```
 
@@ -22,8 +23,8 @@ roll_diffs(
 
 - df:
 
-  Data frame containing the date column, fund columns, and
-  benchmark/index columns referenced in `fund_index_map`.
+  Data frame containing a date column, fund columns, and benchmark/index
+  columns referenced in `fund_index_map`.
 
 - n_days:
 
@@ -32,44 +33,59 @@ roll_diffs(
 - fund_index_map:
 
   Named character vector mapping fund column names to their
-  corresponding benchmark/index column names.
+  corresponding benchmark/index base column names.
 
 - date_col:
 
-  Name of the date column in `df`. Defaults to `"date"`.
+  Name of the date column in `df`. Defaults to `"date"`. Must be of
+  class `Date` and sorted in ascending order.
 
-- use_log:
+- index_level:
 
-  Logical; if `TRUE`, computes **log-return tracking differences**. If
-  `FALSE`, computes **CAGR tracking differences**. Defaults to `TRUE`.
+  Which index level to use, one of `"net"` or `"gross"`. If `"gross"`,
+  `gross_suffix` is appended to the mapped index base name before lookup
+  in `df`. Defaults to `"net"`.
 
 - annual_days:
 
   Number of days used for annualization. Defaults to `365`.
 
-- silent_skip:
+- messages:
 
-  Logical; whether to show messages when skipping funds due to missing
-  fund or tracked benchmark column in df. Defaults to `FALSE`.
+  Character vector controlling emitted messages. Any of `"roll"`
+  (per-pair progress) and `"skip"` (skip reasons). Use
+  `messages = "roll"` to show only progress, `messages = "skip"` to show
+  only skip reasons, or `messages = character()` or `NULL` to silence
+  all messages. Defaults to `c("roll", "skip")`.
+
+- gross_suffix:
+
+  Suffix appended to the mapped index base name when
+  `index_level = "gross"`. Defaults to `"-GR"`.
 
 ## Value
 
-A data frame like `df` with one additional column per fund, named
-`<fund>_rd`, containing the rolling tracking differences.
+A named list with two data frames, `log` and `cagr`. Each data frame
+contains `date_col` followed by one column per fund (named as in
+`fund_index_map`), holding the rolling annualized tracking differences.
 
 ## Details
 
-For each fund–index pair, the function locates a start point `n_days`
-(or more) before each observation and computes:
+For each date \\t\\, an anchor date \\t_0\\ is chosen as the last
+available observation at or before \\t - n\\days\\ where both fund and
+index values are present. Let \\\Delta = t - t_0\\ in calendar days.
 
-- **log-return difference** \$\$ ( \ln(f\_{t}/f\_{t_0}) -
-  \ln(i\_{t}/i\_{t_0}) ) \times \frac{annual\\days}{t - t_0} \$\$
+The annualized tracking differences are:
 
-- **CAGR difference** \$\$ f^{annual\\days/(t - t_0)} -
-  i^{annual\\days/(t - t_0)} \$\$
+- Log-return difference:
+  \$\$\left\[\ln\left(\frac{f_t}{f\_{t_0}}\right) -
+  \ln\left(\frac{i_t}{i\_{t_0}}\right)\right\] \times
+  \frac{annual\\days}{\Delta}\$\$
 
-where \\f\\ and \\i\\ are fund and index values, respectively.
+- CAGR difference:
+  \$\$\left(\frac{f_t}{f\_{t_0}}\right)^{annual\\days/\Delta} -
+  \left(\frac{i_t}{i\_{t_0}}\right)^{annual\\days/\Delta}\$\$
 
-The tracking difference is `NA` whenever the anchor point is missing,
-the values are invalid (e.g., non-positive for log mode), or no past
-observation lies within the required window.
+Values are `NA` when an anchor cannot be found, required inputs are
+missing, \\\Delta \le 0\\, or values are invalid for the chosen formula
+(e.g. non-positive inputs for log returns).

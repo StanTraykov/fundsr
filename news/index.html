@@ -40,9 +40,18 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="fundsr-development-version">fundsr (development version)<a class="anchor" aria-label="anchor" href="#fundsr-development-version"></a></h2>
 <div class="section level3">
-<h3 id="neater-grossnet-index-handling-development-version">Neater gross/net index handling<a class="anchor" aria-label="anchor" href="#neater-grossnet-index-handling-development-version"></a></h3>
-<ul><li>add index_level parameter to roll_diffs</li>
-<li>add suffix parameter to run_plots</li>
+<h3 id="refactor-roll_diffs-development-version">Refactor <code>roll_diffs()</code>
+<a class="anchor" aria-label="anchor" href="#refactor-roll_diffs-development-version"></a></h3>
+<ul><li>much faster</li>
+<li>always calculates CAGR &amp; log differences</li>
+<li>returns a list of dataframes (no longer including original data)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="better-grossnet-index-handling-development-version">Better gross/net index handling<a class="anchor" aria-label="anchor" href="#better-grossnet-index-handling-development-version"></a></h3>
+<ul><li>add index_level parameter to <code><a href="../reference/roll_diffs.html">roll_diffs()</a></code>
+</li>
+<li>add suffix parameter to <code><a href="../reference/run_plots.html">run_plots()</a></code>
+</li>
 </ul></div>
 <div class="section level3">
 <h3 id="survival-plots-development-version">Survival plots<a class="anchor" aria-label="anchor" href="#survival-plots-development-version"></a></h3>
@@ -53,8 +62,9 @@
 <h3 id="fixes-development-version">Fixes<a class="anchor" aria-label="anchor" href="#fixes-development-version"></a></h3>
 <ul><li>skip unavailable funds, indices when calculating differences</li>
 <li>ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)</li>
-<li>make roll_diff skip benchmarks (in addition to funds) that are not found in supplied df</li>
-<li>XLM bookkeeping to avoid repetitions now persistent across run_plots() calls</li>
+<li>make <code><a href="../reference/roll_diffs.html">roll_diffs()</a></code> skip benchmarks (in addition to funds) that are not found in supplied df</li>
+<li>XLM bookkeeping to avoid repetitions now persistent across <code><a href="../reference/run_plots.html">run_plots()</a></code> calls</li>
+<li>more robust gg_params list flattening</li>
 </ul></div>
 <div class="section level3">
 <h3 id="vignettes-examples-translations-development-version">Vignettes, examples, translations<a class="anchor" aria-label="anchor" href="#vignettes-examples-translations-development-version"></a></h3>

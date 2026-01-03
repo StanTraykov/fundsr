@@ -63,13 +63,13 @@
 - [`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)
   : Clear fundsr session state
 - [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
-  : Compute rolling annualized tracking differences (CAGR or log-return)
+  : Rolling annualized tracking differences
 - [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)
   : Run registered data loaders
 - [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
   : Generate and export all configured rolling-difference plots
 - [`save_plot()`](https://stantraykov.github.io/fundsr/reference/save_plot.md)
-  : Save a plot as SVG and optionally queue PNG export via Inkscape
+  : Save a plot as SVG and optionally save PNG immediately
 - [`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md) :
   Import an SPDR fund
 - [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)

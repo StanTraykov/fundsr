@@ -16,6 +16,19 @@ pak::pak("StanTraykov/fundsr@*release")
 pak::pak("StanTraykov/fundsr")
 ```
 
+### From my r-universe (binary builds)
+
+[![fundsr status
+badge](https://stantraykov.r-universe.dev/fundsr/badges/version)](https://stantraykov.r-universe.dev/fundsr)
+
+``` r
+install.packages(
+  "fundsr",
+  repos = c("https://stantraykov.r-universe.dev",
+            "https://cloud.r-project.org")
+)
+```
+
 # Usage
 
 - [Intro
