@@ -1,148 +1,188 @@
-longer <- function(df, funds, sfx, values_to, names_to = "fund") {
+# Pivot selected fund columns to long format.
+#
+# Selects a date column and the specified fund columns from `df`, pivots the
+# fund columns to long format, and standardizes the date column name to `date`
+# in the output.
+#
+# @param df A data frame containing a date column and fund columns.
+# @param funds Character vector of fund column names to pivot.
+# @param date_col Name of the date column in `df`. Defaults to `"date"`.
+# @param values_to Name of the value column in the output.
+# @param names_to Name of the fund-name column in the output.
+# @param drop_na Logical; whether to drop rows with missing values after pivoting.
+#
+# @return A tibble with columns `date`, `names_to`, and `values_to`.
+#
+# @keywords internal
+longer <- function(df,
+                   funds,
+                   date_col = "date",
+                   values_to = "value",
+                   names_to = "fund",
+                   drop_na = TRUE) {
+    stopifnot(is.character(date_col), length(date_col) == 1)
+
     df %>%
-        select(any_of(c("date", paste0(funds, sfx)))) %>%
+        select(any_of(c(date_col, funds))) %>%
         tidyr::pivot_longer(
-            cols = -date,
+            cols = -all_of(date_col),
             names_to = names_to,
             values_to = values_to,
-            names_pattern = paste0("(.+)", sfx),
-            values_drop_na = TRUE
-        )
+            values_drop_na = drop_na
+        ) %>%
+        rename(date = !!date_col)
 }
 
-#' Compute rolling annualized tracking differences (CAGR or log-return)
+#' Rolling annualized tracking differences
 #'
-#' For each fund–index pair in `fund_index_map`, computes a rolling,
-#' annualized tracking-difference series over a backward window of
-#' `n_days`. The result is added as new columns named `<fund>_rd`.
+#' For each fund–index pair in `fund_index_map`, computes rolling, annualized
+#' tracking differences over a backward-looking window of `n_days` calendar
+#' days. Both log-return and CAGR forms are returned.
 #'
-#' @param df Data frame containing the date column, fund columns, and
+#' @param df Data frame containing a date column, fund columns, and
 #'   benchmark/index columns referenced in `fund_index_map`.
 #' @param n_days Rolling lookback window in calendar days.
 #' @param fund_index_map Named character vector mapping fund column names
 #'   to their corresponding benchmark/index base column names.
 #' @param date_col Name of the date column in `df`. Defaults to `"date"`.
-#' @param use_log Logical; if `TRUE`, computes **log-return tracking
-#'   differences**. If `FALSE`, computes **CAGR tracking differences**.
-#'   Defaults to `TRUE`.
-#' @param index_level Character; which index level to use. One of
-#'   `"net"` or `"gross"`. If `"gross"`, `gross_suffix` is appended to the
-#'   mapped index base name before lookup in `df`. Defaults to `"net"`.
-#' @param annual_days Number of days used for annualization. Defaults to
-#'   `365`.
-#' @param silent_skip Logical; whether to suppress messages when skipping
-#'   fund–index pairs due to missing columns or self-tracking. Defaults to
-#'   `FALSE`.
-#' @param gross_suffix Character; suffix appended to the mapped index base
-#'   name when `index_level = "gross"`. Defaults to `"-GR"`.
+#'   Must be of class `Date` and sorted in ascending order.
+#' @param index_level Which index level to use, one of `"net"` or `"gross"`.
+#'   If `"gross"`, `gross_suffix` is appended to the mapped index base name
+#'   before lookup in `df`. Defaults to `"net"`.
+#' @param annual_days Number of days used for annualization. Defaults to `365`.
+#' @param messages Character vector controlling emitted messages. Any of
+#'   `"roll"` (per-pair progress) and `"skip"` (skip reasons). Use
+#'   `messages = "roll"` to show only progress, `messages = "skip"` to show
+#'   only skip reasons, or `messages = character()` to silence all messages.
+#'   Defaults to `c("roll", "skip")`.
+#' @param gross_suffix Suffix appended to the mapped index base name when
+#'   `index_level = "gross"`. Defaults to `"-GR"`.
 #'
-#' @return A data frame like `df` with one additional column per processed
-#'   fund, named `<fund>_rd`, containing the rolling tracking differences.
+#' @return A named list with two data frames, `log` and `cagr`. Each data frame
+#'   contains `date_col` followed by one column per fund (named as in
+#'   `fund_index_map`), holding the rolling annualized tracking differences.
 #'
 #' @details
-#' For each fund–index pair, the function locates an anchor observation at
-#' least `n_days` before each date (using the last available non-missing
-#' fund+index point at or before `date - n_days`) and computes an
-#' annualized tracking difference using the elapsed calendar days
-#' \eqn{t - t_0}.
+#' For each date \eqn{t}, an anchor date \eqn{t_0} is chosen as the last
+#' available observation at or before \eqn{t - n\_days} where both fund and
+#' index values are present. Let \eqn{\Delta = t - t_0} in calendar days.
 #'
-#' * **log-return difference**
-#'   \deqn{ \left[\ln\left(\frac{f_t}{f_{t_0}}\right) -
-#'          \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times
-#'          \frac{annual\_days}{t - t_0} }
+#' The annualized tracking differences are:
+#' \itemize{
+#'   \item Log-return difference:
+#'     \deqn{\left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times \frac{annual\_days}{\Delta}}
+#'   \item CAGR difference:
+#'     \deqn{\left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta} - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}}
+#' }
 #'
-#' * **CAGR difference**
-#'   \deqn{ \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/(t - t_0)} -
-#'          \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/(t - t_0)} }
-#'
-#' where \eqn{f} and \eqn{i} are fund and index values, respectively.
-#'
-#' Pairs are skipped (optionally with a message) if the fund column is not
-#' present in `df`, the corresponding index column is not present (after
-#' applying `index_level`/`gross_suffix`), or if the mapping implies
-#' self-tracking (fund column equals index column).
-#'
-#' The tracking difference is `NA` whenever the anchor point is missing,
-#' the required values are invalid (e.g., non-positive in log mode), or no
-#' past observation lies far enough back to satisfy the lookback window.
+#' Values are `NA` when an anchor cannot be found, required inputs are missing,
+#' \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
+#' non-positive inputs for log returns).
 #'
 #' @export
 roll_diffs <- function(df,
                        n_days,
                        fund_index_map,
                        date_col = "date",
-                       use_log = TRUE,
                        index_level = c("net", "gross"),
                        annual_days = 365,
-                       silent_skip = FALSE,
+                       messages = c("roll", "skip"),
                        gross_suffix = "-GR") {
     index_level <- match.arg(index_level)
-    df <- df %>%
-        mutate(.date_num = as.numeric(.data[[date_col]]))
-    for (fund in names(fund_index_map)) {
+    stopifnot(!is.null(names(fund_index_map)), all(nzchar(names(fund_index_map))))
+    messages <- match.arg(messages, c("roll", "skip"), several.ok = TRUE)
+    msg_roll <- "roll" %in% messages
+    msg_skip <- "skip" %in% messages
+
+    date_num <- as.numeric(df[[date_col]])
+    n <- nrow(df)
+
+    fund_names <- names(fund_index_map)
+    out_log  <- set_names(vector("list", length(fund_names)), fund_names)
+    out_cagr <- set_names(vector("list", length(fund_names)), fund_names)
+
+    for (fund in fund_names) {
+        out_log[[fund]]  <- rep(NA_real_, n)
+        out_cagr[[fund]] <- rep(NA_real_, n)
+    }
+
+    for (fund in fund_names) {
         index <- fund_index_map[[fund]]
-        if (index_level == "gross")
-            index <- paste0(index, gross_suffix)
-        roll_type <- if (use_log) "log-ret" else "CAGR"
+        if (index_level == "gross") index <- paste0(index, gross_suffix)
+
+        if (msg_roll) message(sprintf("Roll diffs %s -> %s", fund, index))
+
         if (!(fund %in% names(df))) {
-            if (!isTRUE(silent_skip)) {
-                message(glue("Skipping {fund}: not in df"))
-            }
+            if (msg_skip) message(sprintf("Skipping %s: not in df", fund))
             next
         }
         if (!(index %in% names(df))) {
-            if (!isTRUE(silent_skip)) {
-                message(glue("Skipping {fund}: tracked index {index} not in df"))
-            }
+            if (msg_skip) message(sprintf("Skipping %s: tracked index %s not in df", fund, index))
             next
         }
         if (fund == index) {
-            if (!isTRUE(silent_skip)) {
-                message(glue("Skipping {index}: self-tracking"))
-            }
+            if (msg_skip) message(sprintf("Skipping %s: self-tracking", fund))
             next
         }
-        message(glue("Roll {roll_type} for {fund} tracking {index}"))
-        roll_diff_col = paste0(fund, "_rd")
-        no_na <- df %>%
-            select(".date_num", !!sym(fund), !!sym(index)) %>%
-            filter(!is.na(!!sym(fund)), !is.na(!!sym(index)))
-        roll_diff <- function(fnd, idx, date, n_days) {
-            if (is.na(fnd) || is.na(idx)) {
-                return(NA_real_)
-            }
-            ndate <- as.numeric(date)
-            pday <- findInterval(ndate - n_days, no_na$.date_num)
-            if (pday == 0) {
-                return(NA_real_)
-            }
-            delta_d <- ndate - no_na$.date_num[pday]
-            if (delta_d <= 0) return(NA_real_)
 
-            f_start <- no_na[[fund]][pday]
-            i_start <- no_na[[index]][pday]
+        fund_vals  <- df[[fund]]
+        index_vals <- df[[index]]
 
-            if (use_log) {
-                if (f_start <= 0 || i_start <= 0 || fnd <= 0 || idx <= 0) return(NA_real_)
-                # Annualized log tracking difference
-                (log(fnd / f_start) - log(idx / i_start)) * (annual_days / delta_d)
-            } else {
-                ratio_f <- fnd / f_start
-                ratio_i <- idx / i_start
-                if (!is.finite(ratio_f) || !is.finite(ratio_i) || ratio_f <= 0 || ratio_i <= 0) return(NA_real_)
-                # CAGR difference
-                (ratio_f^(annual_days / delta_d)) - (ratio_i^(annual_days / delta_d))
-            }
+        anchor_rows <- which(!is.na(fund_vals) & !is.na(index_vals))
+        if (length(anchor_rows) == 0) next
+        anchor_dates <- date_num[anchor_rows]
+
+        anchor_pos <- findInterval(date_num - n_days, anchor_dates)
+        has_anchor <- anchor_pos > 0
+
+        f_start <- rep(NA_real_, n)
+        i_start <- rep(NA_real_, n)
+        anchor_date_for_row <- rep(NA_real_, n)
+
+        if (any(has_anchor)) {
+            pos <- anchor_pos[has_anchor]
+            ar  <- anchor_rows[pos]
+            f_start[has_anchor] <- fund_vals[ar]
+            i_start[has_anchor] <- index_vals[ar]
+            anchor_date_for_row[has_anchor] <- anchor_dates[pos]
         }
-        df <- df %>%
-            rowwise() %>%
-            mutate(
-                !!roll_diff_col := roll_diff(!!sym(fund),
-                                             !!sym(index),
-                                             !!sym(date_col),
-                                             n_days)
-            ) %>%
-            ungroup()
+
+        has_current <- !is.na(fund_vals) & !is.na(index_vals)
+        elapsed_days <- date_num - anchor_date_for_row
+        eligible <- has_current & has_anchor & !is.na(elapsed_days) & (elapsed_days > 0)
+        if (!any(eligible)) next
+
+        annual_factor <- annual_days / elapsed_days
+
+        valid_log <- eligible &
+            (fund_vals  > 0) & (index_vals > 0) &
+            (f_start    > 0) & (i_start    > 0)
+
+        if (any(valid_log)) {
+            out_log[[fund]][valid_log] <-
+                (log(fund_vals[valid_log] / f_start[valid_log]) -
+                     log(index_vals[valid_log] / i_start[valid_log])) *
+                annual_factor[valid_log]
+        }
+
+        ratio_f <- fund_vals / f_start
+        ratio_i <- index_vals / i_start
+
+        valid_cagr <- eligible &
+            is.finite(ratio_f) & is.finite(ratio_i) &
+            (ratio_f > 0) & (ratio_i > 0)
+
+        if (any(valid_cagr)) {
+            pow <- annual_factor[valid_cagr]
+            out_cagr[[fund]][valid_cagr] <-
+                ratio_f[valid_cagr]^pow - ratio_i[valid_cagr]^pow
+        }
     }
-    df %>% select(-.data$.date_num)
+
+    df_log  <- data.frame(df[[date_col]], out_log,  check.names = FALSE)
+    df_cagr <- data.frame(df[[date_col]], out_cagr, check.names = FALSE)
+    names(df_log)[1]  <- date_col
+    names(df_cagr)[1] <- date_col
+
+    list(cagr = df_cagr, log = df_log)
 }
