@@ -1,5 +1,6 @@
 # Overview
 ![combined plots](man/figures/combined.png)
+
 fundsr imports fund NAVs and index levels and creates tracking difference plots (CAGR and log-return). Plotting Xetra liquidity data (XLM) is also supported.
 
 # Installation

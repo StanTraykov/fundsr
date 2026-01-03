@@ -172,8 +172,8 @@ export_pngs <- function(background = "white") {
 
 add_gg_params <- function(p, gg_params) {
     if (is.null(gg_params)) return(p)
-    if (!is.list(gg_params)) gg_params <- list(gg_params)
 
+    if (!is.list(gg_params)) gg_params <- list(gg_params)
     repeat {
         any_list <- any(vapply(gg_params, is.list, logical(1)))
         if (!any_list) break
@@ -431,7 +431,7 @@ run_plots <- function(roll_diffs,
     plots_env <- new.env(parent = emptyenv())
     xetra_map <- getOption("fundsr.xetra_map", character())
     bmark_type <- match.arg(bmark_type)
-    if (is.null(.fundsr$done_xlm_sets)) .fundsr$done_xlm_sets <- character()
+    .fundsr$done_xlm_sets <- character()
     purrr::pwalk(runs, function(plot_id,
                                 title,
                                 data_filter,

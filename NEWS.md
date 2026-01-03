@@ -2,8 +2,9 @@
 
 ## Refactor `roll_diffs()`
 - much faster
-- always calculates CAGR & log differences
-- returns a list of dataframes (no longer including original data)
+- calculates both CAGR & log differences and returns a named list of dfs
+- returned dfs no longer include original data nor field suffixes
+- messaging control
 
 ## Better gross/net index handling
 - add index_level parameter to `roll_diffs()`
