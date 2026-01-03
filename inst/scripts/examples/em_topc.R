@@ -16,15 +16,12 @@ series <- join_env(storage, by = "date") %>%
 
 # Calculate CAGR & log diffs and runs plots
 nd <- 365
-diffs <- map(
-    list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, get_fund_index_map(), use_log = .x, silent_skip = TRUE)
-)
+diffs <- roll_diffs(series, nd, get_fund_index_map(), messages = "roll")
 
 xlm_data <- NULL
 
 # Plots
-plots <- run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data, bmark_type = "gross")
+plots <- run_plots(diffs, nd, spec_list, xlm_data, bmark_type = "gross")
 
 # Optional high-quality PNG export
 # export_pngs()
