@@ -69,7 +69,7 @@ y-limits and formats the y-axis in basis points.</p>
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Input data frame containing a <code>date</code> column and one rolling-difference
-column per fund, named <code>&lt;fund&gt;_rd</code>.</p></dd>
+column per fund (specified by <code>funds</code>).</p></dd>
 
 
 <dt id="arg-n-days">n_days<a class="anchor" aria-label="anchor" href="#arg-n-days"></a></dt>
@@ -78,7 +78,7 @@ for labelling).</p></dd>
 
 
 <dt id="arg-funds">funds<a class="anchor" aria-label="anchor" href="#arg-funds"></a></dt>
-<dd><p>Character vector of fund tickers/column prefixes to include.</p></dd>
+<dd><p>Character vector of fund column names to include.</p></dd>
 
 
 <dt id="arg-use-log">use_log<a class="anchor" aria-label="anchor" href="#arg-use-log"></a></dt>
@@ -97,7 +97,7 @@ character vector specifying the title in multiple languages (e.g. <code>c(en=...
 
 <dt id="arg-date-brk">date_brk<a class="anchor" aria-label="anchor" href="#arg-date-brk"></a></dt>
 <dd><p>Optional date-break specification for the x-axis (e.g. <code>"3 months"</code>).
-If <code>NULL</code>, it is chosen automatically based on the time span.</p></dd>
+If <code>NULL</code>, it is chosen automatically based on the time span and available data.</p></dd>
 
 
 <dt id="arg-qprob">qprob<a class="anchor" aria-label="anchor" href="#arg-qprob"></a></dt>
@@ -121,6 +121,11 @@ differences (as specified by <code>qprob</code>), always including 0.</p>
 <p>To avoid clipping recent extremes, the y-limits are expanded (if needed) to also
 include the full range observed in the most recent 30 days of data, even when
 those values fall outside the <code>qprob</code> quantiles.</p>
+<p>The x-axis breaks are chosen as follows when <code>date_brk</code> is <code>NULL</code>: for spans of
+up to 3 years, breaks default to <code>"3 months"</code>. For longer spans, breaks are
+anchored to calendar months (semiannual or quarterly depending on span) and
+are included only when the data range extends beyond the midpoint to the
+neighboring break.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

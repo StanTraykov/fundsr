@@ -25,7 +25,7 @@ plot_roll_diffs(
 - data:
 
   Input data frame containing a `date` column and one rolling-difference
-  column per fund, named `<fund>_rd`.
+  column per fund (specified by `funds`).
 
 - n_days:
 
@@ -34,7 +34,7 @@ plot_roll_diffs(
 
 - funds:
 
-  Character vector of fund tickers/column prefixes to include.
+  Character vector of fund column names to include.
 
 - use_log:
 
@@ -54,7 +54,8 @@ plot_roll_diffs(
 - date_brk:
 
   Optional date-break specification for the x-axis (e.g. `"3 months"`).
-  If `NULL`, it is chosen automatically based on the time span.
+  If `NULL`, it is chosen automatically based on the time span and
+  available data.
 
 - qprob:
 
@@ -79,3 +80,9 @@ including 0.
 To avoid clipping recent extremes, the y-limits are expanded (if needed)
 to also include the full range observed in the most recent 30 days of
 data, even when those values fall outside the `qprob` quantiles.
+
+The x-axis breaks are chosen as follows when `date_brk` is `NULL`: for
+spans of up to 3 years, breaks default to `"3 months"`. For longer
+spans, breaks are anchored to calendar months (semiannual or quarterly
+depending on span) and are included only when the data range extends
+beyond the midpoint to the neighboring break.

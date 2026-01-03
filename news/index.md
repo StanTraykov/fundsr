@@ -2,23 +2,23 @@
 
 ## fundsr (development version)
 
-### Refactor `roll_diffs()`
-
-- much faster
-- always calculates CAGR & log differences
-- returns a list of dataframes (no longer including original data)
-
-### Better gross/net index handling
-
-- add index_level parameter to
-  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
-- add suffix parameter to
-  [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
-
 ### Survival plots
 
 - empirical via HMD
 - projected via EUROPOP2023
+
+### Improvements
+
+- refactor
+  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
+  for speed
+- better gross/net index handling without state reset
+- add
+  [`load_all_series()`](https://stantraykov.github.io/fundsr/reference/load_all_series.md)
+  (wrapping
+  [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)
+  and
+  [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md))
 
 ### Fixes
 
@@ -33,11 +33,11 @@
   [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
   calls
 - more robust gg_params list flattening
+- date breaks on fixed months (once plot \>3 yrs)
 
 ### Vignettes, examples, translations
 
 - add life vignette
-- add DM ex USA funds
 - add more example scripts; translate more index names in common_spec
 - fix glob_funds example to include EUR indices
 - fix Bulgarian translation: wrong y-axis label on log-return charts

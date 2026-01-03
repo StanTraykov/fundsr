@@ -109,10 +109,11 @@ add_data_loader(function() {
 })
 ```
 
-Get fund data into tibbles in a storage environment
+Get fund and index data into a big tibble
 
 ``` r
-storage <- run_data_loaders() # call registered data loaders
+series <- load_all_series() %>%
+    filter(date >= as_date("2012-12-29"))
 #> *** Loading: spyy
 #> Attempting readxl on 'data/funds/SPYY.xlsx'...
 #> readxl succeeded. Returning data.
@@ -121,50 +122,27 @@ storage <- run_data_loaders() # call registered data loaders
 #> Attempting readxl on 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
 #> Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
-```
-
-Join the environment into a big tibble, cut off & sort
-
-``` r
-series <- join_env(storage, by = "date") %>%
-    filter(date >= as_date("2013-01-01")) %>%
-    arrange(date)
 #> Joining: spyy, iusq
 ```
 
 Check contents
 
 ``` r
-storage[["iusq"]]
-#> # A tibble: 3,623 × 3
-#>    date        iusq  ACWI
-#>    <date>     <dbl> <dbl>
-#>  1 2026-01-02  109.   NA 
-#>  2 2025-12-31  109.  437.
-#>  3 2025-12-30  109.  439.
-#>  4 2025-12-29  109.  440.
-#>  5 2025-12-24  109.  440.
-#>  6 2025-12-23  109.  439.
-#>  7 2025-12-22  109.  437.
-#>  8 2025-12-19  108.  434.
-#>  9 2025-12-18  107.  431.
-#> 10 2025-12-17  106.  428.
-#> # ℹ 3,613 more rows
-series
-#> # A tibble: 3,343 × 4
+series %>% filter(date >= as_date("2015-04-03"))
+#> # A tibble: 2,759 × 4
 #>    date        spyy  iusq  ACWI
 #>    <date>     <dbl> <dbl> <dbl>
-#>  1 2013-01-01  NA    29.2  115.
-#>  2 2013-01-02  78.4  29.8  118.
-#>  3 2013-01-03  78.3  29.8  118.
-#>  4 2013-01-04  78.5  29.9  118.
-#>  5 2013-01-07  78.3  29.8  118.
-#>  6 2013-01-08  77.9  29.7  117.
-#>  7 2013-01-09  78.2  29.8  118.
-#>  8 2013-01-10  78.8  30.1  119.
-#>  9 2013-01-11  79.0  30.1  119.
-#> 10 2013-01-14  79.0  30.1  119.
-#> # ℹ 3,333 more rows
+#>  1 2015-04-06   NA   38.2  153.
+#>  2 2015-04-07  101.  38.5  154.
+#>  3 2015-04-08  101.  38.6  154.
+#>  4 2015-04-09  101.  38.7  154.
+#>  5 2015-04-10  102.  38.9  155.
+#>  6 2015-04-13  102.  38.8  155.
+#>  7 2015-04-14  102.  38.9  155.
+#>  8 2015-04-15  102.  39.0  156.
+#>  9 2015-04-16  102.  39.1  156.
+#> 10 2015-04-17  101.  38.7  155.
+#> # ℹ 2,749 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
@@ -258,6 +236,7 @@ plot_spec_bg <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs, nd, plot_spec_bg, xlm_data)
 #> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ
+#> plot_xlms: spyy, iusq
 #> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ
 #> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ: последни години
 #> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ: последни години
@@ -268,8 +247,9 @@ bg_p[["ACWIz_bg_L"]]
 
 ``` r
 bg_p[["xlm_ACWI_bg"]]
-#> NULL
 ```
+
+![](fundsr-intro_files/figure-html/acwi-bg-plots-2.png)
 
 ## Optional: higher-quality PNG export
 
