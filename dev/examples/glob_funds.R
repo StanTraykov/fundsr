@@ -13,15 +13,12 @@ storage <- run_data_loaders()
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
 series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
-    filter(date >= as_date("2012-12-29")) %>%
+    filter(date >= as_date("2013-01-01")) %>%
     arrange(date)
 
 # Calculate CAGR & log diffs and runs plots
 nd <- 365
-diffs <- map(
-    list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, get_fund_index_map(), use_log = .x, silent_skip = TRUE)
-)
+diffs <- roll_diffs(series, nd, get_fund_index_map(), index_level = "net", messages = NULL)
 
 # Get XLM data
 if (dir.exists(xlm_dir)) {
@@ -31,7 +28,7 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-plots <- run_plots(diffs$cagr, diffs$log, nd, spec_list, xlm_data)
+plots <- run_plots(diffs, nd, spec_list, xlm_data)
 
 # Optional high-quality PNG export
 # export_pngs()

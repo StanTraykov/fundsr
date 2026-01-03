@@ -25,7 +25,7 @@ library(fundsr)
 ```
 
 Set up directories.
-```{r}
+```{r dirs}
 dirs <- c(
     data = file.path("data", "funds"),
     xlm = file.path("data", "xlm"),
@@ -37,7 +37,7 @@ for (d in dirs) {
 ```
 
 Populate the XLM directory with some monthly XLM reports
-```{r}
+```{r xlm-fetch}
 xlm_urls <- c(
     "https://www.cashmarket.deutsche-boerse.com/resource/blob/4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130-ETF-ETP-Statistic.xlsx",
     "https://www.cashmarket.deutsche-boerse.com/resource/blob/4795286/394c4451af562507f9def3f39da62242/data/20251031-ETF-ETP-Statistic.xlsx",
@@ -55,14 +55,14 @@ for (url in xlm_urls) {
 ```
 
 Import all XLM files into a tibble
-```{r}
+```{r xlm-read}
 if (!exists("xlm_data")) {
     xlm_data <- read_xlm_directory(dirs[["xlm"]])
 }
 ```
 
 Set package options
-```{r}
+```{r options}
 fundsr_options(
     data_dir = dirs[["data"]],
     out_dir = dirs[["out"]],
@@ -85,12 +85,12 @@ add_fund_urls(c(
 
 ## Get fund data
 Populate funds directory (download files in `fundsr.fund_urls` option)
-```{r}
+```{r fund-dl}
 download_fund_data()
 ```
 
 Register data loader
-```{r}
+```{r data-loader}
 add_data_loader(function() {
     spdr("SPYY", benchmark = "ACWI") # automatically attempts to read <ticker>.xls[x]
     ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T) # also retrieve ACWI from file
@@ -98,35 +98,32 @@ add_data_loader(function() {
 ```
 
 Get fund data into tibbles in a storage environment
-```{r}
+```{r run-data-loaders}
 storage <- run_data_loaders() # call registered data loaders
 ```
 
 Join the environment into a big tibble, cut off & sort
-```{r}
+```{r join-env}
 series <- join_env(storage, by = "date") %>%
-    filter(date >= as_date("2012-12-29")) %>%
+    filter(date >= as_date("2013-01-01")) %>%
     arrange(date)
 ```
 
 Check contents
-```{r}
+```{r contents-check}
 storage[["iusq"]]
 series
 get_fund_index_map()
 ```
 
 ## Calculate CAGR & log diffs
-```{r}
+```{r roll-diffs}
 nd <- 365
-diffs <- purrr::map(
-    list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, get_fund_index_map(), use_log = .x)
-)
+diffs <- roll_diffs(series, nd, get_fund_index_map())
 ```
 
 ## Plot specs
-```{r}
+```{r plot-specs}
 no_filter <- NULL
 zoom_filter <- function(x) {x %>% filter(date >= as_date("2022-01-01"))}
 acwi_funds <- c("spyy", "iusq")
@@ -152,12 +149,12 @@ plot_spec <- tribble(
 
 ## Run!
 Run the plots! This outputs SVG files and queues plots for optional PNG export using Inkscape (see blow). It may also output lower-quality PNGs (if option `fundsr.internal_png` is `TRUE`).
-```{r}
-p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
+```{r run-plots}
+p <- run_plots(diffs, nd, plot_spec, xlm_data)
 ```
 
 ## Output
-```{r, fig.width=11, fig.height=7, out.width="88%", fig.align="center"}
+```{r acwi-plots, fig.width=12, fig.height=8, out.width="93%", fig.align="center"}
 p[["ACWI"]]
 p[["ACWI_L"]]
 p[["ACWIz_L"]]
@@ -167,18 +164,18 @@ p[["xlm_ACWI"]]
 Corresponding SVG files should be in the `output` directory.
 
 ## Plot in another language
-```{r, fig.width=11, fig.height=7, out.width="88%", fig.align="center"}
-Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems; may issue warning on others
+```{r acwi-bg-plots, fig.width=12, fig.height=8, out.width="93%", fig.align="center"}
+Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems
 Sys.setLanguage("bg")
-plot_spec <- plot_spec %>%
+plot_spec_bg <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
-bg_p <- run_plots(diffs$cagr, diffs$log, nd, plot_spec, xlm_data)
-bg_p[["ACWI_bg_L"]]
+bg_p <- run_plots(diffs, nd, plot_spec_bg, xlm_data)
+bg_p[["ACWIz_bg_L"]]
 bg_p[["xlm_ACWI_bg"]]
 ```
 
 ## Optional: higher-quality PNG export
-```{r, eval=FALSE}
+```{r inkscape, eval=FALSE}
 export_pngs()
 #> Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"
 #> [1] 0
