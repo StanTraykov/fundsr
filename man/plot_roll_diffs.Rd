@@ -18,12 +18,12 @@ plot_roll_diffs(
 }
 \arguments{
 \item{data}{Input data frame containing a \code{date} column and one rolling-difference
-column per fund, named \verb{<fund>_rd}.}
+column per fund (specified by \code{funds}).}
 
 \item{n_days}{Window length (in days) used to compute rolling differences (used
 for labelling).}
 
-\item{funds}{Character vector of fund tickers/column prefixes to include.}
+\item{funds}{Character vector of fund column names to include.}
 
 \item{use_log}{Logical; if \code{TRUE}, labels the plot as log-return differences.
 If \code{FALSE}, labels the plot as CAGR differences.}
@@ -34,7 +34,7 @@ If \code{FALSE}, labels the plot as CAGR differences.}
 character vector specifying the title in multiple languages (e.g. \code{c(en=..., bg=...)}).}
 
 \item{date_brk}{Optional date-break specification for the x-axis (e.g. \code{"3 months"}).
-If \code{NULL}, it is chosen automatically based on the time span.}
+If \code{NULL}, it is chosen automatically based on the time span and available data.}
 
 \item{qprob}{Two-element numeric vector giving lower and upper quantiles used
 to set the baseline y-axis limits. Defaults to \code{c(0.005, 0.995)}.}
@@ -57,4 +57,10 @@ differences (as specified by \code{qprob}), always including 0.
 To avoid clipping recent extremes, the y-limits are expanded (if needed) to also
 include the full range observed in the most recent 30 days of data, even when
 those values fall outside the \code{qprob} quantiles.
+
+The x-axis breaks are chosen as follows when \code{date_brk} is \code{NULL}: for spans of
+up to 3 years, breaks default to \code{"3 months"}. For longer spans, breaks are
+anchored to calendar months (semiannual or quarterly depending on span) and
+are included only when the data range extends beyond the midpoint to the
+neighboring break.
 }

@@ -268,6 +268,37 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
     j
 }
 
+#' Load and join all series from registered data loaders
+#'
+#' Runs [run_data_loaders()], joins the resulting environment into a single data
+#' frame via [join_env()], and sorts the result by `by`.
+#'
+#' This function is a convenience wrapper for the common workflow used in
+#' examples and vignettes.
+#'
+#' @param by Column name to join by and to sort by. Defaults to `"date"`.
+#' @param ... Additional arguments forwarded to [join_env()] (e.g. `late =`,
+#'   `coalesce_suffixed =`, etc.).
+#'
+#' @return A tibble containing all joined series, sorted by `by`.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#'
+#' s1 <- load_all_series()
+#' download_fund_data(redownload = TRUE)
+#' s2 <- load_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+#'   filter(date >= as_date("2013-01-01"))
+#' }
+load_all_series <- function(by = "date", ...) {
+    stopifnot(is.character(by), length(by) == 1L, nzchar(by))
+
+    run_data_loaders() %>%
+        join_env(by = by, ...) %>%
+        arrange(.data[[by]])
+}
+
 #' Get the internal fund index map
 #'
 #' Returns the package's fund index lookup table stored in

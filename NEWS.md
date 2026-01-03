@@ -1,18 +1,13 @@
 # fundsr (development version)
 
-## Refactor `roll_diffs()`
-- much faster
-- calculates both CAGR & log differences and returns a named list of dfs
-- returned dfs no longer include original data nor field suffixes
-- messaging control
-
-## Better gross/net index handling
-- add index_level parameter to `roll_diffs()`
-- add suffix parameter to `run_plots()`
-
 ## Survival plots
 - empirical via HMD
 - projected via EUROPOP2023
+
+## Improvements
+- refactor `roll_diffs()` for speed
+- better gross/net index handling without state reset
+- add `load_all_series()` (wrapping `run_data_loaders()` and `join_env()`)
 
 ## Fixes
 - skip unavailable funds, indices when calculating differences
@@ -20,10 +15,10 @@
 - make `roll_diffs()` skip benchmarks (in addition to funds) that are not found in supplied df
 - XLM bookkeeping to avoid repetitions now persistent across `run_plots()` calls
 - more robust gg_params list flattening
+- date breaks on fixed months (once plot >3 yrs)
 
 ## Vignettes, examples, translations
 - add life vignette
-- add DM ex USA funds 
 - add more example scripts; translate more index names in common_spec
 - fix glob_funds example to include EUR indices
 - fix Bulgarian translation: wrong y-axis label on log-return charts
