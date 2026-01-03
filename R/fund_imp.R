@@ -310,7 +310,7 @@ download_as <- function(named_urls, path = getOption("fundsr.data_dir"), redownl
             Sys.sleep(stats::runif(1, 0.5, 1.0))
             utils::download.file(url, full_file, mode = "wb")
         } else {
-            message(glue("Skipping '{file}': file already exists."))
+            message(glue("Skipping download '{file}': already exists."))
         }
     }
 }
@@ -433,13 +433,13 @@ read_msci_tsv <- function(file) {
 #'
 #' @export
 store_timeseries <- function(var_name, expr, fund_index_map = NULL) {
-    message(paste("*** Loading:", var_name))
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     # Get global reload flag
     reload <- getOption("fundsr.reload", FALSE)
     # Check if assignment is needed and evaluate expr in parent_env
     if (reload || !exists(var_name, envir = .fundsr_storage)) {
+        message(paste("*** Loading:", var_name))
         assign(var_name,
                eval(substitute(expr), envir = parent_env),
                envir = .fundsr_storage)

@@ -53,8 +53,8 @@ longer <- function(df,
 #' @param messages Character vector controlling emitted messages. Any of
 #'   `"roll"` (per-pair progress) and `"skip"` (skip reasons). Use
 #'   `messages = "roll"` to show only progress, `messages = "skip"` to show
-#'   only skip reasons, or `messages = character()` to silence all messages.
-#'   Defaults to `c("roll", "skip")`.
+#'   only skip reasons, or `messages = character()` or `NULL` to silence all
+#'   messages. Defaults to `c("roll", "skip")`.
 #' @param gross_suffix Suffix appended to the mapped index base name when
 #'   `index_level = "gross"`. Defaults to `"-GR"`.
 #'
@@ -90,7 +90,12 @@ roll_diffs <- function(df,
                        gross_suffix = "-GR") {
     index_level <- match.arg(index_level)
     stopifnot(!is.null(names(fund_index_map)), all(nzchar(names(fund_index_map))))
-    messages <- match.arg(messages, c("roll", "skip"), several.ok = TRUE)
+    if (is.null(messages) || length(messages) == 0L) {
+        messages <- character()
+    } else {
+        messages <- match.arg(messages, choices = c("roll", "skip"), several.ok = TRUE)
+    }
+
     msg_roll <- "roll" %in% messages
     msg_skip <- "skip" %in% messages
 

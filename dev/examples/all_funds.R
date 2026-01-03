@@ -19,21 +19,14 @@ storage <- run_data_loaders()
 
 # Join the environment into a big tibble, handle two FTSE All-World data sources
 series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
-    filter(date >= as_date("2012-12-29")) %>%
+    filter(date >= as_date("2013-01-01")) %>%
     arrange(date)
 
-# Calculate CAGR & log diffs and runs plots
+# Calculate CAGR & log diffs vs both net & gross variants
 nd <- 365
-fi <- get_fund_index_map()
-
-net_diffs <- map(
-    list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, fi, use_log = .x, index_level = "net", silent_skip = F)
-)
-
-gr_diffs <- map(
-    list(cagr = FALSE, log = TRUE),
-    ~ roll_diffs(series, nd, fi, use_log = .x, index_level = "gross", silent_skip = F)
+diffs <- map(
+    list(net = "net", gross = "gross"),
+    ~ roll_diffs(series, nd, get_fund_index_map(), index_level = .x, messages = NULL)
 )
 
 # Get XLM data
@@ -44,9 +37,9 @@ if (dir.exists(xlm_dir)) {
 }
 
 # Plots
-net_plots <- run_plots(net_diffs$cagr, net_diffs$log, nd, spec_list,
+net_plots <- run_plots(diffs$net, nd, spec_list,
                        xlm_data = xlm_data)
-gr_plots <- run_plots(gr_diffs$cagr, gr_diffs$log, nd, spec_list,
+gr_plots <- run_plots(diffs$gross, nd, spec_list,
                       bmark_type = "gross",
                       suffix = "_GR")
 

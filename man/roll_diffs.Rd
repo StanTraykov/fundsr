@@ -2,22 +2,21 @@
 % Please edit documentation in R/fund_calc.R
 \name{roll_diffs}
 \alias{roll_diffs}
-\title{Compute rolling annualized tracking differences (CAGR or log-return)}
+\title{Rolling annualized tracking differences}
 \usage{
 roll_diffs(
   df,
   n_days,
   fund_index_map,
   date_col = "date",
-  use_log = TRUE,
   index_level = c("net", "gross"),
   annual_days = 365,
-  silent_skip = FALSE,
+  messages = c("roll", "skip"),
   gross_suffix = "-GR"
 )
 }
 \arguments{
-\item{df}{Data frame containing the date column, fund columns, and
+\item{df}{Data frame containing a date column, fund columns, and
 benchmark/index columns referenced in \code{fund_index_map}.}
 
 \item{n_days}{Rolling lookback window in calendar days.}
@@ -25,59 +24,48 @@ benchmark/index columns referenced in \code{fund_index_map}.}
 \item{fund_index_map}{Named character vector mapping fund column names
 to their corresponding benchmark/index base column names.}
 
-\item{date_col}{Name of the date column in \code{df}. Defaults to \code{"date"}.}
+\item{date_col}{Name of the date column in \code{df}. Defaults to \code{"date"}.
+Must be of class \code{Date} and sorted in ascending order.}
 
-\item{use_log}{Logical; if \code{TRUE}, computes \strong{log-return tracking
-differences}. If \code{FALSE}, computes \strong{CAGR tracking differences}.
-Defaults to \code{TRUE}.}
+\item{index_level}{Which index level to use, one of \code{"net"} or \code{"gross"}.
+If \code{"gross"}, \code{gross_suffix} is appended to the mapped index base name
+before lookup in \code{df}. Defaults to \code{"net"}.}
 
-\item{index_level}{Character; which index level to use. One of
-\code{"net"} or \code{"gross"}. If \code{"gross"}, \code{gross_suffix} is appended to the
-mapped index base name before lookup in \code{df}. Defaults to \code{"net"}.}
+\item{annual_days}{Number of days used for annualization. Defaults to \code{365}.}
 
-\item{annual_days}{Number of days used for annualization. Defaults to
-\code{365}.}
+\item{messages}{Character vector controlling emitted messages. Any of
+\code{"roll"} (per-pair progress) and \code{"skip"} (skip reasons). Use
+\code{messages = "roll"} to show only progress, \code{messages = "skip"} to show
+only skip reasons, or \code{messages = character()} or \code{NULL} to silence all
+messages. Defaults to \code{c("roll", "skip")}.}
 
-\item{silent_skip}{Logical; whether to suppress messages when skipping
-fund–index pairs due to missing columns or self-tracking. Defaults to
-\code{FALSE}.}
-
-\item{gross_suffix}{Character; suffix appended to the mapped index base
-name when \code{index_level = "gross"}. Defaults to \code{"-GR"}.}
+\item{gross_suffix}{Suffix appended to the mapped index base name when
+\code{index_level = "gross"}. Defaults to \code{"-GR"}.}
 }
 \value{
-A data frame like \code{df} with one additional column per processed
-fund, named \verb{<fund>_rd}, containing the rolling tracking differences.
+A named list with two data frames, \code{log} and \code{cagr}. Each data frame
+contains \code{date_col} followed by one column per fund (named as in
+\code{fund_index_map}), holding the rolling annualized tracking differences.
 }
 \description{
-For each fund–index pair in \code{fund_index_map}, computes a rolling,
-annualized tracking-difference series over a backward window of
-\code{n_days}. The result is added as new columns named \verb{<fund>_rd}.
+For each fund–index pair in \code{fund_index_map}, computes rolling, annualized
+tracking differences over a backward-looking window of \code{n_days} calendar
+days. Both log-return and CAGR forms are returned.
 }
 \details{
-For each fund–index pair, the function locates an anchor observation at
-least \code{n_days} before each date (using the last available non-missing
-fund+index point at or before \code{date - n_days}) and computes an
-annualized tracking difference using the elapsed calendar days
-\eqn{t - t_0}.
+For each date \eqn{t}, an anchor date \eqn{t_0} is chosen as the last
+available observation at or before \eqn{t - n\_days} where both fund and
+index values are present. Let \eqn{\Delta = t - t_0} in calendar days.
+
+The annualized tracking differences are:
 \itemize{
-\item \strong{log-return difference}
-\deqn{ \left[\ln\left(\frac{f_t}{f_{t_0}}\right) -
-         \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times
-         \frac{annual\_days}{t - t_0} }
-\item \strong{CAGR difference}
-\deqn{ \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/(t - t_0)} -
-         \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/(t - t_0)} }
+\item Log-return difference:
+\deqn{\left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times \frac{annual\_days}{\Delta}}
+\item CAGR difference:
+\deqn{\left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta} - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}}
 }
 
-where \eqn{f} and \eqn{i} are fund and index values, respectively.
-
-Pairs are skipped (optionally with a message) if the fund column is not
-present in \code{df}, the corresponding index column is not present (after
-applying \code{index_level}/\code{gross_suffix}), or if the mapping implies
-self-tracking (fund column equals index column).
-
-The tracking difference is \code{NA} whenever the anchor point is missing,
-the required values are invalid (e.g., non-positive in log mode), or no
-past observation lies far enough back to satisfy the lookback window.
+Values are \code{NA} when an anchor cannot be found, required inputs are missing,
+\eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
+non-positive inputs for log returns).
 }

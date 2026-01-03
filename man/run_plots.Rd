@@ -5,8 +5,7 @@
 \title{Generate and export all configured rolling-difference plots}
 \usage{
 run_plots(
-  rds_cagr,
-  rds_log,
+  roll_diffs,
   n_days,
   plot_spec,
   xlm_data = NULL,
@@ -17,11 +16,11 @@ run_plots(
 )
 }
 \arguments{
-\item{rds_cagr}{Data frame containing rolling CAGR differences.}
+\item{roll_diffs}{A list of length 2 containing data frames, named \code{cagr}
+and \code{log} (CAGR differences and log-return differences).}
 
-\item{rds_log}{Data frame containing rolling log-return differences.}
-
-\item{n_days}{Rolling-window length in days (passed to \code{\link[=plot_roll_diffs]{plot_roll_diffs()}} for labelling).}
+\item{n_days}{Rolling-window length in days (passed to \code{\link[=plot_roll_diffs]{plot_roll_diffs()}}
+for labelling).}
 
 \item{plot_spec}{A data frame or a list of data frames describing plot
 parameters. Expected columns include: \code{plot_id}, \code{title}, \code{data_filter},
@@ -77,7 +76,7 @@ storing the resulting XLM plot.
 }
 \examples{
 \dontrun{
-plots <- run_plots(rds_cagr, rds_log, n_days, plot_spec, xlm_data = xlm_data)
+plots <- run_plots(roll_diffs, n_days, plot_spec, xlm_data = xlm_data)
 plots[["global"]]
 plots[["global_L"]]
 plots[["xlm_global"]]

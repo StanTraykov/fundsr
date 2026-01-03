@@ -54,7 +54,6 @@ save_plot <- function(file,
                   save_png = getOption("fundsr.internal_png", FALSE),
                   save_svg = getOption("fundsr.export_svg", TRUE),
                   background = "white") {
-
     if (!is.character(file) || length(file) != 1L || !nzchar(file)) {
         stop("`file` must be a non-empty single string.", call. = FALSE)
     }
@@ -70,7 +69,6 @@ save_plot <- function(file,
     }
 
     if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
-
     fname <- function(fn, ext) file.path(out_dir, glue("{fn}.{ext}"))
     svgf <- fname(file, "svg")
     pngf <- fname(file, "png")
@@ -174,11 +172,24 @@ export_pngs <- function(background = "white") {
 
 add_gg_params <- function(p, gg_params) {
     if (is.null(gg_params)) return(p)
-    if (!is.list(gg_params)) {
-        gg_params <- list(gg_params)
+    if (!is.list(gg_params)) gg_params <- list(gg_params)
+
+    repeat {
+        any_list <- any(vapply(gg_params, is.list, logical(1)))
+        if (!any_list) break
+        gg_params <- purrr::list_flatten(gg_params)
     }
-    # reduce over the list to add them one by one
-    p <- purrr::reduce(gg_params, `+`, .init = p)
+
+    tryCatch(
+        purrr::reduce(gg_params, `+`, .init = p),
+        error = function(e) {
+            stop(
+                "Invalid `gg_params`: must contain ggplot components (layers/scales/themes/etc.).\n",
+                "Underlying error: ", conditionMessage(e),
+                call. = FALSE
+            )
+        }
+    )
 }
 
 #' Clear queued Inkscape exports
@@ -258,7 +269,7 @@ plot_roll_diffs <- function(data,
             diff()
         date_brk <- ifelse(years >= 10, "6 months", "3 months")
     }
-    cdata <- longer(data, funds, "_rd", "roll_diff")
+    cdata <- longer(data, funds, values_to = "roll_diff")
     qlims <- stats::quantile(cdata$roll_diff,
                       probs = qprob,
                       na.rm = TRUE)
@@ -328,9 +339,10 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' optional XLM plots may also be generated. All generated plot objects are
 #' stored in an environment and returned.
 #'
-#' @param rds_cagr Data frame containing rolling CAGR differences.
-#' @param rds_log Data frame containing rolling log-return differences.
-#' @param n_days Rolling-window length in days (passed to [plot_roll_diffs()] for labelling).
+#' @param roll_diffs A list of length 2 containing data frames, named `cagr`
+#'   and `log` (CAGR differences and log-return differences).
+#' @param n_days Rolling-window length in days (passed to [plot_roll_diffs()]
+#'   for labelling).
 #' @param plot_spec A data frame or a list of data frames describing plot
 #'   parameters. Expected columns include: `plot_id`, `title`, `data_filter`,
 #'   `gg_params`, `width`, `height`, `funds`.
@@ -375,13 +387,12 @@ vec_key <- function(x, ignore_order = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' plots <- run_plots(rds_cagr, rds_log, n_days, plot_spec, xlm_data = xlm_data)
+#' plots <- run_plots(roll_diffs, n_days, plot_spec, xlm_data = xlm_data)
 #' plots[["global"]]
 #' plots[["global_L"]]
 #' plots[["xlm_global"]]
 #' }
-run_plots <- function(rds_cagr,
-                      rds_log,
+run_plots <- function(roll_diffs,
                       n_days,
                       plot_spec,
                       xlm_data = NULL,
@@ -389,7 +400,12 @@ run_plots <- function(rds_cagr,
                       bmark_type = c("net", "gross"),
                       suffix = "",
                       ...) {
-    variants <- c("CAGR", "log")
+    if (!is.list(roll_diffs) ||
+        length(roll_diffs) != 2L ||
+        !setequal(names(roll_diffs), c("cagr", "log"))) {
+        stop("roll_diffs must be a list with names `cagr` and `log`.", call. = FALSE)
+    }
+    variants <- names(roll_diffs)
     if (is.list(plot_spec) && !inherits(plot_spec, "data.frame")) {
         ensure_title_col <- function(df, col = "title") {
             if (!col %in% names(df)) return(df)
@@ -397,7 +413,8 @@ run_plots <- function(rds_cagr,
             if (is.list(x)) return(df)
             if (is.character(x)) {
                 is_multilang <- !is.null(names(x)) && any(nzchar(names(x)))
-                # If it's a multilingual named vector, keep it as one element (common in 1-row specs)
+                # If it's a multilingual named vector, keep it as one element
+                # (common in 1-row specs)
                 if (is_multilang && nrow(df) == 1L) {
                     df[[col]] <- list(x)
                     return(df)
@@ -414,6 +431,7 @@ run_plots <- function(rds_cagr,
     plots_env <- new.env(parent = emptyenv())
     xetra_map <- getOption("fundsr.xetra_map", character())
     bmark_type <- match.arg(bmark_type)
+    if (is.null(.fundsr$done_xlm_sets)) .fundsr$done_xlm_sets <- character()
     purrr::pwalk(runs, function(plot_id,
                                 title,
                                 data_filter,
@@ -424,7 +442,7 @@ run_plots <- function(rds_cagr,
                                 variants) {
         plot_id <- paste0(plot_id, suffix)
         use_log <- variants == "log"
-        data <- if (use_log) rds_log else rds_cagr
+        data <- if (use_log) roll_diffs$log else roll_diffs$cagr
         if (!is.null(data_filter)) data <- data %>% data_filter()
         plot <- plot_roll_diffs(data,
                          n_days,
