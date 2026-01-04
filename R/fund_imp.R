@@ -268,13 +268,12 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
     j
 }
 
-#' Load and join all series from registered data loaders
+#' Run all registered data loaders and join all loaded series into a big tibble.
 #'
 #' Runs [run_data_loaders()], joins the resulting environment into a single data
 #' frame via [join_env()], and sorts the result by `by`.
 #'
-#' This function is a convenience wrapper for the common workflow used in
-#' examples and vignettes.
+#' This function is a convenience wrapper for the most common workflow.
 #'
 #' @param by Column name to join by and to sort by. Defaults to `"date"`.
 #' @param ... Additional arguments forwarded to [join_env()] (e.g. `late =`,
@@ -286,12 +285,12 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
 #' @examples
 #' \dontrun{
 #'
-#' s1 <- load_all_series()
+#' s1 <- build_all_series()
 #' download_fund_data(redownload = TRUE)
-#' s2 <- load_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+#' s2 <- build_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
 #'   filter(date >= as_date("2013-01-01"))
 #' }
-load_all_series <- function(by = "date", ...) {
+build_all_series <- function(by = "date", ...) {
     stopifnot(is.character(by), length(by) == 1L, nzchar(by))
 
     run_data_loaders() %>%

@@ -6,7 +6,7 @@ source("dev/examples/common_spec.R")
 source("dev/examples/em_topc_spec.R")
 
 # Get funds and indexes into a big tibble
-series <- load_all_series() %>%
+series <- build_all_series() %>%
     filter(date >= as_date("2012-12-29"))
 
 # Calculate CAGR & log diffs and runs plots
