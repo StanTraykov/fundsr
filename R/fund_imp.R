@@ -81,7 +81,7 @@ clear_storage <- function(clear_fund_index_map = FALSE) {
     }
     rm(list = ls(envir = .fundsr_storage, all.names = TRUE), envir = .fundsr_storage)
     if (isTRUE(clear_fund_index_map)) {
-        .fundsr$fund_index_map <- character()
+        clear_fund_index_map()
     }
     invisible(NULL)
 }
@@ -98,10 +98,6 @@ clear_storage <- function(clear_fund_index_map = FALSE) {
 clear_fund_index_map <- function() {
     if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
         stop("Fundsr state environment is not initialised.", call. = FALSE)
-    }
-    if (is.null(.fundsr$fund_index_map)) {
-        .fundsr$fund_index_map <- character()
-        return(invisible(NULL))
     }
     .fundsr$fund_index_map <- character()
     invisible(NULL)
@@ -120,8 +116,7 @@ clear_fund_index_map <- function() {
 #' @export
 #'
 #' @examples
-#' add_fund_index_map(c(vwce = "msci_acwi", i500 = "sp500"))
-#' add_fund_index_map(list(SPYY = "msci_world"))
+#' add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2))
 add_fund_index_map <- function(fund_index_map) {
     if (is.null(fund_index_map)) {
         return(invisible(NULL))
@@ -133,12 +128,10 @@ add_fund_index_map <- function(fund_index_map) {
     if (!(is.atomic(fund_index_map) || is.list(fund_index_map))) {
         stop("`fund_index_map` must be a named vector or list.", call. = FALSE)
     }
-
     nms <- names(fund_index_map)
     if (is.null(nms) || any(is.na(nms)) || any(nms == "")) {
         stop("`fund_index_map` must have non-empty names.", call. = FALSE)
     }
-
     if (is.null(.fundsr$fund_index_map)) {
         .fundsr$fund_index_map <- character()
     }
@@ -553,7 +546,7 @@ store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = 
                envir = .fundsr_storage)
         # Also add fund index pairs to global map (if supplied)
         if (!is.null(fund_index_map)) {
-            .fundsr$fund_index_map[names(fund_index_map)] <- fund_index_map
+            add_fund_index_map(fund_index_map)
         }
     }
     invisible(NULL)
