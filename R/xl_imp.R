@@ -178,7 +178,7 @@ import_xl_data <- function(xl_file,
         as.character() %>%
         stringr::str_trim() %>%
         tidyr::replace_na("...") %>%
-        (\(x) ifelse(x == "", "...", x))() %>%
+        (function(x) ifelse(x == "", "...", x))() %>%
         make.unique(sep = "_")
 
     data_raw <- slice(raw_data, (row_header_idx + 1):nrow(raw_data))
