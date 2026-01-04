@@ -15,13 +15,9 @@ xlm_dir <- file.path("data", "xlm")
 # Download missing files
 download_fund_data(redownload = FALSE)
 
-# Get fund data into tibbles stored in the storage env
-storage <- run_data_loaders()
-
-# Join the environment into a big tibble, handle two FTSE All-World data sources
-series <- join_env(storage, by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
-    filter(date >= as_date("2013-01-01")) %>%
-    arrange(date)
+# Get funds and indexes into a big tibble, handle two FTSE All-World data sources
+series <- load_all_series(late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+    filter(date >= as_date("2012-12-29"))
 
 # Calculate CAGR & log diffs vs both net & gross variants
 nd <- 365

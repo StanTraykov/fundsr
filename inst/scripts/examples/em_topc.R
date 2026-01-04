@@ -6,13 +6,9 @@ library(fundsr)
 source("common_spec.R")
 source("em_topc_spec.R")
 
-# Get fund data into tibbles stored in the storage env
-storage <- run_data_loaders()
-
-# Join the environment into a big tibble, handle two FTSE All-World data sources
-series <- join_env(storage, by = "date") %>%
-    filter(date >= as_date("2012-12-29")) %>%
-    arrange(date)
+# Get funds and indexes into a big tibble
+series <- load_all_series() %>%
+    filter(date >= as_date("2012-12-29"))
 
 # Calculate CAGR & log diffs and runs plots
 nd <- 365
