@@ -16,7 +16,7 @@ xlm_dir <- file.path("data", "xlm")
 download_fund_data(redownload = FALSE)
 
 # Get funds and indexes into a big tibble, handle two FTSE All-World data sources
-series <- load_all_series(late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+series <- build_all_series(late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
     filter(date >= as_date("2012-12-29"))
 
 # Calculate CAGR & log diffs vs both net & gross variants
