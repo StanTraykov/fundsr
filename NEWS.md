@@ -1,5 +1,8 @@
 # fundsr (development version)
 
+- add fund_index_map merge/clean functions `add_fund_index_map()`, `clean_fund_index_map()`
+- add Inkscape detection
+
 # fundsr 0.2.0
 
 ## Rolling diffs

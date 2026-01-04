@@ -18,7 +18,3 @@ Invisibly returns \code{NULL}. Called for side effects.
 Merges fund-index pairs into the fund-index map (\code{.fundsr$fund_index_map}).
 Existing entries with the same names are replaced.
 }
-\examples{
-add_fund_index_map(c(vwce = "msci_acwi", i500 = "sp500"))
-add_fund_index_map(list(SPYY = "msci_world"))
-}
