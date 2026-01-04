@@ -75,34 +75,16 @@
 <span><span class="co"># Development:</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"StanTraykov/fundsr"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="from-my-r-universe-binary-builds">From my r-universe (binary builds)<a class="anchor" aria-label="anchor" href="#from-my-r-universe-binary-builds"></a>
+<h3 id="from-my-r-universe-binary-builds-of-latest-release">From my r-universe (binary builds of latest release)<a class="anchor" aria-label="anchor" href="#from-my-r-universe-binary-builds-of-latest-release"></a>
 </h3>
 <p><a href="https://stantraykov.r-universe.dev/fundsr" class="external-link"><img src="https://stantraykov.r-universe.dev/fundsr/badges/version" alt="fundsr status badge"></a></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span></span>
 <span>  <span class="st">"fundsr"</span>,</span>
-<span>  repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://stantraykov.r-universe.dev"</span>,</span>
-<span>            <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span></span>
+<span>  repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://stantraykov.r-universe.dev"</span>,  <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Binaries provided: Win/Mac/Ubuntu/WebAssembly # Usage * <a href="https://stantraykov.github.io/fundsr/articles/fundsr-intro.html">Intro vignette</a> contains a simple walkthrough comparing IUSQ and SPYY (no data setup needed) * <code>inst/scripts/examples</code> (e.g. open <code>.Rproj</code> file in R Studio after installing the package) * <code>glob_funds.R</code> is a more comprehensive example featuring global funds but requiring index &amp; fund data download outside the package * <code>all_funds.R</code> and <code>all_funds-GR.R</code> feature many more funds for analysis vs net/gross benchmark * <a href="https://stantraykov.github.io/fundsr/reference/index.html">Reference</a></p>
 </div>
-</div>
-<div class="section level1">
-<h1 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
-</h1>
-<ul>
-<li>
-<a href="https://stantraykov.github.io/fundsr/articles/fundsr-intro.html">Intro vignette</a> contains a simple walkthrough comparing IUSQ and SPYY (no data setup needed)</li>
-<li>
-<code>inst/scripts/examples</code> (e.g. open <code>.Rproj</code> file in R Studio after installing the package)
-<ul>
-<li>
-<code>glob_funds.R</code> is a more comprehensive example featuring global funds but requiring index &amp; fund data download outside the package</li>
-<li>
-<code>all_funds.R</code> and <code>all_funds-GR.R</code> feature many more funds for analysis vs net/gross benchmark</li>
-</ul>
-</li>
-<li><a href="https://stantraykov.github.io/fundsr/reference/index.html">Reference</a></li>
-</ul>
 </div>
 <div class="section level1">
 <h1 id="importing-data">Importing data<a class="anchor" aria-label="anchor" href="#importing-data"></a>
