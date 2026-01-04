@@ -1,34 +1,38 @@
 Type: Package
 Package: fundsr
-Title: UCITS ETF rolling differences (CAGR, log), liquidity, and other financial planning plots
+Title: Rolling Differences (CAGR and Log) and Liquidity for UCITS ETFs; Survival and Other Financial Planning Plots
 Version: 0.1.0.9000
 Authors@R: 
     person("Stanislav", "Traykov", , "st@gmuf.com", role = c("aut", "cre"))
-Description: Small tidyverse-based framework for importing & plotting
-    UCITS ETF/index/liquidity data, survival curves and other plots related to financial planning.
+Description: A small tidyverse-based framework for importing and plotting
+    UCITS ETF and index data, ETF liquidity measures, as well as survival curves and other
+    plots related to financial planning.
 License: MIT + file LICENSE
 Imports: 
     dplyr,
+    ggplot2,
     glue,
     lubridate,
+    magrittr,
     purrr,
+    readr,
     readxl,
+    rlang,
+    scales,
     stats,
     stringr,
     tibble,
     tidyr,
-    xml2,
-    ggplot2,
-    magrittr,
-    readr,
-    rlang,
-    scales
+    xml2
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
     rmarkdown,
-    svglite
+    svglite,
+    testthat (>= 3.0.0),
+    withr
 URL: https://stantraykov.github.io/fundsr/, https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues
+Config/testthat/edition: 3
