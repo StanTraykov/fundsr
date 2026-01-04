@@ -7,7 +7,7 @@
 ## Improvements
 - refactor `roll_diffs()` for speed
 - better gross/net index handling without state reset
-- add `build_all_series()` (wrapping `run_data_loaders()` and `join_env()`)
+- add `build_all_series()` (wrapping around `run_data_loaders()` and `join_env()`)
 
 ## Fixes
 - skip unavailable funds, indices when calculating differences
