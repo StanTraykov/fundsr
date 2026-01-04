@@ -112,7 +112,7 @@ add_data_loader(function() {
 Get fund and index data into a big tibble
 
 ``` r
-series <- load_all_series() %>%
+series <- build_all_series() %>%
     filter(date >= as_date("2012-12-29"))
 #> *** Loading: spyy
 #> Attempting readxl on 'data/funds/SPYY.xlsx'...

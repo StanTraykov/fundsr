@@ -14,8 +14,8 @@
   for speed
 - better gross/net index handling without state reset
 - add
-  [`load_all_series()`](https://stantraykov.github.io/fundsr/reference/load_all_series.md)
-  (wrapping
+  [`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md)
+  (wrapping around
   [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)
   and
   [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md))

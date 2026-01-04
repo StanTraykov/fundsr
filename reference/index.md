@@ -8,6 +8,9 @@
   : Add entries to the fund download list
 - [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md) :
   Import an Amundi fund
+- [`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md)
+  : Run all registered data loaders and join all loaded series into a
+  big tibble.
 - [`chance_alive()`](https://stantraykov.github.io/fundsr/reference/chance_alive.md)
   : Compute conditional survival (chance alive) by age
 - [`chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/chance_alive_es_aasmr.md)
@@ -37,8 +40,6 @@
   Import an iShares fund
 - [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
   : Join all tibbles in an environment with optional late left-joins
-- [`load_all_series()`](https://stantraykov.github.io/fundsr/reference/load_all_series.md)
-  : Load and join all series from registered data loaders
 - [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
   : Load a fund's NAV data and optionally register its benchmark mapping
 - [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md) :

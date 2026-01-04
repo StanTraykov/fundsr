@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-03</h4>
+            <h4 data-toc-skip class="date">2026-01-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/fundsr-intro.Rmd" class="external-link"><code>vignettes/fundsr-intro.Rmd</code></a></small>
       <div class="d-none name"><code>fundsr-intro.Rmd</code></div>
@@ -164,7 +164,7 @@ Traykov</h4>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Get fund and index data into a big tibble</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_all_series.html">load_all_series</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_all_series.html">build_all_series</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2012-12-29"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; *** Loading: spyy</span></span>
 <span><span class="co">#&gt; Attempting readxl on 'data/funds/SPYY.xlsx'...</span></span>

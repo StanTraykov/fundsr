@@ -1,4 +1,4 @@
-# Load and join all series from registered data loaders
+# Run all registered data loaders and join all loaded series into a big tibble.
 
 Runs
 [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md),
@@ -9,7 +9,7 @@ and sorts the result by `by`.
 ## Usage
 
 ``` r
-load_all_series(by = "date", ...)
+build_all_series(by = "date", ...)
 ```
 
 ## Arguments
@@ -30,17 +30,16 @@ A tibble containing all joined series, sorted by `by`.
 
 ## Details
 
-This function is a convenience wrapper for the common workflow used in
-examples and vignettes.
+This function is a convenience wrapper for the most common workflow.
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
 
-s1 <- load_all_series()
+s1 <- build_all_series()
 download_fund_data(redownload = TRUE)
-s2 <- load_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+s2 <- build_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
   filter(date >= as_date("2013-01-01"))
 } # }
 ```
