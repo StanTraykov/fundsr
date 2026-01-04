@@ -1,13 +1,14 @@
 test_that("roll_diffs works for 2 indices + 4 funds", {
     withr::local_seed(1)
 
+    n_days <- 365L
     n_years <- 2L
-    n <- 365L * n_years
+    n <- n_days * n_years
     date <- seq.Date(from = as.Date("2024-01-01"), by = "day", length.out = n)
 
     # --- Index LEVELS (additive random walk) ---
-    drift1 <- 0.02 / 365
-    drift2 <- 0.018 / 365
+    drift1 <- 0.02 / n_days
+    drift2 <- 0.018 / n_days
 
     IDX1 <- 100 + cumsum(drift1 + rnorm(n, sd = 0.30))
     IDX2 <- 100 + cumsum(drift2 + rnorm(n, sd = 0.32))
@@ -24,11 +25,11 @@ test_that("roll_diffs works for 2 indices + 4 funds", {
         pmax(y, 1)
     }
 
-    f1 <- mk_fund(IDX1, drift_extra = -0.0010 / 365, te_sd = 0.10, noise_sd = 0.50)
-    f2 <- mk_fund(IDX1, drift_extra = -0.0020 / 365, te_sd = 0.14, noise_sd = 0.65)
+    f1 <- mk_fund(IDX1, drift_extra = -0.0010 / n_days, te_sd = 0.10, noise_sd = 0.50)
+    f2 <- mk_fund(IDX1, drift_extra = -0.0020 / n_days, te_sd = 0.14, noise_sd = 0.65)
 
-    g1 <- mk_fund(IDX2, drift_extra = -0.0015 / 365, te_sd = 0.11, noise_sd = 0.55)
-    g2 <- mk_fund(IDX2, drift_extra = -0.0025 / 365, te_sd = 0.15, noise_sd = 0.70)
+    g1 <- mk_fund(IDX2, drift_extra = -0.0015 / n_days, te_sd = 0.11, noise_sd = 0.55)
+    g2 <- mk_fund(IDX2, drift_extra = -0.0025 / n_days, te_sd = 0.15, noise_sd = 0.70)
 
     df <- tibble::tibble(
         date = date,
@@ -49,7 +50,7 @@ test_that("roll_diffs works for 2 indices + 4 funds", {
 
     out <- roll_diffs(
         df = df,
-        n_days = 365,
+        n_days = n_days,
         fund_index_map = fund_index_map,
         date_col = "date",
         index_level = "net",

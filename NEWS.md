@@ -1,21 +1,22 @@
 # fundsr (development version)
 
 ## Survival plots
-- empirical via HMD
-- projected via EUROPOP2023
+- added survival curve plots using Human Mortality Database (HMD) empirical data and EUROPOP2023 projections.
 
-## Improvements
-- refactor `roll_diffs()` for speed
-- better gross/net index handling without state reset
+## Rolling diffs
+- better gross/net index handling without state reset (`index_level` and `gross_suffix` parameters to `roll_diffs()`)
 - add `build_all_series()` (wrapping around `run_data_loaders()` and `join_env()`)
+- refactor `roll_diffs()` for speed
 
 ## Fixes
 - skip unavailable funds, indices when calculating differences
 - ensure y-limits in rolling-difference plots include the last 30 days (even if outside quantiles)
 - make `roll_diffs()` skip benchmarks (in addition to funds) that are not found in supplied df
-- XLM bookkeeping to avoid repetitions now persistent across `run_plots()` calls
-- more robust gg_params list flattening
-- date breaks on fixed months (once plot >3 yrs)
+- more robust `gg_params` list flattening
+- date breaks on fixed months, quarter or biannual (once plot >3 yrs)
+
+## Tests
+- add rolling test
 
 ## Vignettes, examples, translations
 - add life vignette
