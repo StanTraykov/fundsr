@@ -136,3 +136,54 @@ add_fund_urls <- function(x) {
     new <- new[!duplicated(names(new), fromLast = TRUE)]
     options(fundsr.fund_urls = new)
 }
+
+find_inkscape <- function(
+        candidates = NULL,
+        env_var = "INKSCAPE",
+        option_name = "fundsr.inkscape"
+) {
+    safe_norm <- function(x) {
+        tryCatch(normalizePath(x, winslash = "/", mustWork = FALSE), error = function(e) x)
+    }
+
+    override <- getOption(option_name, Sys.getenv(env_var, unset = NA_character_))
+    if (!is.na(override) && nzchar(override) && file.exists(override)) {
+        return(safe_norm(override))
+    }
+
+    p <- Sys.which("inkscape")
+    if (nzchar(p) && file.exists(p)) {
+        return(safe_norm(p))
+    }
+
+    if (is.null(candidates)) {
+        sys <- Sys.info()[["sysname"]]
+        if (identical(sys, "Windows")) {
+            pf   <- Sys.getenv("ProgramFiles", "C:/Program Files")
+            pf86 <- Sys.getenv("ProgramFiles(x86)", "C:/Program Files (x86)")
+            candidates <- c(
+                file.path(pf,   "Inkscape/bin/inkscape.exe"),
+                file.path(pf,   "Inkscape/inkscape.exe"),
+                file.path(pf86, "Inkscape/bin/inkscape.exe"),
+                file.path(pf86, "Inkscape/inkscape.exe")
+            )
+        } else {
+            candidates <- c(
+                "/Applications/Inkscape.app/Contents/MacOS/inkscape",
+                "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
+                "/opt/homebrew/bin/inkscape",
+                "/usr/local/bin/inkscape",
+                "/opt/local/bin/inkscape",
+                "/usr/bin/inkscape",
+                "/snap/bin/inkscape"
+            )
+        }
+    }
+
+    hit <- candidates[file.exists(candidates)][1]
+    if (!is.na(hit) && nzchar(hit)) {
+        return(safe_norm(hit))
+    }
+
+    NA_character_
+}

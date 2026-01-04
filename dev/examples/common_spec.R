@@ -3,14 +3,8 @@ fundsr_options(
     out_dir = "output", # where to write plots
     px_width = 1300, # for optional PNG output
     # internal_png = TRUE, # whether to export PNGs via ggplot2 (lower quality)
-    export_svg = TRUE, # whether to export SVGs (needed for Inkscape PNG export)
-
-    # Inkscape executable for higher-quality PNG export
-    # (uncomment depending on system or comment all to disable)
-    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe",
-    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
-    # inkscape = "/usr/bin/inkscape",
-    # inkscape = Sys.which("inkscape"), # if it's on PATH
+    export_svg = TRUE, # whether to export SVGs (also needed for Inkscape PNG export)
+    # inkscape = "path/to/inkscape" # set only if auto-detection fails
 
     xetra_map = c(
         fwra = "fwia",

@@ -66,14 +66,8 @@ Set package options
 fundsr_options(
     data_dir = dirs[["data"]],
     out_dir = dirs[["out"]],
-    # internal_png = TRUE, # output PNGs without Inkscape (lower quality)
-    
-    # Inkscape executable for higher-quality PNG export
-    # (uncomment depending on system or comment all to disable)
-    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe",
-    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
-    # inkscape = "/usr/bin/inkscape",
-    # inkscape = Sys.which("inkscape"), # if it's on PATH (usually not on Win/Mac)
+    # internal_png = TRUE, # output PNGs without Inkscape
+    # inkscape = "path/to/inkscape" # set only if auto-detection fails
 )
 
 # Helper to add urls to option fundsr.fund_urls

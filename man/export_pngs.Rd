@@ -2,30 +2,38 @@
 % Please edit documentation in R/plots.R
 \name{export_pngs}
 \alias{export_pngs}
-\title{Export queued SVG files to PNG using Inkscape}
+\title{Export queued SVGs to PNG via Inkscape}
 \usage{
 export_pngs(background = "white")
 }
 \arguments{
-\item{background}{Background color to use for PNG export (passed to Inkscape
-as \code{export-background}). If \code{NULL}, no \code{export-background} action is added.
+\item{background}{Background color for PNG export, passed to Inkscape as an
+\code{export-background:{...}} action. If \code{NULL}, no background action is added.
 Defaults to \code{"white"}.}
 }
 \value{
-The exit status returned by the call to Inkscape (0 indicates success).
-Invisibly returns \code{NULL} if no items are queued or if no Inkscape executable
-is configured.
+The exit status returned by Inkscape (0 indicates success). Invisibly returns
+\code{NULL} if the queue is empty or if Inkscape cannot be located.
 }
 \description{
-Processes all pending items in the internal Inkscape export queue and
-invokes Inkscape to generate PNG files from previously saved SVGs.
+Runs all pending Inkscape export actions stored in the internal queue,
+invoking Inkscape to produce PNG files from previously saved SVGs.
 }
 \details{
 This function reads queued Inkscape actions from \code{.fundsr$inkscape_queue},
 optionally prepends an \code{export-background:{background}} action, and executes
-Inkscape using the executable path in the \code{fundsr.inkscape} option via
-\code{\link[base:system2]{base::system2()}}.
+Inkscape using \code{\link[base:system2]{base::system2()}}.
 
-On success, the queue is cleared via \code{\link[=clear_inkscape_queue]{clear_inkscape_queue()}}. On failure,
-the queue is left intact and a message is printed.
+The Inkscape executable is searched for in the following order:
+\enumerate{
+\item user-supplied config (\code{fundsr.inkscape} option or \code{INKSCAPE} environment variable)
+\item an \code{inkscape} executable available on the system \code{PATH}
+\item common installation locations (Windows, macOS, Linux, etc.)
+}
+
+On success, the internal queue is cleared. On failure, the queue is left
+intact and a message is printed.
+}
+\seealso{
+\code{\link[=clear_inkscape_queue]{clear_inkscape_queue()}}, \code{\link[=save_plot]{save_plot()}}
 }
