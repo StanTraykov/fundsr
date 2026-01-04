@@ -1,12 +1,12 @@
-# fundsr (development version)
-
-## Survival plots
-- added survival curve plots using Human Mortality Database (HMD) empirical data and EUROPOP2023 projections.
+# fundsr 0.2.0
 
 ## Rolling diffs
-- better gross/net index handling without state reset (`index_level` and `gross_suffix` parameters to `roll_diffs()`)
+- improve gross/net index handling (no state resets needed; `index_level` and `gross_suffix` parameters to `roll_diffs()`)
 - add `build_all_series()` (wrapping around `run_data_loaders()` and `join_env()`)
-- refactor `roll_diffs()` for speed
+- refactor `roll_diffs()` for speed / better interface
+
+## Survival plots
+- add survival curve plots using Human Mortality Database (HMD) empirical data and EUROPOP2023 projections
 
 ## Fixes
 - skip unavailable funds, indices when calculating differences
