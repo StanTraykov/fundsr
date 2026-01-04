@@ -86,6 +86,67 @@ clear_storage <- function(clear_fund_index_map = FALSE) {
     invisible(NULL)
 }
 
+#' Clear fund-index map
+#'
+#' Clears the fund-index map stored in `.fundsr$fund_index_map`.
+#'
+#' @return Invisibly returns `NULL`. Called for side effects.
+#' @export
+#'
+#' @examples
+#' clear_fund_index_map()
+clear_fund_index_map <- function() {
+    if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
+        stop("Fundsr state environment is not initialised.", call. = FALSE)
+    }
+    if (is.null(.fundsr$fund_index_map)) {
+        .fundsr$fund_index_map <- character()
+        return(invisible(NULL))
+    }
+    .fundsr$fund_index_map <- character()
+    invisible(NULL)
+}
+
+#' Add to fund-index map
+#'
+#' Merges fund-index pairs into the fund-index map (`.fundsr$fund_index_map`).
+#' Existing entries with the same names are replaced.
+#'
+#' @param fund_index_map Named vector or list of fund-index pairs to merge into
+#'   `.fundsr$fund_index_map`. Names are fund identifiers; values are index
+#'   identifiers.
+#'
+#' @return Invisibly returns `NULL`. Called for side effects.
+#' @export
+#'
+#' @examples
+#' add_fund_index_map(c(vwce = "msci_acwi", i500 = "sp500"))
+#' add_fund_index_map(list(SPYY = "msci_world"))
+add_fund_index_map <- function(fund_index_map) {
+    if (is.null(fund_index_map)) {
+        return(invisible(NULL))
+    }
+    if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
+        stop("Fundsr state environment is not initialised.", call. = FALSE)
+    }
+
+    if (!(is.atomic(fund_index_map) || is.list(fund_index_map))) {
+        stop("`fund_index_map` must be a named vector or list.", call. = FALSE)
+    }
+
+    nms <- names(fund_index_map)
+    if (is.null(nms) || any(is.na(nms)) || any(nms == "")) {
+        stop("`fund_index_map` must have non-empty names.", call. = FALSE)
+    }
+
+    if (is.null(.fundsr$fund_index_map)) {
+        .fundsr$fund_index_map <- character()
+    }
+
+    .fundsr$fund_index_map[nms] <- fund_index_map
+    invisible(NULL)
+}
+
 #' Run registered data loaders
 #'
 #' Runs the data loader registry (`.fundsr$data_loaders`) to populate (or refresh)
@@ -446,31 +507,46 @@ read_msci_tsv <- function(file) {
 
 #' Store a cached object in the package storage environment
 #'
-#' Evaluates an expression and assigns its result into the package storage
-#' environment (`.fundsr_storage`) under the given variable name. The value is
-#' recomputed only if it is missing or if the global option `fundsr.reload` is
-#' set to `TRUE`. Optionally updates the fund/index map.
+#' Evaluate an expression and cache its result in the package storage
+#' environment (`.fundsr_storage`) under a given name. The expression is only
+#' re-evaluated when the cached value is missing, when `overwrite = TRUE`, or
+#' when the global option `fundsr.reload` is `TRUE`. Optionally merges additional
+#' fund/index mappings into `.fundsr$fund_index_map`.
 #'
-#' @param var_name Name of the variable to store in `.fundsr_storage`.
-#' @param expr An expression to evaluate when (re)computing the value.
-#' @param fund_index_map Optional named vector or list of fund/index pairs to add
-#'   to `.fundsr$fund_index_map`.
+#' @param var_name Character scalar. Name of the variable to store in
+#'   `.fundsr_storage`.
+#' @param expr An expression. Evaluated in the caller's environment when
+#'   (re)computing the cached value.
+#' @param fund_index_map Optional named vector or list. Fund/index pairs to merge
+#'   into `.fundsr$fund_index_map`. Names are used as keys.
+#' @param overwrite Logical scalar. If `TRUE`, recompute and replace any existing
+#'   cached value, regardless of `fundsr.reload`.
 #'
-#' @return Invisibly returns `NULL`. Called for side effects.
+#' @return Invisibly returns `NULL` (called for its side effects).
 #'
 #' @details
-#' The expression `expr` is evaluated in the caller's environment and then stored
-#' in `.fundsr_storage`. The `fundsr.reload` option can be used to force
-#' recomputation.
+#' `expr` is evaluated in the environment where `store_timeseries()` is called
+#' (i.e. the caller's environment), then assigned into `.fundsr_storage` under
+#' `var_name`.
+#'
+#' Caching behavior is controlled by:
+#' \itemize{
+#'   \item `overwrite = TRUE` (always recompute),
+#'   \item `options(fundsr.reload = TRUE)` (force recomputation globally), or
+#'   \item absence of `var_name` in `.fundsr_storage` (compute once).
+#' }
+#'
+#' If `fund_index_map` is supplied, it is merged into `.fundsr$fund_index_map`
+#' via name-based assignment: existing entries with the same names are replaced.
 #'
 #' @export
-store_timeseries <- function(var_name, expr, fund_index_map = NULL) {
+store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = FALSE) {
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     # Get global reload flag
     reload <- getOption("fundsr.reload", FALSE)
     # Check if assignment is needed and evaluate expr in parent_env
-    if (reload || !exists(var_name, envir = .fundsr_storage)) {
+    if (overwrite || reload || !exists(var_name, envir = .fundsr_storage)) {
         message(paste("*** Loading:", var_name))
         assign(var_name,
                eval(substitute(expr), envir = parent_env),

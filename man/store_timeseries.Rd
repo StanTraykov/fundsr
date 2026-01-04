@@ -4,27 +4,43 @@
 \alias{store_timeseries}
 \title{Store a cached object in the package storage environment}
 \usage{
-store_timeseries(var_name, expr, fund_index_map = NULL)
+store_timeseries(var_name, expr, fund_index_map = NULL, overwrite = FALSE)
 }
 \arguments{
-\item{var_name}{Name of the variable to store in \code{.fundsr_storage}.}
+\item{var_name}{Character scalar. Name of the variable to store in
+\code{.fundsr_storage}.}
 
-\item{expr}{An expression to evaluate when (re)computing the value.}
+\item{expr}{An expression. Evaluated in the caller's environment when
+(re)computing the cached value.}
 
-\item{fund_index_map}{Optional named vector or list of fund/index pairs to add
-to \code{.fundsr$fund_index_map}.}
+\item{fund_index_map}{Optional named vector or list. Fund/index pairs to merge
+into \code{.fundsr$fund_index_map}. Names are used as keys.}
+
+\item{overwrite}{Logical scalar. If \code{TRUE}, recompute and replace any existing
+cached value, regardless of \code{fundsr.reload}.}
 }
 \value{
-Invisibly returns \code{NULL}. Called for side effects.
+Invisibly returns \code{NULL} (called for its side effects).
 }
 \description{
-Evaluates an expression and assigns its result into the package storage
-environment (\code{.fundsr_storage}) under the given variable name. The value is
-recomputed only if it is missing or if the global option \code{fundsr.reload} is
-set to \code{TRUE}. Optionally updates the fund/index map.
+Evaluate an expression and cache its result in the package storage
+environment (\code{.fundsr_storage}) under a given name. The expression is only
+re-evaluated when the cached value is missing, when \code{overwrite = TRUE}, or
+when the global option \code{fundsr.reload} is \code{TRUE}. Optionally merges additional
+fund/index mappings into \code{.fundsr$fund_index_map}.
 }
 \details{
-The expression \code{expr} is evaluated in the caller's environment and then stored
-in \code{.fundsr_storage}. The \code{fundsr.reload} option can be used to force
-recomputation.
+\code{expr} is evaluated in the environment where \code{store_timeseries()} is called
+(i.e. the caller's environment), then assigned into \code{.fundsr_storage} under
+\code{var_name}.
+
+Caching behavior is controlled by:
+\itemize{
+\item \code{overwrite = TRUE} (always recompute),
+\item \code{options(fundsr.reload = TRUE)} (force recomputation globally), or
+\item absence of \code{var_name} in \code{.fundsr_storage} (compute once).
+}
+
+If \code{fund_index_map} is supplied, it is merged into \code{.fundsr$fund_index_map}
+via name-based assignment: existing entries with the same names are replaced.
 }
