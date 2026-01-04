@@ -4,9 +4,12 @@
 \alias{build_all_series}
 \title{Run all registered data loaders and join all loaded series into a big tibble.}
 \usage{
-build_all_series(by = "date", ...)
+build_all_series(reload = FALSE, by = "date", ...)
 }
 \arguments{
+\item{reload}{Logical; if \code{TRUE}, forces a full reload by temporarily setting
+\code{options(fundsr.reload = TRUE)}.}
+
 \item{by}{Column name to join by and to sort by. Defaults to \code{"date"}.}
 
 \item{...}{Additional arguments forwarded to \code{\link[=join_env]{join_env()}} (e.g. \verb{late =},

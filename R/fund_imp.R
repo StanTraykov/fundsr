@@ -275,6 +275,8 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
 #'
 #' This function is a convenience wrapper for the most common workflow.
 #'
+#' @param reload Logical; if `TRUE`, forces a full reload by temporarily setting
+#'   `options(fundsr.reload = TRUE)`.
 #' @param by Column name to join by and to sort by. Defaults to `"date"`.
 #' @param ... Additional arguments forwarded to [join_env()] (e.g. `late =`,
 #'   `coalesce_suffixed =`, etc.).
@@ -290,10 +292,10 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
 #' s2 <- build_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
 #'   filter(date >= as_date("2013-01-01"))
 #' }
-build_all_series <- function(by = "date", ...) {
+build_all_series <- function(reload = FALSE, by = "date", ...) {
     stopifnot(is.character(by), length(by) == 1L, nzchar(by))
 
-    run_data_loaders() %>%
+    run_data_loaders(reload = reload) %>%
         join_env(by = by, ...) %>%
         arrange(.data[[by]])
 }
