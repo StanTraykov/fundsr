@@ -1,0 +1,31 @@
+---
+title: "fundsr"
+output: html_document
+---
+
+---
+title: "fundsr: intro"
+author: "Stanislav Traykov"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fundsr: intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+## Setup
+```{r setup, results = "hide"}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(fundsr)
+```
+
