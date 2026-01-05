@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,9 +61,9 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-04</h4>
+            <h4 data-toc-skip class="date">2026-01-05</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/fundsr-intro.Rmd" class="external-link"><code>vignettes/fundsr-intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/articles/fundsr-intro.Rmd" class="external-link"><code>vignettes/articles/fundsr-intro.Rmd</code></a></small>
       <div class="d-none name"><code>fundsr-intro.Rmd</code></div>
     </div>
 
@@ -131,14 +131,8 @@ Traykov</h4>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fundsr_options.html">fundsr_options</a></span><span class="op">(</span></span>
 <span>    data_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>    out_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"out"</span><span class="op">]</span><span class="op">]</span>,</span>
-<span>    <span class="co"># internal_png = TRUE, # output PNGs without Inkscape (lower quality)</span></span>
-<span>    </span>
-<span>    <span class="co"># Inkscape executable for higher-quality PNG export</span></span>
-<span>    <span class="co"># (uncomment depending on system or comment all to disable)</span></span>
-<span>    inkscape <span class="op">=</span> <span class="st">"C:/Program Files/Inkscape/bin/inkscape.exe"</span>,</span>
-<span>    <span class="co"># inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",</span></span>
-<span>    <span class="co"># inkscape = "/usr/bin/inkscape",</span></span>
-<span>    <span class="co"># inkscape = Sys.which("inkscape"), # if it's on PATH (usually not on Win/Mac)</span></span>
+<span>    <span class="co"># internal_png = TRUE, # output PNGs without Inkscape</span></span>
+<span>    <span class="co"># inkscape = "path/to/inkscape" # set only if auto-detection fails</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Helper to add urls to option fundsr.fund_urls</span></span>
@@ -169,11 +163,11 @@ Traykov</h4>
 <span><span class="co">#&gt; *** Loading: spyy</span></span>
 <span><span class="co">#&gt; Attempting readxl on 'data/funds/SPYY.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').</span></span>
+<span><span class="co">#&gt; Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date col ='^Date').</span></span>
 <span><span class="co">#&gt; *** Loading: iusq</span></span>
 <span><span class="co">#&gt; Attempting readxl on 'data/funds/IUSQ.xls'...</span></span>
 <span><span class="co">#&gt; readxl failed. Attempting parse as Excel 2003 XML...</span></span>
-<span><span class="co">#&gt; Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').</span></span>
+<span><span class="co">#&gt; Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date col ='^As Of').</span></span>
 <span><span class="co">#&gt; Joining: spyy, iusq</span></span></code></pre></div>
 <p>Check contents</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">

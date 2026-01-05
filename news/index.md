@@ -2,23 +2,54 @@
 
 ## fundsr (development version)
 
-### Survival plots
+### Rolling diffs
 
-- empirical via HMD
-- projected via EUROPOP2023
+- add Excel reader function
+  [`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
+- improve
+  [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md):
+  support text dates, any column name for date
+- add fund_index_map merge/clean functions
+  [`add_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/add_fund_index_map.md),
+  `clean_fund_index_map()`
+- add example Excel + CSV dataset in `extdata`
 
-### Improvements
+### Plot output
 
-- refactor
-  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
-  for speed
-- better gross/net index handling without state reset
+- add automatic Inkscape detection
+
+### Fixes
+
+- add various
+  [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
+  df and column checks to make errors easier to understand
+
+### Vignettes, examples, translations
+
+- fix examples to use
+  [`system.file()`](https://rdrr.io/r/base/system.file.html)
+
+## fundsr 0.2.0
+
+### Rolling diffs
+
+- improve gross/net index handling (no state resets needed;
+  `index_level` and `gross_suffix` parameters to
+  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md))
 - add
   [`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md)
   (wrapping around
   [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)
   and
   [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md))
+- refactor
+  [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
+  for speed / better interface
+
+### Survival plots
+
+- add survival curve plots using Human Mortality Database (HMD)
+  empirical data and EUROPOP2023 projections
 
 ### Fixes
 
@@ -29,11 +60,12 @@
   [`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)
   skip benchmarks (in addition to funds) that are not found in supplied
   df
-- XLM bookkeeping to avoid repetitions now persistent across
-  [`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)
-  calls
-- more robust gg_params list flattening
-- date breaks on fixed months (once plot \>3 yrs)
+- more robust `gg_params` list flattening
+- date breaks on fixed months, quarter or biannual (once plot \>3 yrs)
+
+### Tests
+
+- add rolling test
 
 ### Vignettes, examples, translations
 

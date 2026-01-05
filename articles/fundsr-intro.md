@@ -73,14 +73,8 @@ Set package options
 fundsr_options(
     data_dir = dirs[["data"]],
     out_dir = dirs[["out"]],
-    # internal_png = TRUE, # output PNGs without Inkscape (lower quality)
-    
-    # Inkscape executable for higher-quality PNG export
-    # (uncomment depending on system or comment all to disable)
-    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe",
-    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
-    # inkscape = "/usr/bin/inkscape",
-    # inkscape = Sys.which("inkscape"), # if it's on PATH (usually not on Win/Mac)
+    # internal_png = TRUE, # output PNGs without Inkscape
+    # inkscape = "path/to/inkscape" # set only if auto-detection fails
 )
 
 # Helper to add urls to option fundsr.fund_urls
@@ -117,11 +111,11 @@ series <- build_all_series() %>%
 #> *** Loading: spyy
 #> Attempting readxl on 'data/funds/SPYY.xlsx'...
 #> readxl succeeded. Returning data.
-#> Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date_field='^Date').
+#> Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date col ='^Date').
 #> *** Loading: iusq
 #> Attempting readxl on 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
-#> Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date_field='^As Of').
+#> Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date col ='^As Of').
 #> Joining: spyy, iusq
 ```
 

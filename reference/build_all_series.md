@@ -9,10 +9,15 @@ and sorts the result by `by`.
 ## Usage
 
 ``` r
-build_all_series(by = "date", ...)
+build_all_series(reload = FALSE, by = "date", ...)
 ```
 
 ## Arguments
+
+- reload:
+
+  Logical; if `TRUE`, forces a full reload by temporarily setting
+  `options(fundsr.reload = TRUE)`.
 
 - by:
 

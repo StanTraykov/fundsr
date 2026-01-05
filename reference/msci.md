@@ -2,7 +2,9 @@
 
 Wrapper around
 [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
-and `import_xl_data()` for MSCI index files.
+and
+[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
+for MSCI index files.
 
 ## Usage
 

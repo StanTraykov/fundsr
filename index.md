@@ -20,7 +20,7 @@ pak::pak("StanTraykov/fundsr@*release")
 pak::pak("StanTraykov/fundsr")
 ```
 
-### From my r-universe (binary builds)
+### From my r-universe (binary builds of latest release)
 
 [![fundsr status
 badge](https://stantraykov.r-universe.dev/fundsr/badges/version)](https://stantraykov.r-universe.dev/fundsr)
@@ -28,24 +28,19 @@ badge](https://stantraykov.r-universe.dev/fundsr/badges/version)](https://stantr
 ``` r
 install.packages(
   "fundsr",
-  repos = c("https://stantraykov.r-universe.dev",
-            "https://cloud.r-project.org")
+  repos = c("https://stantraykov.r-universe.dev",  "https://cloud.r-project.org")
 )
 ```
 
-# Usage
-
-- [Intro
-  vignette](https://stantraykov.github.io/fundsr/articles/fundsr-intro.html)
-  contains a simple walkthrough comparing IUSQ and SPYY (no data setup
-  needed)
-- `inst/scripts/examples` (e.g. open `.Rproj` file in R Studio after
-  installing the package)
-  - `glob_funds.R` is a more comprehensive example featuring global
-    funds but requiring index & fund data download outside the package
-  - `all_funds.R` and `all_funds-GR.R` feature many more funds for
-    analysis vs net/gross benchmark
-- [Reference](https://stantraykov.github.io/fundsr/reference/index.html)
+Binaries provided: Win/Mac/Ubuntu/WebAssembly \# Usage \* [Intro
+vignette](https://stantraykov.github.io/fundsr/articles/fundsr-intro.html)
+contains a simple walkthrough comparing IUSQ and SPYY (no data setup
+needed) \* `inst/scripts/examples` (e.g. open `.Rproj` file in R Studio
+after installing the package) \* `glob_funds.R` is a more comprehensive
+example featuring global funds but requiring index & fund data download
+outside the package \* `all_funds.R` and `all_funds-GR.R` feature many
+more funds for analysis vs net/gross benchmark \*
+[Reference](https://stantraykov.github.io/fundsr/reference/index.html)
 
 # Importing data
 

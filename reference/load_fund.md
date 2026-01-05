@@ -81,7 +81,8 @@ If `file` is `NULL`, the function searches
 
 The function builds a column-translation mapping from the fund NAV
 column and, if requested, a benchmark column. It then calls
-`import_xl_data()` to read the Excel file and
+[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
+to read the Excel file and
 [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
 to cache the imported object under `tolower(ticker)`. When `benchmark`
 is provided, a corresponding entry is added to `.fundsr$fund_index_map`

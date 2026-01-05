@@ -4,6 +4,8 @@
 
 - [`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md)
   : Register a data loader
+- [`add_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/add_fund_index_map.md)
+  : Add to fund-index map
 - [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.md)
   : Add entries to the fund download list
 - [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md) :
@@ -18,6 +20,8 @@
   assumptions
 - [`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md)
   : Clear registered data loaders
+- [`clear_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/clear_fund_index_map.md)
+  : Clear fund-index map
 - [`clear_inkscape_queue()`](https://stantraykov.github.io/fundsr/reference/clear_inkscape_queue.md)
   : Clear queued Inkscape exports
 - [`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md)
@@ -25,7 +29,7 @@
 - [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.md)
   : Download fund data according to the configured download list
 - [`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md)
-  : Export queued SVG files to PNG using Inkscape
+  : Export queued SVGs to PNG via Inkscape
 - [`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md)
   : Set fundsr package options
 - [`get_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/get_fund_index_map.md)
@@ -61,6 +65,8 @@
 - [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md)
   : Read a time series file (CSV/TSV) with a date + one or more value
   columns
+- [`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
+  : Read a time series from an Excel workbook
 - [`read_xlm_directory()`](https://stantraykov.github.io/fundsr/reference/read_xlm_directory.md)
   : Read and combine XLM data from multiple Xetra XLSX files
 - [`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)
