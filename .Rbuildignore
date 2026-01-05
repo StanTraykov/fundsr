@@ -3,12 +3,11 @@
 ^dev$
 (^|/)data(/|$)
 (^|/)output(/|$)
-^desktop.ini$
 ^doc$
 ^docs$
 ^Meta$
 ^\.github$
 ^LICENSE\.md$
 ^_pkgdown\.yml$
-^vignettes/
 ^data-raw$
+^vignettes/articles(/|$)

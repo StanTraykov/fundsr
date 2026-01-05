@@ -33,6 +33,7 @@ Suggests:
     svglite,
     testthat (>= 3.0.0),
     withr
+VignetteBuilder: knitr
 URL: https://stantraykov.github.io/fundsr/, https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues
 Config/testthat/edition: 3
