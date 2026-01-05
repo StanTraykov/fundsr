@@ -18,3 +18,6 @@ Invisibly returns \code{NULL}. Called for side effects.
 Merges fund-index pairs into the fund-index map (\code{.fundsr$fund_index_map}).
 Existing entries with the same names are replaced.
 }
+\examples{
+add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2"))
+}

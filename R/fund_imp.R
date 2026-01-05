@@ -116,7 +116,7 @@ clear_fund_index_map <- function() {
 #' @export
 #'
 #' @examples
-#' add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2))
+#' add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2"))
 add_fund_index_map <- function(fund_index_map) {
     if (is.null(fund_index_map)) {
         return(invisible(NULL))
@@ -290,32 +290,52 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 #'   join_env(e, by = "date", coalesce_suffixed = c(".x", ".y"))
 #' }
 join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
-    obj_names <- ls(envir = env, sorted = FALSE)
+    stopifnot(is.environment(env))
+    by <- as.character(by)
+    stopifnot(length(by) >= 1L, all(nzchar(by)))
 
+    obj_names <- ls(envir = env, sorted = FALSE)
+    raw_late <- late %||% character(0)
     message(glue("Joining: {glue::glue_collapse(obj_names, sep = ', ')}"))
 
-    raw_late <- late %||% character(0)
+    objs <- mget(obj_names, envir = env)
+    not_df <- purrr::map_lgl(objs, ~ !is.data.frame(.x))
+    if (any(not_df)) {
+        offenders <- names(objs)[not_df]
+        stop(
+            "Non-joinable object(s) in `env` (expected data.frame/tibble): ",
+            paste(offenders, collapse = ", "),
+            call. = FALSE
+        )
+    }
+    missing_by <- purrr::imap_lgl(objs, ~ !all(by %in% names(.x)))
+    if (any(missing_by)) {
+        offenders <- names(objs)[missing_by]
+        stop(
+            "Join key(s) missing from: ",
+            paste(offenders, collapse = ", "),
+            ". Required key(s): ",
+            paste(by, collapse = ", "),
+            call. = FALSE
+        )
+    }
     missing_late <- setdiff(raw_late, obj_names)
     if (length(missing_late)) {
         warning("Objects not found in `env` and ignored in `late`: ",
                 paste(missing_late, collapse = ", "))
     }
     late <- intersect(raw_late, obj_names)
-
     main_names <- setdiff(obj_names, late)
-
     if (length(main_names) == 0L) {
         stop("No objects left to full_join after excluding `late`.")
     }
-
     main_list <- mget(main_names, envir = env)
-    j <- purrr::reduce(main_list, full_join, by = by)
 
+    j <- purrr::reduce(main_list, full_join, by = by)
     if (length(late) > 0L) {
         late_list <- mget(late, envir = env)
         j <- purrr::reduce(late_list, left_join, .init = j, by = by)
     }
-
     if (!is.null(coalesce_suffixed))
         j <- coalesce_join_suffixes(j, coalesce_suffixed)
 
@@ -377,125 +397,6 @@ get_fund_index_map <- function() {
 #' @export
 get_storage <- function() {
     .fundsr_storage
-}
-
-download_as <- function(named_urls, path = getOption("fundsr.data_dir"), redownload = FALSE) {
-    if (!dir.exists(path)) dir.create(path, recursive = TRUE)
-    for (file in names(named_urls)) {
-        url <- named_urls[[file]]
-        # hack .xls extension for iShares downloads (not critical but allows Excel to open
-        # these files with a warning [outdated XML])
-        ext <- if (grepl("ishares", url, ignore.case = TRUE)) {
-            ".xls"
-        } else {
-            ".xlsx"
-        }
-        full_file <- file.path(path, paste0(file, ext))
-        if (redownload || !file.exists(full_file)) {
-            message(glue("Downloading '{file}'"))
-            Sys.sleep(stats::runif(1, 0.5, 1.0))
-            utils::download.file(url, full_file, mode = "wb")
-        } else {
-            message(glue("Skipping download '{file}': already exists."))
-        }
-    }
-}
-
-#' Download fund data according to the configured download list
-#'
-#' Retrieves all fund data files listed in the `fundsr.fund_urls` option and saves
-#' them into the directory specified by `fundsr.data_dir`.
-#'
-#' @param redownload Logical; if `TRUE`, existing files are overwritten. If
-#'   `FALSE`, only missing files are downloaded.
-#'
-#' @return Invisibly returns `NULL`. Files are written as a side effect.
-#'
-#' @export
-download_fund_data <- function(redownload = FALSE) {
-    fund_urls <- getOption("fundsr.fund_urls")
-    fund_data_dir <- getOption("fundsr.data_dir")
-    download_as(fund_urls, path = fund_data_dir, redownload = redownload)
-    invisible(NULL)
-}
-
-#' Read a time series file (CSV/TSV) with a date + one or more value columns
-#'
-#' Loads a delimited file from the directory specified by `fundsr.data_dir`,
-#' converts the `date` column to a proper Date, and coerces all other columns to
-#' numeric.
-#'
-#' The reader is chosen by file extension: `.csv` uses [readr::read_csv()] and
-#' `.tsv`/`.tab`/`.txt` uses [readr::read_tsv()]. Gzipped variants such as
-#' `.csv.gz` and `.tsv.gz` are also supported.
-#'
-#' @param file Filename to read (relative to `getOption("fundsr.data_dir")`).
-#' @param time_unit Character scalar giving the unit of the numeric `date` column
-#'   (Unix epoch). One of `"ms"` (default), `"s"`, `"us"`, `"ns"`.
-#'
-#' @return A tibble with parsed `date` and numeric value columns.
-#'
-#' @details
-#' The function assumes a column named `date` exists and represents a Unix
-#' timestamp. All non-`date` columns are coerced with `as.numeric()` (non-parsable
-#' values become `NA`).
-#'
-#' @export
-read_timeseries <- function(file, time_unit = c("ms", "s", "us", "ns")) {
-    fund_data_dir <- getOption("fundsr.data_dir")
-    path <- file.path(fund_data_dir, file)
-    ext <- tolower(tools::file_ext(path))
-    if (identical(ext, "gz")) {
-        ext <- tolower(tools::file_ext(sub("\\.gz$", "", path, ignore.case = TRUE)))
-    }
-    reader <- switch(
-        ext,
-        "csv" = readr::read_csv,
-        "tsv" = readr::read_tsv,
-        "tab" = readr::read_tsv,
-        "txt" = readr::read_tsv,
-        stop("Unsupported file extension for `file`: expected .csv or .tsv (optionally .gz).", call. = FALSE)
-    )
-    time_unit <- match.arg(time_unit)
-    div <- switch(
-        time_unit,
-        "s"  = 1,
-        "ms" = 1000,
-        "us" = 1e6,
-        "ns" = 1e9
-    )
-    df <- reader(path, show_col_types = FALSE)
-    df %>%
-        mutate(
-            date = lubridate::as_date(lubridate::as_datetime(as.numeric(date) / div)),
-            across(-date, ~ suppressWarnings(as.numeric(.x)))
-        )
-}
-
-#' Read an MSCI two-column TSV file
-#'
-#' Extracts the data portion of an MSCI TSV file—skipping header noise—and reads
-#' it as a two-column table containing a date and a numeric value.
-#'
-#' @param file Filename of the TSV to read (relative to `getOption("fundsr.data_dir")`).
-#'
-#' @return A tibble with a `Date` column and one numeric column.
-#'
-#' @details
-#' The function filters lines beginning with a digit (date rows) or the literal
-#' `"Date"`, then parses them using a fixed `%m/%d/%Y` date format and a numeric
-#' second field.
-#'
-#' @export
-read_msci_tsv <- function(file) {
-    fund_data_dir <- getOption("fundsr.data_dir")
-    lines <- readr::read_lines(file.path(fund_data_dir, file))
-    data_lines <- grep("^[0-9]|Date", lines, value = TRUE)
-    df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
-        readr::col_date(format = "%m/%d/%Y"),
-        readr::col_double()
-    ))
-    df
 }
 
 #' Store a cached object in the package storage environment
@@ -586,7 +487,7 @@ store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = 
 #'
 #' @details
 #' The function builds a column-translation mapping from the fund NAV column and,
-#' if requested, a benchmark column. It then calls `import_xl_data()` to read the
+#' if requested, a benchmark column. It then calls `read_timeseries_excel()` to read the
 #' Excel file and `store_timeseries()` to cache the imported object under
 #' `tolower(ticker)`. When `benchmark` is provided, a corresponding entry is
 #' added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
@@ -630,173 +531,14 @@ load_fund <- function(ticker,
     }
     store_timeseries(
         ticker_lower,
-        import_xl_data(
-            xl_file = file.path(fund_data_dir, file),
+        read_timeseries_excel(
+            xl_file = file,
             data_sheet = data_sheet,
-            date_field_name = date_col,
+            date_col = date_col,
             col_trans = ct,
             date_order = date_order
         ),
         fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower)
     )
 
-}
-
-####### Provider-specific wrappers #######
-
-#' Import an MSCI index sheet and register benchmark mappings
-#'
-#' Wrapper around `store_timeseries()` and `import_xl_data()` for MSCI index files.
-#'
-#' @param var_name Storage key used in `.fundsr_storage`.
-#' @param col_trans Named vector specifying column translations.
-#' @param benchmarks Optional index mapping to record in
-#'   the fund index map (used to map gross to net indices).
-#' @param file Filename of the XLSX file to import.
-#'
-#' @return Invisibly returns `NULL`. Data are stored via `store_timeseries()`.
-#'
-#' @export
-msci <- function(var_name, col_trans, benchmarks = NULL, file) {
-    fund_data_dir <- getOption("fundsr.data_dir")
-    store_timeseries(
-        var_name = var_name,
-        expr = import_xl_data(
-            xl_file = file.path(fund_data_dir, file),
-            data_sheet = 1,
-            date_field_name = "^Date",
-            col_trans = col_trans,
-            date_order = "mdy",
-            comma_rep = ""
-        ),
-        fund_index_map = benchmarks
-    )
-}
-
-#' Import an iShares fund
-#'
-#' Wrapper around `load_fund()` for iShares files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @param retrieve_benchmark Logical; also import benchmark column.
-#' @export
-ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
-    load_fund(ticker = ticker,
-             file = file,
-             data_sheet = "Historical",
-             date_col = "^As Of",
-             benchmark = benchmark,
-             benchmark_col = "^Benchmark Ret",
-             retrieve_benchmark = retrieve_benchmark)
-}
-
-#' Import an SPDR fund
-#'
-#' Wrapper around `load_fund()` for SPDR files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @export
-spdr <- function(ticker, file = NULL, benchmark = NULL) {
-    load_fund(ticker = ticker,
-             file = file,
-             benchmark = benchmark)
-}
-
-#' Import an Xtrackers fund
-#'
-#' Wrapper around `load_fund()` for Xtrackers files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @param retrieve_benchmark Logical; also import benchmark column.
-#' @export
-xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
-    load_fund(ticker = ticker,
-             file = file,
-             benchmark = benchmark,
-             benchmark_col = "^Index Level",
-             retrieve_benchmark = retrieve_benchmark)
-}
-
-#' Import an Amundi fund
-#'
-#' Wrapper around `load_fund()` for Amundi files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @export
-amun <- function(ticker, file = NULL, benchmark = NULL) {
-    load_fund(ticker = ticker,
-             file = file,
-             nav_col = "^Official NAV",
-             benchmark = benchmark)
-}
-
-#' Import an Invesco fund
-#'
-#' Wrapper around `load_fund()` for Invesco files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @param retrieve_benchmark Logical; also import benchmark column.
-#' @export
-inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
-    load_fund(ticker = ticker,
-             file = file,
-             nav_col = "^NAV$", # need end marker ($) for Invesco do disambiguate
-             benchmark = benchmark,
-             benchmark_col = "^Index",
-             retrieve_benchmark = retrieve_benchmark)
-}
-
-#' Import a Vanguard fund
-#'
-#' Wrapper around `load_fund()` for Vanguard files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @export
-vang <- function(ticker, file = NULL, benchmark = NULL) {
-    load_fund(ticker = ticker,
-             file = file,
-             nav_col = "^NAV \\(USD\\)$",
-             benchmark = benchmark)
-}
-
-#' Import a UBS fund
-#'
-#' Wrapper around `load_fund()` for UBS files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @export
-ubs <- function(ticker, file = NULL, benchmark = NULL) {
-    load_fund(ticker = ticker,
-             file = file,
-             nav_col = "^Official NAV",
-             benchmark = benchmark)
-}
-
-#' Import an HSBC fund
-#'
-#' Wrapper around `load_fund()` for HSBC files.
-#'
-#' @param ticker Fund ticker.
-#' @param file Optional filename override.
-#' @param benchmark Optional benchmark key.
-#' @export
-hsbc <- function(ticker, file = NULL, benchmark = NULL) {
-    load_fund(ticker = ticker,
-             file = file,
-             benchmark = benchmark,
-             date_order = "mdy")
 }

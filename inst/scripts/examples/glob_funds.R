@@ -1,9 +1,14 @@
 library(tidyverse)
 library(fundsr)
 
+script_dir <- system.file("scripts/examples", package = "fundsr")
+stopifnot(nzchar(script_dir))
+spec_src <- function(...) {
+    source(file.path(script_dir, ...))
+}
 # Config
-source("common_spec.R")
-source("glob_spec.R")
+spec_src("common_spec.R")
+spec_src("glob_spec.R")
 xlm_dir <- file.path("data", "xlm")
 
 # Download missing files

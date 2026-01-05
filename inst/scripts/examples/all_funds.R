@@ -1,14 +1,19 @@
 library(tidyverse)
 library(fundsr)
 
+script_dir <- system.file("scripts/examples", package = "fundsr")
+stopifnot(nzchar(script_dir))
+spec_src <- function(...) {
+    source(file.path(script_dir, ...))
+}
 # Config
-source("common_spec.R")
-# Specs
-source("glob_spec.R")
-source("dm_spec.R")
-source("em_spec.R")
-source("usa_sel_spec.R")
-source("exus_spec.R")
+spec_src("common_spec.R")
+# Fund specs
+spec_src("glob_spec.R")
+spec_src("dm_spec.R")
+spec_src("em_spec.R")
+spec_src("usa_sel_spec.R")
+spec_src("exus_spec.R")
 
 xlm_dir <- file.path("data", "xlm")
 

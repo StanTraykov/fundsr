@@ -2,9 +2,14 @@
 library(tidyverse)
 library(fundsr)
 
+script_dir <- system.file("scripts/examples", package = "fundsr")
+stopifnot(nzchar(script_dir))
+spec_src <- function(...) {
+    source(file.path(script_dir, ...))
+}
 # Config
-source("common_spec.R")
-source("em_topc_spec.R")
+spec_src("common_spec.R")
+spec_src("em_topc_spec.R")
 
 # Get funds and indexes into a big tibble
 series <- build_all_series() %>%

@@ -17,10 +17,8 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
 
     message("readxl failed. Attempting parse as Excel 2003 XML...")
 
-    # ------------------------------------------------------------------
     # If readxl fails, we assume it might be a 2003 XML (SpreadsheetML) file.
     # We'll do BOM removal and parse with xml2.
-    # ------------------------------------------------------------------
     file_size <- file.info(file_path)$size
     if (is.na(file_size) || file_size == 0) {
         stop("File '", file_path, "' not found or is empty.")
@@ -137,16 +135,89 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     return(df2)
 }
 
-# Mostly AI-written, except step (6) which is optimized (tidier alternative
-# based on lubridate::parse_date_time() is too slow when importing many funds).
-# Other steps could be cleaned up in the future.
-import_xl_data <- function(xl_file,
+#' Read a time series from an Excel workbook
+#'
+#' Reads an Excel sheet, detects the header row by searching for a date header,
+#' parses the date column, selects/renames value columns by regex, and optionally
+#' coerces value columns to numeric.
+#'
+#' The sheet is read using `read_excel_or_xml()` (tries `readxl` first, then an
+#' XML fallback). Completely empty columns are dropped. The first row containing
+#' `date_col` (any cell match) is treated as the header row; data starts
+#' below it.
+#'
+#' Date parsing:
+#' - If the detected date column is numeric (or looks numeric), it is interpreted
+#'   as an Excel serial date with origin `"1899-12-30"`.
+#' - Otherwise the date strings are cleaned (truncated to 24 chars, `"Sept"` →
+#'   `"Sep"`, trailing `" 12:00:00 AM"` removed) and parsed with `as.Date()` using
+#'   formats from `make_date_fmts(date_order)`.
+#' After parsing, the function drops all rows from the first unparseable date
+#' onward (i.e., it truncates at the first `NA` date), then filters remaining
+#' `NA` dates.
+#'
+#' Column selection/renaming:
+#' `col_trans` maps desired output names to regex patterns matched against the
+#' detected header names. If a pattern matches multiple columns, they are kept
+#' and suffixed (`name`, `name2`, `name3`, ...).
+#'
+#' Numeric coercion:
+#' For non-date columns, character values have `"$"` / `"USD "` stripped, commas
+#' replaced by `comma_rep`, then are converted with `as.numeric()`. If
+#' `force_numeric = TRUE`, the converted numeric column is kept even if some
+#' values fail to parse; otherwise the column is only replaced when all non-`NA`
+#' values parse successfully.
+#'
+#' @param xl_file Path to the Excel workbook. Typically you pass a filename
+#'   relative to `getOption("fundsr.data_dir")`, or an absolute path.
+#' @param data_sheet Sheet identifier to read from (sheet name or 1-based index).
+#' @param date_col String used to detect the header row and identify the
+#'   date column (matched via regex against cell contents for header-row
+#'   detection, and against column names after headers are assigned).
+#' @param col_trans Named character vector (or list) mapping output column names
+#'   to regex patterns used to select columns from the sheet. Names are returned
+#'   column names; values are patterns matched against header names.
+#' @param date_order Character scalar indicating day/month/year order used to
+#'   generate candidate date formats for parsing text dates (passed to
+#'   `make_date_fmts()`). Default is `"dmy"`.
+#' @param force_numeric Logical. If `TRUE` (default), always replace matched
+#'   value columns with their numeric coercions (non-parsable values become
+#'   `NA`). If `FALSE`, only replace when coercion succeeds for all non-`NA`
+#'   values.
+#' @param comma_rep Character scalar used when converting character numerics:
+#'   commas are replaced by this string before conversion. Default `"."` (treat
+#'   comma as decimal separator).
+#'
+#' @return A tibble with a `date` column (class `Date`) and the selected value
+#'   columns (possibly numeric), with names determined by `col_trans`.
+#'
+#' @seealso [read_timeseries()] for CSV/TSV time series import.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- read_timeseries_excel(
+#'   xl_file = "example.xlsx",
+#'   data_sheet = 1,
+#'   date_col = "^Date$",
+#'   col_trans = c(nav = "NAV", tr = "TR"),
+#'   date_order = "dmy"
+#' )
+#' }
+read_timeseries_excel <- function(xl_file,
                            data_sheet,
-                           date_field_name,
+                           date_col,
                            col_trans,
                            date_order = "dmy",
                            force_numeric = TRUE,
                            comma_rep = ".") {
+    fund_data_dir <- getOption("fundsr.data_dir", ".")
+    xl_file <- file.path(fund_data_dir, xl_file)
+
+    # Mostly AI-written, except step (6) which is optimized (tidier alternative
+    # based on lubridate::parse_date_time() is too slow when importing many funds).
+    # Other steps could be cleaned up in the future.
 
     # 1) Read raw data (now tries readxl first, then XML fallback)
     raw_data <- read_excel_or_xml(file_path = xl_file, sheet = data_sheet)
@@ -154,13 +225,13 @@ import_xl_data <- function(xl_file,
     # 2) Remove columns entirely NA
     raw_data <- select(raw_data, where(~ any(!is.na(.x))))
 
-    # 3) Find row containing date_field_name
+    # 3) Find row containing date_col
     row_header_idx <- which(apply(raw_data, 1, function(x) {
-        any(stringr::str_detect(as.character(x), date_field_name), na.rm = TRUE)
+        any(stringr::str_detect(as.character(x), date_col), na.rm = TRUE)
     }))
     if (length(row_header_idx) == 0) {
         stop(glue(
-            "Could NOT find the date column header matching '{date_field_name}' ",
+            "Could NOT find the date column header matching '{date_col}' ",
             "in '{xl_file}', sheet '{data_sheet}'."
         ))
     }
@@ -191,10 +262,10 @@ import_xl_data <- function(xl_file,
     colnames(data_raw) <- header_values
 
     # 5) Identify date column, rename => "date"
-    date_col_idx <- which(stringr::str_detect(names(data_raw), date_field_name))
+    date_col_idx <- which(stringr::str_detect(names(data_raw), date_col))
     if (length(date_col_idx) == 0) {
         stop(glue(
-            "Could NOT find a column matching '{date_field_name}' ",
+            "Could NOT find a column matching '{date_col}' ",
             "after assigning header names in '{xl_file}', sheet '{data_sheet}'."
         ))
     }
@@ -271,7 +342,7 @@ import_xl_data <- function(xl_file,
 
     message(glue(
         "Returning {nrow(data_subset)} rows x {ncol(data_subset)} columns ",
-        "from '{xl_file}' (sheet='{data_sheet}', date_field='{date_field_name}')."
+        "from '{xl_file}' (sheet='{data_sheet}', date col ='{date_col}')."
     ))
 
     data_subset

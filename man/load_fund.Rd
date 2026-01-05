@@ -59,7 +59,7 @@ exactly one of \code{paste0(toupper(ticker), ".xlsx")} or
 \code{paste0(toupper(ticker), ".xls")}.
 
 The function builds a column-translation mapping from the fund NAV column and,
-if requested, a benchmark column. It then calls \code{import_xl_data()} to read the
+if requested, a benchmark column. It then calls \code{read_timeseries_excel()} to read the
 Excel file and \code{store_timeseries()} to cache the imported object under
 \code{tolower(ticker)}. When \code{benchmark} is provided, a corresponding entry is
 added to \code{.fundsr$fund_index_map} to link the fund to its benchmark key.

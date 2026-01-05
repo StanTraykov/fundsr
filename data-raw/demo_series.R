@@ -1,6 +1,7 @@
 library(tidyverse)
+dir <- "inst/extdata"
 
-set.seed(42)
+set.seed(422)
 
 n_days  <- 365L
 n_years <- 2L
@@ -23,8 +24,8 @@ mk_index_pair <- function(mu1_ann = 0.075, mu2_ann = 0.073,
     r2 <- mu2_d + vol_d * (corr * z_common + sqrt(1 - corr^2) * z_idio)
 
     list(
-        idx1 = list(level = start * exp(cumsum(r1)), ret = r1),
-        idx2 = list(level = start * exp(cumsum(r2)), ret = r2)
+        idx1 = list(level = start * exp(cumsum(c(0, r1[-1]))), ret = r1),
+        idx2 = list(level = start * exp(cumsum(c(0, r2[-1]))), ret = r2)
     )
 }
 
@@ -81,7 +82,7 @@ mk_fund <- function(idx_ret,
     )
 
     r <- idx_ret + spread + rnorm(n, 0, idio_sd_d)
-    lvl <- start_level * exp(cumsum(r))
+    lvl <- start_level * exp(cumsum(c(0, r[-1])))
 
     if (start_lag_days > 0L) {
         lvl[seq_len(start_lag_days)] <- NA_real_
@@ -123,8 +124,8 @@ bonus1 <- mk_gross_bonus(start_ann = 0.0040, end_ann = 0.0050, wiggle_sd_ann = 0
 bonus2 <- mk_gross_bonus(start_ann = 0.0041, end_ann = 0.0051, wiggle_sd_ann = 0.00035, wiggle_phi = 0.985,
                          lo_ann = 0.0035, hi_ann = 0.0060)
 
-IDX1_GR <- IDX1[1] * exp(cumsum(idx1$ret + bonus1))
-IDX2_GR <- IDX2[1] * exp(cumsum(idx2$ret + bonus2))
+IDX1_GR <- IDX1[1] * exp(cumsum(c(0, (idx1$ret + bonus1)[-1])))
+IDX2_GR <- IDX2[1] * exp(cumsum(c(0, (idx2$ret + bonus2)[-1])))
 
 # --- Funds: tight tracking; almost never beat gross ---
 # gross ~ 40–50 bps/yr above net, so keep funds ~ 10–25 bps/yr above net
@@ -133,14 +134,14 @@ f1 <- mk_fund(idx1$ret,
 
 f2 <- mk_fund(idx1$ret,
               spread_mu_ann = 0.0012, spread_sd_ann = 0.00018, spread_phi = 0.85, idio_vol_ann = 0.0026,
-              start_lag_days = 30L)
+              start_lag_days = 75L)
 
 g1 <- mk_fund(idx2$ret,
               spread_mu_ann = 0.0016, spread_sd_ann = 0.00016, spread_phi = 0.85, idio_vol_ann = 0.0024)
 
 g2 <- mk_fund(idx2$ret,
               spread_mu_ann = 0.0010, spread_sd_ann = 0.00019, spread_phi = 0.85, idio_vol_ann = 0.0028,
-              start_lag_days = 180L)
+              start_lag_days = 0L)
 
 df <- tibble(
     date   = date,
@@ -175,8 +176,8 @@ gg_par <- scale_color_manual(
 )
 
 nd = 365
-fundsr_options(reload = TRUE)
-store_timeseries("test", df, fund_index_map)
+reset_state()
+store_timeseries("test", df, fund_index_map, overwrite = T)
 series <- build_all_series()
 diffs_net  <- roll_diffs(series, nd, get_fund_index_map(), index_level = "net")
 diffs_gross  <- roll_diffs(series, nd, get_fund_index_map(), index_level = "gross")
@@ -196,3 +197,66 @@ gr_log_plot  <- plot_roll_diffs(diffs_gross$log,
                              use_log = TRUE,
                              bmark_type = "gross",
                              gg_params = gg_par)
+
+save_it <- function() {
+    f1 <- df %>% select(date, f1) %>% mutate(date = format(date, "%d-%b-%Y"))
+    names(f1) <- c("As Of", "NAV")
+    writexl::write_xlsx(f1, file.path(dir,"F1.xlsx"))
+    f2 <- df %>% select(date, f2) %>%
+        filter(is.finite(f2)) %>%
+        mutate(date = format(date, "%m/%d/%Y"))
+    names(f2) <- c("date", "net asset value")
+    writexl::write_xlsx(f2, file.path(dir,"F2.xlsx"))
+    g1 <- df %>% select(date, g1) %>% mutate(date = format(date, "%d.%m.%Y"))
+    names(g1) <- c("Date", "Official NAV")
+    writexl::write_xlsx(g1, file.path(dir,"G1.xlsx"))
+    g2 <- df %>% select(date, g2) %>%
+        mutate(date = as.numeric(as.POSIXct(date, tz = "UTC")) * 1000)
+    names(g2) <- c("Date", "NAV")
+    readr::write_csv(g2, file.path(dir,"G2.csv"))
+    idx1 <- df %>% select(date, "IDX1", "IDX1-GR")
+    names(idx1) <- c("Date", "Index One Net", "Index One Gross")
+    writexl::write_xlsx(idx1, file.path(dir,"IDX1.xlsx"))
+    idx2n <- df %>% select(date, "IDX2") %>% mutate(date = format(date, "%d.%m.%Y"))
+    readr::write_csv(idx2n, file.path(dir,"IDX2N.csv"))
+    idx2g <- df %>% select(date, "IDX2-GR") %>% mutate(date = format(date, "%d.%m.%Y"))
+    readr::write_csv(idx2g, file.path(dir,"IDX2G.csv"))
+}
+load_it <- function() {
+    fundsr::reset_state()
+    fundsr_options(data_dir = dir)
+    load_fund("F1", "F1.xlsx", benchmark = "IDX1", date_col = "^As Of", nav_col = "^NAV")
+    load_fund("F2",
+              "F2.xlsx",
+              benchmark = "IDX1",
+              date_col = "^date",
+              nav_col = "^net asset val",
+              date_order = "mdy")
+    load_fund("G1", "G1.xlsx", benchmark = "IDX2", date_col = "^Date", nav_col = "^Official NAV")
+    store_timeseries(
+        var_name = "g2",
+        expr = read_timeseries("G2.csv", date_col = "Date") %>%
+            rename(g2 = NAV),
+        fund_index_map = c(g2 = "IDX2")
+    )
+    store_timeseries(
+        var_name = "idx1",
+        expr = read_timeseries_excel(
+            xl_file = "IDX1.xlsx",
+            data_sheet = 1, # use number or "sheet name"
+            date_col = "^Date",
+            col_trans = c(IDX1 = "Index One Net",
+                          "IDX1-GR" = "Index One Gross"),
+            date_order = "dmy"
+        ),
+        fund_index_map = c(`IDX1-GR` = "IDX1")
+    )
+    store_timeseries(
+        var_name = "idx2",
+        expr = full_join(read_timeseries("IDX2N.csv"),
+                         read_timeseries("IDX2G.csv"),
+                         by = "date"),
+        fund_index_map = c(`IDX2-GR` = "IDX2")
+    )
+}
+save_it()

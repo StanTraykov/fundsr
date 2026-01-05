@@ -1,7 +1,19 @@
 # fundsr (development version)
 
+## Rolling diffs
+- add Excel reader function `read_timeseries_excel()`
+- improve `read_timeseries()`: support text dates, any column name for date
 - add fund_index_map merge/clean functions `add_fund_index_map()`, `clean_fund_index_map()`
-- add Inkscape detection
+- add example Excel + CSV dataset in `extdata`
+
+## Plot output
+- add automatic Inkscape detection
+
+## Fixes
+- add various `join_env()` df and column checks to make errors easier to understand
+
+## Vignettes, examples, translations
+- fix examples to use `system.file()`
 
 # fundsr 0.2.0
 

@@ -1,6 +1,12 @@
 library(tidyverse)
 library(fundsr)
-source("common_spec.R")
+
+script_dir <- system.file("scripts/examples", package = "fundsr")
+stopifnot(nzchar(script_dir))
+spec_src <- function(...) {
+    source(file.path(script_dir, ...))
+}
+spec_src("common_spec.R")
 
 specs <- tribble(
     ~population, ~sex, ~age,
