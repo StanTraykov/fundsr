@@ -1,29 +1,3 @@
-#' Read an MSCI two-column TSV file
-#'
-#' Extracts the data portion of an MSCI TSV file—skipping header noise—and reads
-#' it as a two-column table containing a date and a numeric value.
-#'
-#' @param file Filename of the TSV to read (relative to `getOption("fundsr.data_dir")`).
-#'
-#' @return A tibble with a `Date` column and one numeric column.
-#'
-#' @details
-#' The function filters lines beginning with a digit (date rows) or the literal
-#' `"Date"`, then parses them using a fixed `%m/%d/%Y` date format and a numeric
-#' second field.
-#'
-#' @export
-read_msci_tsv <- function(file) {
-    fund_data_dir <- getOption("fundsr.data_dir")
-    lines <- readr::read_lines(file.path(fund_data_dir, file))
-    data_lines <- grep("^[0-9]|Date", lines, value = TRUE)
-    df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
-        readr::col_date(format = "%m/%d/%Y"),
-        readr::col_double()
-    ))
-    df
-}
-
 #' Import an MSCI index sheet and register benchmark mappings
 #'
 #' Wrapper around `store_timeseries()` and `read_timeseries_excel()` for MSCI index files.
