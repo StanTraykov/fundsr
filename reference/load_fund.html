@@ -125,7 +125,7 @@ in <code>.fundsr$fund_index_map</code> when <code>benchmark</code> is supplied.<
 exactly one of <code>paste0(toupper(ticker), ".xlsx")</code> or
 <code>paste0(toupper(ticker), ".xls")</code>.</p>
 <p>The function builds a column-translation mapping from the fund NAV column and,
-if requested, a benchmark column. It then calls <code>import_xl_data()</code> to read the
+if requested, a benchmark column. It then calls <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code> to read the
 Excel file and <code><a href="store_timeseries.html">store_timeseries()</a></code> to cache the imported object under
 <code>tolower(ticker)</code>. When <code>benchmark</code> is provided, a corresponding entry is
 added to <code>.fundsr$fund_index_map</code> to link the fund to its benchmark key.</p>
