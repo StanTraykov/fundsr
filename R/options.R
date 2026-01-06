@@ -167,7 +167,7 @@ find_inkscape <- function(
                 file.path(pf86, "Inkscape/bin/inkscape.exe"),
                 file.path(pf86, "Inkscape/inkscape.exe")
             )
-        } else {
+        } else { # Mac, Linux, etc.
             candidates <- c(
                 "/Applications/Inkscape.app/Contents/MacOS/inkscape",
                 "/Applications/Inkscape.app/Contents/MacOS/Inkscape",

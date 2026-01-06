@@ -11,7 +11,7 @@
 #' @export
 download_fund_data <- function(redownload = FALSE) {
     fund_urls <- getOption("fundsr.fund_urls")
-    fund_data_dir <- getOption("fundsr.data_dir")
+    fund_data_dir <- getOption("fundsr.data_dir", ".")
     download_as(fund_urls, path = fund_data_dir, redownload = redownload)
     invisible(NULL)
 }
@@ -20,7 +20,8 @@ download_as <- function(named_urls,
                         path = getOption("fundsr.data_dir", "."),
                         redownload = FALSE) {
     if (!dir.exists(path)) dir.create(path, recursive = TRUE)
-    for (file in names(named_urls)) {
+    files <- sample(names(named_urls)) # randomize order
+    for (file in files) {
         url <- named_urls[[file]]
         # hack .xls extension for iShares downloads (not critical but allows Excel to open
         # these files with a warning instead of blocking [outdated XML format])

@@ -1,5 +1,5 @@
 ##### Plots #####
-funds <- c("sxr8", "spxs", "vuaa", "spyl", "i500", "xd9u", "sc0h", "USA-GR")
+funds <- c("sxr8", "spxs", "vuaa", "spyl", "i500", "xd9u", "sc0h", "sp5c", "USA-GR")
 title <- c(
     en = "USA funds (selection)",
     bg = "фондове за САЩ (селекция)"
@@ -11,7 +11,8 @@ us_sel_pal <- c("sc0h" = "#11569B",
                 "vuaa" = "#DD7700",
                 "USA-GR" = "black",
                 "spyl" = "#880088",
-                "xd9u" = "#206666")
+                "xd9u" = "#206666",
+                "sp5c" = "gray40")
 us_colors <- function(...) {
     scale_color_manual(values = us_sel_pal, na.value = "grey70", labels = toupper, ...)
 }
@@ -36,7 +37,8 @@ spec_list <- c(spec_list, list(plot_spec))
 add_fund_urls(c(
     SXR8 = "https://www.ishares.com/uk/professional/en/products/253743/ishares-sp-500-b-ucits-etf-acc-fund/1535604580409.ajax?fileType=xls&fileName=iShares-Core-SP-500-UCITS-ETF-USD-Acc_fund&dataType=fund",
     SPYL = "https://www.ssga.com/nl/en_gb/intermediary/library-content/products/fund-data/etfs/emea/navhist-emea-en-spyl-gy.xlsx",
-    I500 = "https://www.ishares.com/uk/professional/en/products/314989/fund/1535604580409.ajax?fileType=xls&fileName=iShares-SP-500-Swap-UCITS-ETF-USD-Acc_fund&dataType=fund"
+    I500 = "https://www.ishares.com/uk/professional/en/products/314989/fund/1535604580409.ajax?fileType=xls&fileName=iShares-SP-500-Swap-UCITS-ETF-USD-Acc_fund&dataType=fund",
+    SPEA = "https://www.ishares.com/ch/professionals/en/products/342916/fund/1535604580403.ajax?fileType=xls&fileName=iShares-SP-500-Swap-PEA-UCITS-ETF-EUR-Acc_fund&dataType=fund"
 ))
 
 add_data_loader(function() {
@@ -52,9 +54,11 @@ add_data_loader(function() {
     ####### Funds #######
     ishs("SXR8", benchmark = "SP500", retrieve_benchmark = T)
     ishs("I500", benchmark = "SP500")
+    ishs("SPEA", benchmark = "SP500EUR", retrieve_benchmark = T)
     spdr("SPYL", benchmark = "SP500")
     inve("SPXS", benchmark = "SP500")
     inve("SC0H", benchmark = "USA")
     xtra("XD9U", benchmark = "USA", file = "HistoricalData-IE00BJ0KDR00.xlsx")
     vang("VUAA", benchmark = "SP500", file = "Historical Prices - Vanguard S&P 500 UCITS ETF (USD) Accumulating.xlsx")
+    amun("SP5C", benchmark = "SP500EUR", file = "NAV History_Amundi Core S&P 500 Swap UCITS ETF Acc_LU1135865084_09_12_2014.xlsx")
 })

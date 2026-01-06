@@ -27,12 +27,15 @@ Imports:
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
-Suggests: 
+Suggests:
+    svglite,
     knitr,
     rmarkdown,
-    svglite,
     testthat (>= 3.0.0),
-    withr
+    withr,
+    DT,
+    DiagrammeR,
+    kableExtra
 VignetteBuilder: knitr
 URL: https://stantraykov.github.io/fundsr/, https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues
