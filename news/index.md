@@ -2,6 +2,10 @@
 
 ## fundsr (development version)
 
+### Documentation
+
+- add Importing vignette and improve docs in various places
+
 ### Rolling diffs
 
 - add Excel reader function
@@ -13,6 +17,10 @@
   [`add_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/add_fund_index_map.md),
   `clean_fund_index_map()`
 - add example Excel + CSV dataset in `extdata`
+- `late_join` parameter to
+  [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
+- param rename/depr.: data_sheet -\> sheet, coalesce_suffixed -\>
+  join_precedence
 
 ### Plot output
 

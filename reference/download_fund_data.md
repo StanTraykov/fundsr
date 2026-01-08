@@ -19,3 +19,8 @@ download_fund_data(redownload = FALSE)
 ## Value
 
 Invisibly returns `NULL`. Files are written as a side effect.
+
+## See also
+
+[`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.md)
+to add/update entries in `fundsr.fund_urls`.

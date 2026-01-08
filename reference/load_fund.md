@@ -12,13 +12,15 @@ mapping is recorded in `.fundsr$fund_index_map`.
 load_fund(
   ticker,
   file = NULL,
-  data_sheet = 1,
+  sheet = 1,
   date_col = "^Date",
   nav_col = "^NAV",
   benchmark = NULL,
   benchmark_col = NULL,
   retrieve_benchmark = FALSE,
-  date_order = "dmy"
+  date_order = "dmy",
+  var_name = NULL,
+  data_sheet = NULL
 )
 ```
 
@@ -34,7 +36,7 @@ load_fund(
   Optional filename. If `NULL` (the default), it is inferred from
   `ticker` as described above.
 
-- data_sheet:
+- sheet:
 
   Sheet index or name containing the NAV data. Defaults to `1`.
 
@@ -67,6 +69,14 @@ load_fund(
 
   Date parsing order passed to the importer. Defaults to `"dmy"`.
 
+- var_name:
+
+  Specify a custom variable name for the storage environment.
+
+- data_sheet:
+
+  Deprecated; use `sheet`.
+
 ## Value
 
 Invisibly returns `NULL`. The imported data are stored in
@@ -87,3 +97,19 @@ to read the Excel file and
 to cache the imported object under `tolower(ticker)`. When `benchmark`
 is provided, a corresponding entry is added to `.fundsr$fund_index_map`
 to link the fund to its benchmark key.
+
+## See also
+
+Basic functions:
+[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md),
+[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
+
+Vendor-specific wrappers:
+[`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md),
+[`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md),
+[`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md),
+[`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md),
+[`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md),
+[`ubs()`](https://stantraykov.github.io/fundsr/reference/ubs.md),
+[`vang()`](https://stantraykov.github.io/fundsr/reference/vang.md),
+[`xtra()`](https://stantraykov.github.io/fundsr/reference/xtra.md)

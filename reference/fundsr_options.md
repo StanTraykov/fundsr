@@ -46,8 +46,8 @@ fundsr_options(
 
 - xetra_map:
 
-  Named character vector mapping “primary” tickers to Xetra tickers
-  (sets `fundsr.xetra_map`).
+  Named character vector mapping "primary" tickers (series table column
+  names) to Xetra tickers (sets `fundsr.xetra_map`).
 
 - inkscape:
 

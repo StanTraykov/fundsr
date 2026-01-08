@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>fundsr-intro: Rolling differences and Xetra liquidity plots • fundsr</title>
+<title>Simple Demo Using Real Data • fundsr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="fundsr-intro: Rolling differences and Xetra liquidity plots">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simple Demo Using Real Data">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,8 +33,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/fundsr-intro.html">fundsr-intro: Rolling differences and Xetra liquidity plots</a></li>
-    <li><a class="dropdown-item" href="../articles/life-vignette.html">life: Survival chances for financial planning</a></li>
+<li><a class="dropdown-item" href="../articles/importing-and-computing-differences.html">Importing Data and Computing Differences in fundsr</a></li>
+    <li><a class="dropdown-item" href="../articles/simple-demo-using-real-data.html">Simple Demo Using Real Data</a></li>
+    <li><a class="dropdown-item" href="../articles/survival-curves-for-financial-planning.html">Survival Curves for Financial Planning</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -57,40 +58,35 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>fundsr-intro: Rolling differences and Xetra liquidity plots</h1>
+      <h1>Simple Demo Using Real Data</h1>
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-05</h4>
+            <h4 data-toc-skip class="date">2026-01-08</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/articles/fundsr-intro.Rmd" class="external-link"><code>vignettes/articles/fundsr-intro.Rmd</code></a></small>
-      <div class="d-none name"><code>fundsr-intro.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/articles/simple-demo-using-real-data.Rmd" class="external-link"><code>vignettes/articles/simple-demo-using-real-data.Rmd</code></a></small>
+      <div class="d-none name"><code>simple-demo-using-real-data.Rmd</code></div>
     </div>
 
     
     
+<p>This vignette demonstrates a simple workflow using downloaded fund
+files. For a more comprehensive introduciton using example data files,
+see <code><a href="../articles/importing-and-computing-differences.html">vignette("importing-and-computing-differences")</a></code>. More
+complex workflows are shipped (without data) under
+<code>scripts/examples</code> in the fundsr directory (start with
+<code>glob_funds.R</code> or <code>all_funds.R</code>). The installation
+path can be discovered via
+<code>system.file("scripts/examples", package="fundsr")</code>.</p>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'lubridate'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     date, intersect, setdiff, union</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/fundsr/">fundsr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; fundsr loaded.</span></span></code></pre></div>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stantraykov.github.io/fundsr/">fundsr</a></span><span class="op">)</span></span></code></pre></div>
 <p>Set up directories.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dirs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -101,14 +97,17 @@ Traykov</h4>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">d</span> <span class="kw">in</span> <span class="va">dirs</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">d</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Populate the XLM directory with some monthly XLM reports</p>
+<p>Populate the XLM directory with some monthly XLM reports.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">xlm_urls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"https://www.cashmarket.deutsche-boerse.com/resource/blob/4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130-ETF-ETP-Statistic.xlsx"</span>,</span>
-<span>    <span class="st">"https://www.cashmarket.deutsche-boerse.com/resource/blob/4795286/394c4451af562507f9def3f39da62242/data/20251031-ETF-ETP-Statistic.xlsx"</span>,</span>
-<span>    <span class="st">"https://www.cashmarket.deutsche-boerse.com/resource/blob/4725636/2d62a1677b537d996aefc45df3ff21d3/data/20250930-ETF-ETP-Statistic.xlsx"</span>,</span>
-<span>    <span class="st">"https://www.cashmarket.deutsche-boerse.com/resource/blob/4674370/0de847380722e8e87bc821cb5313ba41/data/20250831-ETF-ETP-Statistic.xlsx"</span></span>
+<code class="sourceCode R"><span><span class="va">base_url</span> <span class="op">&lt;-</span> <span class="st">"https://www.cashmarket.deutsche-boerse.com/resource/blob/"</span></span>
+<span><span class="va">file_suffix</span> <span class="op">&lt;-</span> <span class="st">"-ETF-ETP-Statistic.xlsx"</span></span>
+<span><span class="va">blob_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130"</span>,</span>
+<span>  <span class="st">"4795286/394c4451af562507f9def3f39da62242/data/20251031"</span>,</span>
+<span>  <span class="st">"4725636/2d62a1677b537d996aefc45df3ff21d3/data/20250930"</span>,</span>
+<span>  <span class="st">"4674370/0de847380722e8e87bc821cb5313ba41/data/20250831"</span></span>
 <span><span class="op">)</span></span>
+<span><span class="va">xlm_urls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">base_url</span>, <span class="va">blob_paths</span>, <span class="va">file_suffix</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">url</span> <span class="kw">in</span> <span class="va">xlm_urls</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span>    <span class="va">dest_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dirs</span><span class="op">[[</span><span class="st">"xlm"</span><span class="op">]</span><span class="op">]</span>, <span class="va">fname</span><span class="op">)</span></span>
@@ -117,7 +116,7 @@ Traykov</h4>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Import all XLM files into a tibble</p>
+<p>Import all XLM files into a tibble.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"xlm_data"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">xlm_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_xlm_directory.html">read_xlm_directory</a></span><span class="op">(</span><span class="va">dirs</span><span class="op">[[</span><span class="st">"xlm"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -126,7 +125,7 @@ Traykov</h4>
 <span><span class="co">#&gt; XLM read: September 2025</span></span>
 <span><span class="co">#&gt; XLM read: October 2025</span></span>
 <span><span class="co">#&gt; XLM read: November 2025</span></span></code></pre></div>
-<p>Set package options</p>
+<p>Set package options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fundsr_options.html">fundsr_options</a></span><span class="op">(</span></span>
 <span>    data_dir <span class="op">=</span> <span class="va">dirs</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span>,</span>
@@ -142,37 +141,40 @@ Traykov</h4>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="get-fund-data">Get fund data<a class="anchor" aria-label="anchor" href="#get-fund-data"></a>
+<h2 id="download-and-import">Download and import<a class="anchor" aria-label="anchor" href="#download-and-import"></a>
 </h2>
-<p>Populate funds directory (download files in
-<code>fundsr.fund_urls</code> option)</p>
+<p>Populate funds directory (download URLs listed in option
+<code>fundsr.fund_urls</code>).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/download_fund_data.html">download_fund_data</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/download_fund_data.html">download_fund_data</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># downloads as SPYY.xlsx, IUSQ.xls</span></span>
 <span><span class="co">#&gt; Downloading 'IUSQ'</span></span>
 <span><span class="co">#&gt; Downloading 'SPYY'</span></span></code></pre></div>
-<p>Register data loader</p>
+<p>Register data loader calling vendor-specific wrappers around
+<code><a href="../reference/load_fund.html">load_fund()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_data_loader.html">add_data_loader</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="../reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span> <span class="co"># automatically attempts to read &lt;ticker&gt;.xls[x]</span></span>
-<span>    <span class="fu"><a href="../reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co"># also retrieve ACWI from file</span></span>
+<span>    <span class="co"># this loads the downloaded SPYY.xlsx</span></span>
+<span>    <span class="fu"><a href="../reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
+<span>    <span class="co"># loads IUSQ.xls, also retrieves ACWI (net) from the file</span></span>
+<span>    <span class="fu"><a href="../reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>Get fund and index data into a big tibble</p>
+<p>Get fund and index data into a master table.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_all_series.html">build_all_series</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2012-12-29"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; *** Loading: spyy</span></span>
-<span><span class="co">#&gt; Attempting readxl on 'data/funds/SPYY.xlsx'...</span></span>
+<span><span class="co">#&gt; Reading Excel file 'data/funds/SPYY.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date col ='^Date').</span></span>
+<span><span class="co">#&gt; 3732 rows x 2 cols (sheet='1', date col ='^Date').</span></span>
 <span><span class="co">#&gt; *** Loading: iusq</span></span>
-<span><span class="co">#&gt; Attempting readxl on 'data/funds/IUSQ.xls'...</span></span>
+<span><span class="co">#&gt; Reading Excel file 'data/funds/IUSQ.xls'...</span></span>
 <span><span class="co">#&gt; readxl failed. Attempting parse as Excel 2003 XML...</span></span>
-<span><span class="co">#&gt; Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date col ='^As Of').</span></span>
+<span><span class="co">#&gt; 3625 rows x 3 cols (sheet='Historical', date col ='^As Of').</span></span>
 <span><span class="co">#&gt; Joining: spyy, iusq</span></span></code></pre></div>
-<p>Check contents</p>
+<p>Check contents.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2015-04-03"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,759 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,762 × 4</span></span></span>
 <span><span class="co">#&gt;    date        spyy  iusq  ACWI</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2015-04-06   <span style="color: #BB0000;">NA</span>   38.2  153.</span></span>
@@ -185,28 +187,42 @@ Traykov</h4>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2015-04-15  102.  39.0  156.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2015-04-16  102.  39.1  156.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2015-04-17  101.  38.7  155.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,749 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,752 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   spyy   iusq </span></span>
 <span><span class="co">#&gt; "ACWI" "ACWI"</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="calculate-cagr-log-diffs">Calculate CAGR &amp; log diffs<a class="anchor" aria-label="anchor" href="#calculate-cagr-log-diffs"></a>
+<h2 id="compute">Compute<a class="anchor" aria-label="anchor" href="#compute"></a>
 </h2>
+<p>Calculate CAGR and log-return differences with a 365-day rolling
+window.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nd</span> <span class="op">&lt;-</span> <span class="fl">365</span></span>
 <span><span class="va">diffs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roll_diffs.html">roll_diffs</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">nd</span>, <span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Roll diffs spyy -&gt; ACWI</span></span>
 <span><span class="co">#&gt; Roll diffs iusq -&gt; ACWI</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date        spyy         iusq</span></span>
+<span><span class="co">#&gt; 1 2026-01-05 0.004708281 0.0009037957</span></span>
+<span><span class="co">#&gt; 2 2026-01-06 0.004511927 0.0007926735</span></span>
+<span><span class="co">#&gt; 3 2026-01-07          NA           NA</span></span>
+<span><span class="va">diffs</span><span class="op">$</span><span class="va">log</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date        spyy         iusq</span></span>
+<span><span class="co">#&gt; 1 2026-01-05 0.003822482 0.0007348929</span></span>
+<span><span class="co">#&gt; 2 2026-01-06 0.003658349 0.0006436832</span></span>
+<span><span class="co">#&gt; 3 2026-01-07          NA           NA</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="plot-specs">Plot specs<a class="anchor" aria-label="anchor" href="#plot-specs"></a>
+<h2 id="plot-specifications">Plot specifications<a class="anchor" aria-label="anchor" href="#plot-specifications"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">no_filter</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">zoom_filter</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2022-01-01"</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span>
 <span><span class="va">acwi_funds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spyy"</span>, <span class="st">"iusq"</span><span class="op">)</span></span>
-<span><span class="va">gg_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iusq"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"spyy"</span> <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span>
+<span><span class="va">gg_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iusq"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"spyy"</span> <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>,</span>
+<span>                             labels <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">plot_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>    <span class="op">~</span><span class="va">plot_id</span>, <span class="op">~</span><span class="va">title</span>, <span class="op">~</span><span class="va">data_filter</span>,</span>
@@ -226,13 +242,13 @@ Traykov</h4>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="run">Run!<a class="anchor" aria-label="anchor" href="#run"></a>
+<h2 id="plot">Plot<a class="anchor" aria-label="anchor" href="#plot"></a>
 </h2>
 <p>Run the plots! This outputs SVG files and queues plots for optional
 PNG export using Inkscape (see blow). It may also output lower-quality
 PNGs (if option <code>fundsr.internal_png</code> is
 <code>TRUE</code>).</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_plots.html">run_plots</a></span><span class="op">(</span><span class="va">diffs</span>, <span class="va">nd</span>, <span class="va">plot_spec</span>, <span class="va">xlm_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY &amp; IUSQ</span></span>
 <span><span class="co">#&gt; plot_xlms: spyy, iusq</span></span>
@@ -243,25 +259,25 @@ PNGs (if option <code>fundsr.internal_png</code> is
 <div class="section level2">
 <h2 id="output">Output<a class="anchor" aria-label="anchor" href="#output"></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"ACWI"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="fundsr-intro_files/figure-html/acwi-plots-1.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"ACWI_L"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="fundsr-intro_files/figure-html/acwi-plots-2.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"ACWI"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<p><img src="simple-demo-using-real-data_files/figure-html/acwi-plots-1.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"ACWIz_L"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="fundsr-intro_files/figure-html/acwi-plots-3.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"ACWI_L"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<p><img src="simple-demo-using-real-data_files/figure-html/acwi-plots-2.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"ACWIz_L"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<p><img src="simple-demo-using-real-data_files/figure-html/acwi-plots-3.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span><span class="op">[[</span><span class="st">"xlm_ACWI"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="fundsr-intro_files/figure-html/acwi-plots-4.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
+<p><img src="simple-demo-using-real-data_files/figure-html/acwi-plots-4.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
 <p>Corresponding SVG files should be in the <code>output</code>
 directory.</p>
 </div>
 <div class="section level2">
 <h2 id="plot-in-another-language">Plot in another language<a class="anchor" aria-label="anchor" href="#plot-in-another-language"></a>
 </h2>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/locales.html" class="external-link">Sys.setlocale</a></span><span class="op">(</span><span class="st">"LC_MESSAGES"</span>, <span class="st">"bg_BG.UTF-8"</span><span class="op">)</span> <span class="co"># needed on some systems</span></span>
 <span><span class="co">#&gt; [1] "bg_BG.UTF-8"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/gettext.html" class="external-link">Sys.setLanguage</a></span><span class="op">(</span><span class="st">"bg"</span><span class="op">)</span></span>
@@ -274,15 +290,16 @@ directory.</p>
 <span><span class="co">#&gt; plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY &amp; IUSQ: последни години</span></span>
 <span><span class="co">#&gt; plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY &amp; IUSQ: последни години</span></span>
 <span><span class="va">bg_p</span><span class="op">[[</span><span class="st">"ACWIz_bg_L"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="fundsr-intro_files/figure-html/acwi-bg-plots-1.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p><img src="simple-demo-using-real-data_files/figure-html/acwi-bg-plots-1.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bg_p</span><span class="op">[[</span><span class="st">"xlm_ACWI_bg"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="fundsr-intro_files/figure-html/acwi-bg-plots-2.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
+<p><img src="simple-demo-using-real-data_files/figure-html/acwi-bg-plots-2.png" class="r-plt" alt="" width="93%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
-<h2 id="optional-higher-quality-png-export">Optional: higher-quality PNG export<a class="anchor" aria-label="anchor" href="#optional-higher-quality-png-export"></a>
+<h2 id="optional-high-quality-png-export">Optional high-quality PNG export<a class="anchor" aria-label="anchor" href="#optional-high-quality-png-export"></a>
 </h2>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<p>Process queued files via Inkscape (converting SVG to PNG).</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/export_pngs.html">export_pngs</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"</span></span>
 <span><span class="co">#&gt; [1] 0</span></span></code></pre></div>

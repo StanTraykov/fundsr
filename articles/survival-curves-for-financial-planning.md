@@ -1,4 +1,4 @@
-# life: Survival chances for financial planning
+# Survival Curves for Financial Planning
 
 ## Setup
 
@@ -8,16 +8,15 @@ library(fundsr)
 
 fundsr_options(
     out_dir = "output", # where to write plots
-    px_width = 1700, # for optional PNG output
+    export_svg = TRUE, # whether to export SVG files
+    px_width = 1700, # for optional PNG output (internal or via Inkscape)
     # internal_png = TRUE, # whether to export PNGs via ggplot2 (lower quality)
-    export_svg = TRUE, # whether to export SVGs (needed for Inkscape PNG export)
 
-    # Inkscape executable for higher-quality PNG export
-    # (uncomment depending on system or comment all to disable)
-    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe"
-    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
-    # inkscape = "/usr/bin/inkscape",
-    # inkscape = Sys.which("inkscape"), # if it's on PATH
+    # Inkscape executable for higher-quality PNG export. Discovered auto-
+    # matically on most systems (Win/Mac/*ux). Set manually, if that fails:
+    # inkscape = "/usr/bin/inkscape"
+    # inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe"
+    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape"
 )
 
 data_dir <- file.path("data", "life")
@@ -94,7 +93,7 @@ save_plot("hmd_plot", hmd_p, width = 11, height = 7, px_width = 1700)
 hmd_p
 ```
 
-![](life-vignette_files/figure-html/unnamed-chunk-4-1.png)
+![](survival-curves-for-financial-planning_files/figure-html/unnamed-chunk-4-1.png)
 
 ## Plot survival chances per EUROPOP23 projections (baseline and lower mortality scenario)
 
@@ -126,10 +125,10 @@ save_plot("es_plot", es_p, width = 11, height = 7, px_width = 1700)
 es_p
 ```
 
-![](life-vignette_files/figure-html/unnamed-chunk-6-1.png)
+![](survival-curves-for-financial-planning_files/figure-html/unnamed-chunk-6-1.png)
 
 ## Optional: export PNGs via Inkscape
 
 ``` r
-# export_pngs()
+export_pngs()
 ```

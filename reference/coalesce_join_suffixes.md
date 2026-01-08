@@ -9,7 +9,7 @@ order of `suffix` controls which column is preferred.
 ## Usage
 
 ``` r
-coalesce_join_suffixes(df, suffix = c(".x", ".y"))
+coalesce_join_suffixes(df, suffixes = c(".x", ".y"))
 ```
 
 ## Arguments
@@ -18,7 +18,7 @@ coalesce_join_suffixes(df, suffix = c(".x", ".y"))
 
   A data frame or tibble produced by joins.
 
-- suffix:
+- suffixes:
 
   Character vector of length 2 giving the suffixes to coalesce, in
   priority order. For example, `c(".x", ".y")` uses `.x` as the primary

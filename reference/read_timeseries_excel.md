@@ -8,8 +8,8 @@ and optionally coerces value columns to numeric.
 
 ``` r
 read_timeseries_excel(
-  xl_file,
-  data_sheet,
+  file,
+  sheet,
   date_col,
   col_trans,
   date_order = "dmy",
@@ -20,12 +20,12 @@ read_timeseries_excel(
 
 ## Arguments
 
-- xl_file:
+- file:
 
   Path to the Excel workbook. Typically you pass a filename relative to
   `getOption("fundsr.data_dir")`, or an absolute path.
 
-- data_sheet:
+- sheet:
 
   Sheet identifier to read from (sheet name or 1-based index).
 
@@ -106,8 +106,8 @@ for CSV/TSV time series import.
 ``` r
 if (FALSE) { # \dontrun{
 x <- read_timeseries_excel(
-  xl_file = "example.xlsx",
-  data_sheet = 1,
+  file = "example.xlsx",
+  sheet = 1,
   date_col = "^Date$",
   col_trans = c(nav = "NAV", tr = "TR"),
   date_order = "dmy"

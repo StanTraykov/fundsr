@@ -22,7 +22,7 @@ A list with the previous value of `fundsr.fund_urls`.
 
 ## Details
 
-Names are normalised to uppercase before storing.
+Names are converted to uppercase before storing.
 
 ## See also
 

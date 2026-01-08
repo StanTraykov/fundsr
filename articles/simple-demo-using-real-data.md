@@ -1,26 +1,22 @@
-# fundsr-intro: Rolling differences and Xetra liquidity plots
+# Simple Demo Using Real Data
+
+This vignette demonstrates a simple workflow using downloaded fund
+files. For a more comprehensive introduciton using example data files,
+see
+[`vignette("importing-and-computing-differences")`](https://stantraykov.github.io/fundsr/articles/importing-and-computing-differences.md).
+More complex workflows are shipped (without data) under
+`scripts/examples` in the fundsr directory (start with `glob_funds.R` or
+`all_funds.R`). The installation path can be discovered via
+`system.file("scripts/examples", package="fundsr")`.
 
 ## Setup
 
 ``` r
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 library(ggplot2)
 library(lubridate)
-#> 
-#> Attaching package: 'lubridate'
-#> The following objects are masked from 'package:base':
-#> 
-#>     date, intersect, setdiff, union
+
 library(fundsr)
-#> fundsr loaded.
 ```
 
 Set up directories.
@@ -36,15 +32,18 @@ for (d in dirs) {
 }
 ```
 
-Populate the XLM directory with some monthly XLM reports
+Populate the XLM directory with some monthly XLM reports.
 
 ``` r
-xlm_urls <- c(
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130-ETF-ETP-Statistic.xlsx",
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4795286/394c4451af562507f9def3f39da62242/data/20251031-ETF-ETP-Statistic.xlsx",
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4725636/2d62a1677b537d996aefc45df3ff21d3/data/20250930-ETF-ETP-Statistic.xlsx",
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4674370/0de847380722e8e87bc821cb5313ba41/data/20250831-ETF-ETP-Statistic.xlsx"
+base_url <- "https://www.cashmarket.deutsche-boerse.com/resource/blob/"
+file_suffix <- "-ETF-ETP-Statistic.xlsx"
+blob_paths <- c(
+  "4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130",
+  "4795286/394c4451af562507f9def3f39da62242/data/20251031",
+  "4725636/2d62a1677b537d996aefc45df3ff21d3/data/20250930",
+  "4674370/0de847380722e8e87bc821cb5313ba41/data/20250831"
 )
+xlm_urls <- paste0(base_url, blob_paths, file_suffix)
 for (url in xlm_urls) {
     fname <- basename(url)
     dest_path <- file.path(dirs[["xlm"]], fname)
@@ -55,7 +54,7 @@ for (url in xlm_urls) {
 }
 ```
 
-Import all XLM files into a tibble
+Import all XLM files into a tibble.
 
 ``` r
 if (!exists("xlm_data")) {
@@ -67,7 +66,7 @@ if (!exists("xlm_data")) {
 #> XLM read: November 2025
 ```
 
-Set package options
+Set package options.
 
 ``` r
 fundsr_options(
@@ -84,46 +83,50 @@ add_fund_urls(c(
 ))
 ```
 
-## Get fund data
+## Download and import
 
-Populate funds directory (download files in `fundsr.fund_urls` option)
+Populate funds directory (download URLs listed in option
+`fundsr.fund_urls`).
 
 ``` r
-download_fund_data()
+download_fund_data() # downloads as SPYY.xlsx, IUSQ.xls
 #> Downloading 'IUSQ'
 #> Downloading 'SPYY'
 ```
 
-Register data loader
+Register data loader calling vendor-specific wrappers around
+[`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md).
 
 ``` r
 add_data_loader(function() {
-    spdr("SPYY", benchmark = "ACWI") # automatically attempts to read <ticker>.xls[x]
-    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T) # also retrieve ACWI from file
+    # this loads the downloaded SPYY.xlsx
+    spdr("SPYY", benchmark = "ACWI")
+    # loads IUSQ.xls, also retrieves ACWI (net) from the file
+    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T)
 })
 ```
 
-Get fund and index data into a big tibble
+Get fund and index data into a master table.
 
 ``` r
 series <- build_all_series() %>%
     filter(date >= as_date("2012-12-29"))
 #> *** Loading: spyy
-#> Attempting readxl on 'data/funds/SPYY.xlsx'...
+#> Reading Excel file 'data/funds/SPYY.xlsx'...
 #> readxl succeeded. Returning data.
-#> Returning 3729 rows x 2 columns from 'data/funds/SPYY.xlsx' (sheet='1', date col ='^Date').
+#> 3732 rows x 2 cols (sheet='1', date col ='^Date').
 #> *** Loading: iusq
-#> Attempting readxl on 'data/funds/IUSQ.xls'...
+#> Reading Excel file 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
-#> Returning 3623 rows x 3 columns from 'data/funds/IUSQ.xls' (sheet='Historical', date col ='^As Of').
+#> 3625 rows x 3 cols (sheet='Historical', date col ='^As Of').
 #> Joining: spyy, iusq
 ```
 
-Check contents
+Check contents.
 
 ``` r
 series %>% filter(date >= as_date("2015-04-03"))
-#> # A tibble: 2,759 × 4
+#> # A tibble: 2,762 × 4
 #>    date        spyy  iusq  ACWI
 #>    <date>     <dbl> <dbl> <dbl>
 #>  1 2015-04-06   NA   38.2  153.
@@ -136,13 +139,15 @@ series %>% filter(date >= as_date("2015-04-03"))
 #>  8 2015-04-15  102.  39.0  156.
 #>  9 2015-04-16  102.  39.1  156.
 #> 10 2015-04-17  101.  38.7  155.
-#> # ℹ 2,749 more rows
+#> # ℹ 2,752 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
 ```
 
-## Calculate CAGR & log diffs
+## Compute
+
+Calculate CAGR and log-return differences with a 365-day rolling window.
 
 ``` r
 nd <- 365
@@ -151,13 +156,27 @@ diffs <- roll_diffs(series, nd, get_fund_index_map())
 #> Roll diffs iusq -> ACWI
 ```
 
-## Plot specs
+``` r
+diffs$cagr %>% slice_tail(n = 3)
+#>         date        spyy         iusq
+#> 1 2026-01-05 0.004708281 0.0009037957
+#> 2 2026-01-06 0.004511927 0.0007926735
+#> 3 2026-01-07          NA           NA
+diffs$log %>% slice_tail(n = 3)
+#>         date        spyy         iusq
+#> 1 2026-01-05 0.003822482 0.0007348929
+#> 2 2026-01-06 0.003658349 0.0006436832
+#> 3 2026-01-07          NA           NA
+```
+
+## Plot specifications
 
 ``` r
 no_filter <- NULL
 zoom_filter <- function(x) {x %>% filter(date >= as_date("2022-01-01"))}
 acwi_funds <- c("spyy", "iusq")
-gg_par <- scale_color_manual(values = c("iusq" = "red", "spyy" = "blue"), labels = toupper)
+gg_par <- scale_color_manual(values = c("iusq" = "red", "spyy" = "blue"),
+                             labels = toupper)
 
 plot_spec <- tribble(
     ~plot_id, ~title, ~data_filter,
@@ -177,7 +196,7 @@ plot_spec <- tribble(
 )
 ```
 
-## Run!
+## Plot
 
 Run the plots! This outputs SVG files and queues plots for optional PNG
 export using Inkscape (see blow). It may also output lower-quality PNGs
@@ -198,25 +217,25 @@ p <- run_plots(diffs, nd, plot_spec, xlm_data)
 p[["ACWI"]]
 ```
 
-![](fundsr-intro_files/figure-html/acwi-plots-1.png)
+![](simple-demo-using-real-data_files/figure-html/acwi-plots-1.png)
 
 ``` r
 p[["ACWI_L"]]
 ```
 
-![](fundsr-intro_files/figure-html/acwi-plots-2.png)
+![](simple-demo-using-real-data_files/figure-html/acwi-plots-2.png)
 
 ``` r
 p[["ACWIz_L"]]
 ```
 
-![](fundsr-intro_files/figure-html/acwi-plots-3.png)
+![](simple-demo-using-real-data_files/figure-html/acwi-plots-3.png)
 
 ``` r
 p[["xlm_ACWI"]]
 ```
 
-![](fundsr-intro_files/figure-html/acwi-plots-4.png)
+![](simple-demo-using-real-data_files/figure-html/acwi-plots-4.png)
 
 Corresponding SVG files should be in the `output` directory.
 
@@ -237,15 +256,17 @@ bg_p <- run_plots(diffs, nd, plot_spec_bg, xlm_data)
 bg_p[["ACWIz_bg_L"]]
 ```
 
-![](fundsr-intro_files/figure-html/acwi-bg-plots-1.png)
+![](simple-demo-using-real-data_files/figure-html/acwi-bg-plots-1.png)
 
 ``` r
 bg_p[["xlm_ACWI_bg"]]
 ```
 
-![](fundsr-intro_files/figure-html/acwi-bg-plots-2.png)
+![](simple-demo-using-real-data_files/figure-html/acwi-bg-plots-2.png)
 
-## Optional: higher-quality PNG export
+## Optional high-quality PNG export
+
+Process queued files via Inkscape (converting SVG to PNG).
 
 ``` r
 export_pngs()

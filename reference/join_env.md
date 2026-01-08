@@ -5,14 +5,24 @@ Performs a
 across all objects in an environment, except those listed in `late`.
 Objects listed in `late` are instead joined afterwards using
 [`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
-in the order given. Optionally, any columns created with join suffixes
-(such as `.x` / `.y`) can be automatically coalesced into single
-unsuffixed columns.
+(or another function specified via `late_join`) in the order given.
+Column clashes during the full join are resolved via join suffixes
+`c(".x", ".y")` while the late joins use `c(".early", ".late")`.
+Optionally, columns with join suffixes can be automatically coalesced
+into single unsuffixed columns via precedence specification
+(`join_precedence`).
 
 ## Usage
 
 ``` r
-join_env(env, by, late = NULL, coalesce_suffixed = NULL)
+join_env(
+  env,
+  by = "date",
+  late = NULL,
+  join_precedence = NULL,
+  coalesce_suffixed = NULL,
+  late_join = dplyr::left_join
+)
 ```
 
 ## Arguments
@@ -32,48 +42,75 @@ join_env(env, by, late = NULL, coalesce_suffixed = NULL)
   from the initial full join and instead left-joined afterwards.
   Defaults to `NULL`.
 
-- coalesce_suffixed:
+- join_precedence:
 
   Optional character vector of length 2 giving join suffixes to coalesce
-  (for example, `c(".x", ".y")` or `c(".y", ".x")`). When non-`NULL`,
-  any pairs of columns whose names end in these suffixes (and share the
-  same base name) are replaced by a single unsuffixed column containing
-  the coalesced values. If `NULL` (the default), no automatic coalescing
-  is performed.
+  (for example, `c(".early", ".late")` or `c(".late", ".early")`). When
+  non-`NULL`, any pairs of columns whose names end in these suffixes
+  (and share the same base name) are replaced by a single unsuffixed
+  column containing the coalesced values, preferring the left suffix
+  when both values are available. If `NULL` (the default), no automatic
+  coalescing is performed.
+
+- coalesce_suffixed:
+
+  Deprecated; use `join_precedence`.
+
+- late_join:
+
+  Function to use for joining late objects.
 
 ## Value
 
 A tibble: the full join of all non-late objects, followed by sequential
-left-joins of the late objects. If `coalesce_suffixed` is supplied,
+left-joins of the late objects. If `join_precedence` is supplied,
 suffixed join columns are coalesced into unsuffixed base columns as
 described above.
-
-## Details
-
-This helper is designed for workflows where the majority of tables
-should be fully joined, while certain sparse or auxiliary tables (e.g.
-calendars, metadata) should only be attached via `left_join()`.
-
-When `coalesce_suffixed` is provided, the function uses an internal
-helper to replace pairs like `name.x` / `name.y` with a single `name`
-column whose values are taken from the first suffix in
-`coalesce_suffixed` and then, where missing, from the second.
-
-If a name in `late` does not exist in `env`, it is ignored with a
-warning.
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
   e <- new.env()
-  e$a <- tibble::tibble(date = 1:3, x = 1:3)
-  e$b <- tibble::tibble(date = 1:3, x = c(NA, 20, 30))
+  e$members <- dplyr::band_members
+  e$instruments <- dplyr::band_instruments
+  e$other_instr <- dplyr::band_instruments |>
+      dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord"))
 
-  # Simple full join of a and b
-  join_env(e, by = "date")
-
-  # Full join with automatic coalescing of x.x / x.y into x
-  join_env(e, by = "date", coalesce_suffixed = c(".x", ".y"))
-} # }
+  full <- join_env(e, by = "name")
+#> Joining: instruments, other_instr, members
+  late <- join_env(e, by = "name", late = "other_instr")
+#> Joining: instruments, other_instr, members
+  late_coalesced <- join_env(e,
+                             by = "name",
+                             late = "other_instr",
+                             join_precedence = c(".late", ".early"))
+#> Joining: instruments, other_instr, members
+  print(list(full = full, late = late, late_coalesced = late_coalesced))
+#> $full
+#> # A tibble: 4 × 4
+#>   name  plays.x plays.y     band   
+#>   <chr> <chr>   <chr>       <chr>  
+#> 1 John  guitar  banjo       Beatles
+#> 2 Paul  bass    mellotron   Beatles
+#> 3 Keith guitar  harpsichord NA     
+#> 4 Mick  NA      NA          Stones 
+#> 
+#> $late
+#> # A tibble: 4 × 4
+#>   name  plays.early band    plays.late 
+#>   <chr> <chr>       <chr>   <chr>      
+#> 1 John  guitar      Beatles banjo      
+#> 2 Paul  bass        Beatles mellotron  
+#> 3 Keith guitar      NA      harpsichord
+#> 4 Mick  NA          Stones  NA         
+#> 
+#> $late_coalesced
+#> # A tibble: 4 × 3
+#>   name  band    plays      
+#>   <chr> <chr>   <chr>      
+#> 1 John  Beatles banjo      
+#> 2 Paul  Beatles mellotron  
+#> 3 Keith NA      harpsichord
+#> 4 Mick  Stones  NA         
+#> 
 ```

@@ -2,7 +2,9 @@
 
 ### All vignettes
 
-- [fundsr-intro: Rolling differences and Xetra liquidity
-  plots](https://stantraykov.github.io/fundsr/articles/fundsr-intro.md):
-- [life: Survival chances for financial
-  planning](https://stantraykov.github.io/fundsr/articles/life-vignette.md):
+- [Importing Data and Computing Differences in
+  fundsr](https://stantraykov.github.io/fundsr/articles/importing-and-computing-differences.md):
+- [Simple Demo Using Real
+  Data](https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.md):
+- [Survival Curves for Financial
+  Planning](https://stantraykov.github.io/fundsr/articles/survival-curves-for-financial-planning.md):

@@ -27,7 +27,7 @@ build_all_series(reload = FALSE, by = "date", ...)
 
   Additional arguments forwarded to
   [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
-  (e.g. `late =`, `coalesce_suffixed =`, etc.).
+  (e.g. `late =`, `join_precedence =`, etc.).
 
 ## Value
 
@@ -44,7 +44,7 @@ if (FALSE) { # \dontrun{
 
 s1 <- build_all_series()
 download_fund_data(redownload = TRUE)
-s2 <- build_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+s2 <- build_all_series(by = "date", late = "ftaw", join_precedence = c(".y", ".x")) %>%
   filter(date >= as_date("2013-01-01"))
 } # }
 ```
