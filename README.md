@@ -1,11 +1,11 @@
 # fundsr <img src="man/figures/logo.png" align="right" width="120" />
 
+[![R-CMD-check](https://github.com/StanTraykov/fundsr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/StanTraykov/fundsr/actions/workflows/R-CMD-check.yaml)
+[![fundsr status badge](https://stantraykov.r-universe.dev/fundsr/badges/version)](https://stantraykov.r-universe.dev/fundsr)
+
 fundsr imports fund NAVs and index levels and creates tracking difference plots (CAGR and log-return). Plotting Xetra liquidity data (XLM) is also supported.
 
 ## Installation
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/StanTraykov/fundsr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/StanTraykov/fundsr/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
 ```r
 # install.packages("pak")
 
@@ -17,7 +17,6 @@ pak::pak("StanTraykov/fundsr")
 ```
 
 ### From my r-universe (binary builds of latest release)
-[![fundsr status badge](https://stantraykov.r-universe.dev/fundsr/badges/version)](https://stantraykov.r-universe.dev/fundsr)
 ```r
 install.packages(
   "fundsr",
