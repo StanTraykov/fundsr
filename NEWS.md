@@ -1,7 +1,7 @@
-# fundsr (development version)
+# fundsr 0.2.1
 
 ## Documentation
-- add Importing vignette and improve docs in various places
+- add Importing vignette and improve docs and vignettes
 
 ## Rolling diffs
 - add Excel reader function `read_timeseries_excel()`
