@@ -1,10 +1,10 @@
 ---
-title: "fundsr-intro: Rolling differences and Xetra liquidity plots"
+title: "Simple Demo Using Real Data"
 author: "Stanislav Traykov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{fundsr-intro: Rolling differences and Xetra liquidity plots}
+  %\VignetteIndexEntry{Simple Demo Using Real Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,15 +16,19 @@ knitr::opts_chunk$set(
 )
 ```
 
+This vignette demonstrates a simple workflow using downloaded fund files. For a more comprehensive introduciton using example data files, see `vignette("importing-and-computing-differences")`. More complex workflows are shipped (without data) under `scripts/examples` in the fundsr directory (start with `glob_funds.R` or `all_funds.R`). The installation path can be discovered via `system.file("scripts/examples", package="fundsr")`.
+
 ## Setup
-```{r setup}
+```{r setup, message=FALSE, warning=FALSE}
 library(dplyr)
 library(ggplot2)
 library(lubridate)
+
 library(fundsr)
 ```
 
 Set up directories.
+
 ```{r dirs}
 dirs <- c(
     data = file.path("data", "funds"),
@@ -36,14 +40,18 @@ for (d in dirs) {
 }
 ```
 
-Populate the XLM directory with some monthly XLM reports
+Populate the XLM directory with some monthly XLM reports.
+
 ```{r xlm-fetch}
-xlm_urls <- c(
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130-ETF-ETP-Statistic.xlsx",
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4795286/394c4451af562507f9def3f39da62242/data/20251031-ETF-ETP-Statistic.xlsx",
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4725636/2d62a1677b537d996aefc45df3ff21d3/data/20250930-ETF-ETP-Statistic.xlsx",
-    "https://www.cashmarket.deutsche-boerse.com/resource/blob/4674370/0de847380722e8e87bc821cb5313ba41/data/20250831-ETF-ETP-Statistic.xlsx"
+base_url <- "https://www.cashmarket.deutsche-boerse.com/resource/blob/"
+file_suffix <- "-ETF-ETP-Statistic.xlsx"
+blob_paths <- c(
+  "4844258/91ce589f5309cbbd1ad0c92b3e6cdbda/data/20251130",
+  "4795286/394c4451af562507f9def3f39da62242/data/20251031",
+  "4725636/2d62a1677b537d996aefc45df3ff21d3/data/20250930",
+  "4674370/0de847380722e8e87bc821cb5313ba41/data/20250831"
 )
+xlm_urls <- paste0(base_url, blob_paths, file_suffix)
 for (url in xlm_urls) {
     fname <- basename(url)
     dest_path <- file.path(dirs[["xlm"]], fname)
@@ -54,14 +62,16 @@ for (url in xlm_urls) {
 }
 ```
 
-Import all XLM files into a tibble
+Import all XLM files into a tibble.
+
 ```{r xlm-read}
 if (!exists("xlm_data")) {
     xlm_data <- read_xlm_directory(dirs[["xlm"]])
 }
 ```
 
-Set package options
+Set package options.
+
 ```{r options}
 fundsr_options(
     data_dir = dirs[["data"]],
@@ -77,44 +87,61 @@ add_fund_urls(c(
 ))
 ```
 
-## Get fund data
-Populate funds directory (download files in `fundsr.fund_urls` option)
+## Download and import
+
+Populate funds directory (download URLs listed in option `fundsr.fund_urls`).
+
 ```{r fund-dl}
-download_fund_data()
+download_fund_data() # downloads as SPYY.xlsx, IUSQ.xls
 ```
 
-Register data loader
+Register data loader calling vendor-specific wrappers around `load_fund()`.
+
 ```{r data-loader}
 add_data_loader(function() {
-    spdr("SPYY", benchmark = "ACWI") # automatically attempts to read <ticker>.xls[x]
-    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T) # also retrieve ACWI from file
+    # this loads the downloaded SPYY.xlsx
+    spdr("SPYY", benchmark = "ACWI")
+    # loads IUSQ.xls, also retrieves ACWI (net) from the file
+    ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = T)
 })
 ```
 
-Get fund and index data into a big tibble
+Get fund and index data into a master table.
+
 ```{r run-data-loaders}
 series <- build_all_series() %>%
     filter(date >= as_date("2012-12-29"))
 ```
 
-Check contents
+Check contents.
+
 ```{r contents-check}
 series %>% filter(date >= as_date("2015-04-03"))
 get_fund_index_map()
 ```
 
-## Calculate CAGR & log diffs
+## Compute
+
+Calculate CAGR and log-return differences with a 365-day rolling window.
+
 ```{r roll-diffs}
 nd <- 365
 diffs <- roll_diffs(series, nd, get_fund_index_map())
 ```
 
-## Plot specs
+```{r roll-check}
+diffs$cagr %>% slice_tail(n = 3)
+diffs$log %>% slice_tail(n = 3)
+```
+
+## Plot specifications
+
 ```{r plot-specs}
 no_filter <- NULL
 zoom_filter <- function(x) {x %>% filter(date >= as_date("2022-01-01"))}
 acwi_funds <- c("spyy", "iusq")
-gg_par <- scale_color_manual(values = c("iusq" = "red", "spyy" = "blue"), labels = toupper)
+gg_par <- scale_color_manual(values = c("iusq" = "red", "spyy" = "blue"),
+                             labels = toupper)
 
 plot_spec <- tribble(
     ~plot_id, ~title, ~data_filter,
@@ -134,13 +161,16 @@ plot_spec <- tribble(
 )
 ```
 
-## Run!
+## Plot
+
 Run the plots! This outputs SVG files and queues plots for optional PNG export using Inkscape (see blow). It may also output lower-quality PNGs (if option `fundsr.internal_png` is `TRUE`).
+
 ```{r run-plots}
 p <- run_plots(diffs, nd, plot_spec, xlm_data)
 ```
 
 ## Output
+
 ```{r acwi-plots, fig.width=12, fig.height=8, out.width="93%", fig.align="center"}
 p[["ACWI"]]
 p[["ACWI_L"]]
@@ -151,6 +181,7 @@ p[["xlm_ACWI"]]
 Corresponding SVG files should be in the `output` directory.
 
 ## Plot in another language
+
 ```{r acwi-bg-plots, fig.width=12, fig.height=8, out.width="93%", fig.align="center"}
 Sys.setlocale("LC_MESSAGES", "bg_BG.UTF-8") # needed on some systems
 Sys.setLanguage("bg")
@@ -161,7 +192,10 @@ bg_p[["ACWIz_bg_L"]]
 bg_p[["xlm_ACWI_bg"]]
 ```
 
-## Optional: higher-quality PNG export
+## Optional high-quality PNG export
+
+Process queued files via Inkscape (converting SVG to PNG).
+
 ```{r inkscape, eval=FALSE}
 export_pngs()
 #> Executing "C:/Program Files/Inkscape/bin/inkscape.exe" --actions="export-background:white;file-open:output/ACWI.svg;export-filename:output/ACWI.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI.svg;export-filename:output/xlm_ACWI.png;export-width:1300;export-do;file-close;file-open:output/ACWI_L.svg;export-filename:output/ACWI_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz.svg;export-filename:output/ACWIz.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_L.svg;export-filename:output/ACWIz_L.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg.svg;export-filename:output/ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/xlm_ACWI_bg.svg;export-filename:output/xlm_ACWI_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWI_bg_L.svg;export-filename:output/ACWI_bg_L.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg.svg;export-filename:output/ACWIz_bg.png;export-width:1300;export-do;file-close;file-open:output/ACWIz_bg_L.svg;export-filename:output/ACWIz_bg_L.png;export-width:1300;export-do;file-close"

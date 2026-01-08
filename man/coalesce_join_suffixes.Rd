@@ -4,12 +4,12 @@
 \alias{coalesce_join_suffixes}
 \title{Coalesce suffixed join columns into unsuffixed base columns}
 \usage{
-coalesce_join_suffixes(df, suffix = c(".x", ".y"))
+coalesce_join_suffixes(df, suffixes = c(".x", ".y"))
 }
 \arguments{
 \item{df}{A data frame or tibble produced by joins.}
 
-\item{suffix}{Character vector of length 2 giving the suffixes to
+\item{suffixes}{Character vector of length 2 giving the suffixes to
 coalesce, in priority order. For example, \code{c(".x", ".y")} uses
 \code{.x} as the primary source and falls back to \code{.y} when \code{.x} is \code{NA}.}
 }

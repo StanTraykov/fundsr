@@ -1,6 +1,6 @@
 library(tidyverse)
 dir <- "inst/extdata"
-
+reset_state()
 set.seed(422)
 
 n_days  <- 365L
@@ -88,7 +88,7 @@ mk_fund <- function(idx_ret,
         lvl[seq_len(start_lag_days)] <- NA_real_
     }
 
-    lvl
+    round(lvl, 6)
 }
 
 mk_gross_bonus <- function(start_ann = 0.0040, end_ann = 0.0050,
@@ -115,8 +115,8 @@ pair <- mk_index_pair(mu1_ann = 0.075, mu2_ann = 0.073, vol_ann = 0.16, corr = 0
 idx1 <- pair$idx1
 idx2 <- pair$idx2
 
-IDX1 <- idx1$level
-IDX2 <- idx2$level
+IDX1 <- round(idx1$level, 6)
+IDX2 <- round(idx2$level, 6)
 
 # --- Gross indices: drift + wiggle, strictly above net ---
 bonus1 <- mk_gross_bonus(start_ann = 0.0040, end_ann = 0.0050, wiggle_sd_ann = 0.00035, wiggle_phi = 0.985,
@@ -124,8 +124,8 @@ bonus1 <- mk_gross_bonus(start_ann = 0.0040, end_ann = 0.0050, wiggle_sd_ann = 0
 bonus2 <- mk_gross_bonus(start_ann = 0.0041, end_ann = 0.0051, wiggle_sd_ann = 0.00035, wiggle_phi = 0.985,
                          lo_ann = 0.0035, hi_ann = 0.0060)
 
-IDX1_GR <- IDX1[1] * exp(cumsum(c(0, (idx1$ret + bonus1)[-1])))
-IDX2_GR <- IDX2[1] * exp(cumsum(c(0, (idx2$ret + bonus2)[-1])))
+IDX1_GR <- round(IDX1[1] * exp(cumsum(c(0, (idx1$ret + bonus1)[-1]))), 6)
+IDX2_GR <- round(IDX2[1] * exp(cumsum(c(0, (idx2$ret + bonus2)[-1]))), 6)
 
 # --- Funds: tight tracking; almost never beat gross ---
 # gross ~ 40–50 bps/yr above net, so keep funds ~ 10–25 bps/yr above net
@@ -144,10 +144,10 @@ g2 <- mk_fund(idx2$ret,
               start_lag_days = 0L)
 
 df <- tibble(
-    date   = date,
-    IDX1   = IDX1,
+    date = date,
+    IDX1 = IDX1,
     `IDX1-GR` = IDX1_GR,
-    IDX2   = IDX2,
+    IDX2  = IDX2,
     `IDX2-GR` = IDX2_GR,
     f1 = f1,
     f2 = f2,
@@ -201,7 +201,7 @@ gr_log_plot  <- plot_roll_diffs(diffs_gross$log,
 save_it <- function() {
     f1 <- df %>% select(date, f1) %>% mutate(date = format(date, "%d-%b-%Y"))
     names(f1) <- c("As Of", "NAV")
-    writexl::write_xlsx(f1, file.path(dir,"FNDA.xlsx"))
+    writexl::write_xlsx(list(holdings = tibble(sample = 1:10, data = 10:1), historical = f1), file.path(dir,"FNDA.xlsx"))
     f2 <- df %>% select(date, f2) %>%
         filter(is.finite(f2)) %>%
         mutate(date = format(date, "%m/%d/%Y"))
@@ -210,9 +210,9 @@ save_it <- function() {
     g1 <- df %>% select(date, g1) %>% mutate(date = format(date, "%d.%m.%Y"))
     names(g1) <- c("Date", "Official NAV")
     writexl::write_xlsx(g1, file.path(dir,"GNDA.xlsx"))
-    g2 <- df %>% select(date, g2) %>%
+    g2 <- df %>% select(date, g2, IDX2) %>%
         mutate(date = as.numeric(as.POSIXct(date, tz = "UTC")) * 1000)
-    names(g2) <- c("Date", "NAV")
+    names(g2) <- c("Date", "NAV", "Benchmark")
     readr::write_csv(g2, file.path(dir,"GNDB.csv"))
     idx1 <- df %>% select(date, "IDX1", "IDX1-GR")
     names(idx1) <- c("Date", "Index One Net", "Index One Gross")
@@ -225,25 +225,35 @@ save_it <- function() {
 load_it <- function() {
     fundsr::reset_state()
     fundsr_options(data_dir = dir)
-    load_fund("FNDA", "FNDA.xlsx", benchmark = "IDX1", date_col = "^As Of", nav_col = "^NAV")
+    load_fund("FNDA",
+              "FNDA.xlsx",
+              benchmark = "IDX1",
+              sheet = "historical",
+              date_col = "^As Of",
+              nav_col = "^NAV")
     load_fund("FNDB",
               "FNDB.xlsx",
               benchmark = "IDX1",
               date_col = "^date",
               nav_col = "^net asset val",
               date_order = "mdy")
-    load_fund("GNDA", "GNDA.xlsx", benchmark = "IDX2", date_col = "^Date", nav_col = "^Official NAV")
+    load_fund("GNDA",
+              "GNDA.xlsx",
+              benchmark = "IDX2",
+              date_col = "^Date",
+              nav_col = "^Official NAV")
     store_timeseries(
         var_name = "gndb",
         expr = read_timeseries("GNDB.csv", date_col = "Date") %>%
+            select(date, NAV) %>%
             rename(gndb = NAV),
         fund_index_map = c(gndb = "IDX2")
     )
     store_timeseries(
         var_name = "idx1",
         expr = read_timeseries_excel(
-            xl_file = "IDX1.xlsx",
-            data_sheet = 1, # use number or "sheet name"
+            file = "IDX1.xlsx",
+            sheet = 1,
             date_col = "^Date",
             col_trans = c(IDX1 = "^Index One Net",
                           "IDX1-GR" = "^Index One Gross"),
@@ -274,9 +284,13 @@ test_it <- function() {
             "gndb" = "#37598a"
         )
     )
-    cagr_plot <- plot_roll_diffs(diffs_net$cagr,
+    cagr_plot <<- plot_roll_diffs(diffs_net$cagr,
                                  nd,
                                  c("fnda","fndb","gnda","gndb","IDX1-GR","IDX2-GR"),
                                  gg_params = gg_par)
+    log_plot <<- plot_roll_diffs(diffs_net$log,
+                                  nd,
+                                  c("fnda","fndb","gnda","gndb","IDX1-GR","IDX2-GR"),
+                                  gg_params = gg_par, use_log = T)
 }
 save_it()

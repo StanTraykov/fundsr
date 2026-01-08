@@ -1,10 +1,10 @@
 ---
-title: "life: Survival chances for financial planning"
+title: "Survival Curves for Financial Planning"
 author: "Stanislav Traykov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{life: Survival chances for financial planning}
+  %\VignetteIndexEntry{Survival curves for Financial Planning}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,16 +22,15 @@ library(fundsr)
 
 fundsr_options(
     out_dir = "output", # where to write plots
-    px_width = 1700, # for optional PNG output
+    export_svg = TRUE, # whether to export SVG files
+    px_width = 1700, # for optional PNG output (internal or via Inkscape)
     # internal_png = TRUE, # whether to export PNGs via ggplot2 (lower quality)
-    export_svg = TRUE, # whether to export SVGs (needed for Inkscape PNG export)
 
-    # Inkscape executable for higher-quality PNG export
-    # (uncomment depending on system or comment all to disable)
-    inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe"
-    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
-    # inkscape = "/usr/bin/inkscape",
-    # inkscape = Sys.which("inkscape"), # if it's on PATH
+    # Inkscape executable for higher-quality PNG export. Discovered auto-
+    # matically on most systems (Win/Mac/*ux). Set manually, if that fails:
+    # inkscape = "/usr/bin/inkscape"
+    # inkscape = "C:/Program Files/Inkscape/bin/inkscape.exe"
+    # inkscape = "/Applications/Inkscape.app/Contents/MacOS/Inkscape"
 )
 
 data_dir <- file.path("data", "life")
@@ -123,7 +122,7 @@ es_p
 
 ## Optional: export PNGs via Inkscape
 
-```{r}
-# export_pngs()
+```{r, eval=FALSE}
+export_pngs()
 ```
 

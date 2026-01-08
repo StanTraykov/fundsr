@@ -12,6 +12,7 @@ Imports:
     dplyr,
     ggplot2,
     glue,
+    lifecycle,
     lubridate,
     magrittr,
     purrr,
@@ -28,14 +29,14 @@ Encoding: UTF-8
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests:
-    svglite,
-    knitr,
-    rmarkdown,
-    testthat (>= 3.0.0),
-    withr,
-    DT,
     DiagrammeR,
-    kableExtra
+    kableExtra,
+    knitr,
+    pkgdown,
+    rmarkdown,
+    svglite,
+    testthat (>= 3.0.0),
+    withr
 VignetteBuilder: knitr
 URL: https://stantraykov.github.io/fundsr/, https://github.com/StanTraykov/fundsr
 BugReports: https://github.com/StanTraykov/fundsr/issues

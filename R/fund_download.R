@@ -8,6 +8,9 @@
 #'
 #' @return Invisibly returns `NULL`. Files are written as a side effect.
 #'
+#' @seealso
+#' [add_fund_urls()] to add/update entries in `fundsr.fund_urls`.
+#'
 #' @export
 download_fund_data <- function(redownload = FALSE) {
     fund_urls <- getOption("fundsr.fund_urls")

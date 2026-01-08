@@ -12,8 +12,8 @@
 #'   exporting plots (sets `fundsr.internal_png`).
 #' @param export_svg Logical; whether to save SVGs and queue Inkscape exports
 #'   (sets `fundsr.export_svg`).
-#' @param xetra_map Named character vector mapping “primary” tickers to Xetra
-#'   tickers (sets `fundsr.xetra_map`).
+#' @param xetra_map Named character vector mapping "primary" tickers (series
+#'   table column names) to Xetra tickers (sets `fundsr.xetra_map`).
 #' @param inkscape Inkscape executable (path or command name) used by export
 #'   helpers (sets `fundsr.inkscape`).
 #' @param reload Logical; default value for forcing re-import of cached
@@ -95,8 +95,10 @@ fundsr_options <- function(data_dir = NULL,
 
     if (!is.null(fund_urls)) {
         if ((!is.character(fund_urls) && !is.list(fund_urls)) ||
-            is.null(names(fund_urls)) || any(!nzchar(names(fund_urls)))) {
-            stop("`fund_urls` must be a named character vector or named list.", call. = FALSE)
+            (length(fund_urls) > 0 &&
+                (is.null(names(fund_urls)) || any(!nzchar(names(fund_urls)))))) {
+            stop("`fund_urls` must be a named character vector or named list (or empty).",
+                 call. = FALSE)
         }
         set$fundsr.fund_urls <- fund_urls
     }
@@ -114,7 +116,7 @@ fundsr_options <- function(data_dir = NULL,
 #' option. Existing entries are preserved; entries in `x` replace any
 #' existing entries with the same name.
 #'
-#' Names are normalised to uppercase before storing.
+#' Names are converted to uppercase before storing.
 #'
 #' @param x A named character vector mapping download identifiers to URLs.
 #'

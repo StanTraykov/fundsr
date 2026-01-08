@@ -1,6 +1,6 @@
 read_excel_or_xml <- function(file_path, sheet = NULL) {
     # First, try reading as a standard Excel file with readxl
-    message("Attempting readxl on '", file_path, "'...")
+    message("Reading Excel file '", file_path, "'...")
     df <- tryCatch({
         # Try readxl in a tryCatch
         readxl::read_excel(path = file_path,
@@ -168,9 +168,9 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
 #' values fail to parse; otherwise the column is only replaced when all non-`NA`
 #' values parse successfully.
 #'
-#' @param xl_file Path to the Excel workbook. Typically you pass a filename
+#' @param file Path to the Excel workbook. Typically you pass a filename
 #'   relative to `getOption("fundsr.data_dir")`, or an absolute path.
-#' @param data_sheet Sheet identifier to read from (sheet name or 1-based index).
+#' @param sheet Sheet identifier to read from (sheet name or 1-based index).
 #' @param date_col String used to detect the header row and identify the
 #'   date column (matched via regex against cell contents for header-row
 #'   detection, and against column names after headers are assigned).
@@ -198,29 +198,29 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
 #' @examples
 #' \dontrun{
 #' x <- read_timeseries_excel(
-#'   xl_file = "example.xlsx",
-#'   data_sheet = 1,
+#'   file = "example.xlsx",
+#'   sheet = 1,
 #'   date_col = "^Date$",
 #'   col_trans = c(nav = "NAV", tr = "TR"),
 #'   date_order = "dmy"
 #' )
 #' }
-read_timeseries_excel <- function(xl_file,
-                           data_sheet,
-                           date_col,
-                           col_trans,
-                           date_order = "dmy",
-                           force_numeric = TRUE,
-                           comma_rep = ".") {
+read_timeseries_excel <- function(file,
+                                  sheet,
+                                  date_col,
+                                  col_trans,
+                                  date_order = "dmy",
+                                  force_numeric = TRUE,
+                                  comma_rep = ".") {
     fund_data_dir <- getOption("fundsr.data_dir", ".")
-    xl_file <- file.path(fund_data_dir, xl_file)
+    xl_file <- file.path(fund_data_dir, file)
 
     # Mostly AI-written, except step (6) which is optimized (tidier alternative
     # based on lubridate::parse_date_time() is too slow when importing many funds).
     # Other steps could be cleaned up in the future.
 
     # 1) Read raw data (now tries readxl first, then XML fallback)
-    raw_data <- read_excel_or_xml(file_path = xl_file, sheet = data_sheet)
+    raw_data <- read_excel_or_xml(file_path = xl_file, sheet = sheet)
 
     # 2) Remove columns entirely NA
     raw_data <- select(raw_data, where(~ any(!is.na(.x))))
@@ -232,7 +232,7 @@ read_timeseries_excel <- function(xl_file,
     if (length(row_header_idx) == 0) {
         stop(glue(
             "Could NOT find the date column header matching '{date_col}' ",
-            "in '{xl_file}', sheet '{data_sheet}'."
+            "in '{xl_file}', sheet '{sheet}'."
         ))
     }
     row_header_idx <- row_header_idx[1]
@@ -240,7 +240,7 @@ read_timeseries_excel <- function(xl_file,
     if (row_header_idx == nrow(raw_data)) {
         stop(glue(
             "The detected header row ({row_header_idx}) is the last row. ",
-            "No data below it in '{xl_file}', sheet '{data_sheet}'."
+            "No data below it in '{xl_file}', sheet '{sheet}'."
         ))
     }
 
@@ -266,7 +266,7 @@ read_timeseries_excel <- function(xl_file,
     if (length(date_col_idx) == 0) {
         stop(glue(
             "Could NOT find a column matching '{date_col}' ",
-            "after assigning header names in '{xl_file}', sheet '{data_sheet}'."
+            "after assigning header names in '{xl_file}', sheet '{sheet}'."
         ))
     }
     date_col_idx <- date_col_idx[1]
@@ -341,8 +341,8 @@ read_timeseries_excel <- function(xl_file,
     }
 
     message(glue(
-        "Returning {nrow(data_subset)} rows x {ncol(data_subset)} columns ",
-        "from '{xl_file}' (sheet='{data_sheet}', date col ='{date_col}')."
+        "{nrow(data_subset)} rows x {ncol(data_subset)} cols ",
+        "(sheet='{sheet}', date col ='{date_col}')."
     ))
 
     data_subset

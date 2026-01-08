@@ -201,7 +201,7 @@ run_data_loaders <- function(reload = FALSE) {
 #' columns. The order of `suffix` controls which column is preferred.
 #'
 #' @param df A data frame or tibble produced by joins.
-#' @param suffix Character vector of length 2 giving the suffixes to
+#' @param suffixes Character vector of length 2 giving the suffixes to
 #'   coalesce, in priority order. For example, `c(".x", ".y")` uses
 #'   `.x` as the primary source and falls back to `.y` when `.x` is `NA`.
 #'
@@ -210,11 +210,11 @@ run_data_loaders <- function(reload = FALSE) {
 #'   unsuffixed column (e.g. `name`) containing the coalesced values.
 #'
 #' @keywords internal
-coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
+coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
     df  <- tibble::as_tibble(df)
     nms <- names(df)
-    sx <- suffix[1]
-    sy <- suffix[2]
+    sx <- suffixes[1]
+    sy <- suffixes[2]
 
     # find base names that have both .x and .y variants
     base_x <- sub(paste0("\\Q", sx, "\\E$"), "", nms[endsWith(nms, sx)])
@@ -239,57 +239,67 @@ coalesce_join_suffixes <- function(df, suffix = c(".x", ".y")) {
 
 #' Join all tibbles in an environment with optional late left-joins
 #'
-#' Performs a `dplyr::full_join()` across all objects in an environment,
-#' except those listed in `late`. Objects listed in `late` are instead
-#' joined afterwards using `dplyr::left_join()` in the order given.
-#' Optionally, any columns created with join suffixes (such as `.x` /
-#' `.y`) can be automatically coalesced into single unsuffixed columns.
+#' Performs a `dplyr::full_join()` across all objects in an environment, except those listed in
+#' `late`. Objects listed in `late` are instead joined afterwards using `dplyr::left_join()` (or
+#' another function specified via `late_join`) in the order given. Column clashes during the full
+#' join are resolved via join suffixes `c(".x", ".y")` while the late joins use
+#' `c(".early", ".late")`. Optionally, columns with join suffixes can be automatically coalesced
+#' into single unsuffixed columns via precedence specification (`join_precedence`).
 #'
 #' @param env Environment containing the tibbles to join.
 #' @param by Character vector of join keys (passed to `dplyr::full_join()`).
 #' @param late Character vector of object names in `env` that should be
 #'   *excluded* from the initial full join and instead left-joined
 #'   afterwards. Defaults to `NULL`.
-#' @param coalesce_suffixed Optional character vector of length 2 giving
-#'   join suffixes to coalesce (for example, `c(".x", ".y")` or
-#'   `c(".y", ".x")`). When non-`NULL`, any pairs of columns whose names
-#'   end in these suffixes (and share the same base name) are replaced by
-#'   a single unsuffixed column containing the coalesced values. If
-#'   `NULL` (the default), no automatic coalescing is performed.
+#' @param join_precedence Optional character vector of length 2 giving join suffixes to coalesce
+#'   (for example, `c(".early", ".late")` or `c(".late", ".early")`). When non-`NULL`, any pairs of columns whose
+#'   names end in these suffixes (and share the same base name) are replaced by a single unsuffixed
+#'   column containing the coalesced values, preferring the left suffix when both values are
+#'   available. If `NULL` (the default), no automatic coalescing is performed.
+#' @param coalesce_suffixed Deprecated; use `join_precedence`.
+#' @param late_join Function to use for joining late objects.
 #'
-#' @return A tibble: the full join of all non-late objects, followed by
-#'   sequential left-joins of the late objects. If `coalesce_suffixed`
-#'   is supplied, suffixed join columns are coalesced into unsuffixed
-#'   base columns as described above.
-#'
-#' @details
-#' This helper is designed for workflows where the majority of tables
-#' should be fully joined, while certain sparse or auxiliary tables
-#' (e.g. calendars, metadata) should only be attached via `left_join()`.
-#'
-#' When `coalesce_suffixed` is provided, the function uses an internal
-#' helper to replace pairs like `name.x` / `name.y` with a single
-#' `name` column whose values are taken from the first suffix in
-#' `coalesce_suffixed` and then, where missing, from the second.
-#'
-#' If a name in `late` does not exist in `env`, it is ignored with a
-#' warning.
+#' @return A tibble: the full join of all non-late objects, followed by sequential left-joins of the
+#'   late objects. If `join_precedence` is supplied, suffixed join columns are coalesced into
+#'   unsuffixed base columns as described above.
 #'
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #'   e <- new.env()
-#'   e$a <- tibble::tibble(date = 1:3, x = 1:3)
-#'   e$b <- tibble::tibble(date = 1:3, x = c(NA, 20, 30))
+#'   e$members <- dplyr::band_members
+#'   e$instruments <- dplyr::band_instruments
+#'   e$other_instr <- dplyr::band_instruments |>
+#'       dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord"))
 #'
-#'   # Simple full join of a and b
-#'   join_env(e, by = "date")
-#'
-#'   # Full join with automatic coalescing of x.x / x.y into x
-#'   join_env(e, by = "date", coalesce_suffixed = c(".x", ".y"))
-#' }
-join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
+#'   full <- join_env(e, by = "name")
+#'   late <- join_env(e, by = "name", late = "other_instr")
+#'   late_coalesced <- join_env(e,
+#'                              by = "name",
+#'                              late = "other_instr",
+#'                              join_precedence = c(".late", ".early"))
+#'   print(list(full = full, late = late, late_coalesced = late_coalesced))
+join_env <- function(env,
+                     by = "date",
+                     late = NULL,
+                     join_precedence = NULL,
+                     coalesce_suffixed = NULL, # Deprecated; equivalent to above
+                     late_join = dplyr::left_join) {
+    # Deprecated param handling
+    if (!missing(coalesce_suffixed) && !is.null(coalesce_suffixed)) {
+        lifecycle::deprecate_warn(
+            when = "0.2.1",
+            what = "join_env(coalesce_suffixed)",
+            with = "join_env(join_precedence)"
+        )
+        if (!missing(join_precedence)) {
+            stop("Use only one of `join_precedence` or deprecated `coalesce_suffixed`.",
+                 call. = FALSE)
+        }
+        join_precedence <- coalesce_suffixed
+    }
+    # / Deprecated param handling
+
     stopifnot(is.environment(env))
     by <- as.character(by)
     stopifnot(length(by) >= 1L, all(nzchar(by)))
@@ -331,13 +341,13 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
     }
     main_list <- mget(main_names, envir = env)
 
-    j <- purrr::reduce(main_list, full_join, by = by)
+    j <- purrr::reduce(main_list, full_join, by = by, suffix = c(".x", ".y"))
     if (length(late) > 0L) {
         late_list <- mget(late, envir = env)
-        j <- purrr::reduce(late_list, left_join, .init = j, by = by)
+        j <- purrr::reduce(late_list, late_join, .init = j, by = by, suffix = c(".early", ".late"))
     }
-    if (!is.null(coalesce_suffixed))
-        j <- coalesce_join_suffixes(j, coalesce_suffixed)
+    if (!is.null(join_precedence))
+        j <- coalesce_join_suffixes(j, join_precedence)
 
     j
 }
@@ -353,7 +363,7 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
 #'   `options(fundsr.reload = TRUE)`.
 #' @param by Column name to join by and to sort by. Defaults to `"date"`.
 #' @param ... Additional arguments forwarded to [join_env()] (e.g. `late =`,
-#'   `coalesce_suffixed =`, etc.).
+#'   `join_precedence =`, etc.).
 #'
 #' @return A tibble containing all joined series, sorted by `by`.
 #'
@@ -363,7 +373,7 @@ join_env <- function(env, by, late = NULL, coalesce_suffixed = NULL) {
 #'
 #' s1 <- build_all_series()
 #' download_fund_data(redownload = TRUE)
-#' s2 <- build_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) %>%
+#' s2 <- build_all_series(by = "date", late = "ftaw", join_precedence = c(".y", ".x")) %>%
 #'   filter(date >= as_date("2013-01-01"))
 #' }
 build_all_series <- function(reload = FALSE, by = "date", ...) {
@@ -451,94 +461,4 @@ store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = 
         }
     }
     invisible(NULL)
-}
-
-#' Load a fund's NAV data and optionally register its benchmark mapping
-#'
-#' Imports a fund's NAV time series from an Excel file and stores it in the
-#' storage environment via `store_timeseries()`. Optionally, a benchmark column
-#' can also be imported, and a fund/index mapping is recorded in
-#' `.fundsr$fund_index_map`.
-#'
-#' If `file` is `NULL`, the function searches `getOption("fundsr.data_dir")` for
-#' exactly one of `paste0(toupper(ticker), ".xlsx")` or
-#' `paste0(toupper(ticker), ".xls")`.
-#'
-#' @param ticker Fund ticker symbol. Used (in lower case) as the storage key and
-#'   (in upper case) to derive the default filename.
-#' @param file Optional filename. If `NULL` (the default), it is inferred from
-#'   `ticker` as described above.
-#' @param data_sheet Sheet index or name containing the NAV data. Defaults to `1`.
-#' @param date_col Regular expression identifying the date column. Defaults to `"^Date"`.
-#' @param nav_col Regular expression identifying the fund's NAV column. Defaults to `"^NAV"`.
-#' @param benchmark Optional benchmark key that this fund should be associated
-#'   with in the fund/index map. When `retrieve_benchmark = TRUE`, the same value
-#'   is also used as the name under which the benchmark series is imported.
-#' @param benchmark_col Regular expression identifying the benchmark column in
-#'   the Excel sheet. Only used when `retrieve_benchmark = TRUE`.
-#' @param retrieve_benchmark Logical; if `TRUE`, both `benchmark` and
-#'   `benchmark_col` must be supplied and the benchmark column is imported
-#'   alongside the fund.
-#' @param date_order Date parsing order passed to the importer. Defaults to `"dmy"`.
-#'
-#' @return Invisibly returns `NULL`. The imported data are stored in
-#'   `.fundsr_storage` under `tolower(ticker)`. A fund/index mapping is recorded
-#'   in `.fundsr$fund_index_map` when `benchmark` is supplied.
-#'
-#' @details
-#' The function builds a column-translation mapping from the fund NAV column and,
-#' if requested, a benchmark column. It then calls `read_timeseries_excel()` to read the
-#' Excel file and `store_timeseries()` to cache the imported object under
-#' `tolower(ticker)`. When `benchmark` is provided, a corresponding entry is
-#' added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
-#'
-#' @export
-load_fund <- function(ticker,
-                      file = NULL,
-                      data_sheet = 1,
-                      date_col = "^Date",
-                      nav_col = "^NAV",
-                      benchmark = NULL,
-                      benchmark_col = NULL,
-                      retrieve_benchmark = FALSE,
-                      date_order = "dmy") {
-    ticker_lower <- tolower(ticker)
-
-    # Use provided file or derive default filename based on ticker
-    fund_data_dir <- getOption("fundsr.data_dir")
-    if (is.null(file)) {
-        candidates <- paste0(toupper(ticker), c(".xlsx", ".xls"))
-        paths <- file.path(fund_data_dir, candidates)
-        exists <- file.exists(paths)
-        if (!any(exists)) {
-            stop(glue("No .xls[x] file found for {ticker}."), call. = FALSE)
-        }
-        if (sum(exists) > 1L) {
-            stop(glue("Multiple .xls[x] files found for {ticker}."), call. = FALSE)
-        }
-        file <- candidates[exists]
-    }
-
-    # Build column translations
-    ct <- c(
-        set_names(nav_col, ticker_lower)
-    )
-    # If a benchmark is provided, add it to col_trans
-    if (retrieve_benchmark) {
-        if (is.null(benchmark) || is.null(benchmark_col))
-            stop("Need benchmark and benchmark_col to retrieve benchmark.")
-        ct <- c(ct, set_names(benchmark_col, benchmark))
-    }
-    store_timeseries(
-        ticker_lower,
-        read_timeseries_excel(
-            xl_file = file,
-            data_sheet = data_sheet,
-            date_col = date_col,
-            col_trans = ct,
-            date_order = date_order
-        ),
-        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower)
-    )
-
 }

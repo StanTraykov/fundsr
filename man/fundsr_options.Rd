@@ -29,8 +29,8 @@ exporting plots (sets \code{fundsr.internal_png}).}
 \item{export_svg}{Logical; whether to save SVGs and queue Inkscape exports
 (sets \code{fundsr.export_svg}).}
 
-\item{xetra_map}{Named character vector mapping “primary” tickers to Xetra
-tickers (sets \code{fundsr.xetra_map}).}
+\item{xetra_map}{Named character vector mapping "primary" tickers (series
+table column names) to Xetra tickers (sets \code{fundsr.xetra_map}).}
 
 \item{inkscape}{Inkscape executable (path or command name) used by export
 helpers (sets \code{fundsr.inkscape}).}

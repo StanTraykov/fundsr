@@ -17,3 +17,6 @@ Invisibly returns \code{NULL}. Files are written as a side effect.
 Retrieves all fund data files listed in the \code{fundsr.fund_urls} option and saves
 them into the directory specified by \code{fundsr.data_dir}.
 }
+\seealso{
+\code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
+}

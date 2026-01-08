@@ -5,8 +5,8 @@
 \title{Read a time series from an Excel workbook}
 \usage{
 read_timeseries_excel(
-  xl_file,
-  data_sheet,
+  file,
+  sheet,
   date_col,
   col_trans,
   date_order = "dmy",
@@ -15,10 +15,10 @@ read_timeseries_excel(
 )
 }
 \arguments{
-\item{xl_file}{Path to the Excel workbook. Typically you pass a filename
+\item{file}{Path to the Excel workbook. Typically you pass a filename
 relative to \code{getOption("fundsr.data_dir")}, or an absolute path.}
 
-\item{data_sheet}{Sheet identifier to read from (sheet name or 1-based index).}
+\item{sheet}{Sheet identifier to read from (sheet name or 1-based index).}
 
 \item{date_col}{String used to detect the header row and identify the
 date column (matched via regex against cell contents for header-row
@@ -83,8 +83,8 @@ values parse successfully.
 \examples{
 \dontrun{
 x <- read_timeseries_excel(
-  xl_file = "example.xlsx",
-  data_sheet = 1,
+  file = "example.xlsx",
+  sheet = 1,
   date_col = "^Date$",
   col_trans = c(nav = "NAV", tr = "TR"),
   date_order = "dmy"

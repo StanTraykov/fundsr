@@ -4,7 +4,14 @@
 \alias{join_env}
 \title{Join all tibbles in an environment with optional late left-joins}
 \usage{
-join_env(env, by, late = NULL, coalesce_suffixed = NULL)
+join_env(
+  env,
+  by = "date",
+  late = NULL,
+  join_precedence = NULL,
+  coalesce_suffixed = NULL,
+  late_join = dplyr::left_join
+)
 }
 \arguments{
 \item{env}{Environment containing the tibbles to join.}
@@ -15,49 +22,41 @@ join_env(env, by, late = NULL, coalesce_suffixed = NULL)
 \emph{excluded} from the initial full join and instead left-joined
 afterwards. Defaults to \code{NULL}.}
 
-\item{coalesce_suffixed}{Optional character vector of length 2 giving
-join suffixes to coalesce (for example, \code{c(".x", ".y")} or
-\code{c(".y", ".x")}). When non-\code{NULL}, any pairs of columns whose names
-end in these suffixes (and share the same base name) are replaced by
-a single unsuffixed column containing the coalesced values. If
-\code{NULL} (the default), no automatic coalescing is performed.}
+\item{join_precedence}{Optional character vector of length 2 giving join suffixes to coalesce
+(for example, \code{c(".early", ".late")} or \code{c(".late", ".early")}). When non-\code{NULL}, any pairs of columns whose
+names end in these suffixes (and share the same base name) are replaced by a single unsuffixed
+column containing the coalesced values, preferring the left suffix when both values are
+available. If \code{NULL} (the default), no automatic coalescing is performed.}
+
+\item{coalesce_suffixed}{Deprecated; use \code{join_precedence}.}
+
+\item{late_join}{Function to use for joining late objects.}
 }
 \value{
-A tibble: the full join of all non-late objects, followed by
-sequential left-joins of the late objects. If \code{coalesce_suffixed}
-is supplied, suffixed join columns are coalesced into unsuffixed
-base columns as described above.
+A tibble: the full join of all non-late objects, followed by sequential left-joins of the
+late objects. If \code{join_precedence} is supplied, suffixed join columns are coalesced into
+unsuffixed base columns as described above.
 }
 \description{
-Performs a \code{dplyr::full_join()} across all objects in an environment,
-except those listed in \code{late}. Objects listed in \code{late} are instead
-joined afterwards using \code{dplyr::left_join()} in the order given.
-Optionally, any columns created with join suffixes (such as \code{.x} /
-\code{.y}) can be automatically coalesced into single unsuffixed columns.
-}
-\details{
-This helper is designed for workflows where the majority of tables
-should be fully joined, while certain sparse or auxiliary tables
-(e.g. calendars, metadata) should only be attached via \code{left_join()}.
-
-When \code{coalesce_suffixed} is provided, the function uses an internal
-helper to replace pairs like \code{name.x} / \code{name.y} with a single
-\code{name} column whose values are taken from the first suffix in
-\code{coalesce_suffixed} and then, where missing, from the second.
-
-If a name in \code{late} does not exist in \code{env}, it is ignored with a
-warning.
+Performs a \code{dplyr::full_join()} across all objects in an environment, except those listed in
+\code{late}. Objects listed in \code{late} are instead joined afterwards using \code{dplyr::left_join()} (or
+another function specified via \code{late_join}) in the order given. Column clashes during the full
+join are resolved via join suffixes \code{c(".x", ".y")} while the late joins use
+\code{c(".early", ".late")}. Optionally, columns with join suffixes can be automatically coalesced
+into single unsuffixed columns via precedence specification (\code{join_precedence}).
 }
 \examples{
-\dontrun{
   e <- new.env()
-  e$a <- tibble::tibble(date = 1:3, x = 1:3)
-  e$b <- tibble::tibble(date = 1:3, x = c(NA, 20, 30))
+  e$members <- dplyr::band_members
+  e$instruments <- dplyr::band_instruments
+  e$other_instr <- dplyr::band_instruments |>
+      dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord"))
 
-  # Simple full join of a and b
-  join_env(e, by = "date")
-
-  # Full join with automatic coalescing of x.x / x.y into x
-  join_env(e, by = "date", coalesce_suffixed = c(".x", ".y"))
-}
+  full <- join_env(e, by = "name")
+  late <- join_env(e, by = "name", late = "other_instr")
+  late_coalesced <- join_env(e,
+                             by = "name",
+                             late = "other_instr",
+                             join_precedence = c(".late", ".early"))
+  print(list(full = full, late = late, late_coalesced = late_coalesced))
 }

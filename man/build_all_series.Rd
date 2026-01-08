@@ -13,7 +13,7 @@ build_all_series(reload = FALSE, by = "date", ...)
 \item{by}{Column name to join by and to sort by. Defaults to \code{"date"}.}
 
 \item{...}{Additional arguments forwarded to \code{\link[=join_env]{join_env()}} (e.g. \verb{late =},
-\verb{coalesce_suffixed =}, etc.).}
+\verb{join_precedence =}, etc.).}
 }
 \value{
 A tibble containing all joined series, sorted by \code{by}.
@@ -30,7 +30,7 @@ This function is a convenience wrapper for the most common workflow.
 
 s1 <- build_all_series()
 download_fund_data(redownload = TRUE)
-s2 <- build_all_series(by = "date", late = "ftaw", coalesce_suffixed = c(".y", ".x")) \%>\%
+s2 <- build_all_series(by = "date", late = "ftaw", join_precedence = c(".y", ".x")) \%>\%
   filter(date >= as_date("2013-01-01"))
 }
 }

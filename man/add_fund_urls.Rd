@@ -18,7 +18,7 @@ option. Existing entries are preserved; entries in \code{x} replace any
 existing entries with the same name.
 }
 \details{
-Names are normalised to uppercase before storing.
+Names are converted to uppercase before storing.
 }
 \seealso{
 \code{\link[=fundsr_options]{fundsr_options()}} to set \code{fundsr.fund_urls} (and other fundsr options) in one call.
