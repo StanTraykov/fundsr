@@ -24,8 +24,9 @@ can also be imported, and a fund/index mapping is recorded in
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fundsr-intro.html">fundsr-intro: Rolling differences and Xetra liquidity plots</a></li>
-    <li><a class="dropdown-item" href="../articles/life-vignette.html">life: Survival chances for financial planning</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/importing-and-computing-differences.html">Importing Data and Computing Differences in fundsr</a></li>
+    <li><a class="dropdown-item" href="../articles/simple-demo-using-real-data.html">Simple Demo Using Real Data</a></li>
+    <li><a class="dropdown-item" href="../articles/survival-curves-for-financial-planning.html">Survival Curves for Financial Planning</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -40,7 +41,7 @@ can also be imported, and a fund/index mapping is recorded in
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Load a fund's NAV data and optionally register its benchmark mapping</h1>
-      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/R/fund_imp.R" class="external-link"><code>R/fund_imp.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/R/wrappers.R" class="external-link"><code>R/wrappers.R</code></a></small>
       <div class="d-none name"><code>load_fund.Rd</code></div>
     </div>
 
@@ -56,13 +57,15 @@ can also be imported, and a fund/index mapping is recorded in
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_fund</span><span class="op">(</span></span>
 <span>  <span class="va">ticker</span>,</span>
 <span>  file <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  data_sheet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  sheet <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
 <span>  nav_col <span class="op">=</span> <span class="st">"^NAV"</span>,</span>
 <span>  benchmark <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  benchmark_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  retrieve_benchmark <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  date_order <span class="op">=</span> <span class="st">"dmy"</span></span>
+<span>  date_order <span class="op">=</span> <span class="st">"dmy"</span>,</span>
+<span>  var_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data_sheet <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -80,7 +83,7 @@ can also be imported, and a fund/index mapping is recorded in
 <code>ticker</code> as described above.</p></dd>
 
 
-<dt id="arg-data-sheet">data_sheet<a class="anchor" aria-label="anchor" href="#arg-data-sheet"></a></dt>
+<dt id="arg-sheet">sheet<a class="anchor" aria-label="anchor" href="#arg-sheet"></a></dt>
 <dd><p>Sheet index or name containing the NAV data. Defaults to <code>1</code>.</p></dd>
 
 
@@ -112,6 +115,14 @@ alongside the fund.</p></dd>
 <dt id="arg-date-order">date_order<a class="anchor" aria-label="anchor" href="#arg-date-order"></a></dt>
 <dd><p>Date parsing order passed to the importer. Defaults to <code>"dmy"</code>.</p></dd>
 
+
+<dt id="arg-var-name">var_name<a class="anchor" aria-label="anchor" href="#arg-var-name"></a></dt>
+<dd><p>Specify a custom variable name for the storage environment.</p></dd>
+
+
+<dt id="arg-data-sheet">data_sheet<a class="anchor" aria-label="anchor" href="#arg-data-sheet"></a></dt>
+<dd><p>Deprecated; use <code>sheet</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -129,6 +140,11 @@ if requested, a benchmark column. It then calls <code><a href="read_timeseries_e
 Excel file and <code><a href="store_timeseries.html">store_timeseries()</a></code> to cache the imported object under
 <code>tolower(ticker)</code>. When <code>benchmark</code> is provided, a corresponding entry is
 added to <code>.fundsr$fund_index_map</code> to link the fund to its benchmark key.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Basic functions: <code><a href="store_timeseries.html">store_timeseries()</a></code>, <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code></p>
+<p>Vendor-specific wrappers: <code><a href="amun.html">amun()</a></code>, <code><a href="hsbc.html">hsbc()</a></code>, <code><a href="inve.html">inve()</a></code>, <code><a href="ishs.html">ishs()</a></code>, <code><a href="spdr.html">spdr()</a></code>, <code><a href="ubs.html">ubs()</a></code>, <code><a href="vang.html">vang()</a></code>, <code><a href="xtra.html">xtra()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

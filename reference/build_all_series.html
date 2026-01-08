@@ -20,8 +20,9 @@ frame via join_env(), and sorts the result by by."></head><body>
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fundsr-intro.html">fundsr-intro: Rolling differences and Xetra liquidity plots</a></li>
-    <li><a class="dropdown-item" href="../articles/life-vignette.html">life: Survival chances for financial planning</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/importing-and-computing-differences.html">Importing Data and Computing Differences in fundsr</a></li>
+    <li><a class="dropdown-item" href="../articles/simple-demo-using-real-data.html">Simple Demo Using Real Data</a></li>
+    <li><a class="dropdown-item" href="../articles/survival-curves-for-financial-planning.html">Survival Curves for Financial Planning</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -65,7 +66,7 @@ frame via <code><a href="join_env.html">join_env()</a></code>, and sorts the res
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments forwarded to <code><a href="join_env.html">join_env()</a></code> (e.g. <code>late =</code>,
-<code>coalesce_suffixed =</code>, etc.).</p></dd>
+<code>join_precedence =</code>, etc.).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -83,7 +84,7 @@ frame via <code><a href="join_env.html">join_env()</a></code>, and sorts the res
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu">build_all_series</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="download_fund_data.html">download_fund_data</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu">build_all_series</span><span class="op">(</span>by <span class="op">=</span> <span class="st">"date"</span>, late <span class="op">=</span> <span class="st">"ftaw"</span>, coalesce_suffixed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".y"</span>, <span class="st">".x"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu">build_all_series</span><span class="op">(</span>by <span class="op">=</span> <span class="st">"date"</span>, late <span class="op">=</span> <span class="st">"ftaw"</span>, join_precedence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".y"</span>, <span class="st">".x"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu">as_date</span><span class="op">(</span><span class="st">"2013-01-01"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
