@@ -1,10 +1,15 @@
 # fundsr (development version)
 
+## Documentation
+- add Importing vignette and improve docs in various places
+
 ## Rolling diffs
 - add Excel reader function `read_timeseries_excel()`
 - improve `read_timeseries()`: support text dates, any column name for date
 - add fund_index_map merge/clean functions `add_fund_index_map()`, `clean_fund_index_map()`
 - add example Excel + CSV dataset in `extdata`
+- `late_join` parameter to `join_env()`
+- param rename/depr.: data_sheet -> sheet, coalesce_suffixed -> join_precedence
 
 ## Plot output
 - add automatic Inkscape detection
