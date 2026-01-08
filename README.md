@@ -25,9 +25,6 @@ install.packages(
 )
 ```
 
-# Output
-![combined plots](man/figures/example-plot.png)
-
 ## Usage
 * [Importing Data and Computing Differences](https://stantraykov.github.io/fundsr/articles/importing-and-computing-differences.html)
 * [Simple Demo Using Real Data](https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.html)
@@ -36,6 +33,9 @@ install.packages(
   * `glob_funds.R` is an example workflow plotting global funds, but data needs to be downloaded separately
   * `all_funds.R` features many more funds
 * [Reference](https://stantraykov.github.io/fundsr/reference/index.html)
+
+## Output
+![combined plots](man/figures/example-plot.png)
 
 ## Disclaimer
 This project is provided for informational and analytical purposes (commentary and performance comparison). Charts and statistics shown are derived measures (e.g., tracking differences/return differentials) and are not intended to reproduce or redistribute underlying benchmark or index datasets. Any third-party material, where present, is shown only as necessary for identification and discussion and is provided as low-resolution raster images (not high-resolution or vector graphics) to prevent reuse as a substitute for source data.
