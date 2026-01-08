@@ -95,13 +95,11 @@ roll_diffs <- function(df,
     } else {
         messages <- match.arg(messages, choices = c("roll", "skip"), several.ok = TRUE)
     }
-
     msg_roll <- "roll" %in% messages
     msg_skip <- "skip" %in% messages
 
     date_num <- as.numeric(df[[date_col]])
     n <- nrow(df)
-
     fund_names <- names(fund_index_map)
     out_log  <- set_names(vector("list", length(fund_names)), fund_names)
     out_cagr <- set_names(vector("list", length(fund_names)), fund_names)
@@ -115,8 +113,6 @@ roll_diffs <- function(df,
         index <- fund_index_map[[fund]]
         if (index_level == "gross") index <- paste0(index, gross_suffix)
 
-        if (msg_roll) message(sprintf("Roll diffs %s -> %s", fund, index))
-
         if (!(fund %in% names(df))) {
             if (msg_skip) message(sprintf("Skipping %s: not in df", fund))
             next
@@ -129,6 +125,8 @@ roll_diffs <- function(df,
             if (msg_skip) message(sprintf("Skipping %s: self-tracking", fund))
             next
         }
+        if (msg_roll) message(sprintf("Roll diffs %s -> %s", fund, index))
+
 
         fund_vals  <- df[[fund]]
         index_vals <- df[[index]]
