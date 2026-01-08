@@ -282,13 +282,13 @@ store_timeseries(
 
 ### `load_fund()`
 
-`load_fund()` reads an Excel file with fund NAVs into the storage environment (by calling `store_timeseries()` and providing an expression with `read_timeseries_excel()`). It accepts regular expressions for identifying the date and NAV columns and a sheet name or sheet number identifying the sheet with the NAV history within the Excel workbook (defaulting to `1`, which always works for single-sheet workbooks). The first argument (usually a fund ticker), converted to lowercase, is used as the variable name for `store_timeseries()` and the tibble column name that will eventually propagate to the master table. The `benchmark` argument provides the fund→index mapping.
+`load_fund()` reads an Excel file with fund NAVs into the storage environment (it calls `store_timeseries()` with an expression that uses `read_timeseries_excel()`). It accepts **regular expressions** for identifying the date and NAV columns and a `sheet` (name or number) selecting the worksheet within the Excel workbook that contains the NAV history. The default values are `date_col = "^Date"`, `nav_col = "^NAV"`, and `sheet = 1` (which works for single-sheet workbooks). The first argument (usually a fund ticker), converted to lowercase, is used as the variable name for `store_timeseries()` and as the tibble column name that will eventually propagate to the master table. The `benchmark` argument provides the fund→index mapping.
 
 ```{r, echo=FALSE, fig.cap="Figure 2: Excel file for FNDA", fig.align=fig_align}
 knitr::include_graphics("figures/excel-example.png")
 ```
 
-The NAV history for FNDA is provided in an Excel file with multiple sheets and a date column named "As Of" (Figure 2). The sheet and date column name must be provided to `load_fund()` and will be used to locate the NAV and date ranges, even if there are extraneous rows and columns around the data (common in fund manager files).
+The NAV history for FNDA is provided in an Excel workbook with multiple sheets and a date column named "As Of" (Figure 2). If the defaults for `sheet`, `date_col`, or `nav_col` do not match the file layout, you **must** specify the relevant parameters. They will be used to reliably locate the NAV and date ranges even when the sheet contains extraneous rows and columns around the data (common in fund-manager files). For this file, `sheet` and `date_col` are required; `nav_col` is optional because the default would still match.
 
 ```{r load-fund}
 load_fund("FNDA",
