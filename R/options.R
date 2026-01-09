@@ -1,3 +1,51 @@
+.fundsr_option_defaults <- function() {
+    user_data_dir <- tools::R_user_dir("fundsr", which = "data")
+    list(
+        # Note: fund downloads write to data_dir
+        data_dir = file.path(user_data_dir, "data"),
+        out_dir = file.path(user_data_dir, "output"),
+        fund_urls = character(),
+        reload = FALSE,
+        xetra_map = character(),
+
+        px_width = 1300,
+        internal_png = FALSE,
+        export_svg = TRUE
+    )
+}
+
+#' Get a fundsr option
+#'
+#' Reads `getOption("fundsr.<name>")`. If unset, uses `default` if provided;
+#' otherwise falls back to the package default from `.fundsr_option_defaults()`.
+#' Errors on unknown option names.
+#'
+#' @param name A single option name without the "fundsr." prefix (e.g. "reload").
+#' @param default Optional fallback value used if the option is unset. If not
+#'   supplied, the package default is used.
+#'
+#' @return The option value (or its fallback/default).
+#' @keywords internal
+fundsr_get_option <- function(name, default) {
+    stopifnot(is.character(name), length(name) == 1L, nzchar(name))
+
+    defs <- .fundsr_option_defaults()
+
+    if (!name %in% names(defs)) {
+        stop(
+            "Unknown fundsr option: ", sQuote(name), ".\n",
+            "Valid options: ", paste(sort(names(defs)), collapse = ", "),
+            call. = FALSE
+        )
+    }
+
+    if (missing(default)) {
+        default <- defs[[name]]
+    }
+
+    getOption(paste0("fundsr.", name), default = default)
+}
+
 #' Set fundsr package options
 #'
 #' Convenience wrapper around `options()` for setting common `fundsr.*` options.
@@ -124,8 +172,8 @@ fundsr_options <- function(data_dir = NULL,
 #'
 #' @return A list with the previous value of `fundsr.fund_urls`.
 #' @seealso
-#' [fundsr_options()] to set `fundsr.fund_urls` (and other fundsr options) in one call.
-#' [download_fund_data()] to download files from the configured URLs.
+#' [fundsr_options()] to set `fundsr.fund_urls` and other fundsr options in one call.
+#' [download_fund_data()] to download files from the added URLs.
 #'
 #' @family download functions
 #' @export
@@ -133,7 +181,7 @@ add_fund_urls <- function(x) {
     stopifnot(is.character(x), !is.null(names(x)), all(nzchar(names(x))))
 
     names(x) <- toupper(names(x))
-    cur <- getOption("fundsr.fund_urls", character())
+    cur <- fundsr_get_option("fund_urls")
     if (length(cur) && !is.null(names(cur))) {
         names(cur) <- toupper(names(cur))
     }
@@ -145,14 +193,13 @@ add_fund_urls <- function(x) {
 
 find_inkscape <- function(
         candidates = NULL,
-        env_var = "INKSCAPE",
-        option_name = "fundsr.inkscape"
+        env_var = "INKSCAPE"
 ) {
     safe_norm <- function(x) {
         tryCatch(normalizePath(x, winslash = "/", mustWork = FALSE), error = function(e) x)
     }
 
-    override <- getOption(option_name, Sys.getenv(env_var, unset = NA_character_))
+    override <- fundsr_get_option("inkscape", Sys.getenv(env_var, unset = NA_character_))
     if (!is.na(override) && nzchar(override) && file.exists(override)) {
         return(safe_norm(override))
     }

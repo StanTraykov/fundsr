@@ -14,14 +14,14 @@
 #' @family download functions
 #' @export
 download_fund_data <- function(redownload = FALSE) {
-    fund_urls <- getOption("fundsr.fund_urls")
-    fund_data_dir <- getOption("fundsr.data_dir", ".")
+    fund_urls <- fundsr_get_option("fund_urls")
+    fund_data_dir <- fundsr_get_option("data_dir")
     download_as(fund_urls, path = fund_data_dir, redownload = redownload)
     invisible(NULL)
 }
 
 download_as <- function(named_urls,
-                        path = getOption("fundsr.data_dir", "."),
+                        path = fundsr_get_option("data_dir"),
                         redownload = FALSE) {
     if (!dir.exists(path)) dir.create(path, recursive = TRUE)
     files <- sample(names(named_urls)) # randomize order

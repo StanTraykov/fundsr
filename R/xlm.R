@@ -117,7 +117,7 @@ read_xlm_directory <- function(directory,
 #' `ticker` column. If `rgx = TRUE`, `tickers` is treated as a regular
 #' expression and matched against the `name` column.
 #'
-#' When `back_trans = TRUE`, the function reads `getOption("fundsr.xetra_map")`,
+#' When `back_trans = TRUE`, the function reads option `fundsr.xetra_map`,
 #' expected to be a named character vector mapping internal identifiers to
 #' Xetra tickers, for example:
 #' `c(fwra = "fwia", acwi = "lyy0")`.
@@ -146,7 +146,7 @@ plot_xlms <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL, back_tra
         xlm_data %>% filter(.data$ticker %in% tickers)
     }
     if (back_trans) {
-        xetra_map <- getOption("fundsr.xetra_map", NULL)
+        xetra_map <- fundsr_get_option("xetra_map", NULL)
         if (!is.null(xetra_map)) {
             inv <- set_names(names(xetra_map), unname(xetra_map)) # xetra -> internal
             data <- data %>%

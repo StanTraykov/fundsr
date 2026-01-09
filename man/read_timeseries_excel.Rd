@@ -15,8 +15,7 @@ read_timeseries_excel(
 )
 }
 \arguments{
-\item{file}{Path to the Excel workbook. Typically you pass a filename
-relative to \code{getOption("fundsr.data_dir")}, or an absolute path.}
+\item{file}{Path to the Excel workbook, relative to \code{fundsr.data_dir}.}
 
 \item{sheet}{Sheet identifier to read from (sheet name or 1-based index).}
 

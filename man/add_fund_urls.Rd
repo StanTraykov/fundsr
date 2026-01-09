@@ -21,8 +21,8 @@ existing entries with the same name.
 Names are converted to uppercase before storing.
 }
 \seealso{
-\code{\link[=fundsr_options]{fundsr_options()}} to set \code{fundsr.fund_urls} (and other fundsr options) in one call.
-\code{\link[=download_fund_data]{download_fund_data()}} to download files from the configured URLs.
+\code{\link[=fundsr_options]{fundsr_options()}} to set \code{fundsr.fund_urls} and other fundsr options in one call.
+\code{\link[=download_fund_data]{download_fund_data()}} to download files from the added URLs.
 
 Other download functions: 
 \code{\link{download_fund_data}()}

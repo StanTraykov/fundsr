@@ -35,7 +35,7 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' can also be imported, and a fund/index mapping is recorded in
 #' `.fundsr$fund_index_map`.
 #'
-#' If `file` is `NULL`, the function searches `getOption("fundsr.data_dir")` for
+#' If `file` is `NULL`, the function searches `fundsr.data_dir` for
 #' exactly one of `paste0(toupper(ticker), ".xlsx")` or
 #' `paste0(toupper(ticker), ".xls")`.
 #'
@@ -102,7 +102,7 @@ load_fund <- function(ticker,
     ticker_lower <- tolower(ticker)
 
     # Use provided file or derive default filename based on ticker
-    fund_data_dir <- getOption("fundsr.data_dir")
+    fund_data_dir <- fundsr_get_option("data_dir")
     if (is.null(file)) {
         candidates <- paste0(toupper(ticker), c(".xlsx", ".xls"))
         paths <- file.path(fund_data_dir, candidates)

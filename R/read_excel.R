@@ -168,8 +168,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
 #' values fail to parse; otherwise the column is only replaced when all non-`NA`
 #' values parse successfully.
 #'
-#' @param file Path to the Excel workbook. Typically you pass a filename
-#'   relative to `getOption("fundsr.data_dir")`, or an absolute path.
+#' @param file Path to the Excel workbook, relative to `fundsr.data_dir`.
 #' @param sheet Sheet identifier to read from (sheet name or 1-based index).
 #' @param date_col String used to detect the header row and identify the
 #'   date column (matched via regex against cell contents for header-row
@@ -213,7 +212,7 @@ read_timeseries_excel <- function(file,
                                   date_order = "dmy",
                                   force_numeric = TRUE,
                                   comma_rep = ".") {
-    fund_data_dir <- getOption("fundsr.data_dir", ".")
+    fund_data_dir <- fundsr_get_option("data_dir")
     xl_file <- file.path(fund_data_dir, file)
 
     # Mostly AI-written, except step (6) which is optimized (tidier alternative

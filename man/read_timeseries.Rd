@@ -13,7 +13,7 @@ read_timeseries(
 )
 }
 \arguments{
-\item{file}{Filename to read (relative to \code{getOption("fundsr.data_dir")}).}
+\item{file}{Filename to read (relative to \code{fundsr.data_dir} option).}
 
 \item{date_col}{Name of the date column in the file.}
 

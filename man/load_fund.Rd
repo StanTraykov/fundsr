@@ -60,7 +60,7 @@ can also be imported, and a fund/index mapping is recorded in
 \code{.fundsr$fund_index_map}.
 }
 \details{
-If \code{file} is \code{NULL}, the function searches \code{getOption("fundsr.data_dir")} for
+If \code{file} is \code{NULL}, the function searches \code{fundsr.data_dir} for
 exactly one of \code{paste0(toupper(ticker), ".xlsx")} or
 \code{paste0(toupper(ticker), ".xls")}.
 

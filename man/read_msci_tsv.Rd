@@ -7,7 +7,7 @@
 read_msci_tsv(file)
 }
 \arguments{
-\item{file}{Filename of the TSV to read (relative to \code{getOption("fundsr.data_dir")}).}
+\item{file}{Filename of the TSV to read (relative to \code{fundsr.data_dir} option).}
 }
 \value{
 A tibble with a \code{Date} column and one numeric column.

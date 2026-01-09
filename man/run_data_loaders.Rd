@@ -21,7 +21,7 @@ the package's storage environment (\code{.fundsr_storage}).
 The function temporarily sets the \code{fundsr.reload} option so that data loaders
 can decide whether to recompute cached objects.
 
-The previous value of \code{getOption("fundsr.reload")} is restored on exit,
+The previous value of option "fundsr.reload" is restored on exit,
 even if a data loader errors.
 
 Data loaders are taken from \code{.fundsr$data_loaders} and are called

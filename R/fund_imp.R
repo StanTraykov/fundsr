@@ -106,7 +106,7 @@ clear_storage <- function(clear_fund_index_map = FALSE) {
 #' @return Invisibly returns `.fundsr_storage` after running the data loaders.
 #'
 #' @details
-#' The previous value of `getOption("fundsr.reload")` is restored on exit,
+#' The previous value of option "fundsr.reload" is restored on exit,
 #' even if a data loader errors.
 #'
 #' Data loaders are taken from `.fundsr$data_loaders` and are called
@@ -136,7 +136,7 @@ run_data_loaders <- function(reload = FALSE) {
             stop(sprintf("`.fundsr$data_loaders[[%d]]` must take no arguments.", i), call. = FALSE)
         }
     }
-    old <- getOption("fundsr.reload", FALSE)
+    old <- fundsr_get_option("reload")
     options(fundsr.reload = reload)
     on.exit(options(fundsr.reload = old), add = TRUE)
 
@@ -392,7 +392,7 @@ store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = 
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     # Get global reload flag
-    reload <- getOption("fundsr.reload", FALSE)
+    reload <- fundsr_get_option("reload")
     # Check if assignment is needed and evaluate expr in parent_env
     if (overwrite || reload || !exists(var_name, envir = .fundsr_storage)) {
         message(paste("*** Loading:", var_name))

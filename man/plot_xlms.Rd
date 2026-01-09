@@ -38,7 +38,7 @@ If \code{rgx = FALSE}, the data are filtered by matching \code{tickers} against 
 \code{ticker} column. If \code{rgx = TRUE}, \code{tickers} is treated as a regular
 expression and matched against the \code{name} column.
 
-When \code{back_trans = TRUE}, the function reads \code{getOption("fundsr.xetra_map")},
+When \code{back_trans = TRUE}, the function reads option \code{fundsr.xetra_map},
 expected to be a named character vector mapping internal identifiers to
 Xetra tickers, for example:
 \code{c(fwra = "fwia", acwi = "lyy0")}.

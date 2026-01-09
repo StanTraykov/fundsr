@@ -8,7 +8,7 @@
 #' `.tsv`/`.tab`/`.txt` uses [readr::read_tsv()]. Gzipped variants such as
 #' `.csv.gz` and `.tsv.gz` are also supported.
 #'
-#' @param file Filename to read (relative to `getOption("fundsr.data_dir")`).
+#' @param file Filename to read (relative to `fundsr.data_dir` option).
 #' @param date_col Name of the date column in the file.
 #' @param time_unit Character scalar giving the unit of a *numeric* date column
 #'   (Unix epoch). One of `"ms"` (default), `"s"`, `"us"`, `"ns"`.
@@ -40,7 +40,7 @@ read_timeseries <- function(
         orders = NULL,
         force_text_date = FALSE
 ) {
-    fund_data_dir <- getOption("fundsr.data_dir")
+    fund_data_dir <- fundsr_get_option("data_dir")
     path <- file.path(fund_data_dir, file)
 
     ext <- tolower(tools::file_ext(path))
@@ -137,7 +137,7 @@ read_timeseries <- function(
 #' Extracts the data portion of an MSCI TSV file—skipping header noise—and reads
 #' it as a two-column table containing a date and a numeric value.
 #'
-#' @param file Filename of the TSV to read (relative to `getOption("fundsr.data_dir")`).
+#' @param file Filename of the TSV to read (relative to `fundsr.data_dir` option).
 #'
 #' @return A tibble with a `Date` column and one numeric column.
 #'
@@ -149,7 +149,7 @@ read_timeseries <- function(
 #' @family fund/index file readers
 #' @export
 read_msci_tsv <- function(file) {
-    fund_data_dir <- getOption("fundsr.data_dir")
+    fund_data_dir <- fundsr_get_option("data_dir")
     lines <- readr::read_lines(file.path(fund_data_dir, file))
     data_lines <- grep("^[0-9]|Date", lines, value = TRUE)
     df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
