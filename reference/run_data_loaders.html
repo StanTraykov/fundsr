@@ -73,11 +73,23 @@ the package's storage environment (<code>.fundsr_storage</code>).</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function temporarily sets the <code>fundsr.reload</code> option so that data loaders
 can decide whether to recompute cached objects.</p>
-<p>The previous value of <code>getOption("fundsr.reload")</code> is restored on exit,
+<p>The previous value of option "fundsr.reload" is restored on exit,
 even if a data loader errors.</p>
 <p>Data loaders are taken from <code>.fundsr$data_loaders</code> and are called
 sequentially in registration order. Each registered function must take
 no arguments.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other fund/index workflow functions:
+<code><a href="add_data_loader.html">add_data_loader()</a></code>,
+<code><a href="build_all_series.html">build_all_series()</a></code>,
+<code><a href="clear_data_loaders.html">clear_data_loaders()</a></code>,
+<code><a href="clear_storage.html">clear_storage()</a></code>,
+<code><a href="get_storage.html">get_storage()</a></code>,
+<code><a href="join_env.html">join_env()</a></code>,
+<code><a href="load_fund.html">load_fund()</a></code>,
+<code><a href="store_timeseries.html">store_timeseries()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

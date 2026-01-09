@@ -137,7 +137,7 @@ in <code>.fundsr$fund_index_map</code> when <code>benchmark</code> is supplied.<
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If <code>file</code> is <code>NULL</code>, the function searches <code>getOption("fundsr.data_dir")</code> for
+    <p>If <code>file</code> is <code>NULL</code>, the function searches <code>fundsr.data_dir</code> for
 exactly one of <code>paste0(toupper(ticker), ".xlsx")</code> or
 <code>paste0(toupper(ticker), ".xls")</code>.</p>
 <p>The function builds a column-translation mapping from the fund NAV column and,
@@ -148,8 +148,16 @@ added to <code>.fundsr$fund_index_map</code> to link the fund to its benchmark k
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Basic functions: <code><a href="store_timeseries.html">store_timeseries()</a></code>, <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code></p>
-<p>Vendor-specific wrappers: <code><a href="amun.html">amun()</a></code>, <code><a href="hsbc.html">hsbc()</a></code>, <code><a href="inve.html">inve()</a></code>, <code><a href="ishs.html">ishs()</a></code>, <code><a href="spdr.html">spdr()</a></code>, <code><a href="ubs.html">ubs()</a></code>, <code><a href="vang.html">vang()</a></code>, <code><a href="xtra.html">xtra()</a></code></p></div>
+    <div class="dont-index"><p>Provide wrappers: <code><a href="amun.html">amun()</a></code>, <code><a href="hsbc.html">hsbc()</a></code>, <code><a href="inve.html">inve()</a></code>, <code><a href="ishs.html">ishs()</a></code>, <code><a href="spdr.html">spdr()</a></code>, <code><a href="ubs.html">ubs()</a></code>, <code><a href="vang.html">vang()</a></code>, <code><a href="xtra.html">xtra()</a></code></p>
+<p>Other fund/index workflow functions:
+<code><a href="add_data_loader.html">add_data_loader()</a></code>,
+<code><a href="build_all_series.html">build_all_series()</a></code>,
+<code><a href="clear_data_loaders.html">clear_data_loaders()</a></code>,
+<code><a href="clear_storage.html">clear_storage()</a></code>,
+<code><a href="get_storage.html">get_storage()</a></code>,
+<code><a href="join_env.html">join_env()</a></code>,
+<code><a href="run_data_loaders.html">run_data_loaders()</a></code>,
+<code><a href="store_timeseries.html">store_timeseries()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

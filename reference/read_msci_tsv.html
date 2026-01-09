@@ -61,7 +61,7 @@ it as a two-column table containing a date and a numeric value.</p>
 
 
 <dl><dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
-<dd><p>Filename of the TSV to read (relative to <code>getOption("fundsr.data_dir")</code>).</p></dd>
+<dd><p>Filename of the TSV to read (relative to <code>fundsr.data_dir</code> option).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -73,6 +73,12 @@ it as a two-column table containing a date and a numeric value.</p>
     <p>The function filters lines beginning with a digit (date rows) or the literal
 <code>"Date"</code>, then parses them using a fixed <code>%m/%d/%Y</code> date format and a numeric
 second field.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other fund/index file readers:
+<code><a href="read_timeseries.html">read_timeseries()</a></code>,
+<code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

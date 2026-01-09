@@ -100,13 +100,18 @@ labels and color grouping), not which rows are selected.</p></dd>
     <p>If <code>rgx = FALSE</code>, the data are filtered by matching <code>tickers</code> against the
 <code>ticker</code> column. If <code>rgx = TRUE</code>, <code>tickers</code> is treated as a regular
 expression and matched against the <code>name</code> column.</p>
-<p>When <code>back_trans = TRUE</code>, the function reads <code>getOption("fundsr.xetra_map")</code>,
+<p>When <code>back_trans = TRUE</code>, the function reads option <code>fundsr.xetra_map</code>,
 expected to be a named character vector mapping internal identifiers to
 Xetra tickers, for example:
 <code>c(fwra = "fwia", acwi = "lyy0")</code>.
 The mapping is inverted and applied to the already-filtered data so that
 occurrences of Xetra tickers in the plotted data are replaced by their
 internal identifiers in the plot's legend and grouping.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other XLM functions:
+<code><a href="read_xlm_directory.html">read_xlm_directory()</a></code></p></div>
     </div>
 
     <div class="section level2">

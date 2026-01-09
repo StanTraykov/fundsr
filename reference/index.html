@@ -43,7 +43,83 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="config-functions">Config functions<a class="anchor" aria-label="anchor" href="#config-functions"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="fundsr_options.html">fundsr_options()</a></code>
+
+        </dt>
+        <dd>Set fundsr package options</dd>
+
+        <dt>
+
+          <code><a href="reset_state.html">reset_state()</a></code>
+
+        </dt>
+        <dd>Clear fundsr session state</dd>
+      </dl></div><div class="section level2">
+      <h2 id="download-functions">Download functions<a class="anchor" aria-label="anchor" href="#download-functions"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="add_fund_urls.html">add_fund_urls()</a></code>
+
+        </dt>
+        <dd>Add entries to the fund download list</dd>
+
+        <dt>
+
+          <code><a href="download_fund_data.html">download_fund_data()</a></code>
+
+        </dt>
+        <dd>Download fund data according to the configured download list</dd>
+      </dl></div><div class="section level2">
+      <h2 id="fund-index-file-readers">Fund/index file readers<a class="anchor" aria-label="anchor" href="#fund-index-file-readers"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="read_msci_tsv.html">read_msci_tsv()</a></code>
+
+        </dt>
+        <dd>Read an MSCI two-column TSV file</dd>
+
+        <dt>
+
+          <code><a href="read_timeseries.html">read_timeseries()</a></code>
+
+        </dt>
+        <dd>Read a time series file (CSV/TSV) with a date + one or more value columns</dd>
+
+        <dt>
+
+          <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>
+
+        </dt>
+        <dd>Read a time series from an Excel workbook</dd>
+      </dl></div><div class="section level2">
+      <h2 id="fund-index-workflow-functions">Fund/index workflow functions<a class="anchor" aria-label="anchor" href="#fund-index-workflow-functions"></a></h2>
 
 
 
@@ -61,45 +137,10 @@
 
         <dt>
 
-          <code><a href="add_fund_index_map.html">add_fund_index_map()</a></code>
-
-        </dt>
-        <dd>Add to fund-index map</dd>
-
-        <dt>
-
-          <code><a href="add_fund_urls.html">add_fund_urls()</a></code>
-
-        </dt>
-        <dd>Add entries to the fund download list</dd>
-
-        <dt>
-
-          <code><a href="amun.html">amun()</a></code>
-
-        </dt>
-        <dd>Import an Amundi fund</dd>
-
-        <dt>
-
           <code><a href="build_all_series.html">build_all_series()</a></code>
 
         </dt>
         <dd>Run all registered data loaders and join all loaded series into a big tibble.</dd>
-
-        <dt>
-
-          <code><a href="chance_alive.html">chance_alive()</a></code>
-
-        </dt>
-        <dd>Compute conditional survival (chance alive) by age</dd>
-
-        <dt>
-
-          <code><a href="chance_alive_es_aasmr.html">chance_alive_es_aasmr()</a></code>
-
-        </dt>
-        <dd>Compute cohort-style survival from Eurostat EUROPOP2023 mortality assumptions</dd>
 
         <dt>
 
@@ -110,20 +151,6 @@
 
         <dt>
 
-          <code><a href="clear_fund_index_map.html">clear_fund_index_map()</a></code>
-
-        </dt>
-        <dd>Clear fund-index map</dd>
-
-        <dt>
-
-          <code><a href="clear_inkscape_queue.html">clear_inkscape_queue()</a></code>
-
-        </dt>
-        <dd>Clear queued Inkscape exports</dd>
-
-        <dt>
-
           <code><a href="clear_storage.html">clear_storage()</a></code>
 
         </dt>
@@ -131,24 +158,61 @@
 
         <dt>
 
-          <code><a href="download_fund_data.html">download_fund_data()</a></code>
+          <code><a href="get_storage.html">get_storage()</a></code>
 
         </dt>
-        <dd>Download fund data according to the configured download list</dd>
+        <dd>Get the internal fund storage</dd>
 
         <dt>
 
-          <code><a href="export_pngs.html">export_pngs()</a></code>
+          <code><a href="join_env.html">join_env()</a></code>
 
         </dt>
-        <dd>Export queued SVGs to PNG via Inkscape</dd>
+        <dd>Join all tibbles in an environment with optional late left-joins</dd>
 
         <dt>
 
-          <code><a href="fundsr_options.html">fundsr_options()</a></code>
+          <code><a href="load_fund.html">load_fund()</a></code>
 
         </dt>
-        <dd>Set fundsr package options</dd>
+        <dd>Load a fund's NAV data and optionally register its benchmark mapping</dd>
+
+        <dt>
+
+          <code><a href="run_data_loaders.html">run_data_loaders()</a></code>
+
+        </dt>
+        <dd>Run registered data loaders</dd>
+
+        <dt>
+
+          <code><a href="store_timeseries.html">store_timeseries()</a></code>
+
+        </dt>
+        <dd>Store a cached object in the package storage environment</dd>
+      </dl></div><div class="section level2">
+      <h2 id="fund-index-map-mutators">Fund-index map mutators<a class="anchor" aria-label="anchor" href="#fund-index-map-mutators"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="add_fund_index_map.html">add_fund_index_map()</a></code>
+
+        </dt>
+        <dd>Add to fund-index map</dd>
+
+        <dt>
+
+          <code><a href="clear_fund_index_map.html">clear_fund_index_map()</a></code>
+
+        </dt>
+        <dd>Clear fund-index map</dd>
 
         <dt>
 
@@ -156,13 +220,22 @@
 
         </dt>
         <dd>Get the internal fund index map</dd>
+      </dl></div><div class="section level2">
+      <h2 id="provider-wrappers">Provider wrappers<a class="anchor" aria-label="anchor" href="#provider-wrappers"></a></h2>
 
-        <dt>
 
-          <code><a href="get_storage.html">get_storage()</a></code>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="amun.html">amun()</a></code>
 
         </dt>
-        <dd>Get the internal fund storage</dd>
+        <dd>Import an Amundi fund</dd>
 
         <dt>
 
@@ -187,20 +260,6 @@
 
         <dt>
 
-          <code><a href="join_env.html">join_env()</a></code>
-
-        </dt>
-        <dd>Join all tibbles in an environment with optional late left-joins</dd>
-
-        <dt>
-
-          <code><a href="load_fund.html">load_fund()</a></code>
-
-        </dt>
-        <dd>Load a fund's NAV data and optionally register its benchmark mapping</dd>
-
-        <dt>
-
           <code><a href="msci.html">msci()</a></code>
 
         </dt>
@@ -208,122 +267,10 @@
 
         <dt>
 
-          <code><a href="plot_chance_alive.html">plot_chance_alive()</a></code>
-
-        </dt>
-        <dd>Plot chance alive by age</dd>
-
-        <dt>
-
-          <code><a href="plot_chance_alive_es_aasmr.html">plot_chance_alive_es_aasmr()</a></code>
-
-        </dt>
-        <dd>Plot cohort-style survival from Eurostat EUROPOP2023 assumptions</dd>
-
-        <dt>
-
-          <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code>
-
-        </dt>
-        <dd>Plot rolling return differences against benchmark</dd>
-
-        <dt>
-
-          <code><a href="plot_xlms.html">plot_xlms()</a></code>
-
-        </dt>
-        <dd>Plot Xetra Liquidity Measure (XLM) time series</dd>
-
-        <dt>
-
-          <code><a href="read_es_aasmr.html">read_es_aasmr()</a></code>
-
-        </dt>
-        <dd>Read Eurostat EUROPOP2023 mortality-assumption table (proj_23naasmr)</dd>
-
-        <dt>
-
-          <code><a href="read_life_table.html">read_life_table()</a></code>
-
-        </dt>
-        <dd>Read HMD period life tables (1x1) from disk</dd>
-
-        <dt>
-
-          <code><a href="read_msci_tsv.html">read_msci_tsv()</a></code>
-
-        </dt>
-        <dd>Read an MSCI two-column TSV file</dd>
-
-        <dt>
-
-          <code><a href="read_timeseries.html">read_timeseries()</a></code>
-
-        </dt>
-        <dd>Read a time series file (CSV/TSV) with a date + one or more value columns</dd>
-
-        <dt>
-
-          <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>
-
-        </dt>
-        <dd>Read a time series from an Excel workbook</dd>
-
-        <dt>
-
-          <code><a href="read_xlm_directory.html">read_xlm_directory()</a></code>
-
-        </dt>
-        <dd>Read and combine XLM data from multiple Xetra XLSX files</dd>
-
-        <dt>
-
-          <code><a href="reset_state.html">reset_state()</a></code>
-
-        </dt>
-        <dd>Clear fundsr session state</dd>
-
-        <dt>
-
-          <code><a href="roll_diffs.html">roll_diffs()</a></code>
-
-        </dt>
-        <dd>Rolling annualized tracking differences</dd>
-
-        <dt>
-
-          <code><a href="run_data_loaders.html">run_data_loaders()</a></code>
-
-        </dt>
-        <dd>Run registered data loaders</dd>
-
-        <dt>
-
-          <code><a href="run_plots.html">run_plots()</a></code>
-
-        </dt>
-        <dd>Generate and export all configured rolling-difference plots</dd>
-
-        <dt>
-
-          <code><a href="save_plot.html">save_plot()</a></code>
-
-        </dt>
-        <dd>Save a plot as SVG and optionally save PNG immediately</dd>
-
-        <dt>
-
           <code><a href="spdr.html">spdr()</a></code>
 
         </dt>
         <dd>Import an SPDR fund</dd>
-
-        <dt>
-
-          <code><a href="store_timeseries.html">store_timeseries()</a></code>
-
-        </dt>
-        <dd>Store a cached object in the package storage environment</dd>
 
         <dt>
 
@@ -345,8 +292,143 @@
 
         </dt>
         <dd>Import an Xtrackers fund</dd>
+      </dl></div><div class="section level2">
+      <h2 id="rolling-difference-functions">Rolling-difference functions<a class="anchor" aria-label="anchor" href="#rolling-difference-functions"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="plot_roll_diffs.html">plot_roll_diffs()</a></code>
+
+        </dt>
+        <dd>Plot rolling return differences against benchmark</dd>
+
+        <dt>
+
+          <code><a href="roll_diffs.html">roll_diffs()</a></code>
+
+        </dt>
+        <dd>Compute rolling annualized tracking difference statistics</dd>
+      </dl></div><div class="section level2">
+      <h2 id="plot-export-utilities">Plot export utilities<a class="anchor" aria-label="anchor" href="#plot-export-utilities"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="clear_inkscape_queue.html">clear_inkscape_queue()</a></code>
+
+        </dt>
+        <dd>Clear queued Inkscape exports</dd>
+
+        <dt>
+
+          <code><a href="export_pngs.html">export_pngs()</a></code>
+
+        </dt>
+        <dd>Export queued SVGs to PNG via Inkscape</dd>
+
+        <dt>
+
+          <code><a href="run_plots.html">run_plots()</a></code>
+
+        </dt>
+        <dd>Generate and export rolling-difference and XLM plots from a specification</dd>
+
+        <dt>
+
+          <code><a href="save_plot.html">save_plot()</a></code>
+
+        </dt>
+        <dd>Save a plot as SVG and/or PNG and queue for Inkscape conversion</dd>
+      </dl></div><div class="section level2">
+      <h2 id="xlm-functions">XLM functions<a class="anchor" aria-label="anchor" href="#xlm-functions"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="plot_xlms.html">plot_xlms()</a></code>
+
+        </dt>
+        <dd>Plot Xetra Liquidity Measure (XLM) time series</dd>
+
+        <dt>
+
+          <code><a href="read_xlm_directory.html">read_xlm_directory()</a></code>
+
+        </dt>
+        <dd>Read and combine XLM data from multiple Xetra XLSX files</dd>
+      </dl></div><div class="section level2">
+      <h2 id="survival-curve-functions">Survival-curve functions<a class="anchor" aria-label="anchor" href="#survival-curve-functions"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="chance_alive.html">chance_alive()</a></code>
+
+        </dt>
+        <dd>Compute conditional survival (chance alive) by age</dd>
+
+        <dt>
+
+          <code><a href="chance_alive_es_aasmr.html">chance_alive_es_aasmr()</a></code>
+
+        </dt>
+        <dd>Compute cohort-style survival from Eurostat EUROPOP2023 mortality assumptions</dd>
+
+        <dt>
+
+          <code><a href="plot_chance_alive.html">plot_chance_alive()</a></code>
+
+        </dt>
+        <dd>Plot chance alive by age</dd>
+
+        <dt>
+
+          <code><a href="plot_chance_alive_es_aasmr.html">plot_chance_alive_es_aasmr()</a></code>
+
+        </dt>
+        <dd>Plot cohort-style survival from Eurostat EUROPOP2023 assumptions</dd>
+
+        <dt>
+
+          <code><a href="read_es_aasmr.html">read_es_aasmr()</a></code>
+
+        </dt>
+        <dd>Read Eurostat EUROPOP2023 mortality-assumption table (proj_23naasmr)</dd>
+
+        <dt>
+
+          <code><a href="read_life_table.html">read_life_table()</a></code>
+
+        </dt>
+        <dd>Read HMD period life tables (1x1) from disk</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
