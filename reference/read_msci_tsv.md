@@ -13,8 +13,7 @@ read_msci_tsv(file)
 
 - file:
 
-  Filename of the TSV to read (relative to
-  `getOption("fundsr.data_dir")`).
+  Filename of the TSV to read (relative to `fundsr.data_dir` option).
 
 ## Value
 
@@ -25,3 +24,9 @@ A tibble with a `Date` column and one numeric column.
 The function filters lines beginning with a digit (date rows) or the
 literal `"Date"`, then parses them using a fixed `%m/%d/%Y` date format
 and a numeric second field.
+
+## See also
+
+Other fund/index file readers:
+[`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md),
+[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)

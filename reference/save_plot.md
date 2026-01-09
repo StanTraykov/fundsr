@@ -1,4 +1,4 @@
-# Save a plot as SVG and optionally save PNG immediately
+# Save a plot as SVG and/or PNG and queue for Inkscape conversion
 
 Saves `plot` as an SVG file when `save_svg = TRUE`. When an SVG is
 saved, an Inkscape export action is also queued so PNG generation can be
@@ -15,13 +15,13 @@ immediately via
 save_plot(
   file,
   plot,
-  px_width = getOption("fundsr.px_width", 1300),
+  px_width = fundsr_get_option("px_width", 1300),
   height = 12,
   width = 12,
   units = "in",
-  out_dir = getOption("fundsr.out_dir", "output"),
-  save_png = getOption("fundsr.internal_png", FALSE),
-  save_svg = getOption("fundsr.export_svg", TRUE),
+  out_dir = fundsr_get_option("out_dir"),
+  save_png = fundsr_get_option("internal_png", FALSE),
+  save_svg = fundsr_get_option("export_svg", TRUE),
   background = "white"
 )
 ```
@@ -40,8 +40,7 @@ save_plot(
 
   Target width in pixels for PNG output. Used as the queued Inkscape
   `export-width`, and (if `save_png = TRUE`) used to compute the DPI for
-  immediate PNG saving. Defaults to
-  `getOption("fundsr.px_width", 1300)`.
+  immediate PNG saving. Defaults to option `fundsr.px_width` or 1300.
 
 - height:
 
@@ -59,18 +58,18 @@ save_plot(
 
 - out_dir:
 
-  Output directory where files are written. Defaults to
-  `getOption("fundsr.out_dir", "output")`.
+  Output directory where files are written. Defaults to option
+  `fundsr.out_dir`.
 
 - save_png:
 
   Logical scalar; if `TRUE`, also saves a PNG immediately. Defaults to
-  `getOption("fundsr.internal_png", FALSE)`.
+  option `fundsr.internal_png` or `FALSE`.
 
 - save_svg:
 
   Logical scalar; if `TRUE`, saves the SVG and queues an Inkscape export
-  action. Defaults to `getOption("fundsr.export_svg", TRUE)`.
+  action. Defaults to option `fundsr.export_svg` or `TRUE`.
 
 - background:
 
@@ -102,3 +101,10 @@ typography across outputs. The PNG background is set via `background`.
 
 If both `save_svg` and `save_png` are `FALSE`, the function issues a
 warning and returns without writing files or queueing exports.
+
+## See also
+
+Other plot export utilities:
+[`clear_inkscape_queue()`](https://stantraykov.github.io/fundsr/reference/clear_inkscape_queue.md),
+[`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md),
+[`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md)

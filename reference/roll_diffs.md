@@ -1,4 +1,4 @@
-# Rolling annualized tracking differences
+# Compute rolling annualized tracking difference statistics
 
 For each fund–index pair in `fund_index_map`, computes rolling,
 annualized tracking differences over a backward-looking window of
@@ -89,3 +89,8 @@ The annualized tracking differences are:
 Values are `NA` when an anchor cannot be found, required inputs are
 missing, \\\Delta \le 0\\, or values are invalid for the chosen formula
 (e.g. non-positive inputs for log returns).
+
+## See also
+
+Other rolling difference functions:
+[`plot_roll_diffs()`](https://stantraykov.github.io/fundsr/reference/plot_roll_diffs.md)

@@ -36,3 +36,8 @@ Each XLSX file is processed with `read_xlsx_hdr()`, filtered to the
 relevant XLM, ticker, and product-name fields (stored in columns `xlm`,
 `ticker`, `name`, and `date`). The Month–Year embedded in the XLM column
 name is parsed and used as the observation date.
+
+## See also
+
+Other XLM functions:
+[`plot_xlms()`](https://stantraykov.github.io/fundsr/reference/plot_xlms.md)

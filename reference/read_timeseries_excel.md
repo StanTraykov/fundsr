@@ -22,8 +22,7 @@ read_timeseries_excel(
 
 - file:
 
-  Path to the Excel workbook. Typically you pass a filename relative to
-  `getOption("fundsr.data_dir")`, or an absolute path.
+  Path to the Excel workbook, relative to `fundsr.data_dir`.
 
 - sheet:
 
@@ -100,6 +99,10 @@ all non-`NA` values parse successfully.
 
 [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md)
 for CSV/TSV time series import.
+
+Other fund/index file readers:
+[`read_msci_tsv()`](https://stantraykov.github.io/fundsr/reference/read_msci_tsv.md),
+[`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md)
 
 ## Examples
 

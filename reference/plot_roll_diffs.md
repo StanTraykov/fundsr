@@ -86,3 +86,8 @@ spans of up to 3 years, breaks default to `"3 months"`. For longer
 spans, breaks are anchored to calendar months (semiannual or quarterly
 depending on span) and are included only when the data range extends
 beyond the midpoint to the neighboring break.
+
+## See also
+
+Other rolling difference functions:
+[`roll_diffs()`](https://stantraykov.github.io/fundsr/reference/roll_diffs.md)

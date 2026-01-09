@@ -1,13 +1,14 @@
 # Simple Demo Using Real Data
 
 This vignette demonstrates a simple workflow using downloaded fund
-files. For a more comprehensive introduciton using example data files,
-see
+files. For a comprehensive introduction using example data files, see
 [`vignette("importing-and-computing-differences")`](https://stantraykov.github.io/fundsr/articles/importing-and-computing-differences.md).
-More complex workflows are shipped (without data) under
-`scripts/examples` in the fundsr directory (start with `glob_funds.R` or
-`all_funds.R`). The installation path can be discovered via
-`system.file("scripts/examples", package="fundsr")`.
+For information on how to get data from fund and index providers, see
+[fundsr’s GitHub wiki](https://github.com/StanTraykov/fundsr/wiki). More
+complex workflows are shipped without data under `scripts/examples` in
+the package directory (start with `glob_funds.R` or `all_funds.R`). The
+installation path can be discovered via
+`system.file("scripts/examples", package = "fundsr")`.
 
 ## Setup
 
@@ -114,11 +115,11 @@ series <- build_all_series() %>%
 #> *** Loading: spyy
 #> Reading Excel file 'data/funds/SPYY.xlsx'...
 #> readxl succeeded. Returning data.
-#> 3732 rows x 2 cols (sheet='1', date col ='^Date').
+#> 3733 rows x 2 cols (sheet='1', date col ='^Date').
 #> *** Loading: iusq
 #> Reading Excel file 'data/funds/IUSQ.xls'...
 #> readxl failed. Attempting parse as Excel 2003 XML...
-#> 3625 rows x 3 cols (sheet='Historical', date col ='^As Of').
+#> 3627 rows x 3 cols (sheet='Historical', date col ='^As Of').
 #> Joining: spyy, iusq
 ```
 
@@ -126,7 +127,7 @@ Check contents.
 
 ``` r
 series %>% filter(date >= as_date("2015-04-03"))
-#> # A tibble: 2,762 × 4
+#> # A tibble: 2,763 × 4
 #>    date        spyy  iusq  ACWI
 #>    <date>     <dbl> <dbl> <dbl>
 #>  1 2015-04-06   NA   38.2  153.
@@ -139,7 +140,7 @@ series %>% filter(date >= as_date("2015-04-03"))
 #>  8 2015-04-15  102.  39.0  156.
 #>  9 2015-04-16  102.  39.1  156.
 #> 10 2015-04-17  101.  38.7  155.
-#> # ℹ 2,752 more rows
+#> # ℹ 2,753 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
@@ -159,14 +160,14 @@ diffs <- roll_diffs(series, nd, get_fund_index_map())
 ``` r
 diffs$cagr %>% slice_tail(n = 3)
 #>         date        spyy         iusq
-#> 1 2026-01-05 0.004708281 0.0009037957
-#> 2 2026-01-06 0.004511927 0.0007926735
-#> 3 2026-01-07          NA           NA
+#> 1 2026-01-06 0.004511927 0.0007926735
+#> 2 2026-01-07 0.004357993 0.0007516283
+#> 3 2026-01-08 0.004395124 0.0007814405
 diffs$log %>% slice_tail(n = 3)
 #>         date        spyy         iusq
-#> 1 2026-01-05 0.003822482 0.0007348929
-#> 2 2026-01-06 0.003658349 0.0006436832
-#> 3 2026-01-07          NA           NA
+#> 1 2026-01-06 0.003658349 0.0006436832
+#> 2 2026-01-07 0.003521613 0.0006082626
+#> 3 2026-01-08 0.003554415 0.0006328890
 ```
 
 ## Plot specifications

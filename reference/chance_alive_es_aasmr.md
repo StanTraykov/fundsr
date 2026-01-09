@@ -46,6 +46,15 @@ A tibble with columns `geo`, `sex`, `projection`, `Year`, `Age`, `mx`,
 The result includes two projection variants: baseline (`BSL`) and lower
 mortality (`LMRT`).
 
+## See also
+
+Other survival curve functions:
+[`chance_alive()`](https://stantraykov.github.io/fundsr/reference/chance_alive.md),
+[`plot_chance_alive()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive.md),
+[`plot_chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive_es_aasmr.md),
+[`read_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/read_es_aasmr.md),
+[`read_life_table()`](https://stantraykov.github.io/fundsr/reference/read_life_table.md)
+
 ## Examples
 
 ``` r

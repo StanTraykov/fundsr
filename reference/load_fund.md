@@ -85,9 +85,9 @@ recorded in `.fundsr$fund_index_map` when `benchmark` is supplied.
 
 ## Details
 
-If `file` is `NULL`, the function searches
-`getOption("fundsr.data_dir")` for exactly one of
-`paste0(toupper(ticker), ".xlsx")` or `paste0(toupper(ticker), ".xls")`.
+If `file` is `NULL`, the function searches `fundsr.data_dir` for exactly
+one of `paste0(toupper(ticker), ".xlsx")` or
+`paste0(toupper(ticker), ".xls")`.
 
 The function builds a column-translation mapping from the fund NAV
 column and, if requested, a benchmark column. It then calls
@@ -100,11 +100,7 @@ to link the fund to its benchmark key.
 
 ## See also
 
-Basic functions:
-[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md),
-[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
-
-Vendor-specific wrappers:
+Provide wrappers:
 [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md),
 [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md),
 [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md),
@@ -113,3 +109,13 @@ Vendor-specific wrappers:
 [`ubs()`](https://stantraykov.github.io/fundsr/reference/ubs.md),
 [`vang()`](https://stantraykov.github.io/fundsr/reference/vang.md),
 [`xtra()`](https://stantraykov.github.io/fundsr/reference/xtra.md)
+
+Other fund/index workflow functions:
+[`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md),
+[`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md),
+[`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md),
+[`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md),
+[`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md),
+[`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
+[`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md),
+[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)

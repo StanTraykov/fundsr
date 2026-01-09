@@ -79,3 +79,6 @@ corresponding `fundsr.*` option is left unchanged.
 
 [`add_fund_urls()`](https://stantraykov.github.io/fundsr/reference/add_fund_urls.md)
 to add/update entries in `fundsr.fund_urls`.
+
+Other config functions:
+[`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)

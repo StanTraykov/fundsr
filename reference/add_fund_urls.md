@@ -27,6 +27,9 @@ Names are converted to uppercase before storing.
 ## See also
 
 [`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md)
-to set `fundsr.fund_urls` (and other fundsr options) in one call.
+to set `fundsr.fund_urls` and other fundsr options in one call.
 [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.md)
-to download files from the configured URLs.
+to download files from the added URLs.
+
+Other download functions:
+[`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.md)

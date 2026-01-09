@@ -4,12 +4,15 @@
 
 A glimpse of the final result
 
-This vignette introduces data loading and tracking-difference
-calculations using the example data files shipped with fundsr. For a
-demonstration based on NAV histories downloaded from fund
+This vignette shows how to load data into fundsr and compute rolling
+differences (CAGR and log) using the example files shipped with the
+package. For a demonstration based on NAV histories downloaded from fund
 providers—which also covers liquidity plots and translation support—see
 [Simple Demo Using Real
 Data](https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.html).
+Guidance on obtaining real NAVs and index levels lives in the [project
+wiki](https://github.com/StanTraykov/fundsr/wiki).
+
 More complex workflows are provided (without data) under
 `scripts/examples` in the package directory; start with `glob_funds.R`
 or `all_funds.R`. The directory can be located with
@@ -217,7 +220,7 @@ store_timeseries(
     fund_index_map = c(`IDX1-GR` = "IDX1")
 )
 #> *** Loading: idx1
-#> Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/IDX1.xlsx'...
+#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/IDX1.xlsx'...
 #> readxl succeeded. Returning data.
 #> 730 rows x 3 cols (sheet='1', date col ='^Date').
 
@@ -234,31 +237,33 @@ store_timeseries(
 ### `load_fund()`
 
 [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
-reads an Excel file with fund NAVs into the storage environment (by
-calling
+reads an Excel file with fund NAVs into the storage environment (it
+calls
 [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
-and providing an expression with
+with an expression that uses
 [`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)).
-It accepts regular expressions for identifying the date and NAV columns
-and a sheet name or sheet number identifying the sheet with the NAV
-history within the Excel workbook (defaulting to `1`, which always works
+It accepts **regular expressions** for identifying the date and NAV
+columns and a `sheet` (name or number) selecting the worksheet within
+the Excel workbook that contains the NAV history. The default values are
+`date_col = "^Date"`, `nav_col = "^NAV"`, and `sheet = 1` (which works
 for single-sheet workbooks). The first argument (usually a fund ticker),
 converted to lowercase, is used as the variable name for
 [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
-and the tibble column name that will eventually propagate to the master
-table. The `benchmark` argument provides the fund→index mapping.
+and as the tibble column name that will eventually propagate to the
+master table. The `benchmark` argument provides the fund→index mapping.
 
 ![Figure 2: Excel file for FNDA](figures/excel-example.png)
 
 Figure 2: Excel file for FNDA
 
-The NAV history for FNDA is provided in an Excel file with multiple
-sheets and a date column named “As Of” (Figure 2). The sheet and date
-column name must be provided to
-[`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
-and will be used to locate the NAV and date ranges, even if there are
-extraneous rows and columns around the data (common in fund manager
-files).
+The NAV history for FNDA is provided in an Excel workbook with multiple
+sheets and a date column named “As Of” (Figure 2). If the defaults for
+`sheet`, `date_col`, or `nav_col` do not match the file layout, you
+**must** specify the relevant parameters. They will be used to reliably
+locate the NAV and date ranges even when the sheet contains extraneous
+rows and columns around the data (common in fund-manager files). For
+this file, `sheet` and `date_col` are required; `nav_col` is optional
+because the default would still match.
 
 ``` r
 load_fund("FNDA",
@@ -268,7 +273,7 @@ load_fund("FNDA",
           date_col = "^As Of",
           nav_col = "^NAV")
 #> *** Loading: fnda
-#> Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/FNDA.xlsx'...
+#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDA.xlsx'...
 #> readxl succeeded. Returning data.
 #> 730 rows x 2 cols (sheet='historical', date col ='^As Of').
 ```
@@ -291,7 +296,7 @@ load_fund("FNDB",
           nav_col = "^net asset val",
           date_order = "mdy")
 #> *** Loading: fndb
-#> Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/FNDB.xlsx'...
+#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDB.xlsx'...
 #> readxl succeeded. Returning data.
 #> 655 rows x 2 cols (sheet='1', date col ='^date').
 ```
@@ -305,7 +310,7 @@ load_fund("GNDA",
           date_col = "^Date",
           nav_col = "^Official NAV")
 #> *** Loading: gnda
-#> Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/GNDA.xlsx'...
+#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/GNDA.xlsx'...
 #> readxl succeeded. Returning data.
 #> 730 rows x 2 cols (sheet='1', date col ='^Date').
 ```
@@ -661,9 +666,7 @@ diffs_gross <- roll_diffs(master_series,
                           get_fund_index_map(),
                           index_level = "gross")
 #> Roll diffs gndb -> IDX2-GR
-#> Roll diffs IDX1-GR -> IDX1-GR
 #> Skipping IDX1-GR: self-tracking
-#> Roll diffs IDX2-GR -> IDX2-GR
 #> Skipping IDX2-GR: self-tracking
 #> Roll diffs fnda -> IDX1-GR
 #> Roll diffs fndb -> IDX1-GR

@@ -49,13 +49,17 @@ If `rgx = FALSE`, the data are filtered by matching `tickers` against
 the `ticker` column. If `rgx = TRUE`, `tickers` is treated as a regular
 expression and matched against the `name` column.
 
-When `back_trans = TRUE`, the function reads
-`getOption("fundsr.xetra_map")`, expected to be a named character vector
-mapping internal identifiers to Xetra tickers, for example:
-`c(fwra = "fwia", acwi = "lyy0")`. The mapping is inverted and applied
-to the already-filtered data so that occurrences of Xetra tickers in the
-plotted data are replaced by their internal identifiers in the plot's
-legend and grouping.
+When `back_trans = TRUE`, the function reads option `fundsr.xetra_map`,
+expected to be a named character vector mapping internal identifiers to
+Xetra tickers, for example: `c(fwra = "fwia", acwi = "lyy0")`. The
+mapping is inverted and applied to the already-filtered data so that
+occurrences of Xetra tickers in the plotted data are replaced by their
+internal identifiers in the plot's legend and grouping.
+
+## See also
+
+Other XLM functions:
+[`read_xlm_directory()`](https://stantraykov.github.io/fundsr/reference/read_xlm_directory.md)
 
 ## Examples
 

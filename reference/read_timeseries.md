@@ -20,7 +20,7 @@ read_timeseries(
 
 - file:
 
-  Filename to read (relative to `getOption("fundsr.data_dir")`).
+  Filename to read (relative to `fundsr.data_dir` option).
 
 - date_col:
 
@@ -64,3 +64,9 @@ least one non-`NA`), it is interpreted as a Unix timestamp (scaled by
 All non-date columns are coerced with
 [`as.numeric()`](https://rdrr.io/r/base/numeric.html) (non-parsable
 values become `NA`).
+
+## See also
+
+Other fund/index file readers:
+[`read_msci_tsv()`](https://stantraykov.github.io/fundsr/reference/read_msci_tsv.md),
+[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)

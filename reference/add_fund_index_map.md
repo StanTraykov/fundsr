@@ -22,6 +22,12 @@ add_fund_index_map(fund_index_map)
 
 Invisibly returns `NULL`. Called for side effects.
 
+## See also
+
+Other fund-index map mutators:
+[`clear_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/clear_fund_index_map.md),
+[`get_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/get_fund_index_map.md)
+
 ## Examples
 
 ``` r

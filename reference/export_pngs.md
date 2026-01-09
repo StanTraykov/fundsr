@@ -45,3 +45,8 @@ intact and a message is printed.
 
 [`clear_inkscape_queue()`](https://stantraykov.github.io/fundsr/reference/clear_inkscape_queue.md),
 [`save_plot()`](https://stantraykov.github.io/fundsr/reference/save_plot.md)
+
+Other plot export utilities:
+[`clear_inkscape_queue()`](https://stantraykov.github.io/fundsr/reference/clear_inkscape_queue.md),
+[`run_plots()`](https://stantraykov.github.io/fundsr/reference/run_plots.md),
+[`save_plot()`](https://stantraykov.github.io/fundsr/reference/save_plot.md)

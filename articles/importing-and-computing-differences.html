@@ -6,7 +6,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Importing Data and Computing Differences in fundsr • fundsr</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -20,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,12 +69,11 @@
 <script src="importing-and-computing-differences_files/grViz-binding-1.0.11/grViz.js"></script><script src="importing-and-computing-differences_files/kePrint-0.0.1/kePrint.js"></script><link href="importing-and-computing-differences_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Importing Data and Computing Differences in fundsr</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Importing Data and Computing Differences in fundsr</h1>
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-08</h4>
+            <h4 data-toc-skip class="date">2026-01-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/importing-and-computing-differences.Rmd" class="external-link"><code>vignettes/importing-and-computing-differences.Rmd</code></a></small>
       <div class="d-none name"><code>importing-and-computing-differences.Rmd</code></div>
@@ -96,15 +106,17 @@ Traykov</h4>
 <img src="figures/example-plot.png" alt="A glimpse of the final result"><div class="figcaption">A glimpse of the final result</div>
 </div>
 </div>
-<p>This vignette introduces data loading and tracking-difference
-calculations using the example data files shipped with fundsr. For a
-demonstration based on NAV histories downloaded from fund
+<p>This vignette shows how to load data into fundsr and compute rolling
+differences (CAGR and log) using the example files shipped with the
+package. For a demonstration based on NAV histories downloaded from fund
 providers—which also covers liquidity plots and translation support—see
 <a href="https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.html">Simple
-Demo Using Real Data</a>. More complex workflows are provided (without
-data) under <code>scripts/examples</code> in the package directory;
-start with <code>glob_funds.R</code> or <code>all_funds.R</code>. The
-directory can be located with
+Demo Using Real Data</a>. Guidance on obtaining real NAVs and index
+levels lives in the <a href="https://github.com/StanTraykov/fundsr/wiki" class="external-link">project wiki</a>.</p>
+<p>More complex workflows are provided (without data) under
+<code>scripts/examples</code> in the package directory; start with
+<code>glob_funds.R</code> or <code>all_funds.R</code>. The directory can
+be located with
 <code>system.file("scripts/examples", package = "fundsr")</code>.</p>
 <div class="section level2">
 <h2 id="the-master-table">The master table<a class="anchor" aria-label="anchor" href="#the-master-table"></a>
@@ -623,7 +635,7 @@ table.</p>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX1-GR` <span class="op">=</span> <span class="st">"IDX1"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; *** Loading: idx1</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/IDX1.xlsx'...</span></span>
+<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/IDX1.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
 <span><span class="co">#&gt; 730 rows x 3 cols (sheet='1', date col ='^Date').</span></span>
 <span></span>
@@ -641,14 +653,16 @@ table.</p>
 <code>load_fund()</code><a class="anchor" aria-label="anchor" href="#load_fund"></a>
 </h3>
 <p><code><a href="../reference/load_fund.html">load_fund()</a></code> reads an Excel file with fund NAVs into the
-storage environment (by calling <code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> and
-providing an expression with <code><a href="../reference/read_timeseries_excel.html">read_timeseries_excel()</a></code>). It
-accepts regular expressions for identifying the date and NAV columns and
-a sheet name or sheet number identifying the sheet with the NAV history
-within the Excel workbook (defaulting to <code>1</code>, which always
-works for single-sheet workbooks). The first argument (usually a fund
-ticker), converted to lowercase, is used as the variable name for
-<code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> and the tibble column name that will
+storage environment (it calls <code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> with an
+expression that uses <code><a href="../reference/read_timeseries_excel.html">read_timeseries_excel()</a></code>). It accepts
+<strong>regular expressions</strong> for identifying the date and NAV
+columns and a <code>sheet</code> (name or number) selecting the
+worksheet within the Excel workbook that contains the NAV history. The
+default values are <code>date_col = "^Date"</code>,
+<code>nav_col = "^NAV"</code>, and <code>sheet = 1</code> (which works
+for single-sheet workbooks). The first argument (usually a fund ticker),
+converted to lowercase, is used as the variable name for
+<code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> and as the tibble column name that will
 eventually propagate to the master table. The <code>benchmark</code>
 argument provides the fund→index mapping.</p>
 <div class="figure" style="text-align: left">
@@ -656,11 +670,16 @@ argument provides the fund→index mapping.</p>
 Figure 2: Excel file for FNDA
 </p>
 </div>
-<p>The NAV history for FNDA is provided in an Excel file with multiple
-sheets and a date column named “As Of” (Figure 2). The sheet and date
-column name must be provided to <code><a href="../reference/load_fund.html">load_fund()</a></code> and will be
-used to locate the NAV and date ranges, even if there are extraneous
-rows and columns around the data (common in fund manager files).</p>
+<p>The NAV history for FNDA is provided in an Excel workbook with
+multiple sheets and a date column named “As Of” (Figure 2). If the
+defaults for <code>sheet</code>, <code>date_col</code>, or
+<code>nav_col</code> do not match the file layout, you
+<strong>must</strong> specify the relevant parameters. They will be used
+to reliably locate the NAV and date ranges even when the sheet contains
+extraneous rows and columns around the data (common in fund-manager
+files). For this file, <code>sheet</code> and <code>date_col</code> are
+required; <code>nav_col</code> is optional because the default would
+still match.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"FNDA"</span>,</span>
 <span>          <span class="st">"FNDA.xlsx"</span>,</span>
@@ -669,7 +688,7 @@ rows and columns around the data (common in fund manager files).</p>
 <span>          date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; *** Loading: fnda</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/FNDA.xlsx'...</span></span>
+<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDA.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
 <span><span class="co">#&gt; 730 rows x 2 cols (sheet='historical', date col ='^As Of').</span></span></code></pre></div>
 <p><code><a href="../reference/load_fund.html">load_fund()</a></code> recognizes proper Excel dates, improperly
@@ -688,7 +707,7 @@ histories.</p>
 <span>          nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
 <span>          date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; *** Loading: fndb</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/FNDB.xlsx'...</span></span>
+<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDB.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
 <span><span class="co">#&gt; 655 rows x 2 cols (sheet='1', date col ='^date').</span></span></code></pre></div>
 <p>The final fund to load is GNDA.</p>
@@ -699,7 +718,7 @@ histories.</p>
 <span>          date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; *** Loading: gnda</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/Rtmp8FGSqU/temp_libpath1d8f69998433/fundsr/extdata/GNDA.xlsx'...</span></span>
+<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/GNDA.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
 <span><span class="co">#&gt; 730 rows x 2 cols (sheet='1', date col ='^Date').</span></span></code></pre></div>
 </div>
@@ -1207,9 +1226,7 @@ calls.</p>
 <span>                          <span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                          index_level <span class="op">=</span> <span class="st">"gross"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Roll diffs gndb -&gt; IDX2-GR</span></span>
-<span><span class="co">#&gt; Roll diffs IDX1-GR -&gt; IDX1-GR</span></span>
 <span><span class="co">#&gt; Skipping IDX1-GR: self-tracking</span></span>
-<span><span class="co">#&gt; Roll diffs IDX2-GR -&gt; IDX2-GR</span></span>
 <span><span class="co">#&gt; Skipping IDX2-GR: self-tracking</span></span>
 <span><span class="co">#&gt; Roll diffs fnda -&gt; IDX1-GR</span></span>
 <span><span class="co">#&gt; Roll diffs fndb -&gt; IDX1-GR</span></span>

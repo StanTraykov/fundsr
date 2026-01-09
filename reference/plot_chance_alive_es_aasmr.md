@@ -32,6 +32,15 @@ plot_chance_alive_es_aasmr(ca, sex = c("m", "f"), population)
 
 A ggplot object.
 
+## See also
+
+Other survival curve functions:
+[`chance_alive()`](https://stantraykov.github.io/fundsr/reference/chance_alive.md),
+[`chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/chance_alive_es_aasmr.md),
+[`plot_chance_alive()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive.md),
+[`read_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/read_es_aasmr.md),
+[`read_life_table()`](https://stantraykov.github.io/fundsr/reference/read_life_table.md)
+
 ## Examples
 
 ``` r

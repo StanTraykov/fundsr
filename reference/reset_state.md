@@ -17,6 +17,11 @@ reset_state()
 
 Invisibly returns `NULL`. Called for side effects.
 
+## See also
+
+Other config functions:
+[`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md)
+
 ## Examples
 
 ``` r

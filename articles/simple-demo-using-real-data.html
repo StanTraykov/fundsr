@@ -6,7 +6,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Simple Demo Using Real Data • fundsr</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -20,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,12 +68,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Simple Demo Using Real Data</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Simple Demo Using Real Data</h1>
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-08</h4>
+            <h4 data-toc-skip class="date">2026-01-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/articles/simple-demo-using-real-data.Rmd" class="external-link"><code>vignettes/articles/simple-demo-using-real-data.Rmd</code></a></small>
       <div class="d-none name"><code>simple-demo-using-real-data.Rmd</code></div>
@@ -71,13 +81,14 @@ Traykov</h4>
     
     
 <p>This vignette demonstrates a simple workflow using downloaded fund
-files. For a more comprehensive introduciton using example data files,
-see <code><a href="../articles/importing-and-computing-differences.html">vignette("importing-and-computing-differences")</a></code>. More
-complex workflows are shipped (without data) under
-<code>scripts/examples</code> in the fundsr directory (start with
+files. For a comprehensive introduction using example data files, see
+<code><a href="../articles/importing-and-computing-differences.html">vignette("importing-and-computing-differences")</a></code>. For
+information on how to get data from fund and index providers, see <a href="https://github.com/StanTraykov/fundsr/wiki" class="external-link">fundsr’s GitHub
+wiki</a>. More complex workflows are shipped without data under
+<code>scripts/examples</code> in the package directory (start with
 <code>glob_funds.R</code> or <code>all_funds.R</code>). The installation
 path can be discovered via
-<code>system.file("scripts/examples", package="fundsr")</code>.</p>
+<code>system.file("scripts/examples", package = "fundsr")</code>.</p>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
@@ -165,16 +176,16 @@ path can be discovered via
 <span><span class="co">#&gt; *** Loading: spyy</span></span>
 <span><span class="co">#&gt; Reading Excel file 'data/funds/SPYY.xlsx'...</span></span>
 <span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; 3732 rows x 2 cols (sheet='1', date col ='^Date').</span></span>
+<span><span class="co">#&gt; 3733 rows x 2 cols (sheet='1', date col ='^Date').</span></span>
 <span><span class="co">#&gt; *** Loading: iusq</span></span>
 <span><span class="co">#&gt; Reading Excel file 'data/funds/IUSQ.xls'...</span></span>
 <span><span class="co">#&gt; readxl failed. Attempting parse as Excel 2003 XML...</span></span>
-<span><span class="co">#&gt; 3625 rows x 3 cols (sheet='Historical', date col ='^As Of').</span></span>
+<span><span class="co">#&gt; 3627 rows x 3 cols (sheet='Historical', date col ='^As Of').</span></span>
 <span><span class="co">#&gt; Joining: spyy, iusq</span></span></code></pre></div>
 <p>Check contents.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2015-04-03"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,762 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,763 × 4</span></span></span>
 <span><span class="co">#&gt;    date        spyy  iusq  ACWI</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2015-04-06   <span style="color: #BB0000;">NA</span>   38.2  153.</span></span>
@@ -187,7 +198,7 @@ path can be discovered via
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2015-04-15  102.  39.0  156.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2015-04-16  102.  39.1  156.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2015-04-17  101.  38.7  155.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,752 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,753 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   spyy   iusq </span></span>
 <span><span class="co">#&gt; "ACWI" "ACWI"</span></span></code></pre></div>
@@ -205,14 +216,14 @@ window.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date        spyy         iusq</span></span>
-<span><span class="co">#&gt; 1 2026-01-05 0.004708281 0.0009037957</span></span>
-<span><span class="co">#&gt; 2 2026-01-06 0.004511927 0.0007926735</span></span>
-<span><span class="co">#&gt; 3 2026-01-07          NA           NA</span></span>
+<span><span class="co">#&gt; 1 2026-01-06 0.004511927 0.0007926735</span></span>
+<span><span class="co">#&gt; 2 2026-01-07 0.004357993 0.0007516283</span></span>
+<span><span class="co">#&gt; 3 2026-01-08 0.004395124 0.0007814405</span></span>
 <span><span class="va">diffs</span><span class="op">$</span><span class="va">log</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date        spyy         iusq</span></span>
-<span><span class="co">#&gt; 1 2026-01-05 0.003822482 0.0007348929</span></span>
-<span><span class="co">#&gt; 2 2026-01-06 0.003658349 0.0006436832</span></span>
-<span><span class="co">#&gt; 3 2026-01-07          NA           NA</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2026-01-06 0.003658349 0.0006436832</span></span>
+<span><span class="co">#&gt; 2 2026-01-07 0.003521613 0.0006082626</span></span>
+<span><span class="co">#&gt; 3 2026-01-08 0.003554415 0.0006328890</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plot-specifications">Plot specifications<a class="anchor" aria-label="anchor" href="#plot-specifications"></a>

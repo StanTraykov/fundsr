@@ -55,3 +55,15 @@ Caching behavior is controlled by:
 If `fund_index_map` is supplied, it is merged into
 `.fundsr$fund_index_map` via name-based assignment: existing entries
 with the same names are replaced.
+
+## See also
+
+Other fund/index workflow functions:
+[`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md),
+[`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md),
+[`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md),
+[`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md),
+[`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md),
+[`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
+[`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md),
+[`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)

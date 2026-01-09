@@ -33,6 +33,15 @@ chance_alive(lt, pop_name, age0)
 A tibble with columns `Year`, `Age`, and `chance_alive`, sorted by
 `Year` then `Age`.
 
+## See also
+
+Other survival curve functions:
+[`chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/chance_alive_es_aasmr.md),
+[`plot_chance_alive()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive.md),
+[`plot_chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive_es_aasmr.md),
+[`read_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/read_es_aasmr.md),
+[`read_life_table()`](https://stantraykov.github.io/fundsr/reference/read_life_table.md)
+
 ## Examples
 
 ``` r

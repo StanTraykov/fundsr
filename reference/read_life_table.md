@@ -34,6 +34,15 @@ read_life_table(directory, sex = c("f", "m"), look_back = 20)
 A tibble with columns: `PopName`, `Year`, `Age`, `mx`, `qx`, `ax`, `lx`,
 `dx`, `Lx`, `Tx`, `ex`. `Age` is returned as integer.
 
+## See also
+
+Other survival curve functions:
+[`chance_alive()`](https://stantraykov.github.io/fundsr/reference/chance_alive.md),
+[`chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/chance_alive_es_aasmr.md),
+[`plot_chance_alive()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive.md),
+[`plot_chance_alive_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/plot_chance_alive_es_aasmr.md),
+[`read_es_aasmr()`](https://stantraykov.github.io/fundsr/reference/read_es_aasmr.md)
+
 ## Examples
 
 ``` r

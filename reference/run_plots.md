@@ -1,4 +1,4 @@
-# Generate and export all configured rolling-difference plots
+# Generate and export rolling-difference and XLM plots from a specification
 
 Iterates over plot specifications and produces rolling-difference plots
 for both CAGR and log-return variants. Each plot is saved via
@@ -104,6 +104,13 @@ option (tickers not present in the map are used as-is). The first plot
 specification encountered for a given ticker set determines the base
 filename `xlm_<plot_id{suffix}>` used for saving and storing the
 resulting XLM plot.
+
+## See also
+
+Other plot export utilities:
+[`clear_inkscape_queue()`](https://stantraykov.github.io/fundsr/reference/clear_inkscape_queue.md),
+[`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md),
+[`save_plot()`](https://stantraykov.github.io/fundsr/reference/save_plot.md)
 
 ## Examples
 
