@@ -18,3 +18,8 @@ and the XLM bookkeeping vector (\code{.fundsr$done_xlm_sets}).
 \examples{
 reset_state()
 }
+\seealso{
+Other config functions: 
+\code{\link{fundsr_options}()}
+}
+\concept{config functions}

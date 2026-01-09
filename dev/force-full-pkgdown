@@ -1,7 +1,7 @@
 Changing this magic file forces a full rebuild of vignettes/articles on github pages
-(normally skipped by the pkgdown workflow as they're a bit expensive).
+(normally skipped by the pkgdown workflow as they're expensive).
 
 - Each time you want a full rebuild, add one more "|" below.
 - Commit. Push. Summon pkgdown.
 
-||||||||||||
+|||||||||||||

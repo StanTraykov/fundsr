@@ -44,3 +44,15 @@ Caching behavior is controlled by:
 If \code{fund_index_map} is supplied, it is merged into \code{.fundsr$fund_index_map}
 via name-based assignment: existing entries with the same names are replaced.
 }
+\seealso{
+Other fund/index workflow functions: 
+\code{\link{add_data_loader}()},
+\code{\link{build_all_series}()},
+\code{\link{clear_data_loaders}()},
+\code{\link{clear_storage}()},
+\code{\link{get_storage}()},
+\code{\link{join_env}()},
+\code{\link{load_fund}()},
+\code{\link{run_data_loaders}()}
+}
+\concept{fund/index workflow functions}

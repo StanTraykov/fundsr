@@ -1,4 +1,4 @@
-#' Save a plot as SVG and optionally save PNG immediately
+#' Save a plot as SVG and/or PNG and queue for Inkscape conversion
 #'
 #' Saves `plot` as an SVG file when `save_svg = TRUE`. When an SVG is saved, an
 #' Inkscape export action is also queued so PNG generation can be performed later
@@ -43,6 +43,7 @@
 #' If both `save_svg` and `save_png` are `FALSE`, the function issues a warning
 #' and returns without writing files or queueing exports.
 #'
+#' @family plot export utilities
 #' @export
 save_plot <- function(file,
                   plot,
@@ -148,6 +149,7 @@ save_plot <- function(file,
 #' intact and a message is printed.
 #'
 #' @seealso [clear_inkscape_queue()], [save_plot()]
+#' @family plot export utilities
 #' @export
 export_pngs <- function(background = "white") {
     if (length(.fundsr$inkscape_queue) == 0) {
@@ -180,6 +182,8 @@ export_pngs <- function(background = "white") {
 #' queued export commands.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
+#'
+#' @family plot export utilities
 #' @export
 #'
 #' @examples
@@ -266,6 +270,7 @@ keep_supported_breaks <- function(breaks, min_date, max_date) {
 #' are included only when the data range extends beyond the midpoint to the
 #' neighboring break.
 #'
+#' @family rolling difference functions
 #' @export
 
 plot_roll_diffs <- function(data,
@@ -386,7 +391,7 @@ vec_key <- function(x, ignore_order = FALSE) {
     paste0(x, collapse = ";")
 }
 
-#' Generate and export all configured rolling-difference plots
+#' Generate and export rolling-difference and XLM plots from a specification
 #'
 #' Iterates over plot specifications and produces rolling-difference plots for
 #' both CAGR and log-return variants. Each plot is saved via [save_plot()], and
@@ -436,7 +441,7 @@ vec_key <- function(x, ignore_order = FALSE) {
 #' as-is). The first plot specification encountered for a given ticker set
 #' determines the base filename `xlm_<plot_id{suffix}>` used for saving and
 #' storing the resulting XLM plot.
-#'
+#' @family plot export utilities
 #' @export
 #'
 #' @examples

@@ -11,6 +11,7 @@
 #' @return Invisibly returns `NULL`. Data are stored via `store_timeseries()`.
 #' @seealso
 #' [store_timeseries()], [read_timeseries_excel()]
+#' @family provider wrappers
 #' @export
 msci <- function(var_name, col_trans, benchmarks = NULL, file) {
     store_timeseries(
@@ -69,10 +70,8 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
 #'
 #' @seealso
-#' Basic functions: [store_timeseries()], [read_timeseries_excel()]
-#' @seealso
-#' Vendor-specific wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
-#'
+#' Provide wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
+#' @family fund/index workflow functions
 #' @export
 load_fund <- function(ticker,
                       file = NULL,
@@ -150,9 +149,9 @@ load_fund <- function(ticker,
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
 #'
-#' #' @seealso
-#' [load_fund()], [amun()], [hsbc()], [inve()], [spdr()], [ubs()], [vang()], [xtra()]
-#'
+#' @seealso
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
     load_fund(ticker = ticker,
@@ -173,8 +172,8 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param benchmark Optional benchmark key.
 #'
 #' @seealso
-#' [load_fund()], [amun()], [hsbc()], [inve()], [ishs()], [ubs()], [vang()], [xtra()]
-#'
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 spdr <- function(ticker, file = NULL, benchmark = NULL) {
     load_fund(ticker = ticker,
@@ -192,8 +191,8 @@ spdr <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param retrieve_benchmark Logical; also import benchmark column.
 #'
 #' @seealso
-#' [load_fund()], [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()]
-#'
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
     load_fund(ticker = ticker,
@@ -212,8 +211,8 @@ xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param benchmark Optional benchmark key.
 #'
 #' @seealso
-#' [load_fund()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
-#'
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 amun <- function(ticker, file = NULL, benchmark = NULL) {
     load_fund(ticker = ticker,
@@ -230,10 +229,10 @@ amun <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
-#' #'
-#' @seealso
-#' [load_fund()], [amun()], [hsbc()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
 #'
+#' @seealso
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
     load_fund(ticker = ticker,
@@ -253,8 +252,8 @@ inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param benchmark Optional benchmark key.
 #'
 #' @seealso
-#' [load_fund()], [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [xtra()]
-#'
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 vang <- function(ticker, file = NULL, benchmark = NULL) {
     load_fund(ticker = ticker,
@@ -272,8 +271,8 @@ vang <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param benchmark Optional benchmark key.
 #'
 #' @seealso
-#' [load_fund()], [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [vang()], [xtra()]
-#'
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 ubs <- function(ticker, file = NULL, benchmark = NULL) {
     load_fund(ticker = ticker,
@@ -291,8 +290,8 @@ ubs <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param benchmark Optional benchmark key.
 #'
 #' @seealso
-#' [load_fund()], [amun()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
-#'
+#' [load_fund()]
+#' @family provider wrappers
 #' @export
 hsbc <- function(ticker, file = NULL, benchmark = NULL) {
     load_fund(ticker = ticker,

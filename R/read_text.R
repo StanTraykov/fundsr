@@ -31,6 +31,7 @@
 #' All non-date columns are coerced with `as.numeric()` (non-parsable values
 #' become `NA`).
 #'
+#' @family fund/index file readers
 #' @export
 read_timeseries <- function(
         file,
@@ -145,6 +146,7 @@ read_timeseries <- function(
 #' `"Date"`, then parses them using a fixed `%m/%d/%Y` date format and a numeric
 #' second field.
 #'
+#' @family fund/index file readers
 #' @export
 read_msci_tsv <- function(file) {
     fund_data_dir <- getOption("fundsr.data_dir")

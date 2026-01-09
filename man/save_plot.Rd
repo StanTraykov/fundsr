@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{save_plot}
 \alias{save_plot}
-\title{Save a plot as SVG and optionally save PNG immediately}
+\title{Save a plot as SVG and/or PNG and queue for Inkscape conversion}
 \usage{
 save_plot(
   file,
@@ -72,3 +72,10 @@ The PNG background is set via \code{background}.
 If both \code{save_svg} and \code{save_png} are \code{FALSE}, the function issues a warning
 and returns without writing files or queueing exports.
 }
+\seealso{
+Other plot export utilities: 
+\code{\link{clear_inkscape_queue}()},
+\code{\link{export_pngs}()},
+\code{\link{run_plots}()}
+}
+\concept{plot export utilities}

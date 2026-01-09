@@ -17,5 +17,16 @@ ubs(ticker, file = NULL, benchmark = NULL)
 Wrapper around \code{load_fund()} for UBS files.
 }
 \seealso{
-\code{\link[=load_fund]{load_fund()}}, \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}
+\code{\link[=load_fund]{load_fund()}}
+
+Other provider wrappers: 
+\code{\link{amun}()},
+\code{\link{hsbc}()},
+\code{\link{inve}()},
+\code{\link{ishs}()},
+\code{\link{msci}()},
+\code{\link{spdr}()},
+\code{\link{vang}()},
+\code{\link{xtra}()}
 }
+\concept{provider wrappers}

@@ -19,4 +19,8 @@ them into the directory specified by \code{fundsr.data_dir}.
 }
 \seealso{
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
+
+Other download functions: 
+\code{\link{add_fund_urls}()}
 }
+\concept{download functions}

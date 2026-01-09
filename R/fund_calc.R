@@ -33,7 +33,7 @@ longer <- function(df,
         rename(date = !!date_col)
 }
 
-#' Rolling annualized tracking differences
+#' Compute rolling annualized tracking difference statistics
 #'
 #' For each fund–index pair in `fund_index_map`, computes rolling, annualized
 #' tracking differences over a backward-looking window of `n_days` calendar
@@ -79,6 +79,7 @@ longer <- function(df,
 #' \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
 #' non-positive inputs for log returns).
 #'
+#' @family rolling difference functions
 #' @export
 roll_diffs <- function(df,
                        n_days,

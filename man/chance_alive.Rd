@@ -32,3 +32,12 @@ ca <- chance_alive(lt_m, pop_name = "BGR", age0 = 27)
 ca
 }
 }
+\seealso{
+Other survival curve functions: 
+\code{\link{chance_alive_es_aasmr}()},
+\code{\link{plot_chance_alive}()},
+\code{\link{plot_chance_alive_es_aasmr}()},
+\code{\link{read_es_aasmr}()},
+\code{\link{read_life_table}()}
+}
+\concept{survival curve functions}

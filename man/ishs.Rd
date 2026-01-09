@@ -13,11 +13,22 @@ ishs(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE)
 
 \item{benchmark}{Optional benchmark key.}
 
-\item{retrieve_benchmark}{Logical; also import benchmark column.
-
-#' @seealso
-\code{\link[=load_fund]{load_fund()}}, \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}}
+\item{retrieve_benchmark}{Logical; also import benchmark column.}
 }
 \description{
 Wrapper around \code{load_fund()} for iShares files.
 }
+\seealso{
+\code{\link[=load_fund]{load_fund()}}
+
+Other provider wrappers: 
+\code{\link{amun}()},
+\code{\link{hsbc}()},
+\code{\link{inve}()},
+\code{\link{msci}()},
+\code{\link{spdr}()},
+\code{\link{ubs}()},
+\code{\link{vang}()},
+\code{\link{xtra}()}
+}
+\concept{provider wrappers}

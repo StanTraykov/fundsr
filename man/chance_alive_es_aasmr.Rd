@@ -40,3 +40,12 @@ p <- plot_chance_alive_es_aasmr(ca, sex = "m", population = "NL")
 p
 }
 }
+\seealso{
+Other survival curve functions: 
+\code{\link{chance_alive}()},
+\code{\link{plot_chance_alive}()},
+\code{\link{plot_chance_alive_es_aasmr}()},
+\code{\link{read_es_aasmr}()},
+\code{\link{read_life_table}()}
+}
+\concept{survival curve functions}

@@ -58,3 +58,8 @@ plot_xlms(xlm_data, tickers = c("fwia", "eunl"), back_trans = TRUE)
 plot_xlms(xlm_data, tickers = "MSCI World", rgx = TRUE, back_trans = TRUE)
 }
 }
+\seealso{
+Other XLM functions: 
+\code{\link{read_xlm_directory}()}
+}
+\concept{XLM functions}

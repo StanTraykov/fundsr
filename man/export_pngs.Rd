@@ -36,4 +36,10 @@ intact and a message is printed.
 }
 \seealso{
 \code{\link[=clear_inkscape_queue]{clear_inkscape_queue()}}, \code{\link[=save_plot]{save_plot()}}
+
+Other plot export utilities: 
+\code{\link{clear_inkscape_queue}()},
+\code{\link{run_plots}()},
+\code{\link{save_plot}()}
 }
+\concept{plot export utilities}

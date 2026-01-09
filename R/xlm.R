@@ -46,6 +46,7 @@ read_xlsx_hdr <- function(file_path,
 #' columns `xlm`, `ticker`, `name`, and `date`). The Month–Year embedded
 #' in the XLM column name is parsed and used as the observation date.
 #'
+#' @family XLM functions
 #' @export
 read_xlm_directory <- function(directory,
                                header_rows = c(4,5),
@@ -124,6 +125,7 @@ read_xlm_directory <- function(directory,
 #' occurrences of Xetra tickers in the plotted data are replaced by their
 #' internal identifiers in the plot's legend and grouping.
 #'
+#' @family XLM functions
 #' @export
 #'
 #' @examples

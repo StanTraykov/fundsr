@@ -50,3 +50,9 @@ it is always parsed as text using \code{orders}.
 All non-date columns are coerced with \code{as.numeric()} (non-parsable values
 become \code{NA}).
 }
+\seealso{
+Other fund/index file readers: 
+\code{\link{read_msci_tsv}()},
+\code{\link{read_timeseries_excel}()}
+}
+\concept{fund/index file readers}

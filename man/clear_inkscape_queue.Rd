@@ -16,3 +16,10 @@ queued export commands.
 \examples{
 clear_inkscape_queue()
 }
+\seealso{
+Other plot export utilities: 
+\code{\link{export_pngs}()},
+\code{\link{run_plots}()},
+\code{\link{save_plot}()}
+}
+\concept{plot export utilities}

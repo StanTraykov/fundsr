@@ -21,3 +21,9 @@ The function filters lines beginning with a digit (date rows) or the literal
 \code{"Date"}, then parses them using a fixed \verb{\%m/\%d/\%Y} date format and a numeric
 second field.
 }
+\seealso{
+Other fund/index file readers: 
+\code{\link{read_timeseries}()},
+\code{\link{read_timeseries_excel}()}
+}
+\concept{fund/index file readers}

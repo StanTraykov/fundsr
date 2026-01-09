@@ -24,4 +24,15 @@ Wrapper around \code{store_timeseries()} and \code{read_timeseries_excel()} for 
 }
 \seealso{
 \code{\link[=store_timeseries]{store_timeseries()}}, \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}
+
+Other provider wrappers: 
+\code{\link{amun}()},
+\code{\link{hsbc}()},
+\code{\link{inve}()},
+\code{\link{ishs}()},
+\code{\link{spdr}()},
+\code{\link{ubs}()},
+\code{\link{vang}()},
+\code{\link{xtra}()}
 }
+\concept{provider wrappers}

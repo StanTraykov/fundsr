@@ -22,3 +22,15 @@ Removes all objects from the package's storage environment
 clear_storage()
 clear_storage(clear_fund_index_map = TRUE)
 }
+\seealso{
+Other fund/index workflow functions: 
+\code{\link{add_data_loader}()},
+\code{\link{build_all_series}()},
+\code{\link{clear_data_loaders}()},
+\code{\link{get_storage}()},
+\code{\link{join_env}()},
+\code{\link{load_fund}()},
+\code{\link{run_data_loaders}()},
+\code{\link{store_timeseries}()}
+}
+\concept{fund/index workflow functions}

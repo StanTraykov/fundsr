@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{run_plots}
 \alias{run_plots}
-\title{Generate and export all configured rolling-difference plots}
+\title{Generate and export rolling-difference and XLM plots from a specification}
 \usage{
 run_plots(
   roll_diffs,
@@ -82,3 +82,10 @@ plots[["global_L"]]
 plots[["xlm_global"]]
 }
 }
+\seealso{
+Other plot export utilities: 
+\code{\link{clear_inkscape_queue}()},
+\code{\link{export_pngs}()},
+\code{\link{save_plot}()}
+}
+\concept{plot export utilities}

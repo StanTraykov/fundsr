@@ -193,6 +193,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
 #'
 #' @seealso [read_timeseries()] for CSV/TSV time series import.
 #'
+#' @family fund/index file readers
 #' @export
 #'
 #' @examples

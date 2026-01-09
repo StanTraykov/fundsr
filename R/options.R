@@ -25,6 +25,8 @@
 #'   that were changed (as returned by `options()`).
 #' @seealso
 #' [add_fund_urls()] to add/update entries in `fundsr.fund_urls`.
+#'
+#' @family config functions
 #' @export
 fundsr_options <- function(data_dir = NULL,
                            out_dir = NULL,
@@ -124,6 +126,8 @@ fundsr_options <- function(data_dir = NULL,
 #' @seealso
 #' [fundsr_options()] to set `fundsr.fund_urls` (and other fundsr options) in one call.
 #' [download_fund_data()] to download files from the configured URLs.
+#'
+#' @family download functions
 #' @export
 add_fund_urls <- function(x) {
     stopifnot(is.character(x), !is.null(names(x)), all(nzchar(names(x))))

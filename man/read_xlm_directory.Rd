@@ -30,3 +30,8 @@ relevant XLM, ticker, and product-name fields (stored in
 columns \code{xlm}, \code{ticker}, \code{name}, and \code{date}). The Month–Year embedded
 in the XLM column name is parsed and used as the observation date.
 }
+\seealso{
+Other XLM functions: 
+\code{\link{plot_xlms}()}
+}
+\concept{XLM functions}

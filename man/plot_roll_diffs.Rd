@@ -64,3 +64,8 @@ anchored to calendar months (semiannual or quarterly depending on span) and
 are included only when the data range extends beyond the midpoint to the
 neighboring break.
 }
+\seealso{
+Other rolling difference functions: 
+\code{\link{roll_diffs}()}
+}
+\concept{rolling difference functions}

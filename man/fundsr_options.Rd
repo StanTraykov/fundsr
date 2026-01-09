@@ -54,4 +54,8 @@ corresponding \verb{fundsr.*} option is left unchanged.
 }
 \seealso{
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
+
+Other config functions: 
+\code{\link{reset_state}()}
 }
+\concept{config functions}

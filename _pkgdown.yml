@@ -3,3 +3,44 @@ url: https://stantraykov.github.io/fundsr
 template:
   bootstrap: 5
   math-rendering: mathjax
+
+reference:
+  - title: "Config functions"
+    contents:
+      - has_concept("config functions")
+
+  - title: "Download functions"
+    contents:
+      - has_concept("download functions")
+
+  - title: "Fund/index file readers"
+    contents:
+      - has_concept("fund/index file readers")
+
+  - title: "Fund/index workflow functions"
+    contents:
+      - has_concept("fund/index workflow functions")
+
+  - title: "Fund-index map mutators"
+    contents:
+      - has_concept("fund-index map mutators")
+
+  - title: "Provider wrappers"
+    contents:
+      - has_concept("provider wrappers")
+
+  - title: "Rolling-difference functions"
+    contents:
+      - has_concept("rolling difference functions")
+
+  - title: "Plot export utilities"
+    contents:
+      - has_concept("plot export utilities")
+
+  - title: "XLM functions"
+    contents:
+      - has_concept("XLM functions")
+
+  - title: "Survival-curve functions"
+    contents:
+      - has_concept("survival curve functions")

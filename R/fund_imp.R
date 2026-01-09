@@ -10,6 +10,8 @@
 #' @param fun A function to register. Must take no arguments.
 #'
 #' @return Invisibly returns the updated `.fundsr$data_loaders` list.
+#'
+#' @family fund/index workflow functions
 #' @export
 #'
 #' @examples
@@ -48,8 +50,9 @@ add_data_loader <- function(fun) {
 #' all previously registered data loader functions.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
-#' @export
 #'
+#' @family fund/index workflow functions
+#' @export
 #' @examples
 #' clear_data_loaders()
 clear_data_loaders <- function() {
@@ -67,8 +70,9 @@ clear_data_loaders <- function() {
 #'   `.fundsr$fund_index_map`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
-#' @export
 #'
+#' @family fund/index workflow functions
+#' @export
 #' @examples
 #' clear_storage()
 #' clear_storage(clear_fund_index_map = TRUE)
@@ -86,59 +90,7 @@ clear_storage <- function(clear_fund_index_map = FALSE) {
     invisible(NULL)
 }
 
-#' Clear fund-index map
-#'
-#' Clears the fund-index map stored in `.fundsr$fund_index_map`.
-#'
-#' @return Invisibly returns `NULL`. Called for side effects.
-#' @export
-#'
-#' @examples
-#' clear_fund_index_map()
-clear_fund_index_map <- function() {
-    if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
-        stop("Fundsr state environment is not initialised.", call. = FALSE)
-    }
-    .fundsr$fund_index_map <- character()
-    invisible(NULL)
-}
 
-#' Add to fund-index map
-#'
-#' Merges fund-index pairs into the fund-index map (`.fundsr$fund_index_map`).
-#' Existing entries with the same names are replaced.
-#'
-#' @param fund_index_map Named vector or list of fund-index pairs to merge into
-#'   `.fundsr$fund_index_map`. Names are fund identifiers; values are index
-#'   identifiers.
-#'
-#' @return Invisibly returns `NULL`. Called for side effects.
-#' @export
-#'
-#' @examples
-#' add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2"))
-add_fund_index_map <- function(fund_index_map) {
-    if (is.null(fund_index_map)) {
-        return(invisible(NULL))
-    }
-    if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
-        stop("Fundsr state environment is not initialised.", call. = FALSE)
-    }
-
-    if (!(is.atomic(fund_index_map) || is.list(fund_index_map))) {
-        stop("`fund_index_map` must be a named vector or list.", call. = FALSE)
-    }
-    nms <- names(fund_index_map)
-    if (is.null(nms) || any(is.na(nms)) || any(nms == "")) {
-        stop("`fund_index_map` must have non-empty names.", call. = FALSE)
-    }
-    if (is.null(.fundsr$fund_index_map)) {
-        .fundsr$fund_index_map <- character()
-    }
-
-    .fundsr$fund_index_map[nms] <- fund_index_map
-    invisible(NULL)
-}
 
 #' Run registered data loaders
 #'
@@ -161,6 +113,7 @@ add_fund_index_map <- function(fund_index_map) {
 #' sequentially in registration order. Each registered function must take
 #' no arguments.
 #'
+#' @family fund/index workflow functions
 #' @export
 run_data_loaders <- function(reload = FALSE) {
     if (!is.logical(reload) || length(reload) != 1L || is.na(reload)) {
@@ -263,6 +216,7 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 #'   late objects. If `join_precedence` is supplied, suffixed join columns are coalesced into
 #'   unsuffixed base columns as described above.
 #'
+#' @family fund/index workflow functions
 #' @export
 #'
 #' @examples
@@ -367,6 +321,7 @@ join_env <- function(env,
 #'
 #' @return A tibble containing all joined series, sorted by `by`.
 #'
+#' @family fund/index workflow functions
 #' @export
 #' @examples
 #' \dontrun{
@@ -384,19 +339,6 @@ build_all_series <- function(reload = FALSE, by = "date", ...) {
         arrange(.data[[by]])
 }
 
-#' Get the internal fund index map
-#'
-#' Returns the package's fund index lookup table stored in
-#' `.fundsr$fund_index_map`.
-#'
-#' @return A character vector or named list representing the internal
-#'   fund index mapping.
-#'
-#' @export
-get_fund_index_map <- function() {
-    .fundsr$fund_index_map
-}
-
 #' Get the internal fund storage
 #'
 #' Returns the fundsr's fund storage environment
@@ -404,6 +346,7 @@ get_fund_index_map <- function() {
 #'
 #' @return The storage environment.
 #'
+#' @family fund/index workflow functions
 #' @export
 get_storage <- function() {
     .fundsr_storage
@@ -443,6 +386,7 @@ get_storage <- function() {
 #' If `fund_index_map` is supplied, it is merged into `.fundsr$fund_index_map`
 #' via name-based assignment: existing entries with the same names are replaced.
 #'
+#' @family fund/index workflow functions
 #' @export
 store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = FALSE) {
     # Access the parent's environment (where store_timeseries was called)

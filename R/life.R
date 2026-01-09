@@ -16,6 +16,7 @@
 #'   `PopName`, `Year`, `Age`, `mx`, `qx`, `ax`, `lx`, `dx`, `Lx`, `Tx`, `ex`.
 #'   `Age` is returned as integer.
 #'
+#' @family survival curve functions
 #' @export
 #'
 #' @examples
@@ -87,6 +88,7 @@ read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
 #' @return A tibble with columns `Year`, `Age`, and `chance_alive`, sorted by
 #'   `Year` then `Age`.
 #'
+#' @family survival curve functions
 #' @export
 #'
 #' @examples
@@ -125,6 +127,7 @@ chance_alive <- function(lt, pop_name, age0) {
 #'
 #' @return A ggplot object.
 #'
+#' @family survival curve functions
 #' @export
 #'
 #' @examples
@@ -197,6 +200,7 @@ plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
 #' @return A tibble with columns:
 #'   `freq`, `projection`, `sex`, `unit`, `geo`, `age`, `Age`, `Year`, `mx`.
 #'
+#' @family survival curve functions
 #' @export
 #'
 #' @examples
@@ -253,6 +257,7 @@ read_es_aasmr <- function(directory) {
 #' @return A tibble with columns `geo`, `sex`, `projection`, `Year`, `Age`, `mx`,
 #'   `qx`, `chance_alive`.
 #'
+#' @family survival curve functions
 #' @export
 #'
 #' @examples
@@ -321,6 +326,7 @@ chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
 #'
 #' @return A ggplot object.
 #'
+#' @family survival curve functions
 #' @export
 #'
 #' @examples

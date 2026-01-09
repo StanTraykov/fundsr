@@ -33,3 +33,12 @@ lt_m <- read_life_table(file.path("data", "life"), sex = "m", look_back = 20)
 lt_m \%>\% dplyr::distinct(PopName) \%>\% dplyr::arrange(PopName)
 }
 }
+\seealso{
+Other survival curve functions: 
+\code{\link{chance_alive}()},
+\code{\link{chance_alive_es_aasmr}()},
+\code{\link{plot_chance_alive}()},
+\code{\link{plot_chance_alive_es_aasmr}()},
+\code{\link{read_es_aasmr}()}
+}
+\concept{survival curve functions}

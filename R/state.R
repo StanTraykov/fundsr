@@ -9,6 +9,7 @@
 #' and the XLM bookkeeping vector (`.fundsr$done_xlm_sets`).
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
+#' @family config functions
 #' @export
 #'
 #' @examples

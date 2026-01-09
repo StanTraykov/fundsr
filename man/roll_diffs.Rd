@@ -2,7 +2,7 @@
 % Please edit documentation in R/fund_calc.R
 \name{roll_diffs}
 \alias{roll_diffs}
-\title{Rolling annualized tracking differences}
+\title{Compute rolling annualized tracking difference statistics}
 \usage{
 roll_diffs(
   df,
@@ -69,3 +69,8 @@ Values are \code{NA} when an anchor cannot be found, required inputs are missing
 \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
 non-positive inputs for log returns).
 }
+\seealso{
+Other rolling difference functions: 
+\code{\link{plot_roll_diffs}()}
+}
+\concept{rolling difference functions}

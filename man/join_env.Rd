@@ -60,3 +60,15 @@ into single unsuffixed columns via precedence specification (\code{join_preceden
                              join_precedence = c(".late", ".early"))
   print(list(full = full, late = late, late_coalesced = late_coalesced))
 }
+\seealso{
+Other fund/index workflow functions: 
+\code{\link{add_data_loader}()},
+\code{\link{build_all_series}()},
+\code{\link{clear_data_loaders}()},
+\code{\link{clear_storage}()},
+\code{\link{get_storage}()},
+\code{\link{load_fund}()},
+\code{\link{run_data_loaders}()},
+\code{\link{store_timeseries}()}
+}
+\concept{fund/index workflow functions}

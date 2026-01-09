@@ -11,6 +11,7 @@
 #' @seealso
 #' [add_fund_urls()] to add/update entries in `fundsr.fund_urls`.
 #'
+#' @family download functions
 #' @export
 download_fund_data <- function(redownload = FALSE) {
     fund_urls <- getOption("fundsr.fund_urls")
