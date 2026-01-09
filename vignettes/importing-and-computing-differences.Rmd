@@ -134,7 +134,9 @@ knitr::include_graphics("figures/example-plot.png")
 cat('</div>')
 ```
 
-This vignette introduces data loading and tracking-difference calculations using the example data files shipped with fundsr. For a demonstration based on NAV histories downloaded from fund providers—which also covers liquidity plots and translation support—see [Simple Demo Using Real Data](https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.html). More complex workflows are provided (without data) under `scripts/examples` in the package directory; start with `glob_funds.R` or `all_funds.R`. The directory can be located with `system.file("scripts/examples", package = "fundsr")`.
+This vignette shows how to load data into fundsr and compute rolling differences (CAGR and log) using the example files shipped with the package. For a demonstration based on NAV histories downloaded from fund providers—which also covers liquidity plots and translation support—see [Simple Demo Using Real Data](https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.html). Guidance on obtaining real NAVs and index levels lives in the [project wiki](https://github.com/StanTraykov/fundsr/wiki).
+
+More complex workflows are provided (without data) under `scripts/examples` in the package directory; start with `glob_funds.R` or `all_funds.R`. The directory can be located with `system.file("scripts/examples", package = "fundsr")`.
 
 ## The master table
 

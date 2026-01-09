@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette demonstrates a simple workflow using downloaded fund files. For a more comprehensive introduciton using example data files, see `vignette("importing-and-computing-differences")`. More complex workflows are shipped (without data) under `scripts/examples` in the fundsr directory (start with `glob_funds.R` or `all_funds.R`). The installation path can be discovered via `system.file("scripts/examples", package="fundsr")`.
+This vignette demonstrates a simple workflow using downloaded fund files. For a comprehensive introduction using example data files, see `vignette("importing-and-computing-differences")`. For information on how to get data from fund and index providers, see [fundsr's GitHub wiki](https://github.com/StanTraykov/fundsr/wiki). More complex workflows are shipped without data under `scripts/examples` in the package directory (start with `glob_funds.R` or `all_funds.R`). The installation path can be discovered via `system.file("scripts/examples", package = "fundsr")`.
 
 ## Setup
 ```{r setup, message=FALSE, warning=FALSE}
