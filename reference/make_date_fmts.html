@@ -65,7 +65,8 @@ then parse all" workflows.</p>
 
 <dl><dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>A single string specifying the component order as a permutation
-of <code>"d"</code>, <code>"m"</code>, <code>"y"</code> (e.g. <code>"dmy"</code>, <code>"mdy"</code>, <code>"ymd"</code>).</p></dd>
+of <code>"d"</code>, <code>"y"</code>, and exactly one of <code>"m"</code> or <code>"M"</code>
+(e.g. <code>"dmy"</code>, <code>"ymd"</code>, <code>"dMy"</code>, <code>"Mdy"</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -74,10 +75,13 @@ of <code>"d"</code>, <code>"m"</code>, <code>"y"</code> (e.g. <code>"dmy"</code>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The returned formats cover common separators (<code>"/"</code>, <code>"-"</code>, <code>"."</code>, <code>" "</code>)
-and both 4-digit (<code>%Y</code>) and 2-digit (<code>%y</code>) years. Month tokens include
-numeric months (<code>%m</code>) and abbreviated month names (<code>%b</code>). Full month names
-(<code>%B</code>) are excluded.</p>
+    <p>The returned formats cover common separators (<code>"/"</code>, <code>"-"</code>, <code>"."</code>, <code>" "</code>),
+unseparated dates with numeric months, and an optional comma before a final
+4- or 2-digit year element (<code>%y</code>, <code>%Y</code>) in space-separated dates.</p>
+<p>Month handling depends on <code>order</code>:</p><ul><li><p>If <code>order</code> uses <code>"m"</code>, month tokens include numeric months (<code>%m</code>) and
+abbreviated month names (<code>%b</code>).</p></li>
+<li><p>If <code>order</code> uses <code>"M"</code>, month tokens include full month names (<code>%B</code>).</p></li>
+</ul><p>Month name formats (<code>%b</code>, <code>%B</code>) are locale-dependent.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

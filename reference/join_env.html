@@ -95,10 +95,10 @@ afterwards. Defaults to <code>NULL</code>.</p></dd>
 
 <dt id="arg-join-precedence">join_precedence<a class="anchor" aria-label="anchor" href="#arg-join-precedence"></a></dt>
 <dd><p>Optional character vector of length 2 giving join suffixes to coalesce
-(for example, <code>c(".early", ".late")</code> or <code>c(".late", ".early")</code>). When non-<code>NULL</code>, any pairs of columns whose
-names end in these suffixes (and share the same base name) are replaced by a single unsuffixed
-column containing the coalesced values, preferring the left suffix when both values are
-available. If <code>NULL</code> (the default), no automatic coalescing is performed.</p></dd>
+(for example, <code>c(".early", ".late")</code> or <code>c(".late", ".early")</code>). When non-<code>NULL</code>, any pairs of
+columns whose names end in these suffixes (and share the same base name) are replaced by a
+single unsuffixed column containing the coalesced values, preferring the left suffix when both
+values are available. If <code>NULL</code> (the default), no automatic coalescing is performed.</p></dd>
 
 
 <dt id="arg-coalesce-suffixed">coalesce_suffixed<a class="anchor" aria-label="anchor" href="#arg-coalesce-suffixed"></a></dt>
@@ -137,14 +137,11 @@ unsuffixed base columns as described above.</p>
 <span class="r-in"><span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>plays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"banjo"</span>, <span class="st">"mellotron"</span>, <span class="st">"harpsichord"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">full</span> <span class="op">&lt;-</span> <span class="fu">join_env</span><span class="op">(</span><span class="va">e</span>, by <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining: instruments, other_instr, members</span>
 <span class="r-in"><span>  <span class="va">late</span> <span class="op">&lt;-</span> <span class="fu">join_env</span><span class="op">(</span><span class="va">e</span>, by <span class="op">=</span> <span class="st">"name"</span>, late <span class="op">=</span> <span class="st">"other_instr"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining: instruments, other_instr, members</span>
 <span class="r-in"><span>  <span class="va">late_coalesced</span> <span class="op">&lt;-</span> <span class="fu">join_env</span><span class="op">(</span><span class="va">e</span>,</span></span>
 <span class="r-in"><span>                             by <span class="op">=</span> <span class="st">"name"</span>,</span></span>
 <span class="r-in"><span>                             late <span class="op">=</span> <span class="st">"other_instr"</span>,</span></span>
 <span class="r-in"><span>                             join_precedence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".late"</span>, <span class="st">".early"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining: instruments, other_instr, members</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>full <span class="op">=</span> <span class="va">full</span>, late <span class="op">=</span> <span class="va">late</span>, late_coalesced <span class="op">=</span> <span class="va">late_coalesced</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $full</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 4</span></span>
