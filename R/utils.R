@@ -2,6 +2,11 @@
     if (!is.null(a)) a else b
 }
 
+vec_key <- function(x, ignore_order = FALSE) {
+    if (ignore_order) x <- sort(x)
+    paste0(x, collapse = ";")
+}
+
 #' Generate candidate date format strings for `as.Date()`
 #'
 #' Builds a set of possible format strings suitable for `as.Date()` for a
@@ -100,3 +105,27 @@ fundsr_msg <- function(..., level = 1L) {
     if (level == 0L || fundsr_verbosity() >= level) message(...)
     invisible(NULL)
 }
+
+stop_if_dup_nm <- function(nms, context) {
+    if (!is.character(context) || length(context) != 1L || is.na(context) || !nzchar(context)) {
+        context <- "<unknown>"
+    }
+    if (is.null(nms) || !length(nms)) {
+        return(invisible(NULL))
+    }
+    nms <- as.character(nms)
+
+    d <- anyDuplicated(nms)
+    if (d == 0L) {
+        return(invisible(NULL))
+    }
+    tab <- table(nms, useNA = "ifany")
+    dup <- names(tab)[tab > 1L]
+    msg <- paste0(dup, " (", as.integer(tab[dup]), "x)")
+    stop(
+        "Duplicate names in ", context, ": ",
+        paste(msg, collapse = ", "),
+        call. = FALSE
+    )
+}
+

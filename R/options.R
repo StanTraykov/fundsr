@@ -160,6 +160,8 @@ fundsr_options <- function(data_dir = NULL,
             stop("`fund_urls` must be a named character vector or named list (or empty).",
                  call. = FALSE)
         }
+        names(fund_urls) <- toupper(names(fund_urls))
+        stop_if_dup_nm(names(fund_urls), "fund_urls (case-insensitive)")
         set$fundsr.fund_urls <- fund_urls
     }
     if (!is.null(verbosity)) {
@@ -182,12 +184,12 @@ fundsr_options <- function(data_dir = NULL,
 #' Add entries to the fund download list
 #'
 #' Adds one or more named download specifications to the `fundsr.fund_urls`
-#' option. Existing entries are preserved; entries in `x` replace any
+#' option. Existing entries are preserved; entries in `fund_urls` replace any
 #' existing entries with the same name.
 #'
 #' Names are converted to uppercase before storing.
 #'
-#' @param x A named character vector mapping download identifiers to URLs.
+#' @param fund_urls A named character vector mapping download identifiers to URLs.
 #'
 #' @return A list with the previous value of `fundsr.fund_urls`.
 #' @seealso
@@ -196,22 +198,23 @@ fundsr_options <- function(data_dir = NULL,
 #'
 #' @family download functions
 #' @export
-add_fund_urls <- function(x) {
-    stopifnot(is.character(x))
-    nms <- names(x)
-    if (is.null(nms) ||
-            anyNA(nms) ||
-            any(!nzchar(nms))) {
-        stop("`x` must have non-empty names.", call. = FALSE)
+add_fund_urls <- function(fund_urls) {
+    if (!is.character(fund_urls)) {
+        stop("`fund_urls` must be a character vector.", call. = FALSE)
     }
-
-    names(x) <- toupper(names(x))
+    nms <- names(fund_urls)
+    if (is.null(nms) ||
+        anyNA(nms) ||
+        any(!nzchar(nms))) {
+        stop("`fund_urls` must have non-empty names.", call. = FALSE)
+    }
+    names(fund_urls) <- toupper(names(fund_urls))
     cur <- fundsr_get_option("fund_urls")
     if (length(cur) && !is.null(names(cur))) {
         names(cur) <- toupper(names(cur))
     }
 
-    new <- c(cur, x)
+    new <- c(cur, fund_urls)
     new <- new[!duplicated(names(new), fromLast = TRUE)]
     fundsr_options(fund_urls = new)
 }

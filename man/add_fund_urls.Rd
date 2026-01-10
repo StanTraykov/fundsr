@@ -4,17 +4,17 @@
 \alias{add_fund_urls}
 \title{Add entries to the fund download list}
 \usage{
-add_fund_urls(x)
+add_fund_urls(fund_urls)
 }
 \arguments{
-\item{x}{A named character vector mapping download identifiers to URLs.}
+\item{fund_urls}{A named character vector mapping download identifiers to URLs.}
 }
 \value{
 A list with the previous value of \code{fundsr.fund_urls}.
 }
 \description{
 Adds one or more named download specifications to the \code{fundsr.fund_urls}
-option. Existing entries are preserved; entries in \code{x} replace any
+option. Existing entries are preserved; entries in \code{fund_urls} replace any
 existing entries with the same name.
 }
 \details{

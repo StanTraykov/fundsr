@@ -230,11 +230,6 @@ keep_supported_breaks <- function(breaks, min_date, max_date) {
     breaks[mx >= left & mn <= right]
 }
 
-vec_key <- function(x, ignore_order = FALSE) {
-    if (ignore_order) x <- sort(x)
-    paste0(x, collapse = ";")
-}
-
 #' Generate and export rolling-difference and XLM plots from a specification
 #'
 #' Iterates over plot specifications and produces rolling-difference plots for
