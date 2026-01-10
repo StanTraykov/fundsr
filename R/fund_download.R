@@ -13,7 +13,10 @@
 download_fund_data <- function(redownload = FALSE) {
     fund_urls <- fundsr_get_option("fund_urls")
     fund_data_dir <- fundsr_get_option("data_dir")
-    .fundsr_download_as(fund_urls, path = fund_data_dir, redownload = redownload)
+    .fundsr_download_as(fund_urls,
+                        path = fund_data_dir,
+                        redownload = redownload,
+                        hint = missing(redownload))
     invisible(NULL)
 }
 
@@ -28,7 +31,8 @@ download_fund_data <- function(redownload = FALSE) {
                                 path = fundsr_get_option("data_dir"),
                                 redownload = FALSE,
                                 attempts = 3L,
-                                polite_sleep = TRUE) {
+                                polite_sleep = TRUE,
+                                hint = FALSE) {
     if (!is.character(path) || length(path) != 1L || is.na(path) || !nzchar(path)) {
         stop("`path` must be a length-1 non-empty character string.", call. = FALSE)
     }
@@ -72,7 +76,11 @@ download_fund_data <- function(redownload = FALSE) {
     }
 
     if (!did_download) {
-        fundsr_msg("All downloads skipped due to existing files.")
+        msg <- "Downloads skipped: all files already exist."
+        if (isTRUE(hint)) {
+            msg <- paste(msg, "Use redownload = TRUE to overwrite.")
+        }
+        fundsr_msg(msg)
     }
     invisible(out)
 }
