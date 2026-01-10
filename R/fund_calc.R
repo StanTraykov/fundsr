@@ -70,9 +70,15 @@ longer <- function(df,
 #' The annualized tracking differences are:
 #' \itemize{
 #'   \item Log-return difference:
-#'     \deqn{\left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times \frac{annual\_days}{\Delta}}
+#'     \deqn{
+#'       \left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right]
+#'       \times \frac{annual\_days}{\Delta}
+#'     }
 #'   \item CAGR difference:
-#'     \deqn{\left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta} - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}}
+#'     \deqn{
+#'       \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta}
+#'       - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}
+#'     }
 #' }
 #'
 #' Values are `NA` when an anchor cannot be found, required inputs are missing,
@@ -121,7 +127,9 @@ roll_diffs <- function(df,
             next
         }
         if (!(index %in% names(df))) {
-            if (msg_skip) fundsr_msg(sprintf("Skipping %s: tracked index %s not in df", fund, index))
+            if (msg_skip) fundsr_msg(sprintf("Skipping %s: tracked index %s not in df",
+                                             fund,
+                                             index))
             next
         }
         if (fund == index) {
@@ -167,7 +175,7 @@ roll_diffs <- function(df,
         if (any(valid_log)) {
             out_log[[fund]][valid_log] <-
                 (log(fund_vals[valid_log] / f_start[valid_log]) -
-                     log(index_vals[valid_log] / i_start[valid_log])) *
+                 log(index_vals[valid_log] / i_start[valid_log])) *
                 annual_factor[valid_log]
         }
 

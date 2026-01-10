@@ -98,7 +98,11 @@ download_fund_data <- function(redownload = FALSE) {
     if (length(attempts) != 1L || is.na(attempts) || attempts < 1L) {
         stop("`attempts` must be a single integer >= 1.", call. = FALSE)
     }
-    if (!is.numeric(backoff) || length(backoff) != 1L || is.na(backoff) || !is.finite(backoff) || backoff < 0) {
+    if (!is.numeric(backoff) ||
+            length(backoff) != 1L ||
+            is.na(backoff) ||
+            !is.finite(backoff) ||
+            backoff < 0) {
         stop("`backoff` must be a single non-negative finite number.", call. = FALSE)
     }
     quiet <- isTRUE(quiet)
@@ -129,7 +133,8 @@ download_fund_data <- function(redownload = FALSE) {
             if (file.exists(destfile)) unlink(destfile)
             if (!file.rename(tmp, destfile)) {
                 if (!file.copy(tmp, destfile, overwrite = TRUE)) {
-                    stop(glue("Download succeeded but couldn't write to '{destfile}'."), call. = FALSE)
+                    stop(glue("Download succeeded but couldn't write to '{destfile}'."),
+                         call. = FALSE)
                 }
                 unlink(tmp)
             }
@@ -148,4 +153,3 @@ download_fund_data <- function(redownload = FALSE) {
     stop(glue("Failed to download '{url}' to '{destfile}' after {attempts} attempt(s): {details}"),
          call. = FALSE)
 }
-

@@ -1,6 +1,6 @@
 read_excel_or_xml <- function(file_path, sheet = NULL) {
     # First, try reading as a standard Excel file with readxl
-    fundsr_msg("Reading Excel:'", file_path, level = 1L)
+    fundsr_msg("Reading Excel: ", sQuote(file_path), level = 1L)
     df <- tryCatch({
         # Try readxl in a tryCatch
         readxl::read_excel(path = file_path,
@@ -28,9 +28,9 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     # Helper to remove BOM if present (UTF-8 BOM 0xEF 0xBB 0xBF)
     raw_to_text_no_bom <- function(rdat) {
         if (length(rdat) >= 3 &&
-            rdat[1] == as.raw(0xEF) &&
-            rdat[2] == as.raw(0xBB) &&
-            rdat[3] == as.raw(0xBF)) {
+                rdat[1] == as.raw(0xEF) &&
+                rdat[2] == as.raw(0xBB) &&
+                rdat[3] == as.raw(0xBF)) {
             rdat <- rdat[-(1:3)]
         }
         rawToChar(rdat, multiple = FALSE)
@@ -131,7 +131,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     mat <- do.call(rbind, row_arrays)
     df2 <- as.data.frame(mat, stringsAsFactors = FALSE)
     df2 <- tibble::as_tibble(df2, .name_repair = "minimal")
-    return(df2)
+    df2
 }
 
 #' Read a time series from an Excel workbook

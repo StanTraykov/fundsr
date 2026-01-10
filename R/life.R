@@ -150,15 +150,33 @@ plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
     ca_last <- ca %>% filter(.data[["Year"]] == year_max)
     ggplot2::ggplot() +
         ggplot2::geom_line(data = ca_past,
-                           ggplot2::aes(x = .data[["Age"]], y = .data[["chance_alive"]], group = .data[["Year"]], color = .data[["Year"]]),
+                           ggplot2::aes(x = .data[["Age"]],
+                                        y = .data[["chance_alive"]],
+                                        group = .data[["Year"]],
+                                        color = .data[["Year"]]),
                            linewidth = 0.6) +
         ggplot2::geom_line(data = ca_last,
                            ggplot2::aes(x = .data[["Age"]], y = .data[["chance_alive"]]),
                            color = "black",
                            linewidth = 1.1) +
-        ggplot2::geom_hline(yintercept = c(0.10, 0.05), linetype = "dashed", linewidth = 0.5, alpha = 0.6) +
-        ggplot2::annotate("label", x = age_max, y = 0.10, label = "10%", hjust = 1.05, vjust = -0.4, size = 3) +
-        ggplot2::annotate("label", x = age_max, y = 0.05, label = "5%", hjust = 1.05, vjust = -0.4, size = 3) +
+        ggplot2::geom_hline(yintercept = c(0.10, 0.05),
+                            linetype = "dashed",
+                            linewidth = 0.5,
+                            alpha = 0.6) +
+        ggplot2::annotate("label",
+                          x = age_max,
+                          y = 0.10,
+                          label = "10%",
+                          hjust = 1.05,
+                          vjust = -0.4,
+                          size = 3) +
+        ggplot2::annotate("label",
+                          x = age_max,
+                          y = 0.05,
+                          label = "5%",
+                          hjust = 1.05,
+                          vjust = -0.4,
+                          size = 3) +
         ggplot2::scale_color_gradientn(
             colours = c("#F9F4EE", "#FFE0B2", "#FFB74D", "#FF8F00", "#0A6F74"),
             values  = scales::rescale(c(0, 0.25, 0.55, 0.75, 1))
@@ -166,10 +184,12 @@ plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
         ggplot2::scale_x_continuous(breaks = breaks_major,
                                     minor_breaks = breaks_minor,
                                     expand = ggplot2::expansion(mult = c(0, 0), add = c(0, 0))) +
-        ggplot2::scale_y_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0, 1)) +
+        ggplot2::scale_y_continuous(labels = scales::label_percent(accuracy = 1),
+                                    limits = c(0, 1)) +
         ggplot2::labs(
             title = gettext("Survival by age per HMD life table"),
-            subtitle = glue(gettext("{population} \u00b7 {sex_label} \u00b7 age {age_min} \u00b7 latest data from {year_max} (black line)")),
+            subtitle = glue(sex_label = sex_label,
+                            gettext("{population} \u00b7 {sex_label} \u00b7 age {age_min} \u00b7 latest data from {year_max} (black line)")), # nolint: line_length_linter
             x = gettext("age"),
             y = gettext("survival"),
             color = gettext("data")
@@ -226,14 +246,16 @@ read_es_aasmr <- function(directory) {
         tidyr::pivot_longer(cols = -all_of(c("freq", "projection", "sex", "age", "unit", "geo")),
                             names_to = "Year",
                             values_to = "mx_raw") %>%
-        mutate(Year = as.integer(trimws(.data[["Year"]])),
-               Age = dplyr::case_when(
-                   .data[["age"]] == "Y_LT1" ~ 0L,
-                   grepl("^Y\\d+$", .data[["age"]]) ~ as.integer(sub("^Y", "", .data[["age"]])),
-                   grepl("^Y_GE\\d+$", .data[["age"]]) ~ as.integer(sub("^Y_GE", "", .data[["age"]])),
-                   TRUE ~ NA_integer_
-               ),
-               mx = readr::parse_number(.data[["mx_raw"]])) %>%
+        mutate(
+            Year = as.integer(trimws(.data[["Year"]])),
+            Age = dplyr::case_when(
+                .data[["age"]] == "Y_LT1" ~ 0L,
+                grepl("^Y\\d+$", .data[["age"]]) ~ as.integer(sub("^Y", "", .data[["age"]])),
+                grepl("^Y_GE\\d+$", .data[["age"]]) ~ as.integer(sub("^Y_GE", "", .data[["age"]])),
+                TRUE ~ NA_integer_
+            ),
+            mx = readr::parse_number(.data[["mx_raw"]])
+        ) %>%
         select(all_of(c("freq", "projection", "sex", "unit", "geo", "age", "Age", "Year", "mx")))
 }
 
@@ -293,10 +315,13 @@ chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
         k_max <- min(year_max - start_year, age_max - age0)
         if (!is.finite(k_max) || k_max < 0L) return(tibble::tibble())
         out <- tibble::tibble(Year = start_year + 0L:k_max, Age = age0 + 0L:k_max) %>%
-            left_join(d %>% select(all_of(c("Year", "Age", "mx"))), by = c("Year", "Age")) %>%
+            left_join(d %>%
+                          select(all_of(c("Year", "Age", "mx"))), by = c("Year", "Age")) %>%
             arrange(.data[["Year"]], .data[["Age"]])
-        if (is.na(out[["mx"]][1])) stop("Missing mx at baseline (Year, Age) for ", proj, ".", call. = FALSE)
-        if (anyNA(out[["mx"]])) out <- out[seq_len(which(is.na(out[["mx"]]))[1] - 1L), , drop = FALSE]
+        if (is.na(out[["mx"]][1])) stop("Missing mx at baseline (Year, Age) for ", proj, ".",
+                                        call. = FALSE)
+        if (anyNA(out[["mx"]])) out <-
+            out[seq_len(which(is.na(out[["mx"]]))[1] - 1L), , drop = FALSE]
         mx <- out[["mx"]]
         qx <- 1 - exp(-mx)
         qx <- pmin(1, pmax(0, qx))
@@ -346,21 +371,43 @@ plot_chance_alive_es_aasmr <- function(ca, sex = c("m", "f"), population) {
     breaks_minor <- seq(age_min, age_max, by = 1L)
     start_year <- if ("Year" %in% names(ca)) min(ca[["Year"]], na.rm = TRUE) else NA_integer_
     ca2 <- ca %>% filter(.data[["projection"]] %in% c("BSL", "LMRT"))
-    ggplot2::ggplot(ca2, ggplot2::aes(x = .data[["Age"]], y = .data[["chance_alive"]], color = .data[["projection"]])) +
+    ggplot2::ggplot(ca2, ggplot2::aes(x = .data[["Age"]],
+                                      y = .data[["chance_alive"]],
+                                      color = .data[["projection"]])) +
         ggplot2::geom_line(linewidth = 1.0) +
-        ggplot2::geom_hline(yintercept = c(0.10, 0.05), linetype = "dashed", linewidth = 0.5, alpha = 0.6) +
-        ggplot2::annotate("label", x = Inf, y = 0.10, label = "10%", hjust = 1.05, vjust = -0.4, size = 3) +
-        ggplot2::annotate("label", x = Inf, y = 0.05, label = "5%", hjust = 1.05, vjust = -0.4, size = 3) +
+        ggplot2::geom_hline(yintercept = c(0.10, 0.05),
+                            linetype = "dashed",
+                            linewidth = 0.5,
+                            alpha = 0.6) +
+        ggplot2::annotate("label",
+                          x = Inf,
+                          y = 0.10,
+                          label = "10%",
+                          hjust = 1.05,
+                          vjust = -0.4,
+                          size = 3) +
+        ggplot2::annotate("label",
+                          x = Inf,
+                          y = 0.05,
+                          label = "5%",
+                          hjust = 1.05,
+                          vjust = -0.4,
+                          size = 3) +
         ggplot2::scale_color_manual(values = c(BSL = "black", LMRT = "#60A0C0"),
                                     breaks = c("BSL", "LMRT"),
-                                    labels = c(BSL = gettext("baseline"), LMRT = gettext("lower mortality"))) +
+                                    labels = c(BSL = gettext("baseline"),
+                                               LMRT = gettext("lower mortality"))) +
         ggplot2::scale_x_continuous(breaks = breaks_major,
                                     minor_breaks = breaks_minor,
                                     expand = ggplot2::expansion(mult = c(0, 0), add = c(0, 2))) +
-        ggplot2::scale_y_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0, 1)) +
+        ggplot2::scale_y_continuous(labels = scales::label_percent(accuracy = 1),
+                                    limits = c(0, 1)) +
         ggplot2::labs(
             title = gettext("Survival by age per EUROPOP2023 projection"),
-            subtitle = glue(gettext("{population} \u00b7 {sex_label} \u00b7 age {age_min} \u00b7 start year {start_year}")),
+
+            subtitle = glue(start_year = start_year,
+                            sex_label = sex_label,
+                            gettext("{population} \u00b7 {sex_label} \u00b7 age {age_min} \u00b7 start year {start_year}")), # nolint: line_length_linter
             x = gettext("age"),
             y = gettext("survival"),
             color = gettext("projection")

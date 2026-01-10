@@ -94,7 +94,10 @@ fundsr_options <- function(data_dir = NULL,
     set <- list()
 
     if (!is.null(data_dir)) {
-        if (!is.character(data_dir) || length(data_dir) != 1L || is.na(data_dir) || !nzchar(data_dir)) {
+        if (!is.character(data_dir) ||
+                length(data_dir) != 1L ||
+                is.na(data_dir) ||
+                !nzchar(data_dir)) {
             stop("`data_dir` must be a single non-empty string.", call. = FALSE)
         }
         set$fundsr.data_dir <- data_dir
@@ -125,16 +128,19 @@ fundsr_options <- function(data_dir = NULL,
     }
     if (!is.null(xetra_map)) {
         if (!is.character(xetra_map) ||
-            (length(xetra_map) > 0 &&
-                (is.null(names(xetra_map)) ||
-                 anyNA(names(xetra_map)) ||
-                 any(!nzchar(names(xetra_map)))))) {
+                (length(xetra_map) > 0 &&
+                     (is.null(names(xetra_map)) ||
+                          anyNA(names(xetra_map)) ||
+                          any(!nzchar(names(xetra_map)))))) {
             stop("`xetra_map` must be a named character vector (or empty).", call. = FALSE)
         }
         set$fundsr.xetra_map <- xetra_map
     }
     if (!is.null(inkscape)) {
-        if (!is.character(inkscape) || length(inkscape) != 1L || is.na(inkscape) || !nzchar(inkscape)) {
+        if (!is.character(inkscape) ||
+                length(inkscape) != 1L ||
+                is.na(inkscape) ||
+                !nzchar(inkscape)) {
             stop("`inkscape` must be a single non-empty string.", call. = FALSE)
         }
         set$fundsr.inkscape <- inkscape
@@ -147,17 +153,20 @@ fundsr_options <- function(data_dir = NULL,
     }
     if (!is.null(fund_urls)) {
         if ((!is.character(fund_urls) && !is.list(fund_urls)) ||
-            (length(fund_urls) > 0 &&
-             (is.null(names(fund_urls)) ||
-              anyNA(names(fund_urls)) ||
-              any(!nzchar(names(fund_urls)))))) {
+                (length(fund_urls) > 0 &&
+                     (is.null(names(fund_urls)) ||
+                          anyNA(names(fund_urls)) ||
+                          any(!nzchar(names(fund_urls)))))) {
             stop("`fund_urls` must be a named character vector or named list (or empty).",
                  call. = FALSE)
         }
         set$fundsr.fund_urls <- fund_urls
     }
     if (!is.null(verbosity)) {
-        if (!is.numeric(verbosity) || length(verbosity) != 1L || is.na(verbosity) || verbosity < 0) {
+        if (!is.numeric(verbosity) ||
+                length(verbosity) != 1L ||
+                is.na(verbosity) ||
+                verbosity < 0) {
             stop("`verbosity` must be a single non-negative number.", call. = FALSE)
         }
         set$fundsr.verbosity <- as.integer(verbosity)
@@ -190,7 +199,11 @@ fundsr_options <- function(data_dir = NULL,
 add_fund_urls <- function(x) {
     stopifnot(is.character(x))
     nms <- names(x)
-    if (is.null(nms) || anyNA(nms) || any(!nzchar(nms))) stop("`x` must have non-empty names.", call. = FALSE)
+    if (is.null(nms) ||
+            anyNA(nms) ||
+            any(!nzchar(nms))) {
+        stop("`x` must have non-empty names.", call. = FALSE)
+    }
 
     names(x) <- toupper(names(x))
     cur <- fundsr_get_option("fund_urls")
@@ -203,10 +216,8 @@ add_fund_urls <- function(x) {
     fundsr_options(fund_urls = new)
 }
 
-find_inkscape <- function(
-        candidates = NULL,
-        env_var = "INKSCAPE"
-) {
+find_inkscape <- function(candidates = NULL,
+                          env_var = "INKSCAPE") {
     safe_norm <- function(x) {
         tryCatch(normalizePath(x, winslash = "/", mustWork = FALSE), error = function(e) x)
     }

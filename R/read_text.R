@@ -34,11 +34,11 @@
 #' @family fund/index file readers
 #' @export
 read_timeseries <- function(
-        file,
-        date_col = "date",
-        time_unit = c("ms", "s", "us", "ns"),
-        orders = NULL,
-        force_text_date = FALSE
+    file,
+    date_col = "date",
+    time_unit = c("ms", "s", "us", "ns"),
+    orders = NULL,
+    force_text_date = FALSE
 ) {
     fund_data_dir <- fundsr_get_option("data_dir")
     path <- file.path(fund_data_dir, file)
@@ -53,7 +53,8 @@ read_timeseries <- function(
         "tsv" = readr::read_tsv,
         "tab" = readr::read_tsv,
         "txt" = readr::read_tsv,
-        stop("Unsupported file extension for `file`: expected .csv or .tsv (optionally .gz).", call. = FALSE)
+        stop("Unsupported file extension for `file`: expected .csv or .tsv (optionally .gz).",
+             call. = FALSE)
     )
     if (!is.character(date_col) || length(date_col) != 1L || is.na(date_col) || !nzchar(date_col)) {
         stop("`date_col` must be a single non-empty string.", call. = FALSE)

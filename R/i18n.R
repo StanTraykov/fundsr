@@ -1,14 +1,14 @@
 get_lang <- function() {
     lang <- Sys.getenv("LANGUAGE", "")
     if (nzchar(lang)) {
-        # "bg:en" -> "bg", "pt_BR" -> "pt_BR"
+        # "bg:en" ==> "bg", "pt_BR" ==> "pt_BR"
         lang <- strsplit(lang, "[:]", fixed = FALSE)[[1L]][1L]
         return(sub("[.@].*$", "", lang))
     }
 
     loc <- Sys.getlocale("LC_MESSAGES")
     if (!is.na(loc) && nzchar(loc)) {
-        # "bg_BG.UTF-8" -> "bg"
+        # "bg_BG.UTF-8" ==> "bg"
         return(sub("[_.@].*$", "", loc))
     }
 

@@ -10,12 +10,12 @@ test_that("roll_diffs works for 2 indices + 4 funds", {
     drift1 <- 0.02 / n_days
     drift2 <- 0.018 / n_days
 
-    IDX1 <- 100 + cumsum(drift1 + rnorm(n, sd = 0.30))
-    IDX2 <- 100 + cumsum(drift2 + rnorm(n, sd = 0.32))
+    idx1 <- 100 + cumsum(drift1 + rnorm(n, sd = 0.30))
+    idx2 <- 100 + cumsum(drift2 + rnorm(n, sd = 0.32))
 
     # keep positive (needed for log diffs)
-    IDX1 <- pmax(IDX1, 1)
-    IDX2 <- pmax(IDX2, 1)
+    idx1 <- pmax(idx1, 1)
+    idx2 <- pmax(idx2, 1)
 
     # --- Funds tracking indices (still LEVELS) ---
     mk_fund <- function(idx, drift_extra = 0, te_sd = 0.12, noise_sd = 0.6) {
@@ -25,16 +25,16 @@ test_that("roll_diffs works for 2 indices + 4 funds", {
         pmax(y, 1)
     }
 
-    f1 <- mk_fund(IDX1, drift_extra = -0.0010 / n_days, te_sd = 0.10, noise_sd = 0.50)
-    f2 <- mk_fund(IDX1, drift_extra = -0.0020 / n_days, te_sd = 0.14, noise_sd = 0.65)
+    f1 <- mk_fund(idx1, drift_extra = -0.0010 / n_days, te_sd = 0.10, noise_sd = 0.50)
+    f2 <- mk_fund(idx1, drift_extra = -0.0020 / n_days, te_sd = 0.14, noise_sd = 0.65)
 
-    g1 <- mk_fund(IDX2, drift_extra = -0.0015 / n_days, te_sd = 0.11, noise_sd = 0.55)
-    g2 <- mk_fund(IDX2, drift_extra = -0.0025 / n_days, te_sd = 0.15, noise_sd = 0.70)
+    g1 <- mk_fund(idx2, drift_extra = -0.0015 / n_days, te_sd = 0.11, noise_sd = 0.55)
+    g2 <- mk_fund(idx2, drift_extra = -0.0025 / n_days, te_sd = 0.15, noise_sd = 0.70)
 
     df <- tibble::tibble(
         date = date,
-        IDX1 = IDX1,
-        IDX2 = IDX2,
+        IDX1 = idx1,
+        IDX2 = idx2,
         f1 = f1,
         f2 = f2,
         g1 = g1,

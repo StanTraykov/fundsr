@@ -60,9 +60,15 @@ index values are present. Let \eqn{\Delta = t - t_0} in calendar days.
 The annualized tracking differences are:
 \itemize{
 \item Log-return difference:
-\deqn{\left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right] \times \frac{annual\_days}{\Delta}}
+\deqn{
+      \left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right]
+      \times \frac{annual\_days}{\Delta}
+    }
 \item CAGR difference:
-\deqn{\left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta} - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}}
+\deqn{
+      \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta}
+      - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}
+    }
 }
 
 Values are \code{NA} when an anchor cannot be found, required inputs are missing,

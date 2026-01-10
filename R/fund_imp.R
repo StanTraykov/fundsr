@@ -77,7 +77,9 @@ clear_data_loaders <- function() {
 #' clear_storage()
 #' clear_storage(clear_fund_index_map = TRUE)
 clear_storage <- function(clear_fund_index_map = FALSE) {
-    if (!is.logical(clear_fund_index_map) || length(clear_fund_index_map) != 1L || is.na(clear_fund_index_map)) {
+    if (!is.logical(clear_fund_index_map) ||
+            length(clear_fund_index_map) != 1L ||
+            is.na(clear_fund_index_map)) {
         stop("`clear_fund_index_map` must be TRUE or FALSE.", call. = FALSE)
     }
     if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
@@ -205,10 +207,10 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 #'   *excluded* from the initial full join and instead left-joined
 #'   afterwards. Defaults to `NULL`.
 #' @param join_precedence Optional character vector of length 2 giving join suffixes to coalesce
-#'   (for example, `c(".early", ".late")` or `c(".late", ".early")`). When non-`NULL`, any pairs of columns whose
-#'   names end in these suffixes (and share the same base name) are replaced by a single unsuffixed
-#'   column containing the coalesced values, preferring the left suffix when both values are
-#'   available. If `NULL` (the default), no automatic coalescing is performed.
+#'   (for example, `c(".early", ".late")` or `c(".late", ".early")`). When non-`NULL`, any pairs of
+#'   columns whose names end in these suffixes (and share the same base name) are replaced by a
+#'   single unsuffixed column containing the coalesced values, preferring the left suffix when both
+#'   values are available. If `NULL` (the default), no automatic coalescing is performed.
 #' @param coalesce_suffixed Deprecated; use `join_precedence`.
 #' @param late_join Function to use for joining late objects.
 #'

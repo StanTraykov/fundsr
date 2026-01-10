@@ -22,7 +22,9 @@ spec_list <- list()
 std_w <- 14
 std_h <- 9
 no_filter <- NULL
-zoom_filter <- function(x) {x |> filter(date >= lubridate::as_date("2022-01-01"))}
+zoom_filter <- function(x) {
+    x |> filter(date >= lubridate::as_date("2022-01-01"))
+}
 fund_palette <- c("#11569B",
                   "#ED0000",
                   "#009900",
@@ -36,7 +38,7 @@ fund_palette <- c("#11569B",
 fund_colors <- function(breaks,
                         special = NULL,
                         palette = fund_palette,
-                        na.value = "grey70",
+                        na_value = "grey70",
                         ...) {
     if (missing(breaks) || is.null(breaks)) {
         stop("`breaks` must be supplied.", call. = FALSE)
@@ -56,7 +58,7 @@ fund_colors <- function(breaks,
 
     ggplot2::scale_color_manual(
         values   = vals,
-        na.value = na.value,
+        na.value = na_value,
         labels = toupper,
         ...
     )

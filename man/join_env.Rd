@@ -23,10 +23,10 @@ join_env(
 afterwards. Defaults to \code{NULL}.}
 
 \item{join_precedence}{Optional character vector of length 2 giving join suffixes to coalesce
-(for example, \code{c(".early", ".late")} or \code{c(".late", ".early")}). When non-\code{NULL}, any pairs of columns whose
-names end in these suffixes (and share the same base name) are replaced by a single unsuffixed
-column containing the coalesced values, preferring the left suffix when both values are
-available. If \code{NULL} (the default), no automatic coalescing is performed.}
+(for example, \code{c(".early", ".late")} or \code{c(".late", ".early")}). When non-\code{NULL}, any pairs of
+columns whose names end in these suffixes (and share the same base name) are replaced by a
+single unsuffixed column containing the coalesced values, preferring the left suffix when both
+values are available. If \code{NULL} (the default), no automatic coalescing is performed.}
 
 \item{coalesce_suffixed}{Deprecated; use \code{join_precedence}.}
 

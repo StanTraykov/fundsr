@@ -22,7 +22,7 @@ read_xlsx_hdr <- function(file_path,
     colnames(data) <- ifelse(colnames(data) == "",
                              paste0("col", seq_along(data)),
                              colnames(data))
-    return(data)
+    data
 }
 
 #' Read and combine XLM data from multiple Xetra XLSX files
@@ -49,7 +49,7 @@ read_xlsx_hdr <- function(file_path,
 #' @family XLM functions
 #' @export
 read_xlm_directory <- function(directory,
-                               header_rows = c(4,5),
+                               header_rows = c(4, 5),
                                col_types = NULL) {
     # Get all .xlsx files in the directory
     file_list <- list.files(path = directory, pattern = "\\.xlsx$",
@@ -84,10 +84,10 @@ read_xlm_directory <- function(directory,
             )) %>%
             mutate(xlm = as.numeric(.data$xlm)) %>%
             mutate(ticker = tolower(.data$ticker))
-        return(data)
+        data
     })
 
-    return(combined_data)
+    combined_data
 }
 
 #' Plot Xetra Liquidity Measure (XLM) time series
@@ -148,7 +148,7 @@ plot_xlms <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL, back_tra
     if (back_trans) {
         xetra_map <- fundsr_get_option("xetra_map", NULL)
         if (!is.null(xetra_map)) {
-            inv <- set_names(names(xetra_map), unname(xetra_map)) # xetra -> internal
+            inv <- set_names(names(xetra_map), unname(xetra_map)) # xetra ==> internal
             data <- data %>%
                 mutate(
                     ticker = if_else(

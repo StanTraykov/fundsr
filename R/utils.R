@@ -55,10 +55,10 @@ make_date_fmts <- function(order) {
     tokens_for <- function(y_tok, m_tok) {
         vapply(chars, function(ch) {
             switch(ch,
-                   d = "%d",
-                   y = y_tok,
-                   m = m_tok,
-                   M = m_tok
+                d = "%d",
+                y = y_tok,
+                m = m_tok,
+                M = m_tok
             )
         }, character(1))
     }
