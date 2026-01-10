@@ -131,7 +131,9 @@ download_fund_data <- function(redownload = FALSE) {
             last_err <<- e
             NA_integer_
         })
-        ok <- identical(status, 0L) && file.exists(tmp) && isTRUE(file.info(tmp)$size > 0)
+        ok <- isTRUE(status == 0L) &&
+            file.exists(tmp) &&
+            isTRUE(file.info(tmp)$size > 0)
         if (ok) {
             if (file.exists(destfile)) unlink(destfile)
             if (!file.rename(tmp, destfile)) {
