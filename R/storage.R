@@ -1,3 +1,16 @@
+#' Get the internal fund storage
+#'
+#' Returns the fundsr's fund storage environment
+#' (`.fundsr_storage`).
+#'
+#' @return The storage environment.
+#'
+#' @family fund/index workflow functions
+#' @export
+get_storage <- function() {
+    .fundsr_storage
+}
+
 #' Clear storage
 #'
 #' Removes all objects from the package's storage environment
@@ -26,6 +39,61 @@ clear_storage <- function(clear_fund_index_map = FALSE) {
     rm(list = ls(envir = .fundsr_storage, all.names = TRUE), envir = .fundsr_storage)
     if (isTRUE(clear_fund_index_map)) {
         clear_fund_index_map()
+    }
+    invisible(NULL)
+}
+
+#' Store a cached object in the package storage environment
+#'
+#' Evaluate an expression and cache its result in the package storage
+#' environment (`.fundsr_storage`) under a given name. The expression is only
+#' re-evaluated when the cached value is missing, when `overwrite = TRUE`, or
+#' when the global option `fundsr.reload` is `TRUE`. Optionally merges additional
+#' fund/index mappings into `.fundsr$fund_index_map`.
+#'
+#' @param var_name Character scalar. Name of the variable to store in
+#'   `.fundsr_storage`.
+#' @param expr An expression. Evaluated in the caller's environment when
+#'   (re)computing the cached value.
+#' @param fund_index_map Optional named vector or list. Fund/index pairs to merge
+#'   into `.fundsr$fund_index_map`. Names are used as keys.
+#' @param overwrite Logical scalar. If `TRUE`, recompute and replace any existing
+#'   cached value, regardless of `fundsr.reload`.
+#'
+#' @return Invisibly returns `NULL` (called for its side effects).
+#'
+#' @details
+#' `expr` is evaluated in the environment where `store_timeseries()` is called
+#' (i.e. the caller's environment), then assigned into `.fundsr_storage` under
+#' `var_name`.
+#'
+#' Caching behavior is controlled by:
+#' \itemize{
+#'   \item `overwrite = TRUE` (always recompute),
+#'   \item `options(fundsr.reload = TRUE)` (force recomputation globally), or
+#'   \item absence of `var_name` in `.fundsr_storage` (compute once).
+#' }
+#'
+#' If `fund_index_map` is supplied, it is merged into `.fundsr$fund_index_map`
+#' via name-based assignment: existing entries with the same names are replaced.
+#'
+#' @family fund/index workflow functions
+#' @export
+store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = FALSE) {
+    # Access the parent's environment (where store_timeseries was called)
+    parent_env <- parent.frame()
+    # Get global reload flag
+    reload <- fundsr_get_option("reload")
+    # Check if assignment is needed and evaluate expr in parent_env
+    if (overwrite || reload || !exists(var_name, envir = .fundsr_storage)) {
+        fundsr_msg(paste("*** Loading:", var_name), level = 2L)
+        assign(var_name,
+               eval(substitute(expr), envir = parent_env),
+               envir = .fundsr_storage)
+        # Also add fund index pairs to global map (if supplied)
+        if (!is.null(fund_index_map)) {
+            add_fund_index_map(fund_index_map)
+        }
     }
     invisible(NULL)
 }
@@ -60,6 +128,11 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
     base   <- intersect(base_x, base_y)
 
     if (length(base) == 0L) return(df)
+    conflicts <- intersect(base, nms)
+    if (length(conflicts) > 0L) {
+        ex <- paste(conflicts, collapse = ", ")
+        stop(glue("Cannot coalesce: would overwrite existing column(s): {ex}."), call. = FALSE)
+    }
 
     for (b in base) {
         cx <- paste0(b, sx)
@@ -75,16 +148,16 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
     df
 }
 
-#' Join all tibbles in an environment with optional late left-joins
+#' Join all data frames in an environment with optional late joins
 #'
 #' Performs a `dplyr::full_join()` across all objects in an environment, except those listed in
 #' `late`. Objects listed in `late` are instead joined afterwards using `dplyr::left_join()` (or
-#' another function specified via `late_join`) in the order given. Column clashes during the full
+#' another function specified by `late_join`) in the order given. Column clashes during the full
 #' join are resolved via join suffixes `c(".x", ".y")` while the late joins use
 #' `c(".early", ".late")`. Optionally, columns with join suffixes can be automatically coalesced
 #' into single unsuffixed columns via precedence specification (`join_precedence`).
 #'
-#' @param env Environment containing the tibbles to join.
+#' @param env Environment containing the data frames to join.
 #' @param by Character vector of join keys (passed to `dplyr::full_join()`).
 #' @param late Character vector of object names in `env` that should be
 #'   *excluded* from the initial full join and instead left-joined
@@ -97,9 +170,9 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 #' @param coalesce_suffixed Deprecated; use `join_precedence`.
 #' @param late_join Function to use for joining late objects.
 #'
-#' @return A tibble: the full join of all non-late objects, followed by sequential left-joins of the
-#'   late objects. If `join_precedence` is supplied, suffixed join columns are coalesced into
-#'   unsuffixed base columns as described above.
+#' @return A tibble: the full join of all non-late objects, followed by sequential left-joins (or
+#'   other joins specified by `late_join`) of the late objects. If `join_precedence` is supplied,
+#'   suffixed join columns are coalesced into unsuffixed base columns as described above.
 #'
 #' @family fund/index workflow functions
 #' @export
@@ -109,14 +182,16 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 #'   e$members <- dplyr::band_members
 #'   e$instruments <- dplyr::band_instruments
 #'   e$other_instr <- dplyr::band_instruments |>
-#'       dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord"))
+#'       dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord")) |>
+#'       dplyr::add_row(name = "Mick", plays = "harmonica") |>
+#'       dplyr::add_row(name = "Stu", plays = "piano")
 #'
 #'   full <- join_env(e, by = "name")
 #'   late <- join_env(e, by = "name", late = "other_instr")
 #'   late_coalesced <- join_env(e,
 #'                              by = "name",
 #'                              late = "other_instr",
-#'                              join_precedence = c(".late", ".early"))
+#'                              join_precedence = c(".early", ".late"))
 #'   print(list(full = full, late = late, late_coalesced = late_coalesced))
 join_env <- function(env,
                      by = "date",
@@ -222,72 +297,4 @@ build_all_series <- function(reload = FALSE, by = "date", ...) {
     run_data_loaders(reload = reload) %>%
         join_env(by = by, ...) %>%
         arrange(.data[[by]])
-}
-
-#' Get the internal fund storage
-#'
-#' Returns the fundsr's fund storage environment
-#' (`.fundsr_storage`).
-#'
-#' @return The storage environment.
-#'
-#' @family fund/index workflow functions
-#' @export
-get_storage <- function() {
-    .fundsr_storage
-}
-
-#' Store a cached object in the package storage environment
-#'
-#' Evaluate an expression and cache its result in the package storage
-#' environment (`.fundsr_storage`) under a given name. The expression is only
-#' re-evaluated when the cached value is missing, when `overwrite = TRUE`, or
-#' when the global option `fundsr.reload` is `TRUE`. Optionally merges additional
-#' fund/index mappings into `.fundsr$fund_index_map`.
-#'
-#' @param var_name Character scalar. Name of the variable to store in
-#'   `.fundsr_storage`.
-#' @param expr An expression. Evaluated in the caller's environment when
-#'   (re)computing the cached value.
-#' @param fund_index_map Optional named vector or list. Fund/index pairs to merge
-#'   into `.fundsr$fund_index_map`. Names are used as keys.
-#' @param overwrite Logical scalar. If `TRUE`, recompute and replace any existing
-#'   cached value, regardless of `fundsr.reload`.
-#'
-#' @return Invisibly returns `NULL` (called for its side effects).
-#'
-#' @details
-#' `expr` is evaluated in the environment where `store_timeseries()` is called
-#' (i.e. the caller's environment), then assigned into `.fundsr_storage` under
-#' `var_name`.
-#'
-#' Caching behavior is controlled by:
-#' \itemize{
-#'   \item `overwrite = TRUE` (always recompute),
-#'   \item `options(fundsr.reload = TRUE)` (force recomputation globally), or
-#'   \item absence of `var_name` in `.fundsr_storage` (compute once).
-#' }
-#'
-#' If `fund_index_map` is supplied, it is merged into `.fundsr$fund_index_map`
-#' via name-based assignment: existing entries with the same names are replaced.
-#'
-#' @family fund/index workflow functions
-#' @export
-store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = FALSE) {
-    # Access the parent's environment (where store_timeseries was called)
-    parent_env <- parent.frame()
-    # Get global reload flag
-    reload <- fundsr_get_option("reload")
-    # Check if assignment is needed and evaluate expr in parent_env
-    if (overwrite || reload || !exists(var_name, envir = .fundsr_storage)) {
-        fundsr_msg(paste("*** Loading:", var_name), level = 2L)
-        assign(var_name,
-               eval(substitute(expr), envir = parent_env),
-               envir = .fundsr_storage)
-        # Also add fund index pairs to global map (if supplied)
-        if (!is.null(fund_index_map)) {
-            add_fund_index_map(fund_index_map)
-        }
-    }
-    invisible(NULL)
 }

@@ -70,7 +70,7 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
 #'
 #' @seealso
-#' Provide wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
+#' Provider wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
 #' @family fund/index workflow functions
 #' @export
 load_fund <- function(ticker,

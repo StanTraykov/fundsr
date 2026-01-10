@@ -71,7 +71,7 @@ Excel file and \code{store_timeseries()} to cache the imported object under
 added to \code{.fundsr$fund_index_map} to link the fund to its benchmark key.
 }
 \seealso{
-Provide wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}
+Provider wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}
 
 Other fund/index workflow functions: 
 \code{\link{add_data_loader}()},
