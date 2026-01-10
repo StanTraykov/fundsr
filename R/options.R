@@ -10,7 +10,9 @@
 
         px_width = 1300,
         internal_png = FALSE,
-        export_svg = TRUE
+        export_svg = TRUE,
+
+        inkscape = NA_character_
     )
 }
 

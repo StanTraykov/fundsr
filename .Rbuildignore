@@ -11,4 +11,3 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^data-raw$
-^vignettes/articles(/|$)

@@ -1,5 +1,15 @@
 # fundsr (development version)
 
+## Documentation
+- improve function reference, other docs, vignettes, add logo
+
+## Importing
+- add support for unabbreviated month names (specify with capital `M` in `date_order` parameters, e.g. `"Mdy`)
+
+## Fixes
+- change fallback to R user directory, if writing requested without properly set options
+- add robust download checking and switch to curl, if available (curl added to `Suggests:`)
+
 # fundsr 0.2.1
 
 ## Documentation

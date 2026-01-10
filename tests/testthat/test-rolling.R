@@ -72,7 +72,7 @@ test_that("roll_diffs works for 2 indices + 4 funds", {
 
     snap <- purrr::map(
         snap,
-        \(x) dplyr::mutate(x, dplyr::across(where(is.numeric), \(v) round(v, 10)))
+        function(x) dplyr::mutate(x, dplyr::across(where(is.numeric), function(v) round(v, 10)))
     )
 
     testthat::expect_snapshot(snap)

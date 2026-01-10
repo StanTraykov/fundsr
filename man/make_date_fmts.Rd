@@ -8,7 +8,8 @@ make_date_fmts(order)
 }
 \arguments{
 \item{order}{A single string specifying the component order as a permutation
-of \code{"d"}, \code{"m"}, \code{"y"} (e.g. \code{"dmy"}, \code{"mdy"}, \code{"ymd"}).}
+of \code{"d"}, \code{"y"}, and exactly one of \code{"m"} or \code{"M"}
+(e.g. \code{"dmy"}, \code{"ymd"}, \code{"dMy"}, \code{"Mdy"}).}
 }
 \value{
 A character vector of unique date format strings.
@@ -19,9 +20,17 @@ given day/month/year order. This is intended for fast "detect once per sheet,
 then parse all" workflows.
 }
 \details{
-The returned formats cover common separators (\code{"/"}, \code{"-"}, \code{"."}, \code{" "})
-and both 4-digit (\verb{\%Y}) and 2-digit (\verb{\%y}) years. Month tokens include
-numeric months (\verb{\%m}) and abbreviated month names (\verb{\%b}). Full month names
-(\verb{\%B}) are excluded.
+The returned formats cover common separators (\code{"/"}, \code{"-"}, \code{"."}, \code{" "}),
+unseparated dates with numeric months, and an optional comma before a final
+4- or 2-digit year element (\verb{\%y}, \verb{\%Y}) in space-separated dates.
+
+Month handling depends on \code{order}:
+\itemize{
+\item If \code{order} uses \code{"m"}, month tokens include numeric months (\verb{\%m}) and
+abbreviated month names (\verb{\%b}).
+\item If \code{order} uses \code{"M"}, month tokens include full month names (\verb{\%B}).
+}
+
+Month name formats (\verb{\%b}, \verb{\%B}) are locale-dependent.
 }
 \keyword{internal}

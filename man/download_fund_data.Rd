@@ -7,15 +7,15 @@
 download_fund_data(redownload = FALSE)
 }
 \arguments{
-\item{redownload}{Logical; if \code{TRUE}, existing files are overwritten. If
-\code{FALSE}, only missing files are downloaded.}
+\item{redownload}{Logical; if \code{TRUE}, existing files are overwritten. If \code{FALSE}, only missing
+files are downloaded.}
 }
 \value{
 Invisibly returns \code{NULL}. Files are written as a side effect.
 }
 \description{
-Retrieves all fund data files listed in the \code{fundsr.fund_urls} option and saves
-them into the directory specified by \code{fundsr.data_dir}.
+Retrieves all fund data files listed in the \code{fundsr.fund_urls} option and saves them into the
+directory specified by the \code{fundsr.data_dir} option.
 }
 \seealso{
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.

@@ -29,6 +29,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests:
+    curl,
     DiagrammeR,
     kableExtra,
     knitr,

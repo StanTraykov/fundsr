@@ -28,7 +28,11 @@ specs %>%
         file_id = glue("srv_{population}_{sex}_{age}")
     ) %>%
     select(file_id, p) %>%
-    pwalk(\(file_id, p) save_plot(file_id, p, height = std_h, width = std_w, px_width = 1700))
+    pwalk(function(file_id, p) save_plot(file_id,
+                                         p,
+                                         height = std_h,
+                                         width = std_w,
+                                         px_width = 1700))
 
 ##### Export via Inkscape
 # export_pngs()

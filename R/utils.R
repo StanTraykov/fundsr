@@ -8,38 +8,57 @@
 #' given day/month/year order. This is intended for fast "detect once per sheet,
 #' then parse all" workflows.
 #'
-#' The returned formats cover common separators (`"/"`, `"-"`, `"."`, `" "`)
-#' and both 4-digit (`%Y`) and 2-digit (`%y`) years. Month tokens include
-#' numeric months (`%m`) and abbreviated month names (`%b`). Full month names
-#' (`%B`) are excluded.
+#' The returned formats cover common separators (`"/"`, `"-"`, `"."`, `" "`),
+#' unseparated dates with numeric months, and an optional comma before a final
+#' 4- or 2-digit year element (`%y`, `%Y`) in space-separated dates.
+#'
+#' Month handling depends on `order`:
+#' - If `order` uses `"m"`, month tokens include numeric months (`%m`) and
+#'   abbreviated month names (`%b`).
+#' - If `order` uses `"M"`, month tokens include full month names (`%B`).
+#'
+#' Month name formats (`%b`, `%B`) are locale-dependent.
 #'
 #' @param order A single string specifying the component order as a permutation
-#'   of `"d"`, `"m"`, `"y"` (e.g. `"dmy"`, `"mdy"`, `"ymd"`).
+#'   of `"d"`, `"y"`, and exactly one of `"m"` or `"M"`
+#'   (e.g. `"dmy"`, `"ymd"`, `"dMy"`, `"Mdy"`).
 #'
 #' @return A character vector of unique date format strings.
 #'
 #' @keywords internal
 make_date_fmts <- function(order) {
     stopifnot(is.character(order), length(order) == 1L, nzchar(order))
-    chars <- strsplit(order, "")[[1]]
 
-    if (!all(chars %in% c("d", "m", "y"))) {
-        stop("`order` must use only 'd', 'm', 'y' (e.g. 'dmy', 'ymd').", call. = FALSE)
+    chars <- strsplit(order, "", fixed = TRUE)[[1]]
+
+    allowed <- c("d", "y", "m", "M")
+    if (!all(chars %in% allowed)) {
+        stop("`order` must use only 'd', 'y', and one of 'm' or 'M' (e.g. 'dmy', 'dMy').",
+             call. = FALSE)
     }
     if (length(chars) != 3L || length(unique(chars)) != 3L) {
-        stop("`order` must be a permutation of 'd', 'm', 'y' (length 3, no repeats).", call. = FALSE)
+        stop("`order` must be length 3 with no repeats.", call. = FALSE)
+    }
+    if (!all(c("d", "y") %in% chars)) {
+        stop("`order` must include 'd' and 'y'.", call. = FALSE)
+    }
+    if (!xor("m" %in% chars, "M" %in% chars)) {
+        stop("`order` must include exactly one of 'm' or 'M'.", call. = FALSE)
     }
 
     seps <- c("/", "-", ".", " ")
     yrs  <- c("%Y", "%y")
-    mons <- c("%m", "%b")  # numeric + abbreviated (locale-dependent)
+
+    # month tokens depend on whether order uses 'm' or 'M'
+    mons <- if ("M" %in% chars) c("%B") else c("%m", "%b")
 
     tokens_for <- function(y_tok, m_tok) {
         vapply(chars, function(ch) {
             switch(ch,
                    d = "%d",
+                   y = y_tok,
                    m = m_tok,
-                   y = y_tok
+                   M = m_tok
             )
         }, character(1))
     }
@@ -68,3 +87,4 @@ make_date_fmts <- function(order) {
 
     unique(out)
 }
+
