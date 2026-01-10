@@ -72,7 +72,7 @@ download_fund_data <- function(redownload = FALSE) {
     }
 
     if (!did_download) {
-        fundsr_msg("All downloads skipped due to existing files.")
+        fundsr_msg("Downloads skipped: all files already exist.")
     }
     invisible(out)
 }

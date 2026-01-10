@@ -3,8 +3,24 @@
 }
 
 vec_key <- function(x, ignore_order = FALSE) {
-    if (ignore_order) x <- sort(x)
-    paste0(x, collapse = ";")
+    if (is.null(x)) return("<NULL>")
+    if (!is.atomic(x) || is.object(x)) {
+        stop("`x` must be an atomic vector.", call. = FALSE)
+    }
+    x_type <- typeof(x)
+    x_chr  <- as.character(x)  # NAs remain NA_character_
+    if (ignore_order && length(x_chr) > 1L) {
+        ord <- if (is.numeric(x) || is.logical(x)) {
+            order(x, na.last = TRUE, method = "radix")
+        } else {
+            order(x_chr, na.last = TRUE, method = "radix")
+        }
+        x_chr <- x_chr[ord]
+    }
+    lens <- nchar(x_chr, type = "bytes")
+    lens[is.na(x_chr)] <- -1L
+    parts <- paste0(lens, ":", ifelse(is.na(x_chr), "", x_chr))
+    paste0(x_type, "|", length(x_chr), "|", paste(parts, collapse = "|"))
 }
 
 #' Generate candidate date format strings for `as.Date()`
