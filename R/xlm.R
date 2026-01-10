@@ -74,7 +74,7 @@ read_xlm_directory <- function(directory,
         month_year <- sub("^Xetra Liquidity Measure \\(XLM\\)\\*\\.",
                           "",
                           xlm_col)
-        message(glue("XLM read: {month_year}"))
+        fundsr_msg(glue("XLM read: {month_year}"), level = 2L)
         data <- data %>%
             rename_with(~ "xlm", matches("^Xetra Liquidity Measure")) %>%
             rename_with(~ "ticker", matches("Xetra Ticker")) %>%
@@ -160,7 +160,7 @@ plot_xlms <- function(xlm_data, tickers, rgx = FALSE, gg_params = NULL, back_tra
         }
     }
 
-    message(paste("plot_xlms:", paste(tickers, collapse = ", ")))
+    fundsr_msg(paste("plot_xlms:", paste(tickers, collapse = ", ")), level = 1L)
 
     p <- ggplot2::ggplot(
         data,

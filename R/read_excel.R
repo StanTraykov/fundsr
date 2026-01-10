@@ -1,6 +1,6 @@
 read_excel_or_xml <- function(file_path, sheet = NULL) {
     # First, try reading as a standard Excel file with readxl
-    message("Reading Excel file '", file_path, "'...")
+    fundsr_msg("Reading Excel:'", file_path, level = 1L)
     df <- tryCatch({
         # Try readxl in a tryCatch
         readxl::read_excel(path = file_path,
@@ -11,11 +11,11 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
 
     if (!inherits(df, "error")) {
         # If readxl succeeded, return df as a tibble
-        message("readxl succeeded. Returning data.")
+        fundsr_msg("readxl succeeded. Returning data.", level = 2L)
         return(tibble::as_tibble(df, .name_repair = "minimal"))
     }
 
-    message("readxl failed. Attempting parse as Excel 2003 XML...")
+    fundsr_msg("readxl failed. Attempting parse as Excel 2003 XML...", level = 2L)
 
     # If readxl fails, we assume it might be a 2003 XML (SpreadsheetML) file.
     # We'll do BOM removal and parse with xml2.
@@ -74,7 +74,6 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
             }
             if (is.na(nm_orig)) next
             nm_trim <- trimws(nm_orig)
-            #message("DEBUG: found Worksheet '", nm_trim, "'; comparing to '", sheet_trim, "'")
             if (nm_trim == sheet_trim) {
                 matched_ws <- ws
                 break
@@ -340,10 +339,10 @@ read_timeseries_excel <- function(file,
         }
     }
 
-    message(glue(
+    fundsr_msg(glue(
         "{nrow(data_subset)} rows x {ncol(data_subset)} cols ",
         "(sheet='{sheet}', date col ='{date_col}')."
-    ))
+    ), level = 2L)
 
     data_subset
 }

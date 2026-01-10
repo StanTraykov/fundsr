@@ -68,6 +68,8 @@ The annualized tracking differences are:
 Values are \code{NA} when an anchor cannot be found, required inputs are missing,
 \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
 non-positive inputs for log returns).
+
+Emitted messages will be visible at verbosity level >= 1 (option \code{fundsr.verbosity}).
 }
 \seealso{
 Other rolling difference functions: 

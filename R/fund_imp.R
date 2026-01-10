@@ -260,7 +260,7 @@ join_env <- function(env,
 
     obj_names <- ls(envir = env, sorted = FALSE)
     raw_late <- late %||% character(0)
-    message(glue("Joining: {glue::glue_collapse(obj_names, sep = ', ')}"))
+    fundsr_msg(glue("Joining: {glue::glue_collapse(obj_names, sep = ', ')}"), level = 2L)
 
     objs <- mget(obj_names, envir = env)
     not_df <- purrr::map_lgl(objs, ~ !is.data.frame(.x))
@@ -395,7 +395,7 @@ store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = 
     reload <- fundsr_get_option("reload")
     # Check if assignment is needed and evaluate expr in parent_env
     if (overwrite || reload || !exists(var_name, envir = .fundsr_storage)) {
-        message(paste("*** Loading:", var_name))
+        fundsr_msg(paste("*** Loading:", var_name), level = 2L)
         assign(var_name,
                eval(substitute(expr), envir = parent_env),
                envir = .fundsr_storage)

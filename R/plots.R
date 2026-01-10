@@ -153,12 +153,12 @@ save_plot <- function(file,
 #' @export
 export_pngs <- function(background = "white") {
     if (length(.fundsr$inkscape_queue) == 0) {
-        message("export_pngs: nothing queued.")
+        fundsr_msg("export_pngs: nothing queued.", level = 1L)
         return(invisible(NULL))
     }
     inkscape <- find_inkscape()
     if (is.na(inkscape) || !nzchar(inkscape)) {
-        message("export_pngs: cannot find Inkscape")
+        fundsr_msg("export_pngs: cannot find Inkscape", level = 0L)
         return(invisible(NULL))
     }
     acts <- paste(.fundsr$inkscape_queue, collapse = ";")
@@ -166,12 +166,13 @@ export_pngs <- function(background = "white") {
         acts <- paste0(glue("export-background:{shQuote(background)};"), acts)
     }
     args <- c(sprintf('--actions=%s', shQuote(acts)))
-    message(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"))
+    fundsr_msg(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"), level = 1L)
     exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
         clear_inkscape_queue()
     } else {
-        message(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"))
+        fundsr_msg(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"),
+                       level = 0L)
     }
     exit_status
 }
@@ -292,7 +293,7 @@ plot_roll_diffs <- function(data,
         gettext("{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}")
     }
     title <- glue(title_msg)
-    message(paste("plot_roll_diffs:", title))
+    fundsr_msg(paste("plot_roll_diffs:", title), level = 1L)
 
     vals <- select(data, all_of(funds))
     has_data <- rowSums(is.finite(data.matrix(vals))) > 0

@@ -35,7 +35,7 @@ download_fund_data <- function(redownload = FALSE) {
     redownload <- isTRUE(redownload)
     polite_sleep <- isTRUE(polite_sleep)
     if (is.null(named_urls) || length(named_urls) == 0L) {
-        message("No fund URLs configured (option 'fundsr.fund_urls' is empty).")
+        fundsr_msg("No fund URLs configured (option 'fundsr.fund_urls' is empty).", level = 0L)
         return(invisible(character()))
     }
     nms <- names(named_urls)
@@ -60,12 +60,12 @@ download_fund_data <- function(redownload = FALSE) {
         full_file <- file.path(path, paste0(key, ext))
         alt_file <- file.path(path, paste0(key, if (ext == ".xls") ".xlsx" else ".xls"))
         if (!redownload && (file.exists(full_file) || file.exists(alt_file))) {
-            message(glue("Skipping download '{key}': already exists."))
+            fundsr_msg(glue("Skipping download '{key}': already exists."), level = 2L)
             out[[key]] <- if (file.exists(full_file)) full_file else alt_file
             next
         }
         if (polite_sleep && did_download) Sys.sleep(stats::runif(1, 0.5, 1.0))
-        message(glue("Downloading '{key}'"))
+        fundsr_msg(glue("Downloading '{key}'"), level = 1L)
         .fundsr_download(url = url, destfile = full_file, attempts = attempts, quiet = TRUE)
         did_download <- TRUE
         out[[key]] <- full_file

@@ -13,7 +13,8 @@ fundsr_options(
   xetra_map = NULL,
   inkscape = NULL,
   reload = NULL,
-  fund_urls = NULL
+  fund_urls = NULL,
+  verbosity = NULL
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ objects (sets \code{fundsr.reload}).}
 
 \item{fund_urls}{Named character vector or named list of URLs for fund data
 downloads (sets \code{fundsr.fund_urls}).}
+
+\item{verbosity}{Integer verbosity level (sets \code{fundsr.verbosity}). Use 0 to silence
+informational messages, 2 to enable additional messages.}
 }
 \value{
 Invisibly returns a named list of the previous values of the options

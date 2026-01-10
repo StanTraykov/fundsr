@@ -79,6 +79,8 @@ longer <- function(df,
 #' \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
 #' non-positive inputs for log returns).
 #'
+#' Emitted messages will be visible at verbosity level >= 1 (option `fundsr.verbosity`).
+#'
 #' @family rolling difference functions
 #' @export
 roll_diffs <- function(df,
@@ -115,18 +117,18 @@ roll_diffs <- function(df,
         if (index_level == "gross") index <- paste0(index, gross_suffix)
 
         if (!(fund %in% names(df))) {
-            if (msg_skip) message(sprintf("Skipping %s: not in df", fund))
+            if (msg_skip) fundsr_msg(sprintf("Skipping %s: not in df", fund))
             next
         }
         if (!(index %in% names(df))) {
-            if (msg_skip) message(sprintf("Skipping %s: tracked index %s not in df", fund, index))
+            if (msg_skip) fundsr_msg(sprintf("Skipping %s: tracked index %s not in df", fund, index))
             next
         }
         if (fund == index) {
-            if (msg_skip) message(sprintf("Skipping %s: self-tracking", fund))
+            if (msg_skip) fundsr_msg(sprintf("Skipping %s: self-tracking", fund))
             next
         }
-        if (msg_roll) message(sprintf("Roll diffs %s -> %s", fund, index))
+        if (msg_roll) fundsr_msg(sprintf("Roll diffs %s -> %s", fund, index))
 
 
         fund_vals  <- df[[fund]]
