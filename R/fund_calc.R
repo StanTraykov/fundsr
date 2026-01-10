@@ -6,7 +6,7 @@
 #
 # @param df A data frame containing a date column and fund columns.
 # @param funds Character vector of fund column names to pivot.
-# @param date_col Name of the date column in `df`. Defaults to `"date"`.
+# @param date_col Name of the date column in `df`.
 # @param values_to Name of the value column in the output.
 # @param names_to Name of the fund-name column in the output.
 # @param drop_na Logical; whether to drop rows with missing values after pivoting.
@@ -44,19 +44,19 @@ longer <- function(df,
 #' @param n_days Rolling lookback window in calendar days.
 #' @param fund_index_map Named character vector mapping fund column names
 #'   to their corresponding benchmark/index base column names.
-#' @param date_col Name of the date column in `df`. Defaults to `"date"`.
+#' @param date_col Name of the date column in `df`.
 #'   Must be of class `Date` and sorted in ascending order.
 #' @param index_level Which index level to use, one of `"net"` or `"gross"`.
 #'   If `"gross"`, `gross_suffix` is appended to the mapped index base name
-#'   before lookup in `df`. Defaults to `"net"`.
-#' @param annual_days Number of days used for annualization. Defaults to `365`.
+#'   before lookup in `df`.
+#' @param annual_days Number of days used for annualization.
 #' @param messages Character vector controlling emitted messages. Any of
 #'   `"roll"` (per-pair progress) and `"skip"` (skip reasons). Use
 #'   `messages = "roll"` to show only progress, `messages = "skip"` to show
 #'   only skip reasons, or `messages = character()` or `NULL` to silence all
-#'   messages. Defaults to `c("roll", "skip")`.
+#'   messages.
 #' @param gross_suffix Suffix appended to the mapped index base name when
-#'   `index_level = "gross"`. Defaults to `"-GR"`.
+#'   `index_level = "gross"`.
 #'
 #' @return A named list with two data frames, `log` and `cagr`. Each data frame
 #'   contains `date_col` followed by one column per fund (named as in

@@ -24,23 +24,23 @@ benchmark/index columns referenced in \code{fund_index_map}.}
 \item{fund_index_map}{Named character vector mapping fund column names
 to their corresponding benchmark/index base column names.}
 
-\item{date_col}{Name of the date column in \code{df}. Defaults to \code{"date"}.
+\item{date_col}{Name of the date column in \code{df}.
 Must be of class \code{Date} and sorted in ascending order.}
 
 \item{index_level}{Which index level to use, one of \code{"net"} or \code{"gross"}.
 If \code{"gross"}, \code{gross_suffix} is appended to the mapped index base name
-before lookup in \code{df}. Defaults to \code{"net"}.}
+before lookup in \code{df}.}
 
-\item{annual_days}{Number of days used for annualization. Defaults to \code{365}.}
+\item{annual_days}{Number of days used for annualization.}
 
 \item{messages}{Character vector controlling emitted messages. Any of
 \code{"roll"} (per-pair progress) and \code{"skip"} (skip reasons). Use
 \code{messages = "roll"} to show only progress, \code{messages = "skip"} to show
 only skip reasons, or \code{messages = character()} or \code{NULL} to silence all
-messages. Defaults to \code{c("roll", "skip")}.}
+messages.}
 
 \item{gross_suffix}{Suffix appended to the mapped index base name when
-\code{index_level = "gross"}. Defaults to \code{"-GR"}.}
+\code{index_level = "gross"}.}
 }
 \value{
 A named list with two data frames, \code{log} and \code{cagr}. Each data frame

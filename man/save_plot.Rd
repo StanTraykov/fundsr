@@ -24,27 +24,25 @@ save_plot(
 
 \item{px_width}{Target width in pixels for PNG output. Used as the queued
 Inkscape \code{export-width}, and (if \code{save_png = TRUE}) used to compute the DPI
-for immediate PNG saving. Defaults to option \code{fundsr.px_width} or 1300.}
+for immediate PNG saving.}
 
-\item{height}{Height of the saved plot in \code{units}. Defaults to \code{12}.}
+\item{height}{Height of the saved plot in \code{units}.}
 
-\item{width}{Width of the saved plot in \code{units}. Defaults to \code{12}.}
+\item{width}{Width of the saved plot in \code{units}.}
 
-\item{units}{Units for \code{width}/\code{height} (e.g. \code{"in"}). Defaults to \code{"in"}.
+\item{units}{Units for \code{width}/\code{height} (e.g. \code{"in"}).
 For immediate PNG saving, only \code{"in"}, \code{"cm"}, and \code{"mm"} are supported (to
 compute DPI from \code{px_width}).}
 
-\item{out_dir}{Output directory where files are written. Defaults to
-option \code{fundsr.out_dir}.}
+\item{out_dir}{Output directory where files are written.}
 
-\item{save_png}{Logical scalar; if \code{TRUE}, also saves a PNG immediately.
-Defaults to option \code{fundsr.internal_png} or \code{FALSE}.}
+\item{save_png}{Logical scalar; if \code{TRUE}, also saves a PNG immediately.}
 
 \item{save_svg}{Logical scalar; if \code{TRUE}, saves the SVG and queues an
-Inkscape export action. Defaults to option \code{fundsr.export_svg} or \code{TRUE}.}
+Inkscape export action.}
 
 \item{background}{Background color used for immediate PNG saving via
-\code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (\code{bg}). Defaults to \code{"white"}.}
+\code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (\code{bg}).}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.

@@ -43,9 +43,9 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #'   (in upper case) to derive the default filename.
 #' @param file Optional filename. If `NULL` (the default), it is inferred from
 #'   `ticker` as described above.
-#' @param sheet Sheet index or name containing the NAV data. Defaults to `1`.
-#' @param date_col Regular expression identifying the date column. Defaults to `"^Date"`.
-#' @param nav_col Regular expression identifying the fund's NAV column. Defaults to `"^NAV"`.
+#' @param sheet Sheet index or name containing the NAV data.
+#' @param date_col Regular expression identifying the date column.
+#' @param nav_col Regular expression identifying the fund's NAV column.
 #' @param benchmark Optional benchmark key that this fund should be associated
 #'   with in the fund/index map. When `retrieve_benchmark = TRUE`, the same value
 #'   is also used as the name under which the benchmark series is imported.
@@ -54,7 +54,7 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' @param retrieve_benchmark Logical; if `TRUE`, both `benchmark` and
 #'   `benchmark_col` must be supplied and the benchmark column is imported
 #'   alongside the fund.
-#' @param date_order Date parsing order passed to the importer. Defaults to `"dmy"`.
+#' @param date_order Date parsing order passed to the importer.
 #' @param var_name Specify a custom variable name for the storage environment.
 #' @param data_sheet Deprecated; use `sheet`.
 #'

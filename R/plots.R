@@ -9,20 +9,18 @@
 #' @param plot A plot object (typically a ggplot) to be saved.
 #' @param px_width Target width in pixels for PNG output. Used as the queued
 #'   Inkscape `export-width`, and (if `save_png = TRUE`) used to compute the DPI
-#'   for immediate PNG saving. Defaults to option `fundsr.px_width` or 1300.
-#' @param height Height of the saved plot in `units`. Defaults to `12`.
-#' @param width Width of the saved plot in `units`. Defaults to `12`.
-#' @param units Units for `width`/`height` (e.g. `"in"`). Defaults to `"in"`.
+#'   for immediate PNG saving.
+#' @param height Height of the saved plot in `units`.
+#' @param width Width of the saved plot in `units`.
+#' @param units Units for `width`/`height` (e.g. `"in"`).
 #'   For immediate PNG saving, only `"in"`, `"cm"`, and `"mm"` are supported (to
 #'   compute DPI from `px_width`).
-#' @param out_dir Output directory where files are written. Defaults to
-#'   option `fundsr.out_dir`.
+#' @param out_dir Output directory where files are written.
 #' @param save_png Logical scalar; if `TRUE`, also saves a PNG immediately.
-#'   Defaults to option `fundsr.internal_png` or `FALSE`.
 #' @param save_svg Logical scalar; if `TRUE`, saves the SVG and queues an
-#'   Inkscape export action. Defaults to option `fundsr.export_svg` or `TRUE`.
+#'   Inkscape export action.
 #' @param background Background color used for immediate PNG saving via
-#'   [ggplot2::ggsave()] (`bg`). Defaults to `"white"`.
+#'   [ggplot2::ggsave()] (`bg`).
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'

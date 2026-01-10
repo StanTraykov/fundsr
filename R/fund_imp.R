@@ -317,7 +317,7 @@ join_env <- function(env,
 #'
 #' @param reload Logical; if `TRUE`, forces a full reload by temporarily setting
 #'   `options(fundsr.reload = TRUE)`.
-#' @param by Column name to join by and to sort by. Defaults to `"date"`.
+#' @param by Column name to join by and to sort by.
 #' @param ... Additional arguments forwarded to [join_env()] (e.g. `late =`,
 #'   `join_precedence =`, etc.).
 #'

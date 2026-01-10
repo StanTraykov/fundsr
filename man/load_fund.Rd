@@ -25,11 +25,11 @@ load_fund(
 \item{file}{Optional filename. If \code{NULL} (the default), it is inferred from
 \code{ticker} as described above.}
 
-\item{sheet}{Sheet index or name containing the NAV data. Defaults to \code{1}.}
+\item{sheet}{Sheet index or name containing the NAV data.}
 
-\item{date_col}{Regular expression identifying the date column. Defaults to \code{"^Date"}.}
+\item{date_col}{Regular expression identifying the date column.}
 
-\item{nav_col}{Regular expression identifying the fund's NAV column. Defaults to \code{"^NAV"}.}
+\item{nav_col}{Regular expression identifying the fund's NAV column.}
 
 \item{benchmark}{Optional benchmark key that this fund should be associated
 with in the fund/index map. When \code{retrieve_benchmark = TRUE}, the same value
@@ -42,7 +42,7 @@ the Excel sheet. Only used when \code{retrieve_benchmark = TRUE}.}
 \code{benchmark_col} must be supplied and the benchmark column is imported
 alongside the fund.}
 
-\item{date_order}{Date parsing order passed to the importer. Defaults to \code{"dmy"}.}
+\item{date_order}{Date parsing order passed to the importer.}
 
 \item{var_name}{Specify a custom variable name for the storage environment.}
 
