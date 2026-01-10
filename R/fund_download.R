@@ -71,6 +71,9 @@ download_fund_data <- function(redownload = FALSE) {
         out[[key]] <- full_file
     }
 
+    if (!did_download) {
+        fundsr_msg("All downloads skipped due to existing files.")
+    }
     invisible(out)
 }
 
