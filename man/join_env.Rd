@@ -14,7 +14,7 @@ join_env(
 )
 }
 \arguments{
-\item{env}{Environment containing the data frames to join.}
+\item{env}{Environment containing \emph{only} data frames (incl. tibbles) to join.}
 
 \item{by}{Character vector of join keys (passed to \code{dplyr::full_join()}).}
 
@@ -28,9 +28,10 @@ columns whose names end in these suffixes (and share the same base name) are rep
 single unsuffixed column containing the coalesced values, preferring the left suffix when both
 values are available. If \code{NULL} (the default), no automatic coalescing is performed.}
 
-\item{coalesce_suffixed}{Deprecated; use \code{join_precedence}.}
+\item{coalesce_suffixed}{Deprecated; use \code{join_precedence} (same meaning).}
 
-\item{late_join}{Function to use for joining late objects.}
+\item{late_join}{Function to use for joining late objects, e.g. \code{dplyr::left_join} (the default).
+Must accept dplyr-style \code{suffix} and \code{by} arguments.}
 }
 \value{
 A tibble: the full join of all non-late objects, followed by sequential left-joins (or
@@ -38,19 +39,24 @@ other joins specified by \code{late_join}) of the late objects. If \code{join_pr
 suffixed join columns are coalesced into unsuffixed base columns as described above.
 }
 \description{
-Performs a \code{dplyr::full_join()} across all objects in an environment, except those listed in
-\code{late}. Objects listed in \code{late} are instead joined afterwards using \code{dplyr::left_join()} (or
-another function specified by \code{late_join}) in the order given. Column clashes during the full
-join are resolved via join suffixes \code{c(".x", ".y")} while the late joins use
-\code{c(".early", ".late")}. Optionally, columns with join suffixes can be automatically coalesced
-into single unsuffixed columns via precedence specification (\code{join_precedence}).
+Performs a \code{dplyr::full_join()} across all objects in \code{env} (in alphabetical order), excluding
+any listed in \code{late}. Late objects are then joined sequentially (via \code{dplyr::left_join()} by
+default) in the order given. Full-join clashes use suffixes \code{c(".x", ".y")}; late joins use
+\code{c(".early", ".late")}.
+}
+\details{
+Optionally, column pairs with specified suffixes can be coalesced into unsuffixed base columns
+via \code{join_precedence}.
 }
 \examples{
   e <- new.env()
   e$members <- dplyr::band_members
   e$instruments <- dplyr::band_instruments
   e$other_instr <- dplyr::band_instruments |>
-      dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord")) |>
+      dplyr::mutate(plays = dplyr::case_match(name,
+                                              "John" ~ "banjo",
+                                              "Paul" ~ "mellotron",
+                                              "Keith" ~ "harpsichord")) |>
       dplyr::add_row(name = "Mick", plays = "harmonica") |>
       dplyr::add_row(name = "Stu", plays = "piano")
 

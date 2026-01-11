@@ -2,6 +2,7 @@
 
 ## Breaking changes
 - rename `clear_storage()` argument `clear_fund_index_map` to `clear_map` to avoid name clash with `clear_fund_index_map()`
+- change `join_env()` full join order to alphabetical
 
 ## Importing
 - add support for unabbreviated month names (specify with capital `M` in `date_order` parameters, e.g. `"Mdy"`)
@@ -12,7 +13,7 @@
 - add a logo
 
 ## Fixes
-- fix unset fundsr.data_dir behavior (stop writing to working directory; use `tools::R_user_dir("fundsr", which = "data")`)
+- fix unset `fundsr.data_dir` behavior (stop writing to working directory; use `tools::R_user_dir("fundsr", which = "data")`)
 
 # fundsr 0.2.1
 

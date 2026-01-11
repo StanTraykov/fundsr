@@ -152,7 +152,7 @@ read_timeseries <- function(
 read_msci_tsv <- function(file) {
     fund_data_dir <- fundsr_get_option("data_dir")
     lines <- readr::read_lines(file.path(fund_data_dir, file))
-    data_lines <- grep("^[0-9]|Date", lines, value = TRUE)
+    data_lines <- grep("^[0-9]|^Date", lines, value = TRUE)
     df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
         readr::col_date(format = "%m/%d/%Y"),
         readr::col_double()

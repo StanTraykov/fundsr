@@ -150,14 +150,15 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 
 #' Join all data frames in an environment with optional late joins
 #'
-#' Performs a `dplyr::full_join()` across all objects in an environment, except those listed in
-#' `late`. Objects listed in `late` are instead joined afterwards using `dplyr::left_join()` (or
-#' another function specified by `late_join`) in the order given. Column clashes during the full
-#' join are resolved via join suffixes `c(".x", ".y")` while the late joins use
-#' `c(".early", ".late")`. Optionally, columns with join suffixes can be automatically coalesced
-#' into single unsuffixed columns via precedence specification (`join_precedence`).
+#' Performs a `dplyr::full_join()` across all objects in `env` (in alphabetical order), excluding
+#' any listed in `late`. Late objects are then joined sequentially (via `dplyr::left_join()` by
+#' default) in the order given. Full-join clashes use suffixes `c(".x", ".y")`; late joins use
+#' `c(".early", ".late")`.
 #'
-#' @param env Environment containing the data frames to join.
+#' Optionally, column pairs with specified suffixes can be coalesced into unsuffixed base columns
+#' via `join_precedence`.
+#'
+#' @param env Environment containing *only* data frames (incl. tibbles) to join.
 #' @param by Character vector of join keys (passed to `dplyr::full_join()`).
 #' @param late Character vector of object names in `env` that should be
 #'   *excluded* from the initial full join and instead left-joined
@@ -167,8 +168,9 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 #'   columns whose names end in these suffixes (and share the same base name) are replaced by a
 #'   single unsuffixed column containing the coalesced values, preferring the left suffix when both
 #'   values are available. If `NULL` (the default), no automatic coalescing is performed.
-#' @param coalesce_suffixed Deprecated; use `join_precedence`.
-#' @param late_join Function to use for joining late objects.
+#' @param coalesce_suffixed Deprecated; use `join_precedence` (same meaning).
+#' @param late_join Function to use for joining late objects, e.g. `dplyr::left_join` (the default).
+#'   Must accept dplyr-style `suffix` and `by` arguments.
 #'
 #' @return A tibble: the full join of all non-late objects, followed by sequential left-joins (or
 #'   other joins specified by `late_join`) of the late objects. If `join_precedence` is supplied,
@@ -182,7 +184,10 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
 #'   e$members <- dplyr::band_members
 #'   e$instruments <- dplyr::band_instruments
 #'   e$other_instr <- dplyr::band_instruments |>
-#'       dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord")) |>
+#'       dplyr::mutate(plays = dplyr::case_match(name,
+#'                                               "John" ~ "banjo",
+#'                                               "Paul" ~ "mellotron",
+#'                                               "Keith" ~ "harpsichord")) |>
 #'       dplyr::add_row(name = "Mick", plays = "harmonica") |>
 #'       dplyr::add_row(name = "Stu", plays = "piano")
 #'
@@ -214,14 +219,15 @@ join_env <- function(env,
     }
     # / Deprecated param handling
 
-    stopifnot(is.environment(env))
+    if (!is.environment(env)) {
+        stop("`env` must be an environment.", call. = FALSE)
+    }
     by <- as.character(by)
-    stopifnot(length(by) >= 1L, all(nzchar(by)))
-
-    obj_names <- ls(envir = env, sorted = FALSE)
+    if (length(by) < 1L || any(!nzchar(by))) {
+        stop("`by` must contain at least one non-empty join key.", call. = FALSE)
+    }
+    obj_names <- ls(envir = env, sorted = TRUE)
     raw_late <- late %||% character(0)
-    fundsr_msg(glue("Joining: {glue::glue_collapse(obj_names, sep = ', ')}"), level = 2L)
-
     objs <- mget(obj_names, envir = env)
     not_df <- purrr::map_lgl(objs, ~ !is.data.frame(.x))
     if (any(not_df)) {
@@ -246,7 +252,8 @@ join_env <- function(env,
     missing_late <- setdiff(raw_late, obj_names)
     if (length(missing_late)) {
         warning("Objects not found in `env` and ignored in `late`: ",
-                paste(missing_late, collapse = ", "))
+                paste(missing_late, collapse = ", "),
+                call. = FALSE)
     }
     late <- intersect(raw_late, obj_names)
     main_names <- setdiff(obj_names, late)
@@ -254,15 +261,21 @@ join_env <- function(env,
         stop("No objects left to full_join after excluding `late`.")
     }
     main_list <- mget(main_names, envir = env)
+    main_chr <- glue::glue_collapse(main_names, sep = ", ")
+    late_chr <- ""
+    if (length(late) > 0L) {
+        late_chr <- glue(" (late = {glue::glue_collapse(late, sep = ', ')})")
+    }
+    fundsr_msg(glue("Joining: {main_chr}{late_chr}."), level = 2L)
 
     j <- purrr::reduce(main_list, full_join, by = by, suffix = c(".x", ".y"))
     if (length(late) > 0L) {
         late_list <- mget(late, envir = env)
         j <- purrr::reduce(late_list, late_join, .init = j, by = by, suffix = c(".early", ".late"))
     }
-    if (!is.null(join_precedence))
+    if (!is.null(join_precedence)) {
         j <- coalesce_join_suffixes(j, join_precedence)
-
+    }
     j
 }
 
@@ -276,8 +289,8 @@ join_env <- function(env,
 #' @param reload Logical; if `TRUE`, forces a full reload by temporarily setting
 #'   `options(fundsr.reload = TRUE)`.
 #' @param by Column name to join by and to sort by.
-#' @param ... Additional arguments forwarded to [join_env()] (e.g. `late =`,
-#'   `join_precedence =`, etc.).
+#' @param ... Additional arguments forwarded to [join_env()] (e.g. `late`,
+#'   `join_precedence`, etc.).
 #'
 #' @return A tibble containing all joined series, sorted by `by`.
 #'

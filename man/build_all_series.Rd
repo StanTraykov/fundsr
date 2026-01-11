@@ -12,8 +12,8 @@ build_all_series(reload = FALSE, by = "date", ...)
 
 \item{by}{Column name to join by and to sort by.}
 
-\item{...}{Additional arguments forwarded to \code{\link[=join_env]{join_env()}} (e.g. \verb{late =},
-\verb{join_precedence =}, etc.).}
+\item{...}{Additional arguments forwarded to \code{\link[=join_env]{join_env()}} (e.g. \code{late},
+\code{join_precedence}, etc.).}
 }
 \value{
 A tibble containing all joined series, sorted by \code{by}.
