@@ -14,10 +14,10 @@ get_storage <- function() {
 #' Clear storage
 #'
 #' Removes all objects from the package's storage environment
-#' (`.fundsr_storage`). Optionally also clears the fund/index map
+#' (`.fundsr_storage`). Optionally also clears the fund-index map
 #' (`.fundsr$fund_index_map`).
 #'
-#' @param clear_fund_index_map Logical scalar; if `TRUE`, also clears
+#' @param clear_map Logical scalar; if `TRUE`, also clears
 #'   `.fundsr$fund_index_map`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
@@ -26,18 +26,18 @@ get_storage <- function() {
 #' @export
 #' @examples
 #' clear_storage()
-#' clear_storage(clear_fund_index_map = TRUE)
-clear_storage <- function(clear_fund_index_map = FALSE) {
-    if (!is.logical(clear_fund_index_map) ||
-            length(clear_fund_index_map) != 1L ||
-            is.na(clear_fund_index_map)) {
-        stop("`clear_fund_index_map` must be TRUE or FALSE.", call. = FALSE)
+#' clear_storage(clear_map = TRUE)
+clear_storage <- function(clear_map = FALSE) {
+    if (!is.logical(clear_map) ||
+            length(clear_map) != 1L ||
+            is.na(clear_map)) {
+        stop("`clear_map` must be TRUE or FALSE.", call. = FALSE)
     }
     if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
         stop("Fundsr storage environment is not initialised.", call. = FALSE)
     }
     rm(list = ls(envir = .fundsr_storage, all.names = TRUE), envir = .fundsr_storage)
-    if (isTRUE(clear_fund_index_map)) {
+    if (isTRUE(clear_map)) {
         clear_fund_index_map()
     }
     invisible(NULL)

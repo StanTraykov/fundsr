@@ -4,10 +4,10 @@
 \alias{clear_storage}
 \title{Clear storage}
 \usage{
-clear_storage(clear_fund_index_map = FALSE)
+clear_storage(clear_map = FALSE)
 }
 \arguments{
-\item{clear_fund_index_map}{Logical scalar; if \code{TRUE}, also clears
+\item{clear_map}{Logical scalar; if \code{TRUE}, also clears
 \code{.fundsr$fund_index_map}.}
 }
 \value{
@@ -15,12 +15,12 @@ Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
 Removes all objects from the package's storage environment
-(\code{.fundsr_storage}). Optionally also clears the fund/index map
+(\code{.fundsr_storage}). Optionally also clears the fund-index map
 (\code{.fundsr$fund_index_map}).
 }
 \examples{
 clear_storage()
-clear_storage(clear_fund_index_map = TRUE)
+clear_storage(clear_map = TRUE)
 }
 \seealso{
 Other fund/index workflow functions: 

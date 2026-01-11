@@ -550,7 +550,7 @@ More granular resetting functions are also available.
 ```{r resetting, eval = FALSE}
 # reset the storage environment (optionally also the fund-index map)
 clear_storage()
-clear_storage(clear_fund_index_map = TRUE)
+clear_storage(clear_map = TRUE)
 
 # just the fund-index map
 clear_fund_index_map()

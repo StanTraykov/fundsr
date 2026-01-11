@@ -15,7 +15,7 @@
 #' @examples
 #' reset_state()
 reset_state <- function() {
-    clear_storage(clear_fund_index_map = TRUE)
+    clear_storage(clear_map = TRUE)
     clear_data_loaders()
     clear_inkscape_queue()
     .fundsr$done_xlm_sets <- character()
