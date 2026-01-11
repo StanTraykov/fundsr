@@ -1,14 +1,18 @@
 # fundsr (development version)
 
-## Documentation
-- improve function reference, other docs, vignettes, add logo
+## Breaking changes
+- rename `clear_storage()` argument `clear_fund_index_map` to `clear_map` to avoid name clash with `clear_fund_index_map()`
 
 ## Importing
-- add support for unabbreviated month names (specify with capital `M` in `date_order` parameters, e.g. `"Mdy`)
+- add support for unabbreviated month names (specify with capital `M` in `date_order` parameters, e.g. `"Mdy"`)
+- add download checks, retries, temp + atomic rename for `download_fund_data()`; also prefer curl when available (curl added to `Suggests:`)
+
+## Documentation
+- add categories to function reference; improve docs, doc-examples, vignettes
+- add a logo
 
 ## Fixes
-- change fallback to R user directory, if writing requested without properly set options
-- add robust download checking and switch to curl, if available (curl added to `Suggests:`)
+- fix unset fundsr.data_dir behavior (stop writing to working directory; use `tools::R_user_dir("fundsr", which = "data")`)
 
 # fundsr 0.2.1
 
