@@ -204,8 +204,8 @@ add_fund_urls <- function(fund_urls) {
     }
     nms <- names(fund_urls)
     if (is.null(nms) ||
-        anyNA(nms) ||
-        any(!nzchar(nms))) {
+            anyNA(nms) ||
+            any(!nzchar(nms))) {
         stop("`fund_urls` must have non-empty names.", call. = FALSE)
     }
     names(fund_urls) <- toupper(names(fund_urls))

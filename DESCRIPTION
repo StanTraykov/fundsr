@@ -1,7 +1,7 @@
 Type: Package
 Package: fundsr
 Title: Rolling Differences (CAGR and Log) and Liquidity for UCITS ETFs; Survival and Other Financial Planning Plots
-Version: 0.2.1.9000
+Version: 0.3.0
 Authors@R: 
     person("Stanislav", "Traykov", , "st@gmuf.com", role = c("aut", "cre"))
 Description: A small tidyverse-based framework for importing and plotting

@@ -1,4 +1,4 @@
-# fundsr (development version)
+# fundsr 0.3.0
 
 ## Breaking changes
 - rename `clear_storage()` argument `clear_fund_index_map` to `clear_map` to avoid name clash with `clear_fund_index_map()`
