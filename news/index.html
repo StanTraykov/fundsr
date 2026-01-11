@@ -49,6 +49,7 @@
 <h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
 <ul><li>rename <code><a href="../reference/clear_storage.html">clear_storage()</a></code> argument <code>clear_fund_index_map</code> to <code>clear_map</code> to avoid name clash with <code><a href="../reference/clear_fund_index_map.html">clear_fund_index_map()</a></code>
 </li>
+<li>change <code><a href="../reference/join_env.html">join_env()</a></code> full join order to alphabetical</li>
 </ul></div>
 <div class="section level3">
 <h3 id="importing-development-version">Importing<a class="anchor" aria-label="anchor" href="#importing-development-version"></a></h3>
@@ -62,7 +63,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="fixes-development-version">Fixes<a class="anchor" aria-label="anchor" href="#fixes-development-version"></a></h3>
-<ul><li>fix unset fundsr.data_dir behavior (stop writing to working directory; use <code>tools::R_user_dir("fundsr", which = "data")</code>)</li>
+<ul><li>fix unset <code>fundsr.data_dir</code> behavior (stop writing to working directory; use <code>tools::R_user_dir("fundsr", which = "data")</code>)</li>
 </ul></div>
 </div>
     <div class="section level2">
