@@ -21,13 +21,13 @@ build_all_series(reload = FALSE, by = "date", ...)
 
 - by:
 
-  Column name to join by and to sort by. Defaults to `"date"`.
+  Column name to join by and to sort by.
 
 - ...:
 
   Additional arguments forwarded to
   [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
-  (e.g. `late =`, `join_precedence =`, etc.).
+  (e.g. `late`, `join_precedence`, etc.).
 
 ## Value
 

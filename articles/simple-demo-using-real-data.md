@@ -61,10 +61,6 @@ Import all XLM files into a tibble.
 if (!exists("xlm_data")) {
     xlm_data <- read_xlm_directory(dirs[["xlm"]])
 }
-#> XLM read: August 2025
-#> XLM read: September 2025
-#> XLM read: October 2025
-#> XLM read: November 2025
 ```
 
 Set package options.
@@ -112,35 +108,28 @@ Get fund and index data into a master table.
 ``` r
 series <- build_all_series() %>%
     filter(date >= as_date("2012-12-29"))
-#> *** Loading: spyy
-#> Reading Excel file 'data/funds/SPYY.xlsx'...
-#> readxl succeeded. Returning data.
-#> 3733 rows x 2 cols (sheet='1', date col ='^Date').
-#> *** Loading: iusq
-#> Reading Excel file 'data/funds/IUSQ.xls'...
-#> readxl failed. Attempting parse as Excel 2003 XML...
-#> 3627 rows x 3 cols (sheet='Historical', date col ='^As Of').
-#> Joining: spyy, iusq
+#> Reading Excel: 'data/funds/SPYY.xlsx'
+#> Reading Excel: 'data/funds/IUSQ.xls'
 ```
 
 Check contents.
 
 ``` r
 series %>% filter(date >= as_date("2015-04-03"))
-#> # A tibble: 2,763 × 4
-#>    date        spyy  iusq  ACWI
+#> # A tibble: 2,764 × 4
+#>    date        iusq  ACWI  spyy
 #>    <date>     <dbl> <dbl> <dbl>
-#>  1 2015-04-06   NA   38.2  153.
-#>  2 2015-04-07  101.  38.5  154.
-#>  3 2015-04-08  101.  38.6  154.
-#>  4 2015-04-09  101.  38.7  154.
-#>  5 2015-04-10  102.  38.9  155.
-#>  6 2015-04-13  102.  38.8  155.
-#>  7 2015-04-14  102.  38.9  155.
-#>  8 2015-04-15  102.  39.0  156.
-#>  9 2015-04-16  102.  39.1  156.
-#> 10 2015-04-17  101.  38.7  155.
-#> # ℹ 2,753 more rows
+#>  1 2015-04-06  38.2  153.   NA 
+#>  2 2015-04-07  38.5  154.  101.
+#>  3 2015-04-08  38.6  154.  101.
+#>  4 2015-04-09  38.7  154.  101.
+#>  5 2015-04-10  38.9  155.  102.
+#>  6 2015-04-13  38.8  155.  102.
+#>  7 2015-04-14  38.9  155.  102.
+#>  8 2015-04-15  39.0  156.  102.
+#>  9 2015-04-16  39.1  156.  102.
+#> 10 2015-04-17  38.7  155.  101.
+#> # ℹ 2,754 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
@@ -160,14 +149,14 @@ diffs <- roll_diffs(series, nd, get_fund_index_map())
 ``` r
 diffs$cagr %>% slice_tail(n = 3)
 #>         date        spyy         iusq
-#> 1 2026-01-06 0.004511927 0.0007926735
-#> 2 2026-01-07 0.004357993 0.0007516283
-#> 3 2026-01-08 0.004395124 0.0007814405
+#> 1 2026-01-07 0.004357993 0.0007516283
+#> 2 2026-01-08 0.004395124 0.0007814405
+#> 3 2026-01-09          NA           NA
 diffs$log %>% slice_tail(n = 3)
 #>         date        spyy         iusq
-#> 1 2026-01-06 0.003658349 0.0006436832
-#> 2 2026-01-07 0.003521613 0.0006082626
-#> 3 2026-01-08 0.003554415 0.0006328890
+#> 1 2026-01-07 0.003521613 0.0006082626
+#> 2 2026-01-08 0.003554415 0.0006328890
+#> 3 2026-01-09          NA           NA
 ```
 
 ## Plot specifications

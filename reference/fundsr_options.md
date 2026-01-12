@@ -16,7 +16,8 @@ fundsr_options(
   xetra_map = NULL,
   inkscape = NULL,
   reload = NULL,
-  fund_urls = NULL
+  fund_urls = NULL,
+  verbosity = NULL
 )
 ```
 
@@ -63,6 +64,11 @@ fundsr_options(
 
   Named character vector or named list of URLs for fund data downloads
   (sets `fundsr.fund_urls`).
+
+- verbosity:
+
+  Integer verbosity level (sets `fundsr.verbosity`). Use 0 to silence
+  informational messages, 2 to enable additional messages.
 
 ## Value
 

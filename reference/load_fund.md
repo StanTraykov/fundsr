@@ -38,16 +38,15 @@ load_fund(
 
 - sheet:
 
-  Sheet index or name containing the NAV data. Defaults to `1`.
+  Sheet index or name containing the NAV data.
 
 - date_col:
 
-  Regular expression identifying the date column. Defaults to `"^Date"`.
+  Regular expression identifying the date column.
 
 - nav_col:
 
-  Regular expression identifying the fund's NAV column. Defaults to
-  `"^NAV"`.
+  Regular expression identifying the fund's NAV column.
 
 - benchmark:
 
@@ -67,7 +66,7 @@ load_fund(
 
 - date_order:
 
-  Date parsing order passed to the importer. Defaults to `"dmy"`.
+  Date parsing order passed to the importer.
 
 - var_name:
 
@@ -100,7 +99,7 @@ to link the fund to its benchmark key.
 
 ## See also
 
-Provide wrappers:
+Provider wrappers:
 [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md),
 [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md),
 [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md),

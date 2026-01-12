@@ -1,18 +1,18 @@
 # Add entries to the fund download list
 
 Adds one or more named download specifications to the `fundsr.fund_urls`
-option. Existing entries are preserved; entries in `x` replace any
-existing entries with the same name.
+option. Existing entries are preserved; entries in `fund_urls` replace
+any existing entries with the same name.
 
 ## Usage
 
 ``` r
-add_fund_urls(x)
+add_fund_urls(fund_urls)
 ```
 
 ## Arguments
 
-- x:
+- fund_urls:
 
   A named character vector mapping download identifiers to URLs.
 

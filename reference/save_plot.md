@@ -40,42 +40,40 @@ save_plot(
 
   Target width in pixels for PNG output. Used as the queued Inkscape
   `export-width`, and (if `save_png = TRUE`) used to compute the DPI for
-  immediate PNG saving. Defaults to option `fundsr.px_width` or 1300.
+  immediate PNG saving.
 
 - height:
 
-  Height of the saved plot in `units`. Defaults to `12`.
+  Height of the saved plot in `units`.
 
 - width:
 
-  Width of the saved plot in `units`. Defaults to `12`.
+  Width of the saved plot in `units`.
 
 - units:
 
-  Units for `width`/`height` (e.g. `"in"`). Defaults to `"in"`. For
-  immediate PNG saving, only `"in"`, `"cm"`, and `"mm"` are supported
-  (to compute DPI from `px_width`).
+  Units for `width`/`height` (e.g. `"in"`). For immediate PNG saving,
+  only `"in"`, `"cm"`, and `"mm"` are supported (to compute DPI from
+  `px_width`).
 
 - out_dir:
 
-  Output directory where files are written. Defaults to option
-  `fundsr.out_dir`.
+  Output directory where files are written.
 
 - save_png:
 
-  Logical scalar; if `TRUE`, also saves a PNG immediately. Defaults to
-  option `fundsr.internal_png` or `FALSE`.
+  Logical scalar; if `TRUE`, also saves a PNG immediately.
 
 - save_svg:
 
   Logical scalar; if `TRUE`, saves the SVG and queues an Inkscape export
-  action. Defaults to option `fundsr.export_svg` or `TRUE`.
+  action.
 
 - background:
 
   Background color used for immediate PNG saving via
   [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
-  (`bg`). Defaults to `"white"`.
+  (`bg`).
 
 ## Value
 

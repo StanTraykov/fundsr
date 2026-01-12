@@ -1,6 +1,36 @@
 # Changelog
 
-## fundsr (development version)
+## fundsr 0.3.0
+
+### Breaking changes
+
+- rename
+  [`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md)
+  argument `clear_fund_index_map` to `clear_map` to avoid name clash
+  with
+  [`clear_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/clear_fund_index_map.md)
+- change
+  [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
+  full join order to alphabetical
+
+### Importing
+
+- add support for unabbreviated month names (specify with capital `M` in
+  `date_order` parameters, e.g. `"Mdy"`)
+- add download checks, retries, temp + atomic rename for
+  [`download_fund_data()`](https://stantraykov.github.io/fundsr/reference/download_fund_data.md);
+  also prefer curl when available (curl added to `Suggests:`)
+
+### Documentation
+
+- add categories to function reference; improve docs, doc-examples,
+  vignettes
+- add a logo
+
+### Fixes
+
+- fix unset `fundsr.data_dir` behavior (stop writing to working
+  directory; use `tools::R_user_dir("fundsr", which = "data")`)
 
 ## fundsr 0.2.1
 

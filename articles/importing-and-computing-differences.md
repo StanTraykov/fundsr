@@ -164,7 +164,6 @@ store_timeseries(
         rename(gndb = NAV),
     fund_index_map = c(gndb = "IDX2")
 )
-#> *** Loading: gndb
 ```
 
 The variable name used for the storage environment (`var_name`) can be
@@ -219,10 +218,7 @@ store_timeseries(
     ),
     fund_index_map = c(`IDX1-GR` = "IDX1")
 )
-#> *** Loading: idx1
-#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/IDX1.xlsx'...
-#> readxl succeeded. Returning data.
-#> 730 rows x 3 cols (sheet='1', date col ='^Date').
+#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/IDX1.xlsx'
 
 store_timeseries(
     var_name = "idx2",
@@ -231,7 +227,6 @@ store_timeseries(
                      by = "date"),
     fund_index_map = c(`IDX2-GR` = "IDX2")
 )
-#> *** Loading: idx2
 ```
 
 ### `load_fund()`
@@ -272,10 +267,7 @@ load_fund("FNDA",
           sheet = "historical",
           date_col = "^As Of",
           nav_col = "^NAV")
-#> *** Loading: fnda
-#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDA.xlsx'...
-#> readxl succeeded. Returning data.
-#> 730 rows x 2 cols (sheet='historical', date col ='^As Of').
+#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDA.xlsx'
 ```
 
 [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
@@ -295,10 +287,7 @@ load_fund("FNDB",
           date_col = "^date",
           nav_col = "^net asset val",
           date_order = "mdy")
-#> *** Loading: fndb
-#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDB.xlsx'...
-#> readxl succeeded. Returning data.
-#> 655 rows x 2 cols (sheet='1', date col ='^date').
+#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDB.xlsx'
 ```
 
 The final fund to load is GNDA.
@@ -309,10 +298,7 @@ load_fund("GNDA",
           benchmark = "IDX2",
           date_col = "^Date",
           nav_col = "^Official NAV")
-#> *** Loading: gnda
-#> Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/GNDA.xlsx'...
-#> readxl succeeded. Returning data.
-#> 730 rows x 2 cols (sheet='1', date col ='^Date').
+#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/GNDA.xlsx'
 ```
 
 ### Building the master table
@@ -355,21 +341,20 @@ environment into a single tibble—the master series table.
 
 ``` r
 master_series <- build_all_series()
-#> Joining: idx1, idx2, fnda, fndb, gnda, gndb
 ```
 
 `master_series` should now be a tibble resembling Table 3. The `fndb`
 column contains `NA` values in the initial rows due to FNDB launching in
 2024-03-16 (the first NAV date in its Excel file).
 
-| date       |    IDX1 | IDX1-GR |    IDX2 | IDX2-GR |    fnda | fndb |    gnda |    gndb |
-|:-----------|--------:|--------:|--------:|--------:|--------:|-----:|--------:|--------:|
-| 2024-01-01 | 100.000 | 100.000 | 100.000 | 100.000 | 100.000 |   NA | 100.000 | 100.000 |
-| 2024-01-02 | 101.475 | 101.477 | 101.588 | 101.590 | 101.462 |   NA | 101.575 | 101.596 |
-| 2024-01-03 | 100.390 | 100.392 | 100.495 | 100.498 | 100.395 |   NA | 100.487 | 100.511 |
-| 2024-01-04 | 100.736 | 100.740 | 100.613 | 100.618 | 100.740 |   NA | 100.622 | 100.619 |
-| 2024-01-05 |  99.166 |  99.172 |  99.104 |  99.111 |  99.156 |   NA |  99.112 |  99.089 |
-| 2024-01-06 | 100.051 | 100.058 | 100.156 | 100.164 | 100.029 |   NA | 100.140 | 100.126 |
+| date       |    fnda | fndb |    gnda |    gndb |    IDX1 | IDX1-GR |    IDX2 | IDX2-GR |
+|:-----------|--------:|-----:|--------:|--------:|--------:|--------:|--------:|--------:|
+| 2024-01-01 | 100.000 |   NA | 100.000 | 100.000 | 100.000 | 100.000 | 100.000 | 100.000 |
+| 2024-01-02 | 101.462 |   NA | 101.575 | 101.596 | 101.475 | 101.477 | 101.588 | 101.590 |
+| 2024-01-03 | 100.395 |   NA | 100.487 | 100.511 | 100.390 | 100.392 | 100.495 | 100.498 |
+| 2024-01-04 | 100.740 |   NA | 100.622 | 100.619 | 100.736 | 100.740 | 100.613 | 100.618 |
+| 2024-01-05 |  99.156 |   NA |  99.112 |  99.089 |  99.166 |  99.172 |  99.104 |  99.111 |
+| 2024-01-06 | 100.029 |   NA | 100.140 | 100.126 | 100.051 | 100.058 | 100.156 | 100.164 |
 
 Table 3: Resulting series table (excerpt)
 
@@ -631,7 +616,7 @@ More granular resetting functions are also available.
 ``` r
 # reset the storage environment (optionally also the fund-index map)
 clear_storage()
-clear_storage(clear_fund_index_map = TRUE)
+clear_storage(clear_map = TRUE)
 
 # just the fund-index map
 clear_fund_index_map()

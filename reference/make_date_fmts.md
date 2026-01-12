@@ -16,7 +16,8 @@ make_date_fmts(order)
 - order:
 
   A single string specifying the component order as a permutation of
-  `"d"`, `"m"`, `"y"` (e.g. `"dmy"`, `"mdy"`, `"ymd"`).
+  `"d"`, `"y"`, and exactly one of `"m"` or `"M"` (e.g. `"dmy"`,
+  `"ymd"`, `"dMy"`, `"Mdy"`).
 
 ## Value
 
@@ -25,6 +26,15 @@ A character vector of unique date format strings.
 ## Details
 
 The returned formats cover common separators (`"/"`, `"-"`, `"."`,
-`" "`) and both 4-digit (`%Y`) and 2-digit (`%y`) years. Month tokens
-include numeric months (`%m`) and abbreviated month names (`%b`). Full
-month names (`%B`) are excluded.
+`" "`), unseparated dates with numeric months, and an optional comma
+before a final 4- or 2-digit year element (`%y`, `%Y`) in
+space-separated dates.
+
+Month handling depends on `order`:
+
+- If `order` uses `"m"`, month tokens include numeric months (`%m`) and
+  abbreviated month names (`%b`).
+
+- If `order` uses `"M"`, month tokens include full month names (`%B`).
+
+Month name formats (`%b`, `%B`) are locale-dependent.

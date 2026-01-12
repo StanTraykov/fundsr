@@ -37,18 +37,18 @@ roll_diffs(
 
 - date_col:
 
-  Name of the date column in `df`. Defaults to `"date"`. Must be of
-  class `Date` and sorted in ascending order.
+  Name of the date column in `df`. Must be of class `Date` and sorted in
+  ascending order.
 
 - index_level:
 
   Which index level to use, one of `"net"` or `"gross"`. If `"gross"`,
   `gross_suffix` is appended to the mapped index base name before lookup
-  in `df`. Defaults to `"net"`.
+  in `df`.
 
 - annual_days:
 
-  Number of days used for annualization. Defaults to `365`.
+  Number of days used for annualization.
 
 - messages:
 
@@ -56,12 +56,12 @@ roll_diffs(
   (per-pair progress) and `"skip"` (skip reasons). Use
   `messages = "roll"` to show only progress, `messages = "skip"` to show
   only skip reasons, or `messages = character()` or `NULL` to silence
-  all messages. Defaults to `c("roll", "skip")`.
+  all messages.
 
 - gross_suffix:
 
   Suffix appended to the mapped index base name when
-  `index_level = "gross"`. Defaults to `"-GR"`.
+  `index_level = "gross"`.
 
 ## Value
 
@@ -77,18 +77,21 @@ index values are present. Let \\\Delta = t - t_0\\ in calendar days.
 
 The annualized tracking differences are:
 
-- Log-return difference:
-  \$\$\left\[\ln\left(\frac{f_t}{f\_{t_0}}\right) -
+- Log-return difference: \$\$
+  \left\[\ln\left(\frac{f_t}{f\_{t_0}}\right) -
   \ln\left(\frac{i_t}{i\_{t_0}}\right)\right\] \times
-  \frac{annual\\days}{\Delta}\$\$
+  \frac{annual\\days}{\Delta} \$\$
 
-- CAGR difference:
-  \$\$\left(\frac{f_t}{f\_{t_0}}\right)^{annual\\days/\Delta} -
-  \left(\frac{i_t}{i\_{t_0}}\right)^{annual\\days/\Delta}\$\$
+- CAGR difference: \$\$
+  \left(\frac{f_t}{f\_{t_0}}\right)^{annual\\days/\Delta} -
+  \left(\frac{i_t}{i\_{t_0}}\right)^{annual\\days/\Delta} \$\$
 
 Values are `NA` when an anchor cannot be found, required inputs are
 missing, \\\Delta \le 0\\, or values are invalid for the chosen formula
 (e.g. non-positive inputs for log returns).
+
+Emitted messages will be visible at verbosity level \>= 1 (option
+`fundsr.verbosity`).
 
 ## See also
 

@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-09</h4>
+            <h4 data-toc-skip class="date">2026-01-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/importing-and-computing-differences.Rmd" class="external-link"><code>vignettes/importing-and-computing-differences.Rmd</code></a></small>
       <div class="d-none name"><code>importing-and-computing-differences.Rmd</code></div>
@@ -587,8 +587,7 @@ import the benchmark later from its own file).</p>
 <span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">NAV</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>gndb <span class="op">=</span> <span class="va">NAV</span><span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gndb <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: gndb</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The variable name used for the storage environment
 (<code>var_name</code>) can be chosen arbitrarily and serves as the
 cache key. The <code>fund_index_map</code> parameter defines a mapping
@@ -634,10 +633,7 @@ table.</p>
 <span>    <span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX1-GR` <span class="op">=</span> <span class="st">"IDX1"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: idx1</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/IDX1.xlsx'...</span></span>
-<span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; 730 rows x 3 cols (sheet='1', date col ='^Date').</span></span>
+<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/IDX1.xlsx'</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span></span>
 <span>    var_name <span class="op">=</span> <span class="st">"idx2"</span>,</span>
@@ -645,8 +641,7 @@ table.</p>
 <span>                     <span class="fu"><a href="../reference/read_timeseries.html">read_timeseries</a></span><span class="op">(</span><span class="st">"IDX2G.csv"</span><span class="op">)</span>,</span>
 <span>                     by <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX2-GR` <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: idx2</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="load_fund">
@@ -687,10 +682,7 @@ still match.</p>
 <span>          sheet <span class="op">=</span> <span class="st">"historical"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: fnda</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDA.xlsx'...</span></span>
-<span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; 730 rows x 2 cols (sheet='historical', date col ='^As Of').</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
 <p><code><a href="../reference/load_fund.html">load_fund()</a></code> recognizes proper Excel dates, improperly
 stored Excel dates, and a large number of text date formats used in fund
 files, but the date order (e.g. <code>"dmy"</code>, <code>"mdy"</code>,
@@ -706,10 +698,7 @@ histories.</p>
 <span>          date_col <span class="op">=</span> <span class="st">"^date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
 <span>          date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: fndb</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/FNDB.xlsx'...</span></span>
-<span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; 655 rows x 2 cols (sheet='1', date col ='^date').</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
 <p>The final fund to load is GNDA.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"GNDA"</span>,</span>
@@ -717,10 +706,7 @@ histories.</p>
 <span>          benchmark <span class="op">=</span> <span class="st">"IDX2"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: gnda</span></span>
-<span><span class="co">#&gt; Reading Excel file '/tmp/RtmpcuR9vC/temp_libpath1d783fb2d1e1/fundsr/extdata/GNDA.xlsx'...</span></span>
-<span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; 730 rows x 2 cols (sheet='1', date col ='^Date').</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-the-master-table">Building the master table<a class="anchor" aria-label="anchor" href="#building-the-master-table"></a>
@@ -758,8 +744,7 @@ uppercase) for indices.</p>
 data frames) in the storage environment into a single tibble—the master
 series table.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">master_series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_all_series.html">build_all_series</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Joining: idx1, idx2, fnda, fndb, gnda, gndb</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">master_series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_all_series.html">build_all_series</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><code>master_series</code> should now be a tibble resembling Table 3.
 The <code>fndb</code> column contains <code>NA</code> values in the
 initial rows due to FNDB launching in 2024-03-16 (the first NAV date in
@@ -773,18 +758,6 @@ Table 3: Resulting series table (excerpt)
 date
 </th>
 <th style="text-align:right;">
-IDX1
-</th>
-<th style="text-align:right;">
-IDX1-GR
-</th>
-<th style="text-align:right;">
-IDX2
-</th>
-<th style="text-align:right;">
-IDX2-GR
-</th>
-<th style="text-align:right;">
 fnda
 </th>
 <th style="text-align:right;">
@@ -796,6 +769,18 @@ gnda
 <th style="text-align:right;">
 gndb
 </th>
+<th style="text-align:right;">
+IDX1
+</th>
+<th style="text-align:right;">
+IDX1-GR
+</th>
+<th style="text-align:right;">
+IDX2
+</th>
+<th style="text-align:right;">
+IDX2-GR
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -806,19 +791,19 @@ gndb
 100.000
 </td>
 <td style="text-align:right;">
-100.000
-</td>
-<td style="text-align:right;">
-100.000
-</td>
-<td style="text-align:right;">
-100.000
-</td>
-<td style="text-align:right;">
-100.000
-</td>
-<td style="text-align:right;">
 NA
+</td>
+<td style="text-align:right;">
+100.000
+</td>
+<td style="text-align:right;">
+100.000
+</td>
+<td style="text-align:right;">
+100.000
+</td>
+<td style="text-align:right;">
+100.000
 </td>
 <td style="text-align:right;">
 100.000
@@ -832,18 +817,6 @@ NA
 2024-01-02
 </td>
 <td style="text-align:right;">
-101.475
-</td>
-<td style="text-align:right;">
-101.477
-</td>
-<td style="text-align:right;">
-101.588
-</td>
-<td style="text-align:right;">
-101.590
-</td>
-<td style="text-align:right;">
 101.462
 </td>
 <td style="text-align:right;">
@@ -855,22 +828,22 @@ NA
 <td style="text-align:right;">
 101.596
 </td>
+<td style="text-align:right;">
+101.475
+</td>
+<td style="text-align:right;">
+101.477
+</td>
+<td style="text-align:right;">
+101.588
+</td>
+<td style="text-align:right;">
+101.590
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 2024-01-03
-</td>
-<td style="text-align:right;">
-100.390
-</td>
-<td style="text-align:right;">
-100.392
-</td>
-<td style="text-align:right;">
-100.495
-</td>
-<td style="text-align:right;">
-100.498
 </td>
 <td style="text-align:right;">
 100.395
@@ -884,22 +857,22 @@ NA
 <td style="text-align:right;">
 100.511
 </td>
+<td style="text-align:right;">
+100.390
+</td>
+<td style="text-align:right;">
+100.392
+</td>
+<td style="text-align:right;">
+100.495
+</td>
+<td style="text-align:right;">
+100.498
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 2024-01-04
-</td>
-<td style="text-align:right;">
-100.736
-</td>
-<td style="text-align:right;">
-100.740
-</td>
-<td style="text-align:right;">
-100.613
-</td>
-<td style="text-align:right;">
-100.618
 </td>
 <td style="text-align:right;">
 100.740
@@ -913,22 +886,22 @@ NA
 <td style="text-align:right;">
 100.619
 </td>
+<td style="text-align:right;">
+100.736
+</td>
+<td style="text-align:right;">
+100.740
+</td>
+<td style="text-align:right;">
+100.613
+</td>
+<td style="text-align:right;">
+100.618
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 2024-01-05
-</td>
-<td style="text-align:right;">
-99.166
-</td>
-<td style="text-align:right;">
-99.172
-</td>
-<td style="text-align:right;">
-99.104
-</td>
-<td style="text-align:right;">
-99.111
 </td>
 <td style="text-align:right;">
 99.156
@@ -942,22 +915,22 @@ NA
 <td style="text-align:right;">
 99.089
 </td>
+<td style="text-align:right;">
+99.166
+</td>
+<td style="text-align:right;">
+99.172
+</td>
+<td style="text-align:right;">
+99.104
+</td>
+<td style="text-align:right;">
+99.111
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 2024-01-06
-</td>
-<td style="text-align:right;">
-100.051
-</td>
-<td style="text-align:right;">
-100.058
-</td>
-<td style="text-align:right;">
-100.156
-</td>
-<td style="text-align:right;">
-100.164
 </td>
 <td style="text-align:right;">
 100.029
@@ -970,6 +943,18 @@ NA
 </td>
 <td style="text-align:right;">
 100.126
+</td>
+<td style="text-align:right;">
+100.051
+</td>
+<td style="text-align:right;">
+100.058
+</td>
+<td style="text-align:right;">
+100.156
+</td>
+<td style="text-align:right;">
+100.164
 </td>
 </tr>
 </tbody>
@@ -1192,7 +1177,7 @@ parameter.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reset the storage environment (optionally also the fund-index map)</span></span>
 <span><span class="fu"><a href="../reference/clear_storage.html">clear_storage</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/clear_storage.html">clear_storage</a></span><span class="op">(</span>clear_fund_index_map <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/clear_storage.html">clear_storage</a></span><span class="op">(</span>clear_map <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># just the fund-index map</span></span>
 <span><span class="fu"><a href="../reference/clear_fund_index_map.html">clear_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>

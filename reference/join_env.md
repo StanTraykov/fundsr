@@ -1,16 +1,12 @@
-# Join all tibbles in an environment with optional late left-joins
+# Join all data frames in an environment with optional late joins
 
 Performs a
 [`dplyr::full_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
-across all objects in an environment, except those listed in `late`.
-Objects listed in `late` are instead joined afterwards using
+across all objects in `env` (in alphabetical order), excluding any
+listed in `late`. Late objects are then joined sequentially (via
 [`dplyr::left_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
-(or another function specified via `late_join`) in the order given.
-Column clashes during the full join are resolved via join suffixes
-`c(".x", ".y")` while the late joins use `c(".early", ".late")`.
-Optionally, columns with join suffixes can be automatically coalesced
-into single unsuffixed columns via precedence specification
-(`join_precedence`).
+by default) in the order given. Full-join clashes use suffixes
+`c(".x", ".y")`; late joins use `c(".early", ".late")`.
 
 ## Usage
 
@@ -29,7 +25,7 @@ join_env(
 
 - env:
 
-  Environment containing the tibbles to join.
+  Environment containing *only* data frames (incl. tibbles) to join.
 
 - by:
 
@@ -54,18 +50,25 @@ join_env(
 
 - coalesce_suffixed:
 
-  Deprecated; use `join_precedence`.
+  Deprecated; use `join_precedence` (same meaning).
 
 - late_join:
 
-  Function to use for joining late objects.
+  Function to use for joining late objects, e.g.
+  [`dplyr::left_join`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+  (the default). Must accept dplyr-style `suffix` and `by` arguments.
 
 ## Value
 
 A tibble: the full join of all non-late objects, followed by sequential
-left-joins of the late objects. If `join_precedence` is supplied,
-suffixed join columns are coalesced into unsuffixed base columns as
-described above.
+left-joins (or other joins specified by `late_join`) of the late
+objects. If `join_precedence` is supplied, suffixed join columns are
+coalesced into unsuffixed base columns as described above.
+
+## Details
+
+Optionally, column pairs with specified suffixes can be coalesced into
+unsuffixed base columns via `join_precedence`.
 
 ## See also
 
@@ -86,26 +89,29 @@ Other fund/index workflow functions:
   e$members <- dplyr::band_members
   e$instruments <- dplyr::band_instruments
   e$other_instr <- dplyr::band_instruments |>
-      dplyr::mutate(plays = c("banjo", "mellotron", "harpsichord"))
+      dplyr::mutate(plays = dplyr::case_match(name,
+                                              "John" ~ "banjo",
+                                              "Paul" ~ "mellotron",
+                                              "Keith" ~ "harpsichord")) |>
+      dplyr::add_row(name = "Mick", plays = "harmonica") |>
+      dplyr::add_row(name = "Stu", plays = "piano")
 
   full <- join_env(e, by = "name")
-#> Joining: instruments, other_instr, members
   late <- join_env(e, by = "name", late = "other_instr")
-#> Joining: instruments, other_instr, members
   late_coalesced <- join_env(e,
                              by = "name",
                              late = "other_instr",
-                             join_precedence = c(".late", ".early"))
-#> Joining: instruments, other_instr, members
+                             join_precedence = c(".early", ".late"))
   print(list(full = full, late = late, late_coalesced = late_coalesced))
 #> $full
-#> # A tibble: 4 × 4
-#>   name  plays.x plays.y     band   
-#>   <chr> <chr>   <chr>       <chr>  
-#> 1 John  guitar  banjo       Beatles
-#> 2 Paul  bass    mellotron   Beatles
-#> 3 Keith guitar  harpsichord NA     
-#> 4 Mick  NA      NA          Stones 
+#> # A tibble: 5 × 4
+#>   name  plays.x band    plays.y    
+#>   <chr> <chr>   <chr>   <chr>      
+#> 1 John  guitar  Beatles banjo      
+#> 2 Paul  bass    Beatles mellotron  
+#> 3 Keith guitar  NA      harpsichord
+#> 4 Mick  NA      Stones  harmonica  
+#> 5 Stu   NA      NA      piano      
 #> 
 #> $late
 #> # A tibble: 4 × 4
@@ -114,15 +120,15 @@ Other fund/index workflow functions:
 #> 1 John  guitar      Beatles banjo      
 #> 2 Paul  bass        Beatles mellotron  
 #> 3 Keith guitar      NA      harpsichord
-#> 4 Mick  NA          Stones  NA         
+#> 4 Mick  NA          Stones  harmonica  
 #> 
 #> $late_coalesced
 #> # A tibble: 4 × 3
-#>   name  band    plays      
-#>   <chr> <chr>   <chr>      
-#> 1 John  Beatles banjo      
-#> 2 Paul  Beatles mellotron  
-#> 3 Keith NA      harpsichord
-#> 4 Mick  Stones  NA         
+#>   name  band    plays    
+#>   <chr> <chr>   <chr>    
+#> 1 John  Beatles guitar   
+#> 2 Paul  Beatles bass     
+#> 3 Keith NA      guitar   
+#> 4 Mick  Stones  harmonica
 #> 
 ```

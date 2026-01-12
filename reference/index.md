@@ -38,7 +38,7 @@
 - [`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md)
   : Get the internal fund storage
 - [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
-  : Join all tibbles in an environment with optional late left-joins
+  : Join all data frames in an environment with optional late joins
 - [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
   : Load a fund's NAV data and optionally register its benchmark mapping
 - [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)

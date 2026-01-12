@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-09</h4>
+            <h4 data-toc-skip class="date">2026-01-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/articles/simple-demo-using-real-data.Rmd" class="external-link"><code>vignettes/articles/simple-demo-using-real-data.Rmd</code></a></small>
       <div class="d-none name"><code>simple-demo-using-real-data.Rmd</code></div>
@@ -131,11 +131,7 @@ path can be discovered via
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"xlm_data"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">xlm_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_xlm_directory.html">read_xlm_directory</a></span><span class="op">(</span><span class="va">dirs</span><span class="op">[[</span><span class="st">"xlm"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; XLM read: August 2025</span></span>
-<span><span class="co">#&gt; XLM read: September 2025</span></span>
-<span><span class="co">#&gt; XLM read: October 2025</span></span>
-<span><span class="co">#&gt; XLM read: November 2025</span></span></code></pre></div>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Set package options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fundsr_options.html">fundsr_options</a></span><span class="op">(</span></span>
@@ -173,32 +169,25 @@ path can be discovered via
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_all_series.html">build_all_series</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2012-12-29"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; *** Loading: spyy</span></span>
-<span><span class="co">#&gt; Reading Excel file 'data/funds/SPYY.xlsx'...</span></span>
-<span><span class="co">#&gt; readxl succeeded. Returning data.</span></span>
-<span><span class="co">#&gt; 3733 rows x 2 cols (sheet='1', date col ='^Date').</span></span>
-<span><span class="co">#&gt; *** Loading: iusq</span></span>
-<span><span class="co">#&gt; Reading Excel file 'data/funds/IUSQ.xls'...</span></span>
-<span><span class="co">#&gt; readxl failed. Attempting parse as Excel 2003 XML...</span></span>
-<span><span class="co">#&gt; 3627 rows x 3 cols (sheet='Historical', date col ='^As Of').</span></span>
-<span><span class="co">#&gt; Joining: spyy, iusq</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: 'data/funds/SPYY.xlsx'</span></span>
+<span><span class="co">#&gt; Reading Excel: 'data/funds/IUSQ.xls'</span></span></code></pre></div>
 <p>Check contents.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2015-04-03"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,763 × 4</span></span></span>
-<span><span class="co">#&gt;    date        spyy  iusq  ACWI</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,764 × 4</span></span></span>
+<span><span class="co">#&gt;    date        iusq  ACWI  spyy</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2015-04-06   <span style="color: #BB0000;">NA</span>   38.2  153.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2015-04-07  101.  38.5  154.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2015-04-08  101.  38.6  154.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2015-04-09  101.  38.7  154.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2015-04-10  102.  38.9  155.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2015-04-13  102.  38.8  155.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2015-04-14  102.  38.9  155.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2015-04-15  102.  39.0  156.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2015-04-16  102.  39.1  156.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2015-04-17  101.  38.7  155.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,753 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2015-04-06  38.2  153.   <span style="color: #BB0000;">NA</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2015-04-07  38.5  154.  101.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2015-04-08  38.6  154.  101.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2015-04-09  38.7  154.  101.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2015-04-10  38.9  155.  102.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2015-04-13  38.8  155.  102.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2015-04-14  38.9  155.  102.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2015-04-15  39.0  156.  102.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2015-04-16  39.1  156.  102.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2015-04-17  38.7  155.  101.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,754 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   spyy   iusq </span></span>
 <span><span class="co">#&gt; "ACWI" "ACWI"</span></span></code></pre></div>
@@ -216,14 +205,14 @@ window.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date        spyy         iusq</span></span>
-<span><span class="co">#&gt; 1 2026-01-06 0.004511927 0.0007926735</span></span>
-<span><span class="co">#&gt; 2 2026-01-07 0.004357993 0.0007516283</span></span>
-<span><span class="co">#&gt; 3 2026-01-08 0.004395124 0.0007814405</span></span>
+<span><span class="co">#&gt; 1 2026-01-07 0.004357993 0.0007516283</span></span>
+<span><span class="co">#&gt; 2 2026-01-08 0.004395124 0.0007814405</span></span>
+<span><span class="co">#&gt; 3 2026-01-09          NA           NA</span></span>
 <span><span class="va">diffs</span><span class="op">$</span><span class="va">log</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date        spyy         iusq</span></span>
-<span><span class="co">#&gt; 1 2026-01-06 0.003658349 0.0006436832</span></span>
-<span><span class="co">#&gt; 2 2026-01-07 0.003521613 0.0006082626</span></span>
-<span><span class="co">#&gt; 3 2026-01-08 0.003554415 0.0006328890</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2026-01-07 0.003521613 0.0006082626</span></span>
+<span><span class="co">#&gt; 2 2026-01-08 0.003554415 0.0006328890</span></span>
+<span><span class="co">#&gt; 3 2026-01-09          NA           NA</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plot-specifications">Plot specifications<a class="anchor" aria-label="anchor" href="#plot-specifications"></a>
