@@ -301,8 +301,6 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL) {
 }
 
 
-"^(Date,|[0-9]{4}/)"
-
 #' Import an Avantis fund
 #'
 #' Wrapper around `read_timesries()` for Avantis files.
