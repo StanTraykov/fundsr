@@ -299,3 +299,31 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL) {
               benchmark = benchmark,
               date_order = "mdy")
 }
+
+
+"^(Date,|[0-9]{4}/)"
+
+#' Import an Avantis fund
+#'
+#' Wrapper around `read_timesries()` for Avantis files.
+#'
+#' @param ticker Fund ticker.
+#' @param file Filename.
+#' @param benchmark Optional benchmark key.
+#'
+#' @seealso
+#' [read_timeseries()]
+#' @family provider wrappers
+#' @export
+avan <- function(ticker, file, benchmark = NULL) {
+    ticker_lower <- tolower(ticker)
+    store_timeseries(
+        ticker_lower,
+        read_timeseries(file,
+                        date_col = "Date",
+                        orders = "ymd",
+                        filter_regex = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)") |>
+            select("date", "NAV") |>
+            rename_with(~ ticker_lower, "NAV"),
+        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower))
+}

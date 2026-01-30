@@ -23,6 +23,7 @@ Wrapper around \code{load_fund()} for Invesco files.
 
 Other provider wrappers: 
 \code{\link{amun}()},
+\code{\link{avan}()},
 \code{\link{hsbc}()},
 \code{\link{ishs}()},
 \code{\link{msci}()},

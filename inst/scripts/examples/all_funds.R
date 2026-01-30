@@ -14,6 +14,7 @@ spec_src("dm_spec.R")
 spec_src("em_spec.R")
 spec_src("usa_sel_spec.R")
 spec_src("exus_spec.R")
+spec_src("scv_spec.R")
 
 xlm_dir <- file.path("data", "xlm")
 

@@ -21,6 +21,7 @@ Wrapper around \code{load_fund()} for UBS files.
 
 Other provider wrappers: 
 \code{\link{amun}()},
+\code{\link{avan}()},
 \code{\link{hsbc}()},
 \code{\link{inve}()},
 \code{\link{ishs}()},

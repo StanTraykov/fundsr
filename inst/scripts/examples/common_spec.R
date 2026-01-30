@@ -82,7 +82,10 @@ net_idx_trans <- c(
     INDIA = "^INDIA Standard",
     KOREA = "^KOREA Standard",
     BRAZIL = "^BRAZIL Standard",
-    S_AFR = "^SOUTH AFRICA Standard"
+    S_AFR = "^SOUTH AFRICA Standard",
+    EURSCVW = "^EUROPE SMALL CAP VALUE WEIGHTED",
+    USASCVW = "^USA SMALL CAP VALUE WEIGHTED",
+    WSCV = "^WORLD SMALL VALUE"
 )
 gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
 net_idx_trans_ccy <- function(ccy) {

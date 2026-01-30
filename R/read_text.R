@@ -18,6 +18,11 @@
 #' @param force_text_date Logical scalar. If `TRUE`, the date column is always
 #'   parsed as text using `orders` (no Unix-epoch numeric interpretation is
 #'   attempted).
+#' @param filter_regex Optional regular expression used to pre-filter the raw
+#'   file by lines before parsing. If supplied, the file is read with
+#'   [readr::read_lines()] and only lines matching `filter_regex` are kept. The
+#'   regex must match both data lines and the header line, e.g.
+#'   `"^[0-9]|^Date,"`
 #'
 #' @return A tibble with parsed date column and numeric value columns.
 #'
@@ -38,10 +43,23 @@ read_timeseries <- function(
     date_col = "date",
     time_unit = c("ms", "s", "us", "ns"),
     orders = NULL,
-    force_text_date = FALSE
+    force_text_date = FALSE,
+    filter_regex = NULL
 ) {
     fund_data_dir <- fundsr_get_option("data_dir")
     path <- file.path(fund_data_dir, file)
+
+    if (!file.exists(path)) {
+        stop(glue("Cannot read time series: {path} does not exist."),
+             call. = FALSE)
+    }
+
+    if (!is.null(filter_regex)) {
+        data_lines <- grep(filter_regex, readr::read_lines(path), value = TRUE)
+        read_obj <- I(data_lines)
+    } else {
+        read_obj <- path
+    }
 
     ext <- tolower(tools::file_ext(path))
     if (identical(ext, "gz")) {
@@ -53,7 +71,7 @@ read_timeseries <- function(
         "tsv" = readr::read_tsv,
         "tab" = readr::read_tsv,
         "txt" = readr::read_tsv,
-        stop("Unsupported file extension for `file`: expected .csv or .tsv (optionally .gz).",
+        stop("Unsupported file extension for `file`: expected .csv or .tsv/.txt/.tab (optionally .gz).",
              call. = FALSE)
     )
     if (!is.character(date_col) || length(date_col) != 1L || is.na(date_col) || !nzchar(date_col)) {
@@ -76,7 +94,7 @@ read_timeseries <- function(
         )
     }
 
-    df <- reader(path, show_col_types = FALSE)
+    df <- reader(read_obj, show_col_types = FALSE)
     if (!(date_col %in% names(df))) {
         stop("Expected a column named `", date_col, "`.", call. = FALSE)
     }
@@ -152,10 +170,11 @@ read_timeseries <- function(
 read_msci_tsv <- function(file) {
     fund_data_dir <- fundsr_get_option("data_dir")
     lines <- readr::read_lines(file.path(fund_data_dir, file))
-    data_lines <- grep("^[0-9]|^Date", lines, value = TRUE)
+    data_lines <- grep("^[0-9]|^Date,", lines, value = TRUE)
     df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
         readr::col_date(format = "%m/%d/%Y"),
         readr::col_double()
     ))
     df
 }
+

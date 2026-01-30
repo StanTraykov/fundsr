@@ -9,7 +9,8 @@ read_timeseries(
   date_col = "date",
   time_unit = c("ms", "s", "us", "ns"),
   orders = NULL,
-  force_text_date = FALSE
+  force_text_date = FALSE,
+  filter_regex = NULL
 )
 }
 \arguments{
@@ -27,6 +28,12 @@ of common dmy-order formats is used.}
 \item{force_text_date}{Logical scalar. If \code{TRUE}, the date column is always
 parsed as text using \code{orders} (no Unix-epoch numeric interpretation is
 attempted).}
+
+\item{filter_regex}{Optional regular expression used to pre-filter the raw
+file by lines before parsing. If supplied, the file is read with
+\code{\link[readr:read_lines]{readr::read_lines()}} and only lines matching \code{filter_regex} are kept. The
+regex must match both data lines and the header line, e.g.
+\code{"^[0-9]|^Date,"}}
 }
 \value{
 A tibble with parsed date column and numeric value columns.

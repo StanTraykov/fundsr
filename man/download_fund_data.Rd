@@ -14,8 +14,8 @@ files are downloaded.}
 Invisibly returns \code{NULL}. Files are written as a side effect.
 }
 \description{
-Retrieves all fund data files listed in the \code{fundsr.fund_urls} option and saves them into the
-directory specified by the \code{fundsr.data_dir} option.
+Retrieves all Excel files with fund identifiers and URLs listed in the \code{fundsr.fund_urls} option
+and saves them into the directory specified by the \code{fundsr.data_dir} option.
 }
 \seealso{
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.

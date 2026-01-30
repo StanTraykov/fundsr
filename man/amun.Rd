@@ -20,6 +20,7 @@ Wrapper around \code{load_fund()} for Amundi files.
 \code{\link[=load_fund]{load_fund()}}
 
 Other provider wrappers: 
+\code{\link{avan}()},
 \code{\link{hsbc}()},
 \code{\link{inve}()},
 \code{\link{ishs}()},

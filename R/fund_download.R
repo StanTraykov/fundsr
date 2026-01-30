@@ -1,7 +1,7 @@
 #' Download fund data according to the configured download list
 #'
-#' Retrieves all fund data files listed in the `fundsr.fund_urls` option and saves them into the
-#' directory specified by the `fundsr.data_dir` option.
+#' Retrieves all Excel files with fund identifiers and URLs listed in the `fundsr.fund_urls` option
+#' and saves them into the directory specified by the `fundsr.data_dir` option.
 #'
 #' @param redownload Logical; if `TRUE`, existing files are overwritten. If `FALSE`, only missing
 #'   files are downloaded.
@@ -20,7 +20,7 @@ download_fund_data <- function(redownload = FALSE) {
     invisible(NULL)
 }
 
-#' Download a set of named URLs to disk
+#' Download a set of named URLs pointing to Excel downloads
 #'
 #' Internal helper used by [download_fund_data()]. Skips existing files unless `redownload = TRUE`.
 #' Returns a named character vector of file paths (in the randomized download order).
@@ -37,7 +37,7 @@ download_fund_data <- function(redownload = FALSE) {
         stop("`path` must be a length-1 non-empty character string.", call. = FALSE)
     }
     redownload <- isTRUE(redownload)
-    polite_sleep <- isTRUE(polite_sleep)
+    polite_sleep <- !isFALSE(polite_sleep)
     if (is.null(named_urls) || length(named_urls) == 0L) {
         fundsr_msg("No fund URLs configured (option 'fundsr.fund_urls' is empty).", level = 0L)
         return(invisible(character()))
