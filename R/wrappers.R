@@ -300,7 +300,6 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL) {
               date_order = "mdy")
 }
 
-
 #' Import an Avantis fund
 #'
 #' Wrapper around `read_timesries()` for Avantis files.
@@ -320,7 +319,7 @@ avan <- function(ticker, file, benchmark = NULL) {
         read_timeseries(file,
                         date_col = "Date",
                         orders = "ymd",
-                        filter_regex = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)") |>
+                        data_filter = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)") %>%
             select("date", "NAV") |>
             rename_with(~ ticker_lower, "NAV"),
         fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower))

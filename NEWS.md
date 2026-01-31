@@ -1,5 +1,9 @@
 # fundsr (development version)
 
+## Importing
+- add `data_filter` param to `read_timeseries()`
+- add Avantis CSV NAV history support
+
 # fundsr 0.3.0
 
 ## Breaking changes

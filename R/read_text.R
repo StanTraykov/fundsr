@@ -18,9 +18,9 @@
 #' @param force_text_date Logical scalar. If `TRUE`, the date column is always
 #'   parsed as text using `orders` (no Unix-epoch numeric interpretation is
 #'   attempted).
-#' @param filter_regex Optional regular expression used to pre-filter the raw
+#' @param data_filter Optional regular expression used to pre-filter the raw
 #'   file by lines before parsing. If supplied, the file is read with
-#'   [readr::read_lines()] and only lines matching `filter_regex` are kept. The
+#'   [readr::read_lines()] and only lines matching `data_filter` are kept. The
 #'   regex must match both data lines and the header line, e.g.
 #'   `"^[0-9]|^Date,"`
 #'
@@ -44,7 +44,7 @@ read_timeseries <- function(
     time_unit = c("ms", "s", "us", "ns"),
     orders = NULL,
     force_text_date = FALSE,
-    filter_regex = NULL
+    data_filter = NULL
 ) {
     fund_data_dir <- fundsr_get_option("data_dir")
     path <- file.path(fund_data_dir, file)
@@ -54,8 +54,8 @@ read_timeseries <- function(
              call. = FALSE)
     }
 
-    if (!is.null(filter_regex)) {
-        data_lines <- grep(filter_regex, readr::read_lines(path), value = TRUE)
+    if (!is.null(data_filter)) {
+        data_lines <- grep(data_filter, readr::read_lines(path), value = TRUE)
         read_obj <- I(data_lines)
     } else {
         read_obj <- path
