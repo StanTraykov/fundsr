@@ -24,6 +24,10 @@ install.packages(
 )
 ```
 
+## Overview
+
+fundsr is a tool for the DIY investor. It's not a data provider—you need to download ETF NAVs and index levels yourself. See the *Getting data* section in the [the wiki](https://github.com/StanTraykov/fundsr/wiki) for more info. The package also supports plotting survival curves.
+
 ## Usage
 * [Importing Data and Computing Differences](https://stantraykov.github.io/fundsr/articles/importing-and-computing-differences.html)
 * [Simple Demo Using Real Data](https://stantraykov.github.io/fundsr/articles/simple-demo-using-real-data.html)

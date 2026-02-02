@@ -5,7 +5,7 @@
 - add Avantis CSV NAV history support
 
 ## Examples
-- add Eurozone and EURO STOXX 50
+- add Eurozone and EURO STOXX 50 plots
 
 # fundsr 0.3.0
 
