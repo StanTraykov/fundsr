@@ -17,6 +17,7 @@ spec_src("exus_spec.R")
 spec_src("emu_spec.R")
 spec_src("scv_spec.R")
 spec_src("estx50_spec.R")
+spec_src("esemu_spec.R")
 
 xlm_dir <- file.path("data", "xlm")
 
