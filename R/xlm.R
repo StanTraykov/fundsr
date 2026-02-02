@@ -87,6 +87,8 @@ read_xlm_directory <- function(directory,
         data
     })
 
+    # FIX: XLM showing wrong ticker for this ETF
+    combined_data$ticker[combined_data$name == "Xtrackers EURO STOXX 50 UCITS ETF 1C"] <- "xesc"
     combined_data
 }
 

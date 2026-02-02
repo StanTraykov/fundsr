@@ -4,6 +4,9 @@
 - add `data_filter` param to `read_timeseries()`
 - add Avantis CSV NAV history support
 
+## Examples
+- add Eurozone and EURO STOXX 50
+
 # fundsr 0.3.0
 
 ## Breaking changes
