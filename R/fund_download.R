@@ -34,8 +34,11 @@ download_fund_data <- function(redownload = FALSE) {
                                 polite_sleep = TRUE,
                                 hint = FALSE) {
     check_string(path)
-    redownload <- isTRUE(redownload)
-    polite_sleep <- !isFALSE(polite_sleep)
+    check_logical(redownload)
+    attempts <- check_numeric_scalar(attempts, as_integer = TRUE, ge = 1L)
+    check_logical(polite_sleep)
+    check_logical(hint)
+
     if (is.null(named_urls) || length(named_urls) == 0L) {
         fundsr_msg("No fund URLs configured (option 'fundsr.fund_urls' is empty).", level = 0L)
         return(invisible(character()))
@@ -99,7 +102,11 @@ download_fund_data <- function(redownload = FALSE) {
                              overwrite = TRUE) {
     check_string(url)
     check_string(destfile)
-    attempts <- as.integer(attempts)
+    attempts <- check_numeric_scalar(attempts, as_integer = TRUE, ge = 1L)
+    check_numeric_scalar(backoff)
+    check_logical(quiet)
+    check_logical(overwrite)
+
     if (length(attempts) != 1L || is.na(attempts) || attempts < 1L) {
         stop_bad_arg("attempts", "must be a single integer >= 1.")
     }

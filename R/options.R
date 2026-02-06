@@ -102,7 +102,7 @@ fundsr_options <- function(data_dir = NULL,
     xetra_map <- check_mapping(xetra_map, allow_null = TRUE, type = "character")
     fund_urls <- check_mapping(fund_urls,
                                allow_null = TRUE,
-                               type = "either",
+                               type = "character",
                                name_case = "upper")
 
     px_width <- check_numeric_scalar(px_width, allow_null = TRUE, as_integer = TRUE, ge = 1)

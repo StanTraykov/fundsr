@@ -28,16 +28,12 @@ get_storage <- function() {
 #' clear_storage()
 #' clear_storage(clear_map = TRUE)
 clear_storage <- function(clear_map = FALSE) {
-    if (!is.logical(clear_map) ||
-            length(clear_map) != 1L ||
-            is.na(clear_map)) {
-        stop("`clear_map` must be TRUE or FALSE.", call. = FALSE)
-    }
+    check_logical(clear_map)
     if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
         stop("Fundsr storage environment is not initialised.", call. = FALSE)
     }
     rm(list = ls(envir = .fundsr_storage, all.names = TRUE), envir = .fundsr_storage)
-    if (isTRUE(clear_map)) {
+    if (clear_map) {
         clear_fund_index_map()
     }
     invisible(NULL)
@@ -88,13 +84,14 @@ store_timeseries <- function(var_name,
                              overwrite = FALSE,
                              postprocess = identity) {
     check_string(var_name)
+    check_logical(overwrite)
     if (!is.function(postprocess)) {
         stop_bad_arg("postprocess", "must be a function.")
     }
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     reload <- isTRUE(fundsr_get_option("reload"))
-    needs_eval <- isTRUE(overwrite) || reload || !exists(var_name, envir = .fundsr_storage)
+    needs_eval <- overwrite || reload || !exists(var_name, envir = .fundsr_storage)
     # Check if assignment is needed and evaluate expr in parent_env
     if (needs_eval) {
         fundsr_msg(paste("*** Loading:", var_name), level = 2L)
@@ -115,7 +112,7 @@ store_timeseries <- function(var_name,
 #' `.x` / `.y`. For each base name that appears with both suffixes
 #' (e.g. `FTAW.x` and `FTAW.y`), this function creates a new column
 #' `FTAW` as `dplyr::coalesce(FTAW.x, FTAW.y)` and drops the suffixed
-#' columns. The order of `suffix` controls which column is preferred.
+#' columns. The order of `suffixes` controls which column is preferred.
 #'
 #' @param df A data frame or tibble produced by joins.
 #' @param suffixes Character vector of length 2 giving the suffixes to
@@ -128,6 +125,10 @@ store_timeseries <- function(var_name,
 #'
 #' @keywords internal
 coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
+    check_string(suffixes, n = 2)
+    if (identical(suffixes[1], suffixes[2])) {
+        stop_bad_arg("suffixes", "must be two different suffixes.")
+    }
     df  <- tibble::as_tibble(df)
     nms <- names(df)
     sx <- suffixes[1]
@@ -229,14 +230,16 @@ join_env <- function(env,
         join_precedence <- coalesce_suffixed
     }
     # / Deprecated param handling
-
     if (!is.environment(env)) {
         stop_bad_arg("env", "must be an environment.")
     }
-    by <- as.character(by)
-    if (length(by) < 1L || any(!nzchar(by))) {
-        stop_bad_arg("by", "must contain at least one non-empty join key.")
+    check_string(by, min_n = 1)
+    check_string(late, allow_null = TRUE, min_n = 0)
+    check_string(join_precedence, allow_null = TRUE, n = 2)
+    if (!is.function(late_join)) {
+        stop_bad_arg("late_join", "must be a function.")
     }
+
     obj_names <- ls(envir = env, sorted = TRUE)
     raw_late <- late %||% character(0)
     objs <- mget(obj_names, envir = env)
@@ -299,7 +302,7 @@ join_env <- function(env,
 #'
 #' @param reload Logical; if `TRUE`, forces a full reload by temporarily setting
 #'   `options(fundsr.reload = TRUE)`.
-#' @param by Column name to join by and to sort by.
+#' @param by Character vector of column names to join by and sort by.
 #' @param ... Additional arguments forwarded to [join_env()] (e.g. `late`,
 #'   `join_precedence`, etc.).
 #'
@@ -316,9 +319,8 @@ join_env <- function(env,
 #'   filter(date >= as_date("2013-01-01"))
 #' }
 build_all_series <- function(reload = FALSE, by = "date", ...) {
-    check_string(by)
-
+    check_string(by, min_n = 1)
     run_data_loaders(reload = reload) %>%
         join_env(by = by, ...) %>%
-        arrange(.data[[by]])
+        arrange(across(all_of(by)))
 }

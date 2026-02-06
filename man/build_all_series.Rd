@@ -10,7 +10,7 @@ build_all_series(reload = FALSE, by = "date", ...)
 \item{reload}{Logical; if \code{TRUE}, forces a full reload by temporarily setting
 \code{options(fundsr.reload = TRUE)}.}
 
-\item{by}{Column name to join by and to sort by.}
+\item{by}{Character vector of column names to join by and sort by.}
 
 \item{...}{Additional arguments forwarded to \code{\link[=join_env]{join_env()}} (e.g. \code{late},
 \code{join_precedence}, etc.).}

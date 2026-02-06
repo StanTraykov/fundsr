@@ -49,7 +49,7 @@ read_timeseries <- function(
     time_unit <- match.arg(time_unit)
     check_string(file)
     check_string(date_col)
-    check_string(orders, allow_null = TRUE, n = NULL)
+    check_string(orders, allow_null = TRUE, min_n = 1)
     check_logical(force_text_date)
     check_string(line_filter, allow_null = TRUE)
 

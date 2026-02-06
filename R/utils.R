@@ -32,7 +32,7 @@ check_logical <- function(x,
                           allow_null = FALSE,
                           allow_na = FALSE) {
     if (!missing(allow_null)) {
-        allow_na <- check_logical(allow_null)
+        allow_null <- check_logical(allow_null)
     }
     if (!missing(allow_na)) {
         allow_na <- check_logical(allow_na)
@@ -146,27 +146,33 @@ check_string <- function(x,
                          allow_empty = FALSE,
                          trim = FALSE,
                          n = 1L,
+                         min_n = NULL,
+                         max_n = NULL,
                          min_chars = NULL,
                          max_chars = Inf,
+                         n_chars = NULL,
                          pattern = NULL) {
     allow_null  <- check_logical(allow_null)
     allow_na    <- check_logical(allow_na)
     allow_empty <- check_logical(allow_empty)
     trim        <- check_logical(trim)
+    if (missing(n) && (!is.null(min_n) || !is.null(max_n))) {
+        n <- NULL
+    }
+    n     <- check_numeric_scalar(n,     allow_null = TRUE, ge = 0, as_integer = TRUE)
+    min_n <- check_numeric_scalar(min_n, allow_null = TRUE, ge = 0, as_integer = TRUE)
+    max_n <- check_numeric_scalar(max_n, allow_null = TRUE, ge = 0, as_integer = TRUE)
+    n_chars <- check_numeric_scalar(n_chars, allow_null = TRUE, ge = 0, as_integer = TRUE)
 
-    n <- check_numeric_scalar(n, allow_null = TRUE, ge = 0, as_integer = TRUE)
-
-    min_chars <- check_numeric_scalar(min_chars, allow_null = TRUE, ge = 0, as_integer = TRUE)
-    min_chars <- min_chars %||% (if (allow_empty) 0L else 1L)
-
-    max_chars <- check_numeric_scalar(
-        max_chars,
-        finite = FALSE,
-        ge = 0,
-        whole_num = TRUE,
-        as_integer_or_inf = TRUE
-    )
-
+    if (!is.null(n) && (!is.null(min_n) || !is.null(max_n))) {
+        stop_bad_arg("n", "cannot be used together with min_n/max_n.")
+    }
+    if (!is.null(min_n) && !is.null(max_n) && min_n > max_n) {
+        stop_bad_arg("min_n", "must be <= max_n.")
+    }
+    if (!is.null(n_chars) && (!is.null(min_chars) || !identical(max_chars, Inf))) {
+        stop_bad_arg("n_chars", "cannot be used together with min_chars/max_chars.")
+    }
     if (is.null(x)) {
         if (allow_null) return(NULL)
         stop_bad_arg(arg, "must not be NULL.")
@@ -176,8 +182,15 @@ check_string <- function(x,
         stop_bad_arg(arg, "must be a character vector.")
     }
 
-    if (!is.null(n) && length(x) != n) {
+    len <- length(x)
+    if (!is.null(n) && len != n) {
         stop_bad_arg(arg, sprintf("must be a character vector of length %d.", n))
+    }
+    if (!is.null(min_n) && len < min_n) {
+        stop_bad_arg(arg, sprintf("must have length >= %d.", min_n))
+    }
+    if (!is.null(max_n) && len > max_n) {
+        stop_bad_arg(arg, sprintf("must have length <= %d.", max_n))
     }
 
     if (!allow_na && anyNA(x)) {
@@ -195,11 +208,27 @@ check_string <- function(x,
         }
     }
 
-    n_chars <- nchar(x, type = "chars", allowNA = TRUE)
-    if (min_chars > 0L && any(n_chars < min_chars, na.rm = TRUE)) {
+    if (is.null(n_chars)) {
+        min_chars <- check_numeric_scalar(min_chars, allow_null = TRUE, ge = 0, as_integer = TRUE)
+        min_chars <- min_chars %||% (if (allow_empty) 0L else 1L)
+
+        max_chars <- check_numeric_scalar(
+            max_chars,
+            finite = FALSE,
+            ge = 0,
+            whole_num = TRUE,
+            as_integer_or_inf = TRUE
+        )
+    } else {
+        min_chars <- n_chars
+        max_chars <- n_chars
+    }
+
+    nch <- nchar(x, type = "chars", allowNA = TRUE)
+    if (min_chars > 0L && any(nch < min_chars, na.rm = TRUE)) {
         stop_bad_arg(arg, sprintf("must have at least %d character(s).", min_chars))
     }
-    if (is.finite(max_chars) && any(n_chars > max_chars, na.rm = TRUE)) {
+    if (is.finite(max_chars) && any(nch > max_chars, na.rm = TRUE)) {
         stop_bad_arg(arg, sprintf("must have at most %d character(s).", max_chars))
     }
 
@@ -210,8 +239,11 @@ check_string <- function(x,
             allow_empty = FALSE,
             trim = FALSE,
             n = 1L,
+            min_n = NULL,
+            max_n = NULL,
             min_chars = 1L,
             max_chars = Inf,
+            n_chars = NULL,
             pattern = NULL
         )
 
@@ -293,6 +325,7 @@ check_mapping <- function(x,
     if (is.character(x)) {
         check_string(
             x,
+            arg = arg,
             n = NULL,
             allow_na = allow_na_values,
             allow_empty = allow_empty_values
@@ -302,11 +335,16 @@ check_mapping <- function(x,
 
     # list: values must be character vectors (optionally scalar)
     for (i in seq_along(x)) {
+        nm <- nms[i]
+        arg_i <- sprintf("%s[[%s]]", arg, shQuote(nm))
+
         xi <- x[[i]]
-        if (is.null(xi)) stop_bad_arg(arg, "must not contain NULL values.")
-        if (!is.character(xi)) stop_bad_arg(arg, "must contain only character values.")
+        if (is.null(xi)) stop_bad_arg(arg_i, "must not be NULL.")
+        if (!is.character(xi)) stop_bad_arg(arg_i, "must be a character vector.")
+
         check_string(
             xi,
+            arg = arg_i,
             n = if (scalar_values) 1L else NULL,
             allow_na = allow_na_values,
             allow_empty = allow_empty_values

@@ -23,6 +23,6 @@ Helper for post-processing join results that use suffixes such as
 \code{.x} / \code{.y}. For each base name that appears with both suffixes
 (e.g. \code{FTAW.x} and \code{FTAW.y}), this function creates a new column
 \code{FTAW} as \code{dplyr::coalesce(FTAW.x, FTAW.y)} and drops the suffixed
-columns. The order of \code{suffix} controls which column is preferred.
+columns. The order of \code{suffixes} controls which column is preferred.
 }
 \keyword{internal}
