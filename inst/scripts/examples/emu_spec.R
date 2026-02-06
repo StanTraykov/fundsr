@@ -47,5 +47,11 @@ add_data_loader(function() {
     spdr("ZPRE", benchmark = "EMUEUR")
     amun("MFEC", benchmark = "EMUEUR", file = "NAV History_Amundi Core MSCI EMU UCITS ETF Acc_LU1646361276_06_02_2020.xlsx")
     xtra("XEMU", benchmark = "EMUEUR", file = "HistoricalData-LU1920015366.xlsx")
-    amun("PRAZ", benchmark = "EZLM", file = "NAV History_Amundi Prime Eurozone UCITS ETF DR (C)_LU2089238112_21_01_2020.xlsx")
+    amun("PRAZ",
+        benchmark = "EZLM",
+        file = "NAV History_Amundi Prime Eurozone UCITS ETF DR (C)_LU2089238112_21_01_2020.xlsx",
+        postprocess = function(x) {
+             x %>% filter(.data[["date"]] >= lubridate::as_date("2021-03-16"))
+        }
+    )
 })

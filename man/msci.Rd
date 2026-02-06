@@ -4,17 +4,17 @@
 \alias{msci}
 \title{Import an MSCI index sheet and register benchmark mappings}
 \usage{
-msci(var_name, col_trans, benchmarks = NULL, file)
+msci(var_name, file, col_trans, benchmarks = NULL)
 }
 \arguments{
 \item{var_name}{Storage key used in \code{.fundsr_storage}.}
+
+\item{file}{Filename of the XLSX file to import.}
 
 \item{col_trans}{Named vector specifying column translations.}
 
 \item{benchmarks}{Optional index mapping to record in
 the fund index map (used to map gross to net indices).}
-
-\item{file}{Filename of the XLSX file to import.}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{store_timeseries()}.

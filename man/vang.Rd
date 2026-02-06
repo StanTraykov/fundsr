@@ -4,7 +4,7 @@
 \alias{vang}
 \title{Import a Vanguard fund}
 \usage{
-vang(ticker, file = NULL, benchmark = NULL)
+vang(ticker, file = NULL, benchmark = NULL, ...)
 }
 \arguments{
 \item{ticker}{Fund ticker.}
@@ -12,6 +12,9 @@ vang(ticker, file = NULL, benchmark = NULL)
 \item{file}{Optional filename override.}
 
 \item{benchmark}{Optional benchmark key.}
+
+\item{...}{Additional arguments passed to \code{\link[=load_fund]{load_fund()}} and \code{\link[=store_timeseries]{store_timeseries()}}, such as
+\code{postprocess}.}
 }
 \description{
 Wrapper around \code{load_fund()} for Vanguard files.

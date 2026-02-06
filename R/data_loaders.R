@@ -34,10 +34,10 @@ clear_data_loaders <- function() {
 #' add_data_loader(function() NULL)
 add_data_loader <- function(fun) {
     if (!is.function(fun)) {
-        stop("`fun` must be a function.", call. = FALSE)
+        stop_bad_arg("fun", "must be a function.")
     }
     if (length(formals(fun)) != 0L) {
-        stop("`fun` must take no arguments.", call. = FALSE)
+        stop_bad_arg("fun", "must take no arguments.")
     }
     if (is.null(.fundsr$data_loaders)) {
         .fundsr$data_loaders <- list()
@@ -84,9 +84,7 @@ add_data_loader <- function(fun) {
 #' @family fund/index workflow functions
 #' @export
 run_data_loaders <- function(reload = FALSE) {
-    if (!is.logical(reload) || length(reload) != 1L || is.na(reload)) {
-        stop("`reload` must be TRUE or FALSE.", call. = FALSE)
-    }
+    check_logical(reload)
     if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
         stop("Fundsr storage is not initialised.", call. = FALSE)
     }

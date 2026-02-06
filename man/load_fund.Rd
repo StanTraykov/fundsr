@@ -15,7 +15,8 @@ load_fund(
   retrieve_benchmark = FALSE,
   date_order = "dmy",
   var_name = NULL,
-  data_sheet = NULL
+  data_sheet = NULL,
+  ...
 )
 }
 \arguments{
@@ -47,6 +48,9 @@ alongside the fund.}
 \item{var_name}{Specify a custom variable name for the storage environment.}
 
 \item{data_sheet}{Deprecated; use \code{sheet}.}
+
+\item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
+\code{overwrite} or \code{postprocess}.}
 }
 \value{
 Invisibly returns \code{NULL}. The imported data are stored in
@@ -67,8 +71,8 @@ exactly one of \code{paste0(toupper(ticker), ".xlsx")} or
 The function builds a column-translation mapping from the fund NAV column and,
 if requested, a benchmark column. It then calls \code{read_timeseries_excel()} to read the
 Excel file and \code{store_timeseries()} to cache the imported object under
-\code{tolower(ticker)}. When \code{benchmark} is provided, a corresponding entry is
-added to \code{.fundsr$fund_index_map} to link the fund to its benchmark key.
+\code{var_name}, if supplied, otherwise \code{tolower(ticker)}. When \code{benchmark} is provided, a
+corresponding entry is added to \code{.fundsr$fund_index_map} to link the fund to its benchmark key.
 }
 \seealso{
 Provider wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}

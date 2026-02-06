@@ -4,7 +4,7 @@
 \alias{avan}
 \title{Import an Avantis fund}
 \usage{
-avan(ticker, file, benchmark = NULL)
+avan(ticker, file, benchmark = NULL, ...)
 }
 \arguments{
 \item{ticker}{Fund ticker.}
@@ -12,9 +12,12 @@ avan(ticker, file, benchmark = NULL)
 \item{file}{Filename.}
 
 \item{benchmark}{Optional benchmark key.}
+
+\item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
+\code{postprocess}.}
 }
 \description{
-Wrapper around \code{read_timesries()} for Avantis files.
+Wrapper around \code{read_timeseries()} for Avantis files.
 }
 \seealso{
 \code{\link[=read_timeseries]{read_timeseries()}}

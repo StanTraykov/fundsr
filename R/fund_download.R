@@ -33,9 +33,7 @@ download_fund_data <- function(redownload = FALSE) {
                                 attempts = 3L,
                                 polite_sleep = TRUE,
                                 hint = FALSE) {
-    if (!is.character(path) || length(path) != 1L || is.na(path) || !nzchar(path)) {
-        stop("`path` must be a length-1 non-empty character string.", call. = FALSE)
-    }
+    check_string(path)
     redownload <- isTRUE(redownload)
     polite_sleep <- !isFALSE(polite_sleep)
     if (is.null(named_urls) || length(named_urls) == 0L) {
@@ -44,10 +42,10 @@ download_fund_data <- function(redownload = FALSE) {
     }
     nms <- names(named_urls)
     if (is.null(nms) || anyNA(nms) || any(nms == "")) {
-        stop("`named_urls` must be a named vector or named list.", call. = FALSE)
+        stop_bad_arg("named_urls", "must be a named vector or named list.")
     }
     if (anyDuplicated(nms)) {
-        stop("`named_urls` must have unique names.", call. = FALSE)
+        stop_bad_arg("named_url", "must have unique names.")
     }
     keys <- withr::with_preserve_seed(sample(nms))
     out <- set_names(character(length(keys)), keys)
@@ -99,22 +97,18 @@ download_fund_data <- function(redownload = FALSE) {
                              backoff = 0.5,
                              quiet = TRUE,
                              overwrite = TRUE) {
-    if (!is.character(url) || length(url) != 1L || is.na(url) || !nzchar(url)) {
-        stop("`url` must be a length-1 non-empty character string.", call. = FALSE)
-    }
-    if (!is.character(destfile) || length(destfile) != 1L || is.na(destfile) || !nzchar(destfile)) {
-        stop("`destfile` must be a length-1 non-empty character string.", call. = FALSE)
-    }
+    check_string(url)
+    check_string(destfile)
     attempts <- as.integer(attempts)
     if (length(attempts) != 1L || is.na(attempts) || attempts < 1L) {
-        stop("`attempts` must be a single integer >= 1.", call. = FALSE)
+        stop_bad_arg("attempts", "must be a single integer >= 1.")
     }
     if (!is.numeric(backoff) ||
             length(backoff) != 1L ||
             is.na(backoff) ||
             !is.finite(backoff) ||
             backoff < 0) {
-        stop("`backoff` must be a single non-negative finite number.", call. = FALSE)
+        stop_bad_arg("backoff", "must be a single non-negative finite number.")
     }
     quiet <- isTRUE(quiet)
     overwrite <- isTRUE(overwrite)

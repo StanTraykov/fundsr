@@ -59,6 +59,9 @@ clear_storage <- function(clear_map = FALSE) {
 #'   into `.fundsr$fund_index_map`. Names are used as keys.
 #' @param overwrite Logical scalar. If `TRUE`, recompute and replace any existing
 #'   cached value, regardless of `fundsr.reload`.
+#' @param postprocess Function applied to the computed value before caching.
+#'   Only used when the value is (re)computed (i.e. not applied when a cached
+#'   value is reused). Defaults to [base::identity()].
 #'
 #' @return Invisibly returns `NULL` (called for its side effects).
 #'
@@ -79,21 +82,29 @@ clear_storage <- function(clear_map = FALSE) {
 #'
 #' @family fund/index workflow functions
 #' @export
-store_timeseries <- function(var_name, expr, fund_index_map = NULL, overwrite = FALSE) {
+store_timeseries <- function(var_name,
+                             expr,
+                             fund_index_map = NULL,
+                             overwrite = FALSE,
+                             postprocess = identity) {
+    check_string(var_name)
+    if (!is.function(postprocess)) {
+        stop_bad_arg("postprocess", "must be a function.")
+    }
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
-    # Get global reload flag
-    reload <- fundsr_get_option("reload")
+    reload <- isTRUE(fundsr_get_option("reload"))
+    needs_eval <- isTRUE(overwrite) || reload || !exists(var_name, envir = .fundsr_storage)
     # Check if assignment is needed and evaluate expr in parent_env
-    if (overwrite || reload || !exists(var_name, envir = .fundsr_storage)) {
+    if (needs_eval) {
         fundsr_msg(paste("*** Loading:", var_name), level = 2L)
-        assign(var_name,
-               eval(substitute(expr), envir = parent_env),
-               envir = .fundsr_storage)
-        # Also add fund index pairs to global map (if supplied)
-        if (!is.null(fund_index_map)) {
-            add_fund_index_map(fund_index_map)
-        }
+        value <- eval(substitute(expr), envir = parent_env)
+        value <- postprocess(value)
+        assign(var_name, value, envir = .fundsr_storage)
+    }
+    # Also add fund index pairs to global map (if supplied)
+    if (!is.null(fund_index_map)) {
+        add_fund_index_map(fund_index_map)
     }
     invisible(NULL)
 }
@@ -220,11 +231,11 @@ join_env <- function(env,
     # / Deprecated param handling
 
     if (!is.environment(env)) {
-        stop("`env` must be an environment.", call. = FALSE)
+        stop_bad_arg("env", "must be an environment.")
     }
     by <- as.character(by)
     if (length(by) < 1L || any(!nzchar(by))) {
-        stop("`by` must contain at least one non-empty join key.", call. = FALSE)
+        stop_bad_arg("by", "must contain at least one non-empty join key.")
     }
     obj_names <- ls(envir = env, sorted = TRUE)
     raw_late <- late %||% character(0)

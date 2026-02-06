@@ -71,7 +71,8 @@ read_timeseries <- function(
         "tsv" = readr::read_tsv,
         "tab" = readr::read_tsv,
         "txt" = readr::read_tsv,
-        stop("Unsupported file extension for `file`: expected .csv or .tsv/.txt/.tab (optionally .gz).",
+        stop(paste("Unsupported file extension for `file`: ",
+                   "expected .csv or .tsv/.txt/.tab (optionally .gz)."),
              call. = FALSE)
     )
     if (!is.character(date_col) || length(date_col) != 1L || is.na(date_col) || !nzchar(date_col)) {
@@ -177,4 +178,3 @@ read_msci_tsv <- function(file) {
     ))
     df
 }
-

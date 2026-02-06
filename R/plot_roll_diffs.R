@@ -65,7 +65,8 @@ plot_roll_diffs <- function(data,
     has_data <- rowSums(is.finite(data.matrix(vals))) > 0
     if (!any(has_data)) {
         # fallback: use full date span
-        warning(glue("plot_roll_diffs: no finite data for selected funds ({paste(funds, collapse = ', ')})."),
+        fnds <- paste(funds, collapse = ", ")
+        warning(glue("plot_roll_diffs: no finite data for selected funds ({fnds})."),
                 call. = FALSE)
         min_date <- min(data[["date"]], na.rm = TRUE)
         max_date <- max(data[["date"]], na.rm = TRUE)

@@ -13,7 +13,7 @@
 #' [store_timeseries()], [read_timeseries_excel()]
 #' @family provider wrappers
 #' @export
-msci <- function(var_name, col_trans, benchmarks = NULL, file) {
+msci <- function(var_name, file, col_trans, benchmarks = NULL) {
     store_timeseries(
         var_name = var_name,
         expr = read_timeseries_excel(
@@ -57,6 +57,8 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' @param date_order Date parsing order passed to the importer.
 #' @param var_name Specify a custom variable name for the storage environment.
 #' @param data_sheet Deprecated; use `sheet`.
+#' @param ... Additional arguments passed to [store_timeseries()], such as
+#'   `overwrite` or `postprocess`.
 #'
 #' @return Invisibly returns `NULL`. The imported data are stored in
 #'   `.fundsr_storage` under `tolower(ticker)`. A fund/index mapping is recorded
@@ -66,8 +68,8 @@ msci <- function(var_name, col_trans, benchmarks = NULL, file) {
 #' The function builds a column-translation mapping from the fund NAV column and,
 #' if requested, a benchmark column. It then calls `read_timeseries_excel()` to read the
 #' Excel file and `store_timeseries()` to cache the imported object under
-#' `tolower(ticker)`. When `benchmark` is provided, a corresponding entry is
-#' added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
+#' `var_name`, if supplied, otherwise `tolower(ticker)`. When `benchmark` is provided, a
+#' corresponding entry is added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
 #'
 #' @seealso
 #' Provider wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
@@ -83,7 +85,12 @@ load_fund <- function(ticker,
                       retrieve_benchmark = FALSE,
                       date_order = "dmy",
                       var_name = NULL,
-                      data_sheet = NULL) {
+                      data_sheet = NULL,
+                      ...) {
+    check_string(ticker)
+    check_string(date_col)
+    check_string(nav_col)
+    check_string(date_order)
     # Deprecated param handling
     if (!missing(data_sheet) && !is.null(data_sheet)) {
         lifecycle::deprecate_warn(
@@ -121,9 +128,9 @@ load_fund <- function(ticker,
         set_names(nav_col, ticker_lower)
     )
     # If a benchmark is provided, add it to col_trans
-    if (retrieve_benchmark) {
+    if (isTRUE(retrieve_benchmark)) {
         if (is.null(benchmark) || is.null(benchmark_col))
-            stop("Need benchmark and benchmark_col to retrieve benchmark.")
+            stop("Need benchmark and benchmark_col to retrieve benchmark.", call. = FALSE)
         ct <- c(ct, set_names(benchmark_col, benchmark))
     }
     store_timeseries(
@@ -135,7 +142,8 @@ load_fund <- function(ticker,
             col_trans = ct,
             date_order = date_order
         ),
-        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower)
+        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower),
+        ...
     )
 
 }
@@ -148,19 +156,22 @@ load_fund <- function(ticker,
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
+ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
               sheet = "Historical",
               date_col = "^As Of",
               benchmark = benchmark,
               benchmark_col = "^Benchmark Ret",
-              retrieve_benchmark = retrieve_benchmark)
+              retrieve_benchmark = retrieve_benchmark,
+              ...)
 }
 
 #' Import an SPDR fund
@@ -170,15 +181,18 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-spdr <- function(ticker, file = NULL, benchmark = NULL) {
+spdr <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
-              benchmark = benchmark)
+              benchmark = benchmark,
+              ...)
 }
 
 #' Import an Xtrackers fund
@@ -189,17 +203,20 @@ spdr <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
+xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
               benchmark = benchmark,
               benchmark_col = "^Index Level",
-              retrieve_benchmark = retrieve_benchmark)
+              retrieve_benchmark = retrieve_benchmark,
+              ...)
 }
 
 #' Import an Amundi fund
@@ -209,16 +226,19 @@ xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-amun <- function(ticker, file = NULL, benchmark = NULL) {
+amun <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^Official NAV",
-              benchmark = benchmark)
+              benchmark = benchmark,
+              ...)
 }
 
 #' Import an Invesco fund
@@ -229,18 +249,21 @@ amun <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE) {
+inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^NAV$", # need end marker ($) for Invesco do disambiguate
               benchmark = benchmark,
               benchmark_col = "^Index",
-              retrieve_benchmark = retrieve_benchmark)
+              retrieve_benchmark = retrieve_benchmark,
+              ...)
 }
 
 #' Import a Vanguard fund
@@ -250,16 +273,19 @@ inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-vang <- function(ticker, file = NULL, benchmark = NULL) {
+vang <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^NAV \\(USD\\)$",
-              benchmark = benchmark)
+              benchmark = benchmark,
+              ...)
 }
 
 #' Import a UBS fund
@@ -269,16 +295,19 @@ vang <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-ubs <- function(ticker, file = NULL, benchmark = NULL) {
+ubs <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^Official NAV",
-              benchmark = benchmark)
+              benchmark = benchmark,
+              ...)
 }
 
 #' Import an HSBC fund
@@ -288,39 +317,48 @@ ubs <- function(ticker, file = NULL, benchmark = NULL) {
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-hsbc <- function(ticker, file = NULL, benchmark = NULL) {
+hsbc <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               benchmark = benchmark,
-              date_order = "mdy")
+              date_order = "mdy",
+              ...)
 }
 
 #' Import an Avantis fund
 #'
-#' Wrapper around `read_timesries()` for Avantis files.
+#' Wrapper around `read_timeseries()` for Avantis files.
 #'
 #' @param ticker Fund ticker.
 #' @param file Filename.
 #' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [store_timeseries()], such as
+#'   `postprocess`.
 #'
 #' @seealso
 #' [read_timeseries()]
 #' @family provider wrappers
 #' @export
-avan <- function(ticker, file, benchmark = NULL) {
+avan <- function(ticker, file, benchmark = NULL, ...) {
     ticker_lower <- tolower(ticker)
     store_timeseries(
         ticker_lower,
-        read_timeseries(file,
-                        date_col = "Date",
-                        orders = "ymd",
-                        data_filter = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)") %>%
-            select("date", "NAV") |>
+        read_timeseries(
+            file,
+            date_col = "Date",
+            orders = "ymd",
+            data_filter = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)"
+        ) %>%
+            select("date", "NAV") %>%
             rename_with(~ ticker_lower, "NAV"),
-        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower))
+        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower),
+        ...
+    )
 }

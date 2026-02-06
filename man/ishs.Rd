@@ -4,7 +4,7 @@
 \alias{ishs}
 \title{Import an iShares fund}
 \usage{
-ishs(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE)
+ishs(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...)
 }
 \arguments{
 \item{ticker}{Fund ticker.}
@@ -14,6 +14,9 @@ ishs(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE)
 \item{benchmark}{Optional benchmark key.}
 
 \item{retrieve_benchmark}{Logical; also import benchmark column.}
+
+\item{...}{Additional arguments passed to \code{\link[=load_fund]{load_fund()}} and \code{\link[=store_timeseries]{store_timeseries()}}, such as
+\code{postprocess}.}
 }
 \description{
 Wrapper around \code{load_fund()} for iShares files.

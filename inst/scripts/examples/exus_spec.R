@@ -1,5 +1,5 @@
 ##### Plots #####
-funds <- c("exus", "wexe", "ixua", "WxUSA-GR")
+funds <- c("exus", "wexe", "ixua", "chsi", "WxUSA-GR")
 title <- c(
     en = "World ex USA funds",
     bg = "Фондове World ex USA"
@@ -42,4 +42,5 @@ add_data_loader(function() {
     xtra("EXUS", benchmark = "WxUSA", file = "HistoricalData-IE0006WW1TQ4.xlsx")
     amun("WEXE", benchmark = "WxUSA", file = "NAV History_Amundi MSCI World Ex USA UCITS ETF Acc_IE00085PWS28_03_09_2024.xlsx")
     ishs("IXUA", benchmark = "WxUSA")
+    ubs("CHSI", benchmark = "WxUSA", file = "UBSFunds_Prices_CHSI.xlsx")
 })

@@ -30,7 +30,7 @@
 #' @return The option value (or its fallback/default).
 #' @keywords internal
 fundsr_get_option <- function(name, default) {
-    stopifnot(is.character(name), length(name) == 1L, nzchar(name))
+    check_string(name)
 
     defs <- .fundsr_option_defaults()
 
@@ -91,88 +91,36 @@ fundsr_options <- function(data_dir = NULL,
                            reload = NULL,
                            fund_urls = NULL,
                            verbosity = NULL) {
-    set <- list()
+    check_string(data_dir, allow_null = TRUE)
+    check_string(out_dir, allow_null = TRUE)
+    check_string(inkscape, allow_null = TRUE)
 
-    if (!is.null(data_dir)) {
-        if (!is.character(data_dir) ||
-                length(data_dir) != 1L ||
-                is.na(data_dir) ||
-                !nzchar(data_dir)) {
-            stop("`data_dir` must be a single non-empty string.", call. = FALSE)
-        }
-        set$fundsr.data_dir <- data_dir
-    }
-    if (!is.null(out_dir)) {
-        if (!is.character(out_dir) || length(out_dir) != 1L || is.na(out_dir) || !nzchar(out_dir)) {
-            stop("`out_dir` must be a single non-empty string.", call. = FALSE)
-        }
-        set$fundsr.out_dir <- out_dir
-    }
-    if (!is.null(px_width)) {
-        if (!is.numeric(px_width) || length(px_width) != 1L || is.na(px_width) || px_width <= 0) {
-            stop("`px_width` must be a single positive number.", call. = FALSE)
-        }
-        set$fundsr.px_width <- as.integer(px_width)
-    }
-    if (!is.null(internal_png)) {
-        if (!is.logical(internal_png) || length(internal_png) != 1L || is.na(internal_png)) {
-            stop("`internal_png` must be TRUE or FALSE.", call. = FALSE)
-        }
-        set$fundsr.internal_png <- internal_png
-    }
-    if (!is.null(export_svg)) {
-        if (!is.logical(export_svg) || length(export_svg) != 1L || is.na(export_svg)) {
-            stop("`export_svg` must be TRUE or FALSE.", call. = FALSE)
-        }
-        set$fundsr.export_svg <- export_svg
-    }
-    if (!is.null(xetra_map)) {
-        if (!is.character(xetra_map) ||
-                (length(xetra_map) > 0 &&
-                     (is.null(names(xetra_map)) ||
-                          anyNA(names(xetra_map)) ||
-                          any(!nzchar(names(xetra_map)))))) {
-            stop("`xetra_map` must be a named character vector (or empty).", call. = FALSE)
-        }
-        set$fundsr.xetra_map <- xetra_map
-    }
-    if (!is.null(inkscape)) {
-        if (!is.character(inkscape) ||
-                length(inkscape) != 1L ||
-                is.na(inkscape) ||
-                !nzchar(inkscape)) {
-            stop("`inkscape` must be a single non-empty string.", call. = FALSE)
-        }
-        set$fundsr.inkscape <- inkscape
-    }
-    if (!is.null(reload)) {
-        if (!is.logical(reload) || length(reload) != 1L || is.na(reload)) {
-            stop("`reload` must be TRUE or FALSE.", call. = FALSE)
-        }
-        set$fundsr.reload <- reload
-    }
-    if (!is.null(fund_urls)) {
-        if ((!is.character(fund_urls) && !is.list(fund_urls)) ||
-                (length(fund_urls) > 0 &&
-                     (is.null(names(fund_urls)) ||
-                          anyNA(names(fund_urls)) ||
-                          any(!nzchar(names(fund_urls)))))) {
-            stop("`fund_urls` must be a named character vector or named list (or empty).",
-                 call. = FALSE)
-        }
-        names(fund_urls) <- toupper(names(fund_urls))
-        stop_if_dup_nm(names(fund_urls), "fund_urls (case-insensitive)")
-        set$fundsr.fund_urls <- fund_urls
-    }
-    if (!is.null(verbosity)) {
-        if (!is.numeric(verbosity) ||
-                length(verbosity) != 1L ||
-                is.na(verbosity) ||
-                verbosity < 0) {
-            stop("`verbosity` must be a single non-negative number.", call. = FALSE)
-        }
-        set$fundsr.verbosity <- as.integer(verbosity)
-    }
+    check_logical(internal_png, allow_null = TRUE)
+    check_logical(export_svg, allow_null = TRUE)
+    check_logical(reload, allow_null = TRUE)
+
+    xetra_map <- check_mapping(xetra_map, allow_null = TRUE, type = "character")
+    fund_urls <- check_mapping(fund_urls,
+                               allow_null = TRUE,
+                               type = "either",
+                               name_case = "upper")
+
+    px_width <- check_numeric_scalar(px_width, allow_null = TRUE, as_integer = TRUE, ge = 1)
+    verbosity <- check_numeric_scalar(verbosity, allow_null = TRUE, as_integer = TRUE, ge = 0)
+
+    set <- list(
+        fundsr.data_dir      = data_dir,
+        fundsr.out_dir       = out_dir,
+        fundsr.px_width      = px_width,
+        fundsr.internal_png  = internal_png,
+        fundsr.export_svg    = export_svg,
+        fundsr.xetra_map     = xetra_map,
+        fundsr.inkscape      = inkscape,
+        fundsr.reload        = reload,
+        fundsr.fund_urls     = fund_urls,
+        fundsr.verbosity     = verbosity
+    )
+    set <- set[!vapply(set, is.null, logical(1))]
 
     if (length(set) == 0L) {
         return(invisible(list()))
