@@ -1,4 +1,4 @@
-# Assume estx50_spec.R & emu_spec.R are already sourced
+# Assume estx50_spec.R & emu_spec.R are already sourced (file name `zz*` loads last)
 
 ##### Plots #####
 funds <- c("praz", "sxr7", "xemu", "c50", "h4zz", "xesc", "sxrt", "EMUEUR-GR", "EZLM-GR")

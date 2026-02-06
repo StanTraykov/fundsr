@@ -1,23 +1,26 @@
 library(tidyverse)
 library(fundsr)
 
+# Source specs
 script_dir <- system.file("scripts/examples", package = "fundsr")
 stopifnot(nzchar(script_dir))
 spec_src <- function(...) {
     source(file.path(script_dir, ...))
 }
-# Config
+spec_files <- list.files(script_dir, pattern = "_spec\\.R$", full.names = FALSE)
+spec_files <- setdiff(spec_files, "common_spec.R")
+all_specs <- sub("_spec\\.R$", "", spec_files)
+if (!exists("only", inherits = FALSE)) {
+    only <- Sys.getenv("FUNDSR_ONLY", "")
+}
+only <- if (!nzchar(only)) character(0) else trimws(strsplit(only, ",", fixed = TRUE)[[1]])
+only <- only[nzchar(only)]
+bad <- setdiff(only, all_specs)
+if (length(bad)) warning("Unknown specs ignored: ", paste(bad, collapse = ", "), call. = FALSE)
+source_specs <- if (!length(only)) all_specs else intersect(all_specs, only)
+
 spec_src("common_spec.R")
-# Fund specs
-spec_src("glob_spec.R")
-spec_src("dm_spec.R")
-spec_src("em_spec.R")
-spec_src("usa_sel_spec.R")
-spec_src("exus_spec.R")
-spec_src("emu_spec.R")
-spec_src("scv_spec.R")
-spec_src("estx50_spec.R")
-spec_src("esemu_spec.R")
+purrr::walk(paste0(sort(source_specs), "_spec.R"), spec_src)
 
 xlm_dir <- file.path("data", "xlm")
 

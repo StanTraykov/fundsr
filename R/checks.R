@@ -263,10 +263,15 @@ check_mapping <- function(x,
         either    = is.character(x) || is.list(x)
     )
     if (!ok_type) {
-        stop_bad_arg(arg, switch(type,
-                                 character = "must be a named character vector (or empty).",
-                                 list      = "must be a named list (or empty).",
-                                 either    = "must be a named character vector or named list (or empty)."))
+        stop_bad_arg(
+            arg,
+            switch(
+                type,
+                character = "must be a named character vector (or empty).",
+                list      = "must be a named list (or empty).",
+                either    = "must be a named character vector or named list (or empty)."
+            )
+        )
     }
 
     if (!allow_empty && length(x) == 0L) {
