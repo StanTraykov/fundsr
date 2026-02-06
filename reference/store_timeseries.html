@@ -62,7 +62,13 @@ fund/index mappings into <code>.fundsr$fund_index_map</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">store_timeseries</span><span class="op">(</span><span class="va">var_name</span>, <span class="va">expr</span>, fund_index_map <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">store_timeseries</span><span class="op">(</span></span>
+<span>  <span class="va">var_name</span>,</span>
+<span>  <span class="va">expr</span>,</span>
+<span>  fund_index_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  postprocess <span class="op">=</span> <span class="va">identity</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -87,6 +93,12 @@ into <code>.fundsr$fund_index_map</code>. Names are used as keys.</p></dd>
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
 <dd><p>Logical scalar. If <code>TRUE</code>, recompute and replace any existing
 cached value, regardless of <code>fundsr.reload</code>.</p></dd>
+
+
+<dt id="arg-postprocess">postprocess<a class="anchor" aria-label="anchor" href="#arg-postprocess"></a></dt>
+<dd><p>Function applied to the computed value before caching.
+Only used when the value is (re)computed (i.e. not applied when a cached
+value is reused). Defaults to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">base::identity()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

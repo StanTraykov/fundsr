@@ -62,7 +62,7 @@ to numeric.</p>
 <span>  time_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ms"</span>, <span class="st">"s"</span>, <span class="st">"us"</span>, <span class="st">"ns"</span><span class="op">)</span>,</span>
 <span>  orders <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  force_text_date <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  data_filter <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  line_filter <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,10 +95,10 @@ parsed as text using <code>orders</code> (no Unix-epoch numeric interpretation i
 attempted).</p></dd>
 
 
-<dt id="arg-data-filter">data_filter<a class="anchor" aria-label="anchor" href="#arg-data-filter"></a></dt>
+<dt id="arg-line-filter">line_filter<a class="anchor" aria-label="anchor" href="#arg-line-filter"></a></dt>
 <dd><p>Optional regular expression used to pre-filter the raw
 file by lines before parsing. If supplied, the file is read with
-<code><a href="https://readr.tidyverse.org/reference/read_lines.html" class="external-link">readr::read_lines()</a></code> and only lines matching <code>data_filter</code> are kept. The
+<code><a href="https://readr.tidyverse.org/reference/read_lines.html" class="external-link">readr::read_lines()</a></code> and only lines matching <code>line_filter</code> are kept. The
 regex must match both data lines and the header line, e.g.
 <code>"^[0-9]|^Date,"</code></p></dd>
 
