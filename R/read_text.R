@@ -18,9 +18,9 @@
 #' @param force_text_date Logical scalar. If `TRUE`, the date column is always
 #'   parsed as text using `orders` (no Unix-epoch numeric interpretation is
 #'   attempted).
-#' @param data_filter Optional regular expression used to pre-filter the raw
+#' @param line_filter Optional regular expression used to pre-filter the raw
 #'   file by lines before parsing. If supplied, the file is read with
-#'   [readr::read_lines()] and only lines matching `data_filter` are kept. The
+#'   [readr::read_lines()] and only lines matching `line_filter` are kept. The
 #'   regex must match both data lines and the header line, e.g.
 #'   `"^[0-9]|^Date,"`
 #'
@@ -44,8 +44,15 @@ read_timeseries <- function(
     time_unit = c("ms", "s", "us", "ns"),
     orders = NULL,
     force_text_date = FALSE,
-    data_filter = NULL
+    line_filter = NULL
 ) {
+    time_unit <- match.arg(time_unit)
+    check_string(file)
+    check_string(date_col)
+    check_string(orders, allow_null = TRUE, n = NULL)
+    check_logical(force_text_date)
+    check_string(line_filter, allow_null = TRUE)
+
     fund_data_dir <- fundsr_get_option("data_dir")
     path <- file.path(fund_data_dir, file)
 
@@ -54,8 +61,11 @@ read_timeseries <- function(
              call. = FALSE)
     }
 
-    if (!is.null(data_filter)) {
-        data_lines <- grep(data_filter, readr::read_lines(path), value = TRUE)
+    if (!is.null(line_filter)) {
+        data_lines <- grep(line_filter, readr::read_lines(path), value = TRUE)
+        if (length(data_lines) == 0L) {
+            stop_bad_arg("line_filter", "matched no lines.")
+        }
         read_obj <- I(data_lines)
     } else {
         read_obj <- path
@@ -75,10 +85,6 @@ read_timeseries <- function(
                    "expected .csv or .tsv/.txt/.tab (optionally .gz)."),
              call. = FALSE)
     )
-    if (!is.character(date_col) || length(date_col) != 1L || is.na(date_col) || !nzchar(date_col)) {
-        stop("`date_col` must be a single non-empty string.", call. = FALSE)
-    }
-    time_unit <- match.arg(time_unit)
     div <- switch(
         time_unit,
         "s"  = 1,
@@ -98,9 +104,6 @@ read_timeseries <- function(
     df <- reader(read_obj, show_col_types = FALSE)
     if (!(date_col %in% names(df))) {
         stop("Expected a column named `", date_col, "`.", call. = FALSE)
-    }
-    if (!is.logical(force_text_date) || length(force_text_date) != 1L || is.na(force_text_date)) {
-        stop("`force_text_date` must be a single TRUE/FALSE value.", call. = FALSE)
     }
 
     out <- mutate(

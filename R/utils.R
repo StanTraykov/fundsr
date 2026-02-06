@@ -341,8 +341,7 @@ check_mapping <- function(x,
 #'
 #' @keywords internal
 make_date_fmts <- function(order) {
-    stopifnot(is.character(order), length(order) == 1L, nzchar(order))
-
+    check_string(order)
     chars <- strsplit(order, "", fixed = TRUE)[[1]]
 
     allowed <- c("d", "y", "m", "M")

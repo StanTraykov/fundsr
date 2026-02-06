@@ -316,7 +316,7 @@ join_env <- function(env,
 #'   filter(date >= as_date("2013-01-01"))
 #' }
 build_all_series <- function(reload = FALSE, by = "date", ...) {
-    stopifnot(is.character(by), length(by) == 1L, nzchar(by))
+    check_string(by)
 
     run_data_loaders(reload = reload) %>%
         join_env(by = by, ...) %>%

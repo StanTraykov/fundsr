@@ -6,7 +6,7 @@
 ## Importing
 - add `postprocess` param to `store_timeseries()`
 - add `...` param to import wrappers, passing it upstream to `store_timeseries()`
-- add `data_filter` param to `read_timeseries()`
+- add `line_filter` param to `read_timeseries()`
 - add Avantis CSV NAV history support
 
 ## Examples

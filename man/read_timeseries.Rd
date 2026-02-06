@@ -10,7 +10,7 @@ read_timeseries(
   time_unit = c("ms", "s", "us", "ns"),
   orders = NULL,
   force_text_date = FALSE,
-  data_filter = NULL
+  line_filter = NULL
 )
 }
 \arguments{
@@ -29,9 +29,9 @@ of common dmy-order formats is used.}
 parsed as text using \code{orders} (no Unix-epoch numeric interpretation is
 attempted).}
 
-\item{data_filter}{Optional regular expression used to pre-filter the raw
+\item{line_filter}{Optional regular expression used to pre-filter the raw
 file by lines before parsing. If supplied, the file is read with
-\code{\link[readr:read_lines]{readr::read_lines()}} and only lines matching \code{data_filter} are kept. The
+\code{\link[readr:read_lines]{readr::read_lines()}} and only lines matching \code{line_filter} are kept. The
 regex must match both data lines and the header line, e.g.
 \code{"^[0-9]|^Date,"}}
 }

@@ -354,7 +354,7 @@ avan <- function(ticker, file, benchmark = NULL, ...) {
             file,
             date_col = "Date",
             orders = "ymd",
-            data_filter = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)"
+            line_filter = "^(Date,|[0-9]{4}/[0-9]{2}/[0-9]{2},)"
         ) %>%
             select("date", "NAV") %>%
             rename_with(~ ticker_lower, "NAV"),
