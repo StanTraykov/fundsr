@@ -51,14 +51,19 @@ plot_roll_diffs <- function(data,
                             bmark_type = c("net", "gross")) {
     bmark_type <- match.arg(bmark_type)
     bmark_type <- if (bmark_type == "net") gettext("net") else gettext("gross")
+    n_days <- check_numeric_scalar(n_days, as_integer = TRUE, ge = 1L)
+    check_string(funds, min_n = 1)
+    check_logical(use_log)
+    check_string(title_add, allow_null = TRUE, n = NULL)
     title_add <- pick_user_trans(title_add)
+
     ttl <- if (is.null(title_add)) "" else paste(":", title_add)
     title_msg <- if (use_log) {
         gettext("{n_days}d rolling log-return differences vs {bmark_type} benchmark{ttl}")
     } else {
         gettext("{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}")
     }
-    title <- glue(ttl = ttl, title_msg)
+    title <- glue(title_msg, ttl = ttl)
     fundsr_msg(paste("plot_roll_diffs:", title), level = 1L)
 
     vals <- select(data, all_of(funds))

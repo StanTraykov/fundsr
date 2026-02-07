@@ -13,11 +13,11 @@ all_specs <- sub("_spec\\.R$", "", spec_files)
 if (!exists("only", inherits = FALSE)) {
     only <- Sys.getenv("FUNDSR_ONLY", "")
 }
-only <- if (!nzchar(only)) character(0) else trimws(strsplit(only, ",", fixed = TRUE)[[1]])
-only <- only[nzchar(only)]
-bad <- setdiff(only, all_specs)
+only_split <- if (!nzchar(only)) character(0) else trimws(strsplit(only, ",", fixed = TRUE)[[1]])
+only_split <- only_split[nzchar(only_split)]
+bad <- setdiff(only_split, all_specs)
 if (length(bad)) warning("Unknown specs ignored: ", paste(bad, collapse = ", "), call. = FALSE)
-source_specs <- if (!length(only)) all_specs else intersect(all_specs, only)
+source_specs <- if (!length(only_split)) all_specs else intersect(all_specs, only_split)
 
 spec_src("common_spec.R")
 purrr::walk(paste0(sort(source_specs), "_spec.R"), spec_src)
