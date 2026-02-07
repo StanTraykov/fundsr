@@ -1,4 +1,4 @@
-# fundsr (development version)
+# fundsr 0.4.0
 
 ## Breaking changes
 - reorder arguments in `msci()` to match package convention
