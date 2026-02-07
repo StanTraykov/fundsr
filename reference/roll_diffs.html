@@ -116,15 +116,17 @@ messages.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with two data frames, <code>log</code> and <code>cagr</code>. Each data frame
+    <p>A named list with two data frames, <code>cagr</code> and <code>log</code>. Each data frame
 contains <code>date_col</code> followed by one column per fund (named as in
 <code>fund_index_map</code>), holding the rolling annualized tracking differences.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For each date \(t\), an anchor date \(t_0\) is chosen as the last
-available observation at or before \(t - n\_days\) where both fund and
-index values are present. Let \(\Delta = t - t_0\) in calendar days.</p>
+    <p>For each date \(t\), a target anchor threshold \(t - n\_days\) is formed.
+The anchor date \(t_0\) is chosen as the <strong>last available observation at or
+before</strong> \(t - n\_days\) among rows where <strong>both</strong> fund and index values are
+present. Let \(\Delta = t - t_0\) in calendar days (\(\Delta\) can be
+greater than <code>n_days</code> when data are missing around the threshold).</p>
 <p>The annualized tracking differences are:</p><ul><li><p>Log-return difference:
 $$
       \left[\ln\left(\frac{f_t}{f_{t_0}}\right) - \ln\left(\frac{i_t}{i_{t_0}}\right)\right]
@@ -135,10 +137,15 @@ $$
       \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta}
       - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}
     $$</p></li>
-</ul><p>Values are <code>NA</code> when an anchor cannot be found, required inputs are missing,
-\(\Delta \le 0\), or values are invalid for the chosen formula (e.g.
-non-positive inputs for log returns).</p>
-<p>Emitted messages will be visible at verbosity level &gt;= 1 (option <code>fundsr.verbosity</code>).</p>
+</ul><p>Values are <code>NA</code> when an anchor cannot be found, current-date inputs are missing,
+\(\Delta \le 0\), or values are invalid for the chosen formula (e.g. any
+non-positive value for log returns, or non-finite / non-positive ratios for
+CAGR).</p>
+<p>Funds are skipped (optionally with a message) when the fund column is missing,
+the mapped index column is missing (after applying <code>index_level</code> /
+<code>gross_suffix</code>), or when <code>fund == index</code> (self-tracking).</p>
+<p>Emitted messages will be visible at verbosity level &gt;= 1 (option <code>fundsr.verbosity</code>).
+Verbosity level &gt;= 4 forces both message types regardless of the <code>messages</code> argument.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
