@@ -44,7 +44,9 @@ objects (sets \code{fundsr.reload}).}
 downloads (sets \code{fundsr.fund_urls}).}
 
 \item{verbosity}{Integer verbosity level (sets \code{fundsr.verbosity}). Use 0 to silence
-informational messages, 2 to enable additional messages.}
+informational messages, 2 to emit more detailed progress/diagnostic messages, and
+4 to force all message types even when they are disabled via function arguments
+(e.g. \code{messages} for \code{roll_diffs()}).}
 }
 \value{
 Invisibly returns a named list of the previous values of the options
@@ -56,6 +58,30 @@ Convenience wrapper around \code{options()} for setting common \verb{fundsr.*} o
 \details{
 All arguments default to \code{NULL}. If an argument is left as \code{NULL}, the
 corresponding \verb{fundsr.*} option is left unchanged.
+}
+\examples{
+\dontrun{
+fundsr_options(verbosity = 4)
+fundsr_options(
+    data_dir = file.path("data", "funds"),
+    out_dir = "output",
+    px_width = 1300,
+    xetra_map = c(
+        fwra = "fwia",
+        acwi = "lyy0",
+        iwda = "eunl",
+        cw8 = "amew",
+        aeem = "amem",
+        lem = "lym7",
+        iema = "eunm",
+        emim = "is3n",
+        spxs = "p500",
+        c50 = "v50a",
+        mse = "lysx",
+        ijpa = "eunn"
+    )
+)
+}
 }
 \seealso{
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
