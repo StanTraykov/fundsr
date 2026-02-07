@@ -51,6 +51,7 @@ add_data_loader(function() {
         benchmark = "EZLM",
         file = "NAV History_Amundi Prime Eurozone UCITS ETF DR (C)_LU2089238112_21_01_2020.xlsx",
         postprocess = function(x) {
+             # tracked index change (Solactive Euro 50 -> GBS Eurozone L&M)
              x %>% filter(.data[["date"]] >= lubridate::as_date("2021-03-16"))
         }
     )

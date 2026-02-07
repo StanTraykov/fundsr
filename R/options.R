@@ -56,7 +56,8 @@ fundsr_get_option <- function(name, default) {
 #' All arguments default to `NULL`. If an argument is left as `NULL`, the
 #' corresponding `fundsr.*` option is left unchanged.
 #'
-#' @param data_dir Directory containing fund data files (sets `fundsr.data_dir`).
+#' @param data_dir Directory containing fund data files (sets `fundsr.data_dir`). Note: fundsr may
+#' try to write to this directory (see `download_fund_data()`).
 #' @param out_dir Output directory for plots/exports (sets `fundsr.out_dir`).
 #' @param px_width Default PNG export width in pixels (sets `fundsr.px_width`).
 #' @param internal_png Logical; whether to save an internal PNG immediately when

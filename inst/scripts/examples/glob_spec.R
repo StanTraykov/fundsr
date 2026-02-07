@@ -7,12 +7,13 @@ phys_s_title <- c(en = "Global funds (phys. and swap)",
                   bg = "Глобални фондове (физ. и суап)")
 spyi_title <- c(en = "SPYI in comparison to a few global funds",
                 bg = "SPYI в сравнение с някои глобални фондове")
+spyi_funds <- c("spyy", "spyi", "vwce", "iusq", "webn", "ACWI-GR", "ACWI_IMI-GR", "GMLM-GR")
 glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
                    "spyy" = "#89AE00",       "vwce" = "#600000",
                    "spyi" = "darkgreen",     "acwi" = "pink",
                    "acwu" = "#ADD8E6",       "acwia" = "orange",
-                   "GMLM-GR" = "grey50",     "ACWI-GR" = "black",
-                   "ACWI_IMI-GR" = "grey50", "scwx" = "orange",
+                   "GMLM-GR" = "grey40",     "ACWI-GR" = "black",
+                   "ACWI_IMI-GR" = "grey75", "scwx" = "orange",
                    "fwra" = "blue"
 )
 glob_colors <- function(...) {
@@ -43,7 +44,7 @@ plot_spec <- tribble(
 
     "globI", spyi_title, no_filter,
     glob_colors(), std_w, std_h,
-    c("spyy", "spyi", "vwce", "iusq", "ACWI-GR", "ACWI_IMI-GR")
+    spyi_funds
 )
 spec_list <- c(spec_list, list(plot_spec))
 

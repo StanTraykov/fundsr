@@ -18,7 +18,8 @@ fundsr_options(
 )
 }
 \arguments{
-\item{data_dir}{Directory containing fund data files (sets \code{fundsr.data_dir}).}
+\item{data_dir}{Directory containing fund data files (sets \code{fundsr.data_dir}). Note: fundsr may
+try to write to this directory (see \code{download_fund_data()}).}
 
 \item{out_dir}{Output directory for plots/exports (sets \code{fundsr.out_dir}).}
 

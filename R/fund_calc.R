@@ -58,14 +58,16 @@ longer <- function(df,
 #' @param gross_suffix Suffix appended to the mapped index base name when
 #'   `index_level = "gross"`.
 #'
-#' @return A named list with two data frames, `log` and `cagr`. Each data frame
+#' @return A named list with two data frames, `cagr` and `log`. Each data frame
 #'   contains `date_col` followed by one column per fund (named as in
 #'   `fund_index_map`), holding the rolling annualized tracking differences.
 #'
 #' @details
-#' For each date \eqn{t}, an anchor date \eqn{t_0} is chosen as the last
-#' available observation at or before \eqn{t - n\_days} where both fund and
-#' index values are present. Let \eqn{\Delta = t - t_0} in calendar days.
+#' For each date \eqn{t}, a target anchor threshold \eqn{t - n\_days} is formed.
+#' The anchor date \eqn{t_0} is chosen as the **last available observation at or
+#' before** \eqn{t - n\_days} among rows where **both** fund and index values are
+#' present. Let \eqn{\Delta = t - t_0} in calendar days (\eqn{\Delta} can be
+#' greater than `n_days` when data are missing around the threshold).
 #'
 #' The annualized tracking differences are:
 #' \itemize{
@@ -81,11 +83,17 @@ longer <- function(df,
 #'     }
 #' }
 #'
-#' Values are `NA` when an anchor cannot be found, required inputs are missing,
-#' \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
-#' non-positive inputs for log returns).
+#' Values are `NA` when an anchor cannot be found, current-date inputs are missing,
+#' \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g. any
+#' non-positive value for log returns, or non-finite / non-positive ratios for
+#' CAGR).
+#'
+#' Funds are skipped (optionally with a message) when the fund column is missing,
+#' the mapped index column is missing (after applying `index_level` /
+#' `gross_suffix`), or when `fund == index` (self-tracking).
 #'
 #' Emitted messages will be visible at verbosity level >= 1 (option `fundsr.verbosity`).
+#' Verbosity level >= 4 forces both message types regardless of the `messages` argument.
 #'
 #' @family rolling difference functions
 #' @export
@@ -104,8 +112,9 @@ roll_diffs <- function(df,
     } else {
         messages <- match.arg(messages, choices = c("roll", "skip"), several.ok = TRUE)
     }
-    msg_roll <- "roll" %in% messages
-    msg_skip <- "skip" %in% messages
+    verbosity_override <- fundsr_get_option("verbosity") >= 4
+    msg_roll <- "roll" %in% messages || verbosity_override
+    msg_skip <- "skip" %in% messages || verbosity_override
 
     date_num <- as.numeric(df[[date_col]])
     n <- nrow(df)

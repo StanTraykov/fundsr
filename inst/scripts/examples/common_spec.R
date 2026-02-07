@@ -17,7 +17,8 @@ fundsr_options(
         emim = "is3n",
         spxs = "p500",
         c50 = "v50a",
-        mse = "lysx"
+        mse = "lysx",
+        ijpa = "eunn"
     )
 )
 spec_list <- list()
@@ -77,8 +78,8 @@ net_idx_trans <- c(
     EUR = "^EUROPE Standard",
     EMU = "^EMU Standard",
     PACxJPN = "^PACIFIC ex JAPAN Standard",
-    JAPAN = "^JAPAN Standard",
-    JP_IMI = "^JAPAN IMI",
+    JPN = "^JAPAN Standard",
+    JPN_IMI = "^JAPAN IMI",
     WxUSPAR = "^WORLD EX USA CLIMATE PARIS ALIGNED Standard",
     CHINA = "^CHINA Standard",
     TAIWAN = "^TAIWAN Standard",

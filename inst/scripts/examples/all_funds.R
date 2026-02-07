@@ -7,21 +7,26 @@ stopifnot(nzchar(script_dir))
 spec_src <- function(...) {
     source(file.path(script_dir, ...))
 }
+preload_file <- "common_spec.R"
 spec_files <- list.files(script_dir, pattern = "_spec\\.R$", full.names = FALSE)
-spec_files <- setdiff(spec_files, "common_spec.R")
+spec_files <- setdiff(spec_files, preload_file )
 all_specs <- sub("_spec\\.R$", "", spec_files)
 if (!exists("only", inherits = FALSE)) {
     only <- Sys.getenv("FUNDSR_ONLY", "")
 }
-only_split <- if (!nzchar(only)) character(0) else trimws(strsplit(only, ",", fixed = TRUE)[[1]])
-only_split <- only_split[nzchar(only_split)]
+only_split <- if (!length(only) || all(is.na(only)) || !any(nzchar(only))) {
+    character(0)
+} else {
+    trimws(unlist(strsplit(only, ",", fixed = TRUE), use.names = FALSE))
+}
+only_split <- only_split[!is.na(only_split) & nzchar(only_split)]
 bad <- setdiff(only_split, all_specs)
 if (length(bad)) warning("Unknown specs ignored: ", paste(bad, collapse = ", "), call. = FALSE)
 source_specs <- if (!length(only_split)) all_specs else intersect(all_specs, only_split)
-
-spec_src("common_spec.R")
+spec_src(preload_file)
 purrr::walk(paste0(sort(source_specs), "_spec.R"), spec_src)
 
+# Folder with monthly XLM Excel files
 xlm_dir <- file.path("data", "xlm")
 
 # Download missing files

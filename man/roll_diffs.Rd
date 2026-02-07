@@ -43,7 +43,7 @@ messages.}
 \code{index_level = "gross"}.}
 }
 \value{
-A named list with two data frames, \code{log} and \code{cagr}. Each data frame
+A named list with two data frames, \code{cagr} and \code{log}. Each data frame
 contains \code{date_col} followed by one column per fund (named as in
 \code{fund_index_map}), holding the rolling annualized tracking differences.
 }
@@ -53,9 +53,11 @@ tracking differences over a backward-looking window of \code{n_days} calendar
 days. Both log-return and CAGR forms are returned.
 }
 \details{
-For each date \eqn{t}, an anchor date \eqn{t_0} is chosen as the last
-available observation at or before \eqn{t - n\_days} where both fund and
-index values are present. Let \eqn{\Delta = t - t_0} in calendar days.
+For each date \eqn{t}, a target anchor threshold \eqn{t - n\_days} is formed.
+The anchor date \eqn{t_0} is chosen as the \strong{last available observation at or
+before} \eqn{t - n\_days} among rows where \strong{both} fund and index values are
+present. Let \eqn{\Delta = t - t_0} in calendar days (\eqn{\Delta} can be
+greater than \code{n_days} when data are missing around the threshold).
 
 The annualized tracking differences are:
 \itemize{
@@ -71,11 +73,17 @@ The annualized tracking differences are:
     }
 }
 
-Values are \code{NA} when an anchor cannot be found, required inputs are missing,
-\eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g.
-non-positive inputs for log returns).
+Values are \code{NA} when an anchor cannot be found, current-date inputs are missing,
+\eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g. any
+non-positive value for log returns, or non-finite / non-positive ratios for
+CAGR).
+
+Funds are skipped (optionally with a message) when the fund column is missing,
+the mapped index column is missing (after applying \code{index_level} /
+\code{gross_suffix}), or when \code{fund == index} (self-tracking).
 
 Emitted messages will be visible at verbosity level >= 1 (option \code{fundsr.verbosity}).
+Verbosity level >= 4 forces both message types regardless of the \code{messages} argument.
 }
 \seealso{
 Other rolling difference functions: 
