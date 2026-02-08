@@ -1,4 +1,4 @@
-##### Generic ######
+##### Generic #####
 
 "%||%" <- function(a, b) {
     if (!is.null(a)) a else b
@@ -25,7 +25,7 @@ vec_key <- function(x, ignore_order = FALSE) {
     paste0(x_type, "|", length(x_chr), "|", paste(parts, collapse = "|"))
 }
 
-##### Messaging ####
+##### Messaging #####
 
 fundsr_verbosity <- function() {
     v <- fundsr_get_option("verbosity")
@@ -40,7 +40,7 @@ fundsr_msg <- function(..., level = 1L) {
     invisible(NULL)
 }
 
-##### Plot helpers ####
+##### Plot helpers #####
 add_gg_params <- function(p, gg_params) {
     if (is.null(gg_params)) return(p)
 

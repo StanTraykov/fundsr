@@ -4,12 +4,11 @@ library(fundsr)
 # Source specs
 script_dir <- system.file("scripts/examples", package = "fundsr")
 stopifnot(nzchar(script_dir))
-spec_src <- function(...) {
+source_script <- function(...) {
     source(file.path(script_dir, ...))
 }
-preload_file <- "common_spec.R"
+source_script("common_config.R")
 spec_files <- list.files(script_dir, pattern = "_spec\\.R$", full.names = FALSE)
-spec_files <- setdiff(spec_files, preload_file )
 all_specs <- sub("_spec\\.R$", "", spec_files)
 if (!exists("only", inherits = FALSE)) {
     only <- Sys.getenv("FUNDSR_ONLY", "")
@@ -23,8 +22,7 @@ only_split <- only_split[!is.na(only_split) & nzchar(only_split)]
 bad <- setdiff(only_split, all_specs)
 if (length(bad)) warning("Unknown specs ignored: ", paste(bad, collapse = ", "), call. = FALSE)
 source_specs <- if (!length(only_split)) all_specs else intersect(all_specs, only_split)
-spec_src(preload_file)
-purrr::walk(paste0(sort(source_specs), "_spec.R"), spec_src)
+purrr::walk(paste0(sort(source_specs), "_spec.R"), source_script)
 
 # Folder with monthly XLM Excel files
 xlm_dir <- file.path("data", "xlm")

@@ -3,12 +3,9 @@ library(tidyverse)
 library(fundsr)
 
 ##### Config ######
-script_dir <- system.file("scripts/examples", package = "fundsr")
-stopifnot(nzchar(script_dir))
-spec_src <- function(...) {
-    source(file.path(script_dir, ...))
-}
-spec_src("common_spec.R")
+common_config <- system.file("scripts/examples/common_config.R", package = "fundsr")
+stopifnot(nzchar(common_config))
+source(common_config)
 
 ##### Plot specs #####
 idx <- c("CHINA", "TAIWAN", "INDIA", "KOREA", "BRAZIL", "S_AFR")
