@@ -143,3 +143,41 @@ stop_if_dup_nm <- function(nms, context) {
         call. = FALSE
     )
 }
+
+add_gg_params <- function(p, gg_params) {
+    if (is.null(gg_params)) return(p)
+
+    if (!is.list(gg_params)) gg_params <- list(gg_params)
+    repeat {
+        any_list <- any(vapply(gg_params, is.list, logical(1)))
+        if (!any_list) break
+        gg_params <- purrr::list_flatten(gg_params)
+    }
+
+    tryCatch(
+        purrr::reduce(gg_params, `+`, .init = p),
+        error = function(e) {
+            stop(
+                "Invalid `gg_params`: must contain ggplot components (scales/themes/etc.).\n",
+                "Underlying error: ", conditionMessage(e),
+                call. = FALSE
+            )
+        }
+    )
+}
+
+keep_supported_breaks <- function(breaks, min_date, max_date) {
+    breaks <- sort(unique(breaks))
+    if (length(breaks) <= 1L) return(breaks)
+
+    b <- as.numeric(breaks)
+    mids <- (b[-1] + b[-length(b)]) / 2
+
+    left  <- c(-Inf, mids)
+    right <- c(mids, Inf)
+
+    mn <- as.numeric(min_date)
+    mx <- as.numeric(max_date)
+
+    breaks[mx >= left & mn <= right]
+}

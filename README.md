@@ -35,7 +35,7 @@ fundsr is a tool for the DIY investor. It's not a data provider—you need to do
 * `scripts/examples` in the package directory (locate via `system.file("scripts/examples", package="fundsr")`)
   * `glob_funds.R` is an example workflow plotting global funds, but data needs to be downloaded separately
   * `all_funds.R` features many more funds
-* [Fundsr Options](https://stantraykov.github.io/fundsr/reference/fundsr_options.html)
+* [Options](https://stantraykov.github.io/fundsr/reference/fundsr_options.html)
 * [Reference](https://stantraykov.github.io/fundsr/reference/index.html)
 
 ## Output

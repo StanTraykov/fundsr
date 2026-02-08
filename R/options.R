@@ -85,7 +85,6 @@ fundsr_get_option <- function(name, default) {
 #' @family config functions
 #' @export
 #' @examples
-#' \dontrun{
 #' fundsr_options(verbosity = 4)
 #' fundsr_options(
 #'     data_dir = file.path("data", "funds"),
@@ -106,7 +105,6 @@ fundsr_get_option <- function(name, default) {
 #'         ijpa = "eunn"
 #'     )
 #' )
-#' }
 fundsr_options <- function(data_dir = NULL,
                            out_dir = NULL,
                            px_width = NULL,

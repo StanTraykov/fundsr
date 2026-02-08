@@ -60,7 +60,6 @@ All arguments default to \code{NULL}. If an argument is left as \code{NULL}, the
 corresponding \verb{fundsr.*} option is left unchanged.
 }
 \examples{
-\dontrun{
 fundsr_options(verbosity = 4)
 fundsr_options(
     data_dir = file.path("data", "funds"),
@@ -81,7 +80,6 @@ fundsr_options(
         ijpa = "eunn"
     )
 )
-}
 }
 \seealso{
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
