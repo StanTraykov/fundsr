@@ -1,3 +1,5 @@
+##### Generic ######
+
 "%||%" <- function(a, b) {
     if (!is.null(a)) a else b
 }
@@ -22,6 +24,62 @@ vec_key <- function(x, ignore_order = FALSE) {
     parts <- paste0(lens, ":", ifelse(is.na(x_chr), "", x_chr))
     paste0(x_type, "|", length(x_chr), "|", paste(parts, collapse = "|"))
 }
+
+##### Messaging ####
+
+fundsr_verbosity <- function() {
+    v <- fundsr_get_option("verbosity")
+    v <- suppressWarnings(as.integer(v))
+    if (length(v) != 1L || is.na(v) || v < 0L) 1L else v
+}
+
+fundsr_msg <- function(..., level = 1L) {
+    level <- suppressWarnings(as.integer(level))
+    if (length(level) != 1L || is.na(level) || level < 0L) level <- 1L
+    if (level == 0L || fundsr_verbosity() >= level) message(...)
+    invisible(NULL)
+}
+
+##### Plot helpers ####
+add_gg_params <- function(p, gg_params) {
+    if (is.null(gg_params)) return(p)
+
+    if (!is.list(gg_params)) gg_params <- list(gg_params)
+    repeat {
+        any_list <- any(vapply(gg_params, is.list, logical(1)))
+        if (!any_list) break
+        gg_params <- purrr::list_flatten(gg_params)
+    }
+
+    tryCatch(
+        purrr::reduce(gg_params, `+`, .init = p),
+        error = function(e) {
+            stop(
+                "Invalid `gg_params`: must contain ggplot components (scales/themes/etc.).\n",
+                "Underlying error: ", conditionMessage(e),
+                call. = FALSE
+            )
+        }
+    )
+}
+
+keep_supported_breaks <- function(breaks, min_date, max_date) {
+    breaks <- sort(unique(breaks))
+    if (length(breaks) <= 1L) return(breaks)
+
+    b <- as.numeric(breaks)
+    mids <- (b[-1] + b[-length(b)]) / 2
+
+    left  <- c(-Inf, mids)
+    right <- c(mids, Inf)
+
+    mn <- as.numeric(min_date)
+    mx <- as.numeric(max_date)
+
+    breaks[mx >= left & mn <= right]
+}
+
+##### Date parsing #####
 
 #' Generate candidate date format strings for `as.Date()`
 #'
@@ -75,10 +133,10 @@ make_date_fmts <- function(order) {
     tokens_for <- function(y_tok, m_tok) {
         vapply(chars, function(ch) {
             switch(ch,
-                d = "%d",
-                y = y_tok,
-                m = m_tok,
-                M = m_tok
+                   d = "%d",
+                   y = y_tok,
+                   m = m_tok,
+                   M = m_tok
             )
         }, character(1))
     }
@@ -106,78 +164,4 @@ make_date_fmts <- function(order) {
     }
 
     unique(out)
-}
-
-fundsr_verbosity <- function() {
-    v <- fundsr_get_option("verbosity")
-    v <- suppressWarnings(as.integer(v))
-    if (length(v) != 1L || is.na(v) || v < 0L) 1L else v
-}
-
-fundsr_msg <- function(..., level = 1L) {
-    level <- suppressWarnings(as.integer(level))
-    if (length(level) != 1L || is.na(level) || level < 0L) level <- 1L
-    if (level == 0L || fundsr_verbosity() >= level) message(...)
-    invisible(NULL)
-}
-
-stop_if_dup_nm <- function(nms, context) {
-    if (!is.character(context) || length(context) != 1L || is.na(context) || !nzchar(context)) {
-        context <- "<unknown>"
-    }
-    if (is.null(nms) || !length(nms)) {
-        return(invisible(NULL))
-    }
-    nms <- as.character(nms)
-
-    d <- anyDuplicated(nms)
-    if (d == 0L) {
-        return(invisible(NULL))
-    }
-    tab <- table(nms, useNA = "ifany")
-    dup <- names(tab)[tab > 1L]
-    msg <- paste0(dup, " (", as.integer(tab[dup]), "x)")
-    stop(
-        "Duplicate names in ", context, ": ",
-        paste(msg, collapse = ", "),
-        call. = FALSE
-    )
-}
-
-add_gg_params <- function(p, gg_params) {
-    if (is.null(gg_params)) return(p)
-
-    if (!is.list(gg_params)) gg_params <- list(gg_params)
-    repeat {
-        any_list <- any(vapply(gg_params, is.list, logical(1)))
-        if (!any_list) break
-        gg_params <- purrr::list_flatten(gg_params)
-    }
-
-    tryCatch(
-        purrr::reduce(gg_params, `+`, .init = p),
-        error = function(e) {
-            stop(
-                "Invalid `gg_params`: must contain ggplot components (scales/themes/etc.).\n",
-                "Underlying error: ", conditionMessage(e),
-                call. = FALSE
-            )
-        }
-    )
-}
-
-keep_supported_breaks <- function(breaks, min_date, max_date) {
-    breaks <- sort(unique(breaks))
-    if (length(breaks) <= 1L) return(breaks)
-
-    b <- as.numeric(breaks)
-    mids <- (b[-1] + b[-length(b)]) / 2
-
-    left  <- c(-Inf, mids)
-    right <- c(mids, Inf)
-
-    mn <- as.numeric(min_date)
-    mx <- as.numeric(max_date)
-
-    breaks[mx >= left & mn <= right]
 }
