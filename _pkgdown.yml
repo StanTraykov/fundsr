@@ -21,9 +21,9 @@ reference:
     contents:
       - has_concept("fund/index workflow functions")
 
-  - title: "Fund-index map mutators"
+  - title: "Fund-index map functions"
     contents:
-      - has_concept("fund-index map mutators")
+      - has_concept("fund-index map functions")
 
   - title: "Provider wrappers"
     contents:
