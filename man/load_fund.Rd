@@ -54,14 +54,14 @@ alongside the fund.}
 }
 \value{
 Invisibly returns \code{NULL}. The imported data are stored in
-\code{.fundsr_storage} under \code{tolower(ticker)}. A fund/index mapping is recorded
-in \code{.fundsr$fund_index_map} when \code{benchmark} is supplied.
+\code{session$storage} under \code{tolower(ticker)}. A fund/index mapping is recorded
+in \code{session$state$fund_index_map} when \code{benchmark} is supplied.
 }
 \description{
 Imports a fund's NAV time series from an Excel file and stores it in the
 storage environment via \code{store_timeseries()}. Optionally, a benchmark column
 can also be imported, and a fund/index mapping is recorded in
-\code{.fundsr$fund_index_map}.
+\code{session$state$fund_index_map}.
 }
 \details{
 If \code{file} is \code{NULL}, the function searches \code{fundsr.data_dir} for
@@ -72,7 +72,7 @@ The function builds a column-translation mapping from the fund NAV column and,
 if requested, a benchmark column. It then calls \code{read_timeseries_excel()} to read the
 Excel file and \code{store_timeseries()} to cache the imported object under
 \code{var_name}, if supplied, otherwise \code{tolower(ticker)}. When \code{benchmark} is provided, a
-corresponding entry is added to \code{.fundsr$fund_index_map} to link the fund to its benchmark key.
+corresponding entry is added to \code{session$state$fund_index_map} to link the fund to its benchmark key.
 }
 \seealso{
 Provider wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}

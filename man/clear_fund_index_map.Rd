@@ -14,7 +14,7 @@ default session when \code{NULL}.}
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-Clears the fund-index map stored in \code{.fundsr$fund_index_map}.
+Clears the fund-index map stored in \code{session$state$fund_index_map}.
 }
 \seealso{
 Other fund-index map functions: 

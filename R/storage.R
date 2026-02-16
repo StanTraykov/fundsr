@@ -1,7 +1,7 @@
 #' Get the internal fund storage
 #'
 #' Returns the fundsr's fund storage environment
-#' (`.fundsr_storage`).
+#' (`session$storage`).
 #'
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
@@ -17,11 +17,11 @@ get_storage <- function(session = NULL) {
 #' Clear storage
 #'
 #' Removes all objects from the package's storage environment
-#' (`.fundsr_storage`). Optionally also clears the fund-index map
-#' (`.fundsr$fund_index_map`).
+#' (`session$storage`). Optionally also clears the fund-index map
+#' (`session$state$fund_index_map`).
 #'
 #' @param clear_map Logical scalar; if `TRUE`, also clears
-#'   `.fundsr$fund_index_map`.
+#'   `session$state$fund_index_map`.
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
 #'
@@ -64,17 +64,17 @@ clear_storage <- function(clear_map = FALSE, session = NULL) {
 #' Store a cached object in the package storage environment
 #'
 #' Evaluate an expression and cache its result in the package storage
-#' environment (`.fundsr_storage`) under a given name. The expression is only
+#' environment (`session$storage`) under a given name. The expression is only
 #' re-evaluated when the cached value is missing, when `overwrite = TRUE`, or
 #' when the global option `fundsr.reload` is `TRUE`. Optionally merges additional
-#' fund/index mappings into `.fundsr$fund_index_map`.
+#' fund/index mappings into `session$state$fund_index_map`.
 #'
 #' @param var_name Character scalar. Name of the variable to store in
-#'   `.fundsr_storage`.
+#'   `session$storage`.
 #' @param expr An expression. Evaluated in the caller's environment when
 #'   (re)computing the cached value.
 #' @param fund_index_map Optional named vector of fund/index pairs to merge
-#'   into `.fundsr$fund_index_map`. Names are used as keys, values should be indices.
+#'   into `session$state$fund_index_map`. Names are used as keys, values should be indices.
 #' @param overwrite Logical scalar. If `TRUE`, recompute and replace any existing
 #'   cached value, regardless of `fundsr.reload`.
 #' @param postprocess Function applied to the computed value before caching.
@@ -87,17 +87,17 @@ clear_storage <- function(clear_map = FALSE, session = NULL) {
 #'
 #' @details
 #' `expr` is evaluated in the environment where `store_timeseries()` is called
-#' (i.e. the caller's environment), then assigned into `.fundsr_storage` under
+#' (i.e. the caller's environment), then assigned into `session$storage` under
 #' `var_name`.
 #'
 #' Caching behavior is controlled by:
 #' \itemize{
 #'   \item `overwrite = TRUE` (always recompute),
 #'   \item `options(fundsr.reload = TRUE)` (force recomputation globally), or
-#'   \item absence of `var_name` in `.fundsr_storage` (compute once).
+#'   \item absence of `var_name` in `session$storage` (compute once).
 #' }
 #'
-#' If `fund_index_map` is supplied, it is merged into `.fundsr$fund_index_map`
+#' If `fund_index_map` is supplied, it is merged into `session$state$fund_index_map`
 #' via name-based assignment: existing entries with the same names are replaced.
 #'
 #' @family fund/index workflow functions

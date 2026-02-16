@@ -2,7 +2,7 @@
 #'
 #' Wrapper around `store_timeseries()` and `read_timeseries_excel()` for MSCI index files.
 #'
-#' @param var_name Storage key used in `.fundsr_storage`.
+#' @param var_name Storage key used in `session$storage`.
 #' @param col_trans Named vector specifying column translations.
 #' @param benchmarks Optional index mapping to record in
 #'   the fund index map (used to map gross to net indices).
@@ -33,7 +33,7 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL) {
 #' Imports a fund's NAV time series from an Excel file and stores it in the
 #' storage environment via `store_timeseries()`. Optionally, a benchmark column
 #' can also be imported, and a fund/index mapping is recorded in
-#' `.fundsr$fund_index_map`.
+#' `session$state$fund_index_map`.
 #'
 #' If `file` is `NULL`, the function searches `fundsr.data_dir` for
 #' exactly one of `paste0(toupper(ticker), ".xlsx")` or
@@ -61,15 +61,15 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL) {
 #'   `overwrite` or `postprocess`.
 #'
 #' @return Invisibly returns `NULL`. The imported data are stored in
-#'   `.fundsr_storage` under `tolower(ticker)`. A fund/index mapping is recorded
-#'   in `.fundsr$fund_index_map` when `benchmark` is supplied.
+#'   `session$storage` under `tolower(ticker)`. A fund/index mapping is recorded
+#'   in `session$state$fund_index_map` when `benchmark` is supplied.
 #'
 #' @details
 #' The function builds a column-translation mapping from the fund NAV column and,
 #' if requested, a benchmark column. It then calls `read_timeseries_excel()` to read the
 #' Excel file and `store_timeseries()` to cache the imported object under
 #' `var_name`, if supplied, otherwise `tolower(ticker)`. When `benchmark` is provided, a
-#' corresponding entry is added to `.fundsr$fund_index_map` to link the fund to its benchmark key.
+#' corresponding entry is added to `session$state$fund_index_map` to link the fund to its benchmark key.
 #'
 #' @seealso
 #' Provider wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]

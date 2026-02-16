@@ -14,7 +14,7 @@ default session when \code{NULL}.}
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-Clears the internal Inkscape export queue (\code{.fundsr$inkscape_queue}), removing all
+Clears the internal Inkscape export queue (\code{session$state$inkscape_queue}), removing all
 queued export commands.
 }
 \examples{

@@ -15,7 +15,7 @@ The storage environment.
 }
 \description{
 Returns the fundsr's fund storage environment
-(\code{.fundsr_storage}).
+(\code{session$storage}).
 }
 \seealso{
 Other fund/index workflow functions: 

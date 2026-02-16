@@ -15,7 +15,7 @@ A named character vector representing the internal fund index mapping.
 }
 \description{
 Returns the package's fund index lookup table stored in
-\code{.fundsr$fund_index_map}.
+\code{session$state$fund_index_map}.
 }
 \seealso{
 Other fund-index map functions: 
