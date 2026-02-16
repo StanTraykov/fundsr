@@ -3,6 +3,7 @@
 ## General
 
 - add new structured error/state-checking framework; improve error messages, standardize classes
+- add session management to all functions requiring state via `session` parameter (not specifying it uses a default session fo backwards compatibility / simple use cases)
 
 ## Importing
 
