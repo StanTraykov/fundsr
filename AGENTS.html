@@ -47,173 +47,131 @@
 
 <p>Guidance for AI/code agents working in this repository.</p>
 <div class="section level2">
-<h2 id="scope-priorities-and-discipline">Scope, priorities, and discipline<a class="anchor" aria-label="anchor" href="#scope-priorities-and-discipline"></a></h2>
-<ul><li>This guidance applies to the entire repository.</li>
-<li>Follow <strong>system/developer/user</strong> instructions first, then this file.</li>
-<li>Keep changes <strong>small, reviewable, and reversible</strong>.</li>
-<li>Do not refactor unrelated code. Avoid renames/moves/deletions unless required.</li>
-<li>Prefer incremental edits that keep diffs readable.</li>
-</ul></div>
+<h2 id="id_0-priority-order">0) Priority order<a class="anchor" aria-label="anchor" href="#id_0-priority-order"></a></h2>
+<ol style="list-style-type: decimal"><li>Follow <strong>system/developer/user instructions</strong> in the chat.</li>
+<li>Then follow this file.</li>
+<li>If this file conflicts with the repo’s established conventions, prefer the repo’s existing code patterns.</li>
+</ol></div>
 <div class="section level2">
-<h2 id="repository-overview">Repository overview<a class="anchor" aria-label="anchor" href="#repository-overview"></a></h2>
-<ul><li>This is an <strong>R package</strong> named <code>fundsr</code> for importing ETF/index data and producing plots and financial/survival visuals.</li>
-<li>Core package code: <code>R/</code>
-</li>
-<li>Tests: <code>tests/testthat/</code> (entry: <code>tests/testthat.R</code>)</li>
-<li>Docs: roxygen in <code>R/</code> → generated <code>man/</code> and <code>NAMESPACE</code>
-</li>
-<li>Website/vignettes: <code>vignettes/</code> and pkgdown config in <code>_pkgdown.yml</code>
-</li>
-<li>i18n: <code>R/i18n.R</code>, <code>po/</code>, <code>inst/po/</code>
-</li>
-</ul></div>
-<div class="section level2">
-<h2 id="architecture-map-rough">Architecture map (rough)<a class="anchor" aria-label="anchor" href="#architecture-map-rough"></a></h2>
-<ul><li>
-<strong>Checks &amp; errors:</strong> <code>R/checks.R</code>
-</li>
-<li>
-<strong>State &amp; storage:</strong> <code>R/state.R</code>, <code>R/storage.R</code>, <code>R/zzz.R</code>
-</li>
-<li>
-<strong>Options:</strong> <code>R/options.R</code>
-</li>
-<li>
-<strong>Downloads:</strong> <code>R/fund_download.R</code>
-</li>
-<li>
-<strong>Ingest/readers:</strong> <code>R/read_text.R</code>, <code>R/read_excel.R</code>, <code>R/data_loaders.R</code>
-</li>
-<li>
-<strong>Computation:</strong> <code>R/fund_calc.R</code>, <code>R/fund_index_map.R</code>
-</li>
-<li>
-<strong>Plotting/export:</strong> <code>R/plot_*.R</code>, <code>R/plot_export.R</code>, <code>R/xlm.R</code>, <code>R/life.R</code>, <code>R/es_aasmr.R</code>
-</li>
-<li>
-<strong>Provider wrappers:</strong> <code>R/wrappers.R</code>
-</li>
-</ul><p>Preserve these boundaries; don’t mix unrelated concerns.</p>
+<h2 id="id_1-repository-summary">1) Repository summary<a class="anchor" aria-label="anchor" href="#id_1-repository-summary"></a></h2>
+<p><code>fundsr</code> is an <strong>R package</strong> for: - importing fund/index time series from provider exports (Excel/CSV/TSV), - caching them in a package-owned session store, - computing rolling differences / tracking diagnostics, - producing plots (incl. export helpers), - plus survival / life-table utilities.</p>
+<p>Key directories: - <code>R/</code> – package code (source of truth) - <code>tests/testthat/</code> – tests (<code>tests/testthat.R</code> runs them) - <code>man/</code> – generated Rd docs (do not edit by hand) - <code>vignettes/</code>, <code>pkgdown/</code> – website and long-form docs - <code>po/</code>, <code>inst/po/</code> – translations / i18n assets</p>
 </div>
 <div class="section level2">
-<h2 id="error-handling-important">Error handling (IMPORTANT)<a class="anchor" aria-label="anchor" href="#error-handling-important"></a></h2>
-<p>This repo uses a structured error framework. Prefer it over raw <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>.</p>
-<div class="section level3">
-<h3 id="use-stop_bad_arg-when">Use <code>stop_bad_arg()</code> when:<a class="anchor" aria-label="anchor" href="#use-stop_bad_arg-when"></a></h3>
-<ul><li>A function argument is invalid (type/length/range/pattern).</li>
-<li>An input parameter contradicts another parameter.</li>
-<li>A required column name is missing because the user specified it wrong.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="use-fundsr_abort-when">Use <code>fundsr_abort()</code> when:<a class="anchor" aria-label="anchor" href="#use-fundsr_abort-when"></a></h3>
-<ul><li>The failure is <strong>not</strong> primarily an argument issue:
-<ul><li>IO problems (missing files, unreadable files, cannot create directories)</li>
-<li>Bad or incomplete input data (file contents don’t match expectations)</li>
-<li>Invalid internal state (<code>.fundsr</code> / <code>.fundsr_storage</code> not initialised, registry corrupted)</li>
-<li>Join conflicts, missing baseline rows, inconsistent datasets, etc.</li>
-</ul></li>
-<li>Wrap underlying errors via <code>parent = e</code> and classify the error with <code>class = ...</code>.</li>
-</ul></div>
-<div class="section level3">
-<h3 id="conventions">Conventions<a class="anchor" aria-label="anchor" href="#conventions"></a></h3>
-<ul><li>Provide messages as character vectors when useful; they are collapsed with newlines.</li>
-<li>Prefer stable error class names like:
+<h2 id="id_2-architecture-and-state-model">2) Architecture and state model<a class="anchor" aria-label="anchor" href="#id_2-architecture-and-state-model"></a></h2>
+<p>This package is intentionally <strong>stateful</strong>:</p>
 <ul><li>
-<code>fundsr_bad_state</code>, <code>fundsr_io_error</code>, <code>fundsr_bad_data</code>, <code>fundsr_download_failed</code>, <code>fundsr_loader_failed</code>, <code>fundsr_no_data</code>, <code>fundsr_incomplete_data</code>, <code>fundsr_bad_option</code>, etc.</li>
+<code>.fundsr</code> is a session environment for mutable registries and metadata:
+<ul><li>loader registry (<code>.fundsr$data_loaders</code>)</li>
+<li>fund/index map (<code>.fundsr$fund_index_map</code>)</li>
+<li>export queue (<code>.fundsr$inkscape_queue</code>)</li>
+<li>XLM bookkeeping (<code>.fundsr$done_xlm_sets</code>)</li>
 </ul></li>
-<li>When applicable, set <code>arg = "&lt;argument name&gt;"</code> to support caller UX.</li>
-</ul></div>
-</div>
-<div class="section level2">
-<h2 id="state-model--side-effects">State model &amp; side effects<a class="anchor" aria-label="anchor" href="#state-model--side-effects"></a></h2>
-<ul><li>Package state lives in <code>.fundsr</code> and <code>.fundsr_storage</code> (initialised in <code>.onLoad()</code> in <code>R/zzz.R</code>).</li>
-<li>Functions that rely on state/storage should call:
-<ul><li>
-<code>fundsr_require_state()</code> or <code>fundsr_require_state(storage = TRUE)</code>
-</li>
-</ul></li>
-<li>Do not introduce new global variables. Do not bypass these helpers.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="options-and-messaging">Options and messaging<a class="anchor" aria-label="anchor" href="#options-and-messaging"></a></h2>
-<div class="section level3">
-<h3 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a></h3>
-<p>Options are namespaced as <code>fundsr.&lt;name&gt;</code> and accessed via <code><a href="reference/fundsr_get_option.html">fundsr_get_option()</a></code>. Key options: - <code>fundsr.data_dir</code>, <code>fundsr.out_dir</code> - <code>fundsr.reload</code> (controls caching in data loaders) - <code>fundsr.verbosity</code> (integer; 0 silences informational messages)</p>
-<p>Do not read <code>getOption("fundsr.*")</code> directly in new code; use <code><a href="reference/fundsr_get_option.html">fundsr_get_option()</a></code>.</p>
-</div>
-<div class="section level3">
-<h3 id="messaging--progress-output">Messaging / progress output<a class="anchor" aria-label="anchor" href="#messaging--progress-output"></a></h3>
-<ul><li>Use <code>fundsr_msg(..., level = &lt;int&gt;)</code> for output. Avoid <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>, <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>, <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>.</li>
-<li>Avoid noisy defaults:
-<ul><li>Do not enable <code>readr</code> progress bars by default.</li>
-<li>Gate progress output via <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> or <code>fundsr_verbosity()</code>/<code>fundsr_msg(level=...)</code>.</li>
-</ul></li>
-<li>Prefer <code>level = 1L</code> for normal informative messages, <code>2L</code> for detailed diagnostics.</li>
-</ul></div>
-</div>
-<div class="section level2">
-<h2 id="i18n--gettext">i18n / gettext<a class="anchor" aria-label="anchor" href="#i18n--gettext"></a></h2>
-<ul><li>User-facing strings may be translated.</li>
-<li>When composing translated strings with placeholders:
-<ul><li>Translate first: <code>gettext("... {name} ...")</code>
-</li>
-<li>Then interpolate: <code>glue(..., gettext("..."))</code>
-</li>
-</ul></li>
-<li>Do not change placeholder names casually; it breaks translations.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="style--coding-conventions">Style &amp; coding conventions<a class="anchor" aria-label="anchor" href="#style--coding-conventions"></a></h2>
-<ul><li>Use idiomatic R with <strong>4-space indentation</strong>.</li>
-<li>Keep lines reasonably short (~100 chars target).</li>
-<li>Avoid deep nesting; use small helpers where appropriate.</li>
-<li>Follow existing conventions:
-<ul><li>
-<code>check_*()</code> helpers for validation</li>
 <li>
-<code>.data</code> / <code>.env</code> pronouns in dplyr code</li>
-<li>
-<code>imports.R</code> governs package imports; avoid adding <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> in package code</li>
-</ul></li>
-<li>Avoid adding dependencies unless necessary; if you add one, update <code>DESCRIPTION</code>.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="documentation-and-generated-files">Documentation and generated files<a class="anchor" aria-label="anchor" href="#documentation-and-generated-files"></a></h2>
+<code>.fundsr_storage</code> is an environment used as a cache for imported/processed objects.</li>
+</ul><p>Initialization happens in <code>R/zzz.R</code> via <code>.onLoad()</code>.</p>
+<div class="section level3">
+<h3 id="main-building-blocks">Main building blocks<a class="anchor" aria-label="anchor" href="#main-building-blocks"></a></h3>
 <ul><li>
-<code>man/*.Rd</code> and <code>NAMESPACE</code> are generated.</li>
-<li>If you modify roxygen or exports, regenerate via <code>devtools::document()</code> and commit the results.</li>
-<li>Keep README/vignettes consistent with user-visible behavior changes.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="testing-and-validation">Testing and validation<a class="anchor" aria-label="anchor" href="#testing-and-validation"></a></h2>
-<p>Prefer the narrowest checks first: 1. Targeted tests: - <code>Rscript -e 'testthat::test_file("tests/testthat/test-&lt;file&gt;.R")'</code> 2. Full tests: - <code>Rscript -e 'testthat::test_dir("tests/testthat")'</code> 3. Full package check: - <code>R CMD check --no-manual --as-cran .</code></p>
-<p>If checks cannot be run due to environment limits, state what was attempted and why.</p>
+<strong>Checks &amp; structured errors:</strong> <code>fundsr_abort()</code>, <code>stop_bad_arg()</code>, <code>check_*()</code> helpers (<code>R/checks.R</code>)</li>
+<li>
+<strong>State gate:</strong> <code>fundsr_require_state()</code> (<code>R/state.R</code>)</li>
+<li>
+<strong>Storage/cache:</strong> <code><a href="reference/store_timeseries.html">store_timeseries()</a></code>, <code><a href="reference/get_storage.html">get_storage()</a></code>, <code><a href="reference/clear_storage.html">clear_storage()</a></code> (<code>R/storage.R</code>)</li>
+<li>
+<strong>Loader registry:</strong> <code><a href="reference/add_data_loader.html">add_data_loader()</a></code>, <code><a href="reference/run_data_loaders.html">run_data_loaders()</a></code>, <code><a href="reference/clear_data_loaders.html">clear_data_loaders()</a></code> (<code>R/data_loaders.R</code>)</li>
+<li>
+<strong>Wrappers:</strong> provider wrappers are thin adapters around the common import/caching workflow (<code>R/wrappers.R</code>)</li>
+<li>
+<strong>Joining:</strong> <code><a href="reference/join_env.html">join_env()</a></code> and <code><a href="reference/build_all_series.html">build_all_series()</a></code> assemble storage content into wide tibbles (<code>R/storage.R</code>)</li>
+<li>
+<strong>Utilities &amp; messaging:</strong> <code>%||%</code>, <code>fundsr_msg()</code>, helper utilities (<code>R/utils.R</code>)</li>
+<li>
+<strong>XLM utilities:</strong> read+plot Xetra XLM exports (<code>R/xlm.R</code>)</li>
+<li>
+<strong>i18n:</strong> gettext usage + catalogs (<code>R/i18n.R</code>, <code>po/</code>, <code>inst/po/</code>)</li>
+</ul><p>When modifying code, preserve these separations: - readers parse; wrappers configure; storage caches; calculations compute; plots render.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="data-examples-and-downloads">Data, examples, and downloads<a class="anchor" aria-label="anchor" href="#data-examples-and-downloads"></a></h2>
-<ul><li>Do not commit bulky/generated data unless explicitly requested.</li>
-<li>Example scripts live under <code>inst/scripts/examples</code>; preserve naming/layout.</li>
-<li>Download helpers enforce safe filenames; do not loosen filename safety checks without a specific reason.</li>
-</ul></div>
-<div class="section level2">
-<h2 id="prcommit-expectations-for-agents">PR/commit expectations for agents<a class="anchor" aria-label="anchor" href="#prcommit-expectations-for-agents"></a></h2>
-<ul><li>Make atomic commits with clear, imperative messages.</li>
-<li>Summarize:
-<ul><li>what changed,</li>
-<li>why it changed,</li>
-<li>how it was validated,</li>
-<li>any backward-compatibility impact.</li>
+<h2 id="id_3-error-handling-and-validation-rules">3) Error handling and validation rules<a class="anchor" aria-label="anchor" href="#id_3-error-handling-and-validation-rules"></a></h2>
+<p>This repo uses structured errors with <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code>.</p>
+<div class="section level3">
+<h3 id="which-error-helper-to-use">Which error helper to use<a class="anchor" aria-label="anchor" href="#which-error-helper-to-use"></a></h3>
+<ul><li>Use <code>stop_bad_arg()</code> for <strong>invalid user inputs / argument validation</strong>.</li>
+<li>Use <code>fundsr_abort()</code> for:
+<ul><li>state problems (e.g. missing initialization),</li>
+<li>I/O failures,</li>
+<li>invalid/ambiguous input data files,</li>
+<li>internal invariants / “this should not happen” situations,</li>
+<li>wrapping lower-level failures.</li>
 </ul></li>
 </ul></div>
+<div class="section level3">
+<h3 id="checks-and-consistency">Checks and consistency<a class="anchor" aria-label="anchor" href="#checks-and-consistency"></a></h3>
+<ul><li>Prefer existing <code>check_*()</code> helpers over ad-hoc validation.</li>
+<li>When wrapping a caught error, pass it as <code>parent = e</code> so callers retain context.</li>
+<li>Use meaningful error classes consistent with existing ones (examples seen in code):
+<ul><li>
+<code>fundsr_bad_state</code>, <code>fundsr_io_error</code>, <code>fundsr_bad_data</code>,</li>
+<li>
+<code>fundsr_duplicate_dates</code>, <code>fundsr_download_failed</code>, etc.</li>
+</ul></li>
+</ul><p>Message style: - Keep messages actionable and specific (include key parameters like <code>file</code>, <code>sheet</code>, etc. when relevant). - Avoid overly verbose multi-paragraph output unless it materially helps the user debug.</p>
+</div>
+</div>
 <div class="section level2">
-<h2 id="quick-checklist-before-finishing">Quick checklist before finishing<a class="anchor" aria-label="anchor" href="#quick-checklist-before-finishing"></a></h2>
-<ul class="task-list"><li><label><input type="checkbox">Changes match the request.</label></li>
-<li><label><input type="checkbox">Errors use <code>stop_bad_arg()</code> / <code>fundsr_abort()</code> appropriately.</label></li>
-<li><label><input type="checkbox">Messages respect <code>fundsr_msg()</code> / verbosity.</label></li>
-<li><label><input type="checkbox">State access uses <code>fundsr_require_state()</code> where needed.</label></li>
-<li><label><input type="checkbox">Docs regenerated if roxygen/exports changed.</label></li>
-<li><label><input type="checkbox">Tests/checks run (or blockers documented).</label></li>
-<li><label><input type="checkbox">Diff is focused and reviewable.</label></li>
+<h2 id="id_4-coding-style-and-conventions">4) Coding style and conventions<a class="anchor" aria-label="anchor" href="#id_4-coding-style-and-conventions"></a></h2>
+<ul><li>Indentation: <strong>4 spaces</strong>.</li>
+<li>Keep lines roughly ≤ 100 characters when practical.</li>
+<li>Match existing tidyverse patterns:
+<ul><li>use <code>.data</code> / <code>.env</code> pronouns for NSE,</li>
+<li>prefer readable pipelines and small helpers over deep nesting,</li>
+<li>use existing messaging (<code>fundsr_msg</code>) for progress output where appropriate.</li>
+</ul></li>
+<li>Avoid broad refactors unless explicitly requested.</li>
+<li>Avoid new dependencies unless necessary; if added, update <code>DESCRIPTION</code>.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="id_5-import-pipeline-conventions">5) Import pipeline conventions<a class="anchor" aria-label="anchor" href="#id_5-import-pipeline-conventions"></a></h2>
+<p>Imported series typically have: - a <code>date</code> column of class <code>Date</code>, - one or more value columns (often numeric).</p>
+<p>Wrappers/loaders generally: 1. call a reader (<code><a href="reference/read_timeseries.html">read_timeseries()</a></code> / <code><a href="reference/read_timeseries_excel.html">read_timeseries_excel()</a></code>), 2. postprocess (select/rename/coerce), 3. store via <code><a href="reference/store_timeseries.html">store_timeseries()</a></code> under a stable key (often lowercase ticker), 4. optionally record benchmark mappings via <code>fund_index_map</code>.</p>
+<p>If changing a reader, consider downstream effects on: - provider wrappers in <code>R/wrappers.R</code>, - <code><a href="reference/build_all_series.html">build_all_series()</a></code> / <code><a href="reference/join_env.html">join_env()</a></code>, - rolling difference calculations and plotting code.</p>
+</div>
+<div class="section level2">
+<h2 id="id_6-documentation-and-generated-files">6) Documentation and generated files<a class="anchor" aria-label="anchor" href="#id_6-documentation-and-generated-files"></a></h2>
+<ul><li>
+<code>man/*.Rd</code> and <code>NAMESPACE</code> are generated from roxygen comments.</li>
+<li>Do not hand-edit generated files.</li>
+<li>If exported APIs or roxygen docs change, run <code>devtools::document()</code> and commit updated <code>man/</code> and <code>NAMESPACE</code>.</li>
+<li>Keep README/vignettes consistent with behavior changes that affect users.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="id_7-internationalization-i18n">7) Internationalization (i18n)<a class="anchor" aria-label="anchor" href="#id_7-internationalization-i18n"></a></h2>
+<ul><li>Some user-facing strings are translated via gettext.</li>
+<li>When modifying user-visible strings, preserve translation hooks where present.</li>
+<li>If you introduce new user-facing strings in translated areas, follow existing i18n patterns and consider whether catalogs/templates need updating.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="id_8-tests-and-validation-workflow">8) Tests and validation workflow<a class="anchor" aria-label="anchor" href="#id_8-tests-and-validation-workflow"></a></h2>
+<p>Prefer the narrowest relevant checks: 1. Targeted tests (when present):<br><code>Rscript -e 'testthat::test_file("tests/testthat/&lt;file&gt;.R")'</code> 2. All tests:<br><code>Rscript -e 'testthat::test_dir("tests/testthat")'</code> 3. Full package check:<br><code>R CMD check --no-manual --as-cran .</code></p>
+<p>If checks cannot be run (environment limits), state what was attempted and why.</p>
+</div>
+<div class="section level2">
+<h2 id="id_9-change-discipline-for-agents">9) Change discipline for agents<a class="anchor" aria-label="anchor" href="#id_9-change-discipline-for-agents"></a></h2>
+<ul><li>Keep changes minimal and reviewable.</li>
+<li>Do not rename/move/delete files unless required by the task.</li>
+<li>Avoid “drive-by” formatting or cleanup in unrelated files.</li>
+<li>Prefer atomic commits with imperative messages and a brief validation note.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="id_10-pre-finish-checklist">10) Pre-finish checklist<a class="anchor" aria-label="anchor" href="#id_10-pre-finish-checklist"></a></h2>
+<ul class="task-list"><li><label><input type="checkbox">Scope matches the user request.</label></li>
+<li><label><input type="checkbox">Error handling follows <code>fundsr_abort()</code> / <code>stop_bad_arg()</code> conventions.</label></li>
+<li><label><input type="checkbox">Style matches repository conventions.</label></li>
+<li><label><input type="checkbox">Generated docs updated if needed.</label></li>
+<li><label><input type="checkbox">Relevant tests/checks run (or blockers documented).</label></li>
+<li><label><input type="checkbox"><code>git diff</code> is focused and reviewable.</label></li>
 </ul></div>
 </div>
 
