@@ -67,6 +67,7 @@ stored in an environment and returned.</p>
 <span>  add_gg_params <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_blank.html" class="external-link">geom_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  bmark_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"net"</span>, <span class="st">"gross"</span><span class="op">)</span>,</span>
 <span>  suffix <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  session <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -109,6 +110,11 @@ defined in <code>plot_spec</code>. Defaults to <code><a href="https://ggplot2.ti
 <dt id="arg-suffix">suffix<a class="anchor" aria-label="anchor" href="#arg-suffix"></a></dt>
 <dd><p>Character string appended to each <code>plot_id</code> when constructing
 filenames and names in the returned environment. Defaults to <code>""</code>.</p></dd>
+
+
+<dt id="arg-session">session<a class="anchor" aria-label="anchor" href="#arg-session"></a></dt>
+<dd><p>Optional <code>fundsr_session</code> object. Defaults to the package
+default session when <code>NULL</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

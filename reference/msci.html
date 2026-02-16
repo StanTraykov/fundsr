@@ -50,7 +50,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">msci</span><span class="op">(</span><span class="va">var_name</span>, <span class="va">file</span>, <span class="va">col_trans</span>, benchmarks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">msci</span><span class="op">(</span><span class="va">var_name</span>, <span class="va">file</span>, <span class="va">col_trans</span>, benchmarks <span class="op">=</span> <span class="cn">NULL</span>, session <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,6 +72,11 @@
 <dt id="arg-benchmarks">benchmarks<a class="anchor" aria-label="anchor" href="#arg-benchmarks"></a></dt>
 <dd><p>Optional index mapping to record in
 the fund index map (used to map gross to net indices).</p></dd>
+
+
+<dt id="arg-session">session<a class="anchor" aria-label="anchor" href="#arg-session"></a></dt>
+<dd><p>Optional <code>fundsr_session</code> object. Defaults to the package
+default session when <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
