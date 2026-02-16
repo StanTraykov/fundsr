@@ -6,11 +6,13 @@
 #' @param fund_index_map Named character vector of fund-index pairs to merge into
 #'   `.fundsr$fund_index_map`. Names are fund identifiers; values are index
 #'   identifiers.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #' @family fund-index map functions
 #' @export
-add_fund_index_map <- function(fund_index_map) {
+add_fund_index_map <- function(fund_index_map, session = NULL) {
     fund_index_map <- check_mapping(
         fund_index_map,
         allow_null = TRUE,
@@ -21,7 +23,7 @@ add_fund_index_map <- function(fund_index_map) {
     if (is.null(fund_index_map) || length(fund_index_map) == 0L) {
         return(invisible(NULL))
     }
-    st <- fundsr_require_state()$state
+    st <- fundsr_require_state(session = session)$state
 
     cur <- st$fund_index_map
     cur <- tryCatch(
@@ -58,11 +60,14 @@ add_fund_index_map <- function(fund_index_map) {
 #' Returns the package's fund index lookup table stored in
 #' `.fundsr$fund_index_map`.
 #'
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
+#'
 #' @return A named character vector representing the internal fund index mapping.
 #' @family fund-index map functions
 #' @export
-get_fund_index_map <- function() {
-    st <- fundsr_require_state()$state
+get_fund_index_map <- function(session = NULL) {
+    st <- fundsr_require_state(session = session)$state
     st$fund_index_map
 }
 
@@ -70,13 +75,20 @@ get_fund_index_map <- function() {
 #'
 #' Clears the fund-index map stored in `.fundsr$fund_index_map`.
 #'
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
+#'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #' @family fund-index map functions
 #' @export
-clear_fund_index_map <- function() {
-    if (!is.environment(.fundsr)) {
+clear_fund_index_map <- function(session = NULL) {
+    session <- fundsr_get_session(session, validate = FALSE)
+    st <- session$state
+
+    if (!is.environment(st)) {
         return(invisible(NULL))
     }
-    .fundsr$fund_index_map <- character()
+
+    st$fund_index_map <- character()
     invisible(NULL)
 }

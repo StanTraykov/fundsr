@@ -4,11 +4,14 @@
 \alias{clear_storage}
 \title{Clear storage}
 \usage{
-clear_storage(clear_map = FALSE)
+clear_storage(clear_map = FALSE, session = NULL)
 }
 \arguments{
 \item{clear_map}{Logical scalar; if \code{TRUE}, also clears
 \code{.fundsr$fund_index_map}.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.

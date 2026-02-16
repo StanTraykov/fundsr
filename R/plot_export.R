@@ -89,8 +89,9 @@ save_plot <- function(file,
         a <- glue(
             "file-open:{svgf};export-filename:{pngf};export-width:{px_width};export-do;file-close"
         )
-        if (is.null(.fundsr$inkscape_queue)) clear_inkscape_queue()
-        .fundsr$inkscape_queue[file] <- a
+        st <- fundsr_require_state()$state
+        if (is.null(st$inkscape_queue)) clear_inkscape_queue()
+        st$inkscape_queue[file] <- a
     }
 
     if (save_png) {
@@ -148,7 +149,10 @@ save_plot <- function(file,
 #' @family plot export utilities
 #' @export
 export_pngs <- function(background = "white") {
-    if (length(.fundsr$inkscape_queue) == 0) {
+    check_string(background, allow_null = TRUE)
+    st <- fundsr_require_state()$state
+
+    if (length(st$inkscape_queue) == 0) {
         fundsr_msg("export_pngs: nothing queued.", level = 1L)
         return(invisible(NULL))
     }
@@ -157,7 +161,7 @@ export_pngs <- function(background = "white") {
         fundsr_msg("export_pngs: cannot find Inkscape", level = 0L)
         return(invisible(NULL))
     }
-    acts <- paste(.fundsr$inkscape_queue, collapse = ";")
+    acts <- paste(st$inkscape_queue, collapse = ";")
     if (!is.null(background)) {
         acts <- paste0(glue("export-background:{shQuote(background)};"), acts)
     }
@@ -178,6 +182,9 @@ export_pngs <- function(background = "white") {
 #' Clears the internal Inkscape export queue (`.fundsr$inkscape_queue`), removing all
 #' queued export commands.
 #'
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
+#'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
 #' @family plot export utilities
@@ -185,8 +192,15 @@ export_pngs <- function(background = "white") {
 #'
 #' @examples
 #' clear_inkscape_queue()
-clear_inkscape_queue <- function() {
-    .fundsr$inkscape_queue <- character()
+clear_inkscape_queue <- function(session = NULL) {
+    session <- fundsr_get_session(session, validate = FALSE)
+    st <- session$state
+
+    if (!is.environment(st)) {
+        return(invisible(NULL))
+    }
+
+    st$inkscape_queue <- character()
     invisible(NULL)
 }
 
@@ -289,7 +303,8 @@ run_plots <- function(roll_diffs,
     plots_env <- new.env(parent = emptyenv())
     xetra_map <- fundsr_get_option("xetra_map")
     bmark_type <- match.arg(bmark_type)
-    .fundsr$done_xlm_sets <- character()
+    st <- fundsr_require_state()$state
+    st$done_xlm_sets <- character()
     purrr::pwalk(runs, function(plot_id,
                                 title,
                                 data_filter,
@@ -319,7 +334,7 @@ run_plots <- function(roll_diffs,
                                 xetra_map[funds],
                                 funds)
             key <- vec_key(funds_xet, ignore_order = TRUE)
-            if (!key %in% .fundsr$done_xlm_sets) {
+            if (!key %in% st$done_xlm_sets) {
                 xlm_plot <- plot_xlms(xlm_data,
                                       funds_xet,
                                       gg_params = list(gg_params, add_gg_params),
@@ -327,7 +342,7 @@ run_plots <- function(roll_diffs,
                 xlm_fname <- paste0("xlm_", plot_id)
                 save_plot(xlm_fname, xlm_plot, width = width, height = height)
                 plots_env[[xlm_fname]] <- xlm_plot
-                .fundsr$done_xlm_sets <- c(.fundsr$done_xlm_sets, key)
+                st$done_xlm_sets <- c(st$done_xlm_sets, key)
             }
         }
     })
