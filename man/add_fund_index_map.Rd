@@ -4,12 +4,15 @@
 \alias{add_fund_index_map}
 \title{Add to fund-index map}
 \usage{
-add_fund_index_map(fund_index_map)
+add_fund_index_map(fund_index_map, session = NULL)
 }
 \arguments{
 \item{fund_index_map}{Named character vector of fund-index pairs to merge into
 \code{.fundsr$fund_index_map}. Names are fund identifiers; values are index
 identifiers.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.

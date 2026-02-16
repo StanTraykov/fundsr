@@ -4,10 +4,13 @@
 \alias{add_data_loader}
 \title{Register a data loader}
 \usage{
-add_data_loader(fun)
+add_data_loader(fun, session = NULL)
 }
 \arguments{
 \item{fun}{A function to register. Must take no arguments.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns the updated \code{.fundsr$data_loaders} list.

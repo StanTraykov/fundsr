@@ -4,7 +4,11 @@
 \alias{get_fund_index_map}
 \title{Get the internal fund index map}
 \usage{
-get_fund_index_map()
+get_fund_index_map(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 A named character vector representing the internal fund index mapping.

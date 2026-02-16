@@ -3,17 +3,24 @@
 #' Clears the internal data-loader registry (`.fundsr$data_loaders`), removing
 #' all previously registered data loader functions.
 #'
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
+#'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
 #' @family fund/index workflow functions
 #' @export
 #' @examples
 #' clear_data_loaders()
-clear_data_loaders <- function() {
-    if (!is.environment(.fundsr)) {
+clear_data_loaders <- function(session = NULL) {
+    session <- fundsr_get_session(session, validate = FALSE)
+    st <- session$state
+
+    if (!is.environment(st)) {
         return(invisible(NULL))
     }
-    .fundsr$data_loaders <- list()
+
+    st$data_loaders <- list()
     invisible(NULL)
 }
 
@@ -27,6 +34,8 @@ clear_data_loaders <- function() {
 #' added again.
 #'
 #' @param fun A function to register. Must take no arguments.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns the updated `.fundsr$data_loaders` list.
 #'
@@ -35,7 +44,7 @@ clear_data_loaders <- function() {
 #'
 #' @examples
 #' add_data_loader(function() NULL)
-add_data_loader <- function(fun) {
+add_data_loader <- function(fun, session = NULL) {
     if (!identical(typeof(fun), "closure")) {
         stop_bad_arg("fun", "must be an R function (a closure, not a primitive/builtin).")
     }
@@ -43,7 +52,7 @@ add_data_loader <- function(fun) {
         stop_bad_arg("fun", "must take no arguments.")
     }
 
-    st   <- fundsr_require_state()$state
+    st <- fundsr_require_state(session = session)$state
 
     if (is.null(st$data_loaders)) {
         st$data_loaders <- list()
@@ -86,6 +95,8 @@ add_data_loader <- function(fun) {
 #'
 #' @param reload Logical scalar. If `TRUE`, forces a full reload by setting
 #'   `options(fundsr.reload = TRUE)` for the duration of this call.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns `.fundsr_storage` after running the data loaders.
 #'
@@ -99,9 +110,9 @@ add_data_loader <- function(fun) {
 #'
 #' @family fund/index workflow functions
 #' @export
-run_data_loaders <- function(reload = FALSE) {
+run_data_loaders <- function(reload = FALSE, session = NULL) {
     check_logical(reload)
-    rqs <- fundsr_require_state(storage = TRUE)
+    rqs <- fundsr_require_state(storage = TRUE, session = session)
     st <- rqs$state
     storage <- rqs$storage
 

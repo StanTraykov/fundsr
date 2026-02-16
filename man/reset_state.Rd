@@ -4,16 +4,19 @@
 \alias{reset_state}
 \title{Clear fundsr session state}
 \usage{
-reset_state()
+reset_state(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-Convenience helper that clears mutable internal fundsr state: the fund storage
-(\code{.fundsr_storage}) and fund-index map (\code{.fundsr$fund_index_map}), the import-function
-registry (\code{.fundsr$data_loaders}), the Inkscape export queue (\code{.fundsr$inkscape_queue}),
-and the XLM bookkeeping vector (\code{.fundsr$done_xlm_sets}).
+Convenience helper that clears mutable internal fundsr state for a session:
+storage, fund-index map, import-function registry, Inkscape export queue, and
+the XLM bookkeeping vector.
 }
 \examples{
 reset_state()

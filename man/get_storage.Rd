@@ -4,7 +4,11 @@
 \alias{get_storage}
 \title{Get the internal fund storage}
 \usage{
-get_storage()
+get_storage(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 The storage environment.

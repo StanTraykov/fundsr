@@ -4,7 +4,11 @@
 \alias{clear_fund_index_map}
 \title{Clear fund-index map}
 \usage{
-clear_fund_index_map()
+clear_fund_index_map(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.
