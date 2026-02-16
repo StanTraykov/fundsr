@@ -1,5 +1,4 @@
-.fundsr <- NULL
-.fundsr_storage <- NULL
+.fundsr_default_session <- NULL
 
 fundsr_validate_session <- function(session,
                                     arg = "session",
@@ -53,23 +52,22 @@ fundsr_session <- function(state = new.env(parent = emptyenv()),
 
 #' Get the default fundsr session
 #'
-#' Returns a `fundsr_session` object backed by the package-global `.fundsr`
-#' and `.fundsr_storage` environments.
+#' Returns the package-global default `fundsr_session` object.
 #'
 #' @return An object of class `"fundsr_session"`.
 #' @family config functions
 #' @export
 fundsr_default_session <- function() {
-    structure(
-        list(state = .fundsr, storage = .fundsr_storage),
-        class = "fundsr_session"
-    )
+    if (!inherits(.fundsr_default_session, "fundsr_session")) {
+        .fundsr_default_session <<- fundsr_session()
+    }
+    .fundsr_default_session
 }
 
 
 fundsr_get_session <- function(session = NULL,
-    call = rlang::caller_env(n = 2L),
-    validate = TRUE) {
+                                 call = rlang::caller_env(n = 2L),
+                                 validate = TRUE) {
     validate <- check_logical(validate)
 
     if (is.null(session)) {
@@ -88,10 +86,9 @@ fundsr_get_session <- function(session = NULL,
 
 #' Clear fundsr session state
 #'
-#' Convenience helper that clears mutable internal fundsr state: the fund storage
-#' (`.fundsr_storage`) and fund-index map (`.fundsr$fund_index_map`), the import-function
-#' registry (`.fundsr$data_loaders`), the Inkscape export queue (`.fundsr$inkscape_queue`),
-#' and the XLM bookkeeping vector (`.fundsr$done_xlm_sets`).
+#' Convenience helper that clears mutable internal fundsr state for a session:
+#' storage, fund-index map, import-function registry, Inkscape export queue,
+#' and the XLM bookkeeping vector.
 #'
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.

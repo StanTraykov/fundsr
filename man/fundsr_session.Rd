@@ -22,8 +22,8 @@ An object of class \code{"fundsr_session"}.
 \code{fundsr_session()} constructs a \code{fundsr_session} object with explicit state and
 storage environments.
 
-\code{fundsr_default_session()} returns a \code{fundsr_session} backed by the package-global
-\code{.fundsr} and \code{.fundsr_storage} environments.
+\code{fundsr_default_session()} returns the package-global default
+\code{fundsr_session} object.
 }
 \seealso{
 Other config functions: 
