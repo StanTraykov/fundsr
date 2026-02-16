@@ -28,6 +28,7 @@ Wrapper around \code{store_timeseries()} and \code{read_timeseries_excel()} for 
 Other provider wrappers: 
 \code{\link{amun}()},
 \code{\link{avan}()},
+\code{\link{bnpp}()},
 \code{\link{hsbc}()},
 \code{\link{inve}()},
 \code{\link{ishs}()},

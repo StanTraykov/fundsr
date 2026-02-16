@@ -45,7 +45,7 @@ add_data_loader(function() {
     msci(var_name = "msci2-nt-jpy",
          col_trans = net_idx_trans_ccy("JPY"),
          file = "MSCI2-NT-JPY.xls")
-    msci(var_name = "msci2-gr-eur",
+    msci(var_name = "msci2-gr-jpy",
          col_trans = gross_idx_trans_ccy("JPY"),
          benchmarks = set_names(names(net_idx_trans_ccy("JPY")), names(gross_idx_trans_ccy("JPY"))),
          file = "MSCI2-GR-JPY.xls")

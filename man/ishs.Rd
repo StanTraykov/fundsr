@@ -27,6 +27,7 @@ Wrapper around \code{load_fund()} for iShares files.
 Other provider wrappers: 
 \code{\link{amun}()},
 \code{\link{avan}()},
+\code{\link{bnpp}()},
 \code{\link{hsbc}()},
 \code{\link{inve}()},
 \code{\link{msci}()},

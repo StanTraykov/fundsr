@@ -10,6 +10,9 @@
 #' @examples
 #' clear_data_loaders()
 clear_data_loaders <- function() {
+    if (!is.environment(.fundsr)) {
+        return(invisible(NULL))
+    }
     .fundsr$data_loaders <- list()
     invisible(NULL)
 }
@@ -33,28 +36,41 @@ clear_data_loaders <- function() {
 #' @examples
 #' add_data_loader(function() NULL)
 add_data_loader <- function(fun) {
-    if (!is.function(fun)) {
-        stop_bad_arg("fun", "must be a function.")
+    if (!identical(typeof(fun), "closure")) {
+        stop_bad_arg("fun", "must be an R function (a closure, not a primitive/builtin).")
     }
     if (length(formals(fun)) != 0L) {
         stop_bad_arg("fun", "must take no arguments.")
     }
+
+    fundsr_require_state()
+
     if (is.null(.fundsr$data_loaders)) {
         .fundsr$data_loaders <- list()
     }
     if (!is.list(.fundsr$data_loaders)) {
-        stop("Internal registry `.fundsr$data_loaders` must be a list.", call. = FALSE)
+        fundsr_abort(
+            msg   = "Internal registry `.fundsr$data_loaders` must be a list.",
+            class = "fundsr_bad_state"
+        )
     }
 
+    fns <- .fundsr$data_loaders
     sig <- function(f) paste(deparse(body(f)), collapse = "\n")
-
     fun_sig <- sig(fun)
-    already <- any(vapply(.fundsr$data_loaders, function(g) {
-        is.function(g) && identical(sig(g), fun_sig)
+
+    already <- any(vapply(fns, function(g) {
+        if (!identical(typeof(g), "closure")) {
+            fundsr_abort(
+                msg   = "Internal registry `.fundsr$data_loaders` must contain only closures.",
+                class = "fundsr_bad_state"
+            )
+        }
+        identical(sig(g), fun_sig)
     }, logical(1)))
 
     if (!already) {
-        .fundsr$data_loaders <- c(.fundsr$data_loaders, list(fun))
+        .fundsr$data_loaders <- c(fns, list(fun))
     }
 
     invisible(.fundsr$data_loaders)
@@ -85,27 +101,51 @@ add_data_loader <- function(fun) {
 #' @export
 run_data_loaders <- function(reload = FALSE) {
     check_logical(reload)
-    if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
-        stop("Fundsr storage is not initialised.", call. = FALSE)
-    }
+    fundsr_require_state(storage = TRUE)
+
     fns <- .fundsr$data_loaders
     if (is.null(fns)) fns <- list()
+
     if (!is.list(fns)) {
-        stop("Internal registry `.fundsr$data_loaders` must be a list of functions.", call. = FALSE)
+        fundsr_abort(
+            msg   = "Internal registry `.fundsr$data_loaders` must be a list of functions.",
+            class = "fundsr_bad_state"
+        )
     }
+
     for (i in seq_along(fns)) {
         fn <- fns[[i]]
-        if (!is.function(fn)) {
-            stop(sprintf("`.fundsr$data_loaders[[%d]]` is not a function.", i), call. = FALSE)
+        if (!identical(typeof(fn), "closure")) {
+            fundsr_abort(
+                msg   = sprintf("`.fundsr$data_loaders[[%d]]` is not a closure.", i),
+                class = "fundsr_bad_state"
+            )
         }
         if (length(formals(fn)) != 0L) {
-            stop(sprintf("`.fundsr$data_loaders[[%d]]` must take no arguments.", i), call. = FALSE)
+            fundsr_abort(
+                msg   = sprintf("`.fundsr$data_loaders[[%d]]` must take no arguments.", i),
+                class = "fundsr_bad_state"
+            )
         }
     }
+
     old <- fundsr_get_option("reload")
     options(fundsr.reload = reload)
     on.exit(options(fundsr.reload = old), add = TRUE)
 
-    for (fn in fns) fn()
+    for (i in seq_along(fns)) {
+        fn <- fns[[i]]
+        tryCatch(
+            fn(),
+            error = function(e) {
+                fundsr_abort(
+                    msg    = sprintf("Data loader %d failed.", i),
+                    class  = "fundsr_loader_failed",
+                    parent = e
+                )
+            }
+        )
+    }
+
     invisible(.fundsr_storage)
 }

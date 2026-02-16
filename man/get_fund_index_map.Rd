@@ -7,16 +7,15 @@
 get_fund_index_map()
 }
 \value{
-A character vector or named list representing the internal
-fund index mapping.
+A named character vector representing the internal fund index mapping.
 }
 \description{
 Returns the package's fund index lookup table stored in
 \code{.fundsr$fund_index_map}.
 }
 \seealso{
-Other fund-index map mutators: 
+Other fund-index map functions: 
 \code{\link{add_fund_index_map}()},
 \code{\link{clear_fund_index_map}()}
 }
-\concept{fund-index map mutators}
+\concept{fund-index map functions}

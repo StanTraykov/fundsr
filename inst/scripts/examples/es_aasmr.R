@@ -1,4 +1,5 @@
 library(tidyverse)
+library(glue)
 library(fundsr)
 
 ##### Config ######

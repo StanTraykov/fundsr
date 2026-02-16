@@ -57,14 +57,25 @@ read_timeseries <- function(
     path <- file.path(fund_data_dir, file)
 
     if (!file.exists(path)) {
-        stop(glue("Cannot read time series: {path} does not exist."),
-             call. = FALSE)
+        stop_bad_arg(
+            "file",
+            c(
+                "must refer to an existing file; file does not exist.",
+                sprintf("path = %s.", sQuote(path))
+            )
+        )
     }
 
     if (!is.null(line_filter)) {
         data_lines <- grep(line_filter, readr::read_lines(path), value = TRUE)
         if (length(data_lines) == 0L) {
-            stop_bad_arg("line_filter", "matched no lines.")
+            stop_bad_arg(
+                "line_filter",
+                c(
+                    "matched no lines.",
+                    sprintf("path = %s.", sQuote(path))
+                )
+            )
         }
         read_obj <- I(data_lines)
     } else {
@@ -81,9 +92,12 @@ read_timeseries <- function(
         "tsv" = readr::read_tsv,
         "tab" = readr::read_tsv,
         "txt" = readr::read_tsv,
-        stop(paste("Unsupported file extension for `file`: ",
-                   "expected .csv or .tsv/.txt/.tab (optionally .gz)."),
-             call. = FALSE)
+        stop_bad_arg(
+            "file",
+            c("must have extension .csv or .tsv/.txt/.tab (optionally .gz).",
+              sprintf("ext  = %s.", sQuote(ext)),
+              sprintf("path = %s.", sQuote(path)))
+        )
     )
     div <- switch(
         time_unit,
@@ -103,7 +117,14 @@ read_timeseries <- function(
 
     df <- reader(read_obj, show_col_types = FALSE)
     if (!(date_col %in% names(df))) {
-        stop("Expected a column named `", date_col, "`.", call. = FALSE)
+        stop_bad_arg(
+            "date_col",
+            c(
+                "must name a column present in the input.",
+                sprintf("date_col = %s.", sQuote(date_col)),
+                sprintf("path     = %s.", sQuote(path))
+            )
+        )
     }
 
     out <- mutate(
@@ -142,16 +163,38 @@ read_timeseries <- function(
     )
 
     if (!identical(date_col, "date")) {
+        # FIXME should probably overwrite / rename the original `date` column instead
         if ("date" %in% names(out)) {
-            stop(
-                "In `read_timeseries(file = ", sQuote(file), ")`: can't rename `", date_col,
-                "` to `date` because a `date` column already exists in the input file (path: ",
-                sQuote(path), ").",
-                call. = FALSE
+            stop_bad_arg(
+                "date_col",
+                c(
+                    "cannot be specified because renaming it to `date` would overwrite an",
+                    "existing `date` column in the input file.",
+                    sprintf("path = %s.", sQuote(path))
+                )
             )
         }
         out <- rename(out, date = all_of(date_col))
     }
+
+    # Dates must be unique
+    dup_pos <- anyDuplicated(out$date)
+    if (dup_pos > 0L) {
+        dup_dates <- unique(out$date[duplicated(out$date)])
+        ex <- format(utils::head(sort(dup_dates), 5L), "%Y-%m-%d")
+
+        fundsr_abort(
+            msg = c(
+                "Parsed dates are not unique.",
+                sprintf("n_unique = %d.", length(unique(out$date))),
+                sprintf("n_rows   = %d.", nrow(out)),
+                sprintf("examples = %s.", paste(ex, collapse = ", ")),
+                sprintf("path     = %s.", sQuote(path))
+            ),
+            class = c("fundsr_bad_data", "fundsr_duplicate_dates", "fundsr_io_error")
+        )
+    }
+
     out
 }
 
@@ -173,8 +216,27 @@ read_timeseries <- function(
 #' @export
 read_msci_tsv <- function(file) {
     fund_data_dir <- fundsr_get_option("data_dir")
-    lines <- readr::read_lines(file.path(fund_data_dir, file))
-    data_lines <- grep("^[0-9]|^Date,", lines, value = TRUE)
+    path <- file.path(fund_data_dir, file)
+    if (!file.exists(path)) {
+        stop_bad_arg(
+            "file",
+            c(
+                "must refer to an existing file; file does not exist.",
+                sprintf("path = %s.", sQuote(path))
+            )
+        )
+    }
+    lines <- readr::read_lines(path)
+    data_lines <- grep("^[0-9]|^Date\\b", lines, value = TRUE)
+    if (!length(data_lines)) {
+        fundsr_abort(
+            msg = c(
+                "MSCI TSV parse failed: no data lines found.",
+                sprintf("path = %s.", sQuote(path))
+            ),
+            class = "fundsr_bad_data"
+        )
+    }
     df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
         readr::col_date(format = "%m/%d/%Y"),
         readr::col_double()

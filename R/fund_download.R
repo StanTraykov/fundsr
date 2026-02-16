@@ -38,27 +38,51 @@ download_fund_data <- function(redownload = FALSE) {
     attempts <- check_numeric_scalar(attempts, as_integer = TRUE, ge = 1L)
     check_logical(polite_sleep)
     check_logical(hint)
+    named_urls <- check_mapping(
+        named_urls,
+        allow_null = TRUE,
+        allow_empty = TRUE,
+        type = "character",
+        scalar_values = TRUE,
+        unique_case_insensitive = TRUE
+    )
 
-    if (is.null(named_urls) || length(named_urls) == 0L) {
+    if (!length(named_urls)) {
         fundsr_msg("No fund URLs configured (option 'fundsr.fund_urls' is empty).", level = 0L)
         return(invisible(character()))
     }
+
+    if (!dir.exists(path)) {
+        ok <- dir.create(path, recursive = TRUE, showWarnings = FALSE)
+        if (!ok || !dir.exists(path)) {
+            fundsr_abort(
+                msg = c(
+                    "Cannot download fund files: directory could not be created.",
+                    sprintf("path = %s.", sQuote(path))
+                ),
+                class = "fundsr_io_error"
+            )
+        }
+    }
+
     nms <- names(named_urls)
-    if (is.null(nms) || anyNA(nms) || any(nms == "")) {
-        stop_bad_arg("named_urls", "must be a named vector or named list.")
-    }
-    if (anyDuplicated(nms)) {
-        stop_bad_arg("named_url", "must have unique names.")
-    }
+    check_string(
+        nms,
+        "names(named_urls)",
+        n = NULL,
+        allow_empty = FALSE,
+        pattern = "^[^<>:\"/\\\\|?*[:cntrl:]]*[^<>:\"/\\\\|?*[:cntrl:] .]$" # safe filenames
+    )
     keys <- withr::with_preserve_seed(sample(nms))
     out <- set_names(character(length(keys)), keys)
     did_download <- FALSE
 
     for (key in keys) {
-        url <- as.character(named_urls[[key]])
-        if (length(url) != 1L || is.na(url) || !nzchar(url)) {
-            stop(glue("Invalid URL for '{key}'."), call. = FALSE)
-        }
+        url <- check_string(
+            named_urls[[key]],
+            arg = paste0("named_urls[[", sQuote(key), "]]"),
+            trim = TRUE
+        )
         # Hack .xls instead of .xlsx for iShares downloads, which use an outdated XML spreadsheet
         # format. Not critical for fundsr, but it lets Excel open the file (with a warning).
         ext <- if (grepl("ishares", url, ignore.case = TRUE)) ".xls" else ".xlsx"
@@ -71,7 +95,16 @@ download_fund_data <- function(redownload = FALSE) {
         }
         if (polite_sleep && did_download) Sys.sleep(stats::runif(1, 0.5, 1.0))
         fundsr_msg(glue("Downloading '{key}'"), level = 1L)
-        .fundsr_download(url = url, destfile = full_file, attempts = attempts, quiet = TRUE)
+        tryCatch(
+            .fundsr_download(url = url, destfile = full_file, attempts = attempts, quiet = TRUE),
+            error = function(e) {
+                fundsr_abort(
+                    msg    = glue("Download failed for '{key}'."),
+                    class  = "fundsr_download_failed",
+                    parent = e
+                )
+            }
+        )
         did_download <- TRUE
         out[[key]] <- full_file
     }
@@ -89,8 +122,7 @@ download_fund_data <- function(redownload = FALSE) {
 #' Download a single URL to a file with retries
 #'
 #' Internal helper. Downloads to a temporary file in the destination directory and then moves it
-#' into place to avoid partial destination files. Uses `curl::curl_download()` if available;
-#' otherwise uses `utils::download.file()`.
+#' into place. Uses `curl::curl_download()` if available; otherwise uses `utils::download.file()`.
 #'
 #' @keywords internal
 #' @noRd
@@ -103,58 +135,76 @@ download_fund_data <- function(redownload = FALSE) {
     check_string(url)
     check_string(destfile)
     attempts <- check_numeric_scalar(attempts, as_integer = TRUE, ge = 1L)
-    check_numeric_scalar(backoff)
+    backoff  <- check_numeric_scalar(backoff, ge = 0)
     check_logical(quiet)
     check_logical(overwrite)
 
-    if (length(attempts) != 1L || is.na(attempts) || attempts < 1L) {
-        stop_bad_arg("attempts", "must be a single integer >= 1.")
-    }
-    if (!is.numeric(backoff) ||
-            length(backoff) != 1L ||
-            is.na(backoff) ||
-            !is.finite(backoff) ||
-            backoff < 0) {
-        stop_bad_arg("backoff", "must be a single non-negative finite number.")
-    }
-    quiet <- isTRUE(quiet)
-    overwrite <- isTRUE(overwrite)
     destdir <- dirname(destfile)
-    if (!dir.exists(destdir)) dir.create(destdir, recursive = TRUE, showWarnings = FALSE)
-    if (!overwrite && file.exists(destfile)) return(invisible(destfile))
+    if (!dir.exists(destdir)) {
+        ok <- dir.create(destdir, recursive = TRUE, showWarnings = FALSE)
+        if (!ok && !dir.exists(destdir)) {
+            fundsr_abort(
+                msg = c(
+                    "Cannot download: destination directory could not be created.",
+                    sprintf("destdir = %s.", sQuote(destdir))
+                ),
+                class = "fundsr_io_error"
+            )
+        }
+    }
+
+    if (!overwrite && file.exists(destfile)) {
+        return(invisible(destfile))
+    }
+
     tmp <- tempfile(pattern = "fundsr-dl-", tmpdir = destdir)
     on.exit(unlink(tmp, force = TRUE), add = TRUE)
+
     last_err <- NULL
     status <- NA_integer_
 
     for (i in seq_len(attempts)) {
         if (file.exists(tmp)) unlink(tmp, force = TRUE)
-        status <- tryCatch({
-            if (requireNamespace("curl", quietly = TRUE)) {
-                curl::curl_download(url, destfile = tmp, quiet = quiet, mode = "wb")
-                0L
-            } else {
-                utils::download.file(url, destfile = tmp, mode = "wb", quiet = quiet)
+
+        status <- tryCatch(
+            {
+                if (requireNamespace("curl", quietly = TRUE)) {
+                    curl::curl_download(url, destfile = tmp, quiet = quiet, mode = "wb")
+                    0L
+                } else {
+                    utils::download.file(url, destfile = tmp, mode = "wb", quiet = quiet)
+                }
+            },
+            error = function(e) {
+                last_err <<- e
+                NA_integer_
             }
-        }, error = function(e) {
-            last_err <<- e
-            NA_integer_
-        })
+        )
+
         ok <- isTRUE(status == 0L) &&
             file.exists(tmp) &&
             isTRUE(file.info(tmp)$size > 0)
+
         if (ok) {
-            if (file.exists(destfile)) unlink(destfile)
-            if (!file.rename(tmp, destfile)) {
-                if (!file.copy(tmp, destfile, overwrite = TRUE)) {
-                    stop(glue("Download succeeded but couldn't write to '{destfile}'."),
-                         call. = FALSE)
+            if (!isTRUE(file.rename(tmp, destfile))) {
+                if (!isTRUE(file.copy(tmp, destfile, overwrite = TRUE))) {
+                    if (file.exists(destfile)) unlink(destfile, force = TRUE)
+                    fundsr_abort(
+                        msg = c(
+                            "Download succeeded but couldn't write the destination file.",
+                            sprintf("destfile = %s.", sQuote(destfile))
+                        ),
+                        class = "fundsr_io_error"
+                    )
                 }
-                unlink(tmp)
+                unlink(tmp, force = TRUE)
             }
             return(invisible(destfile))
         }
-        if (i < attempts) Sys.sleep(backoff * 2^(i - 1L))
+
+        if (i < attempts) {
+            Sys.sleep(backoff * 2^(i - 1L))
+        }
     }
 
     details <- if (!is.null(last_err)) {
@@ -162,8 +212,16 @@ download_fund_data <- function(redownload = FALSE) {
     } else if (is.na(status)) {
         "Unknown download failure."
     } else {
-        glue("download returned status {status}.")
+        glue("Download returned status {status}.")
     }
-    stop(glue("Failed to download '{url}' to '{destfile}' after {attempts} attempt(s): {details}"),
-         call. = FALSE)
+
+    fundsr_abort(
+        msg = c(
+            glue("Failed to download {sQuote(url)} to {sQuote(destfile)}"),
+            glue("    after {attempts} attempt(s)."),
+            details
+        ),
+        class  = "fundsr_download_failed",
+        parent = last_err
+    )
 }

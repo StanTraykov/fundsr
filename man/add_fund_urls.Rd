@@ -10,7 +10,8 @@ add_fund_urls(fund_urls)
 \item{fund_urls}{A named character vector mapping download identifiers to URLs.}
 }
 \value{
-A list with the previous value of \code{fundsr.fund_urls}.
+Invisibly returns a named list (as returned by \code{\link[=fundsr_options]{fundsr_options()}})
+containing the previous value of \code{fundsr.fund_urls}.
 }
 \description{
 Adds one or more named download specifications to the \code{fundsr.fund_urls}

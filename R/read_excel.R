@@ -1,4 +1,25 @@
 read_excel_or_xml <- function(file_path, sheet = NULL) {
+    check_string(file_path)
+    sheet_idx <- NULL
+    sheet_name <- NULL
+    if (!is.null(sheet)) {
+        if (is.numeric(sheet)) {
+            sheet_idx <- check_numeric_scalar(
+                sheet,
+                arg = "sheet [if numeric]",
+                as_integer = TRUE,
+                ge = 1L
+            )
+        } else if (is.character(sheet)) {
+            sheet_name <- check_string(sheet, arg = "sheet [if string]")
+        } else {
+            stop_bad_arg(
+                "sheet",
+                "must be NULL, a sheet name (character), or a 1-based sheet index (numeric)."
+            )
+        }
+    }
+
     # First, try reading as a standard Excel file with readxl
     fundsr_msg("Reading Excel: ", sQuote(file_path), level = 1L)
     df <- tryCatch({
@@ -21,7 +42,11 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     # We'll do BOM removal and parse with xml2.
     file_size <- file.info(file_path)$size
     if (is.na(file_size) || file_size == 0) {
-        stop("File '", file_path, "' not found or is empty.")
+        stop_bad_arg(
+            "file_path",
+            c("must refer to an existing non-empty file.",
+              sprintf("file_path = %s.", sQuote(file_path)))
+        )
     }
     raw_data <- readBin(file_path, what = "raw", n = file_size)
 
@@ -49,8 +74,20 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     })
 
     if (!parse_ok || is.null(doc)) {
-        stop("Could not parse '", file_path, "' as Excel or as valid 2003 XML.\n",
-             "Original readxl error was: ", df$message)
+        readxl_msg <- conditionMessage(df)
+        if (is.null(readxl_msg) || !nzchar(readxl_msg)) {
+            readxl_msg <- "<unknown>"
+        }
+        fundsr_abort(
+            msg = c(
+                "Could not parse the file as Excel or as valid SpreadsheetML (Excel 2003 XML).",
+                sprintf("file_path = %s.", sQuote(file_path)),
+                "Original readxl error:",
+                readxl_msg
+            ),
+            class = c("fundsr_bad_data", "fundsr_excel_import_failed"),
+            parent = df
+        )
     }
 
     # If doc parsed OK as XML, attempt to find <ss:Worksheet> etc.
@@ -60,31 +97,56 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         ns = c(ss = "urn:schemas-microsoft-com:office:spreadsheet")
     )
     if (length(ws_nodes) == 0) {
-        stop("No <ss:Worksheet> found in the XML for '", file_path, "'.")
+        fundsr_abort(
+            msg = c(
+                "No <ss:Worksheet> found in the XML.",
+                sprintf("file_path = %s.", sQuote(file_path))
+            ),
+            class = c("fundsr_bad_data", "fundsr_excel_import_failed")
+        )
     }
 
-    # If user gave a sheet name, try to match it
-    if (!is.null(sheet)) {
+    # If user gave a sheet name/number, try to match it
+    if (is.null(sheet)) {
+        matched_ws <- ws_nodes[[1]]
+    } else if (!is.null(sheet_idx)) {
+        if (sheet_idx > length(ws_nodes)) {
+            stop_bad_arg(
+                "sheet [if numeric]",
+                c(
+                    "must be between 1 and the number of worksheets in the XML file.",
+                    sprintf("sheet = %d.", sheet_idx),
+                    sprintf("n_sheets = %d.", length(ws_nodes)),
+                    sprintf("file_path = %s.", sQuote(file_path))
+                )
+            )
+        }
+        matched_ws <- ws_nodes[[sheet_idx]]
+    } else {
+        # sheet_name is non-NULL here
         matched_ws <- NULL
-        sheet_trim <- trimws(sheet)
+        sheet_trim <- trimws(sheet_name)
+
         for (ws in ws_nodes) {
             nm_orig <- xml2::xml_attr(ws, "Name", ns = "ss")
-            if (is.na(nm_orig)) {
-                nm_orig <- xml2::xml_attr(ws, "Name")
-            }
+            if (is.na(nm_orig)) nm_orig <- xml2::xml_attr(ws, "Name")
             if (is.na(nm_orig)) next
-            nm_trim <- trimws(nm_orig)
-            if (nm_trim == sheet_trim) {
+
+            if (trimws(nm_orig) == sheet_trim) {
                 matched_ws <- ws
                 break
             }
         }
+
         if (is.null(matched_ws)) {
-            warning("Could not find a Worksheet named '", sheet, "'; using the first.")
+            warning(
+                "Could not find a Worksheet named '",
+                sheet_name,
+                "'; using the first.",
+                call. = FALSE
+            )
             matched_ws <- ws_nodes[[1]]
         }
-    } else {
-        matched_ws <- ws_nodes[[1]]
     }
 
     tbl_node <- xml2::xml_find_first(
@@ -93,7 +155,13 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         ns = c(ss = "urn:schemas-microsoft-com:office:spreadsheet")
     )
     if (inherits(tbl_node, "xml_missing") || is.null(tbl_node)) {
-        stop("No <ss:Table> found in the selected Worksheet for '", file_path, "'.")
+        fundsr_abort(
+            msg = c(
+                "No <ss:Table> found in the selected Worksheet.",
+                sprintf("file_path = %s.", sQuote(file_path))
+            ),
+            class = c("fundsr_bad_data", "fundsr_excel_import_failed")
+        )
     }
 
     row_nodes <- xml2::xml_find_all(
@@ -211,6 +279,13 @@ read_timeseries_excel <- function(file,
                                   date_order = "dmy",
                                   force_numeric = TRUE,
                                   comma_rep = ".") {
+    check_string(file)
+    check_string(date_col)
+    check_mapping(col_trans, allow_empty = FALSE, scalar_values = TRUE, type = "either")
+    check_string(date_order, n_chars = 3L, pattern = "^[dmyM]{3}$")
+    check_logical(force_numeric)
+    check_string(comma_rep, allow_empty = TRUE)
+
     fund_data_dir <- fundsr_get_option("data_dir")
     xl_file <- file.path(fund_data_dir, file)
 
@@ -229,18 +304,29 @@ read_timeseries_excel <- function(file,
         any(stringr::str_detect(as.character(x), date_col), na.rm = TRUE)
     }))
     if (length(row_header_idx) == 0) {
-        stop(glue(
-            "Could NOT find the date column header matching '{date_col}' ",
-            "in '{xl_file}', sheet '{sheet}'."
-        ))
+        stop_bad_arg(
+            "date_col",
+            c(
+                "did not match any cell; could not detect a header row.",
+                sprintf("file = %s.", sQuote(xl_file)),
+                sprintf("sheet = %s.", sQuote(sheet))
+            )
+        )
     }
     row_header_idx <- row_header_idx[1]
 
     if (row_header_idx == nrow(raw_data)) {
-        stop(glue(
-            "The detected header row ({row_header_idx}) is the last row. ",
-            "No data below it in '{xl_file}', sheet '{sheet}'."
-        ))
+        fundsr_abort(
+            msg = c(
+                sprintf(
+                    "The detected header row (%d) is the last row; no data below it.",
+                    row_header_idx
+                ),
+                sprintf("file = %s.", sQuote(xl_file)),
+                sprintf("sheet = %s.", sQuote(sheet))
+            ),
+            class = c("fundsr_bad_data", "fundsr_excel_import_failed")
+        )
     }
 
     # 4) Extract that row as header names, slice data below
@@ -263,10 +349,14 @@ read_timeseries_excel <- function(file,
     # 5) Identify date column, rename => "date"
     date_col_idx <- which(stringr::str_detect(names(data_raw), date_col))
     if (length(date_col_idx) == 0) {
-        stop(glue(
-            "Could NOT find a column matching '{date_col}' ",
-            "after assigning header names in '{xl_file}', sheet '{sheet}'."
-        ))
+        stop_bad_arg(
+            "date_col",
+            c(
+                "did not match any column after assigning header names.",
+                sprintf("file = %s.", sQuote(xl_file)),
+                sprintf("sheet = %s.", sQuote(sheet))
+            )
+        )
     }
     date_col_idx <- date_col_idx[1]
     old_date_name <- names(data_raw)[date_col_idx]
@@ -296,6 +386,25 @@ read_timeseries_excel <- function(file,
     data_raw <- filter(data_raw, !is.na(.data$parsed_date))
     data_raw$date <- data_raw$parsed_date
     data_raw$parsed_date <- NULL
+
+    # 6b) Dates must be unique after parsing
+    dup_pos <- anyDuplicated(data_raw$date)
+    if (dup_pos > 0L) {
+        dup_dates <- unique(data_raw$date[duplicated(data_raw$date)])
+        ex <- format(utils::head(sort(dup_dates), 5L), "%Y-%m-%d")
+
+        fundsr_abort(
+            msg = c(
+                "Parsed dates are not unique.",
+                sprintf("n_unique = %d.", length(unique(data_raw$date))),
+                sprintf("n_rows   = %d.", nrow(data_raw)),
+                sprintf("examples = %s.", paste(ex, collapse = ", ")),
+                sprintf("file     = %s.", sQuote(xl_file)),
+                sprintf("sheet    = %s.", sQuote(sheet))
+            ),
+            class = c("fundsr_bad_data", "fundsr_duplicate_dates", "fundsr_excel_import_failed")
+        )
+    }
 
     # 7) Match columns by regex, rename them
     matched_cols <- purrr::map2(

@@ -4,7 +4,7 @@
 \alias{plot_chance_alive_es_aasmr}
 \title{Plot cohort-style survival from Eurostat EUROPOP2023 assumptions}
 \usage{
-plot_chance_alive_es_aasmr(ca, sex = c("m", "f"), population)
+plot_chance_alive_es_aasmr(ca, sex, population)
 }
 \arguments{
 \item{ca}{A tibble as returned by \code{\link[=chance_alive_es_aasmr]{chance_alive_es_aasmr()}}, with columns

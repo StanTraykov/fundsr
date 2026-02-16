@@ -7,7 +7,7 @@
 add_fund_index_map(fund_index_map)
 }
 \arguments{
-\item{fund_index_map}{Named vector or list of fund-index pairs to merge into
+\item{fund_index_map}{Named character vector of fund-index pairs to merge into
 \code{.fundsr$fund_index_map}. Names are fund identifiers; values are index
 identifiers.}
 }
@@ -18,12 +18,9 @@ Invisibly returns \code{NULL}. Called for side effects.
 Merges fund-index pairs into the fund-index map (\code{.fundsr$fund_index_map}).
 Existing entries with the same names are replaced.
 }
-\examples{
-add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2"))
-}
 \seealso{
-Other fund-index map mutators: 
+Other fund-index map functions: 
 \code{\link{clear_fund_index_map}()},
 \code{\link{get_fund_index_map}()}
 }
-\concept{fund-index map mutators}
+\concept{fund-index map functions}

@@ -1,5 +1,20 @@
 # fundsr (development version)
 
+## General
+
+- add new structured error/state-checking framework; improve error messages, standardize classes
+
+## Importing
+
+- validate imported time series have unique dates (also check for this during tracking difference calculations)
+- add a provider wrapper for BNP Paribas ETFs
+- support/fix numeric sheet selection for Excel 2003 XML files
+
+## Examples
+
+- add cash funds
+- fix Japan gross index import
+
 # fundsr 0.4.0
 
 ## Breaking changes

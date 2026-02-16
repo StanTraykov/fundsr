@@ -24,6 +24,7 @@ Wrapper around \code{read_timeseries()} for Avantis files.
 
 Other provider wrappers: 
 \code{\link{amun}()},
+\code{\link{bnpp}()},
 \code{\link{hsbc}()},
 \code{\link{inve}()},
 \code{\link{ishs}()},

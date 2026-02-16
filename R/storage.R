@@ -8,6 +8,7 @@
 #' @family fund/index workflow functions
 #' @export
 get_storage <- function() {
+    fundsr_require_state(storage = TRUE)
     .fundsr_storage
 }
 
@@ -29,10 +30,22 @@ get_storage <- function() {
 #' clear_storage(clear_map = TRUE)
 clear_storage <- function(clear_map = FALSE) {
     check_logical(clear_map)
-    if (!exists(".fundsr_storage", inherits = TRUE) || !is.environment(.fundsr_storage)) {
-        stop("Fundsr storage environment is not initialised.", call. = FALSE)
+    if (!is.environment(.fundsr_storage)) {
+        return(invisible(NULL))
     }
-    rm(list = ls(envir = .fundsr_storage, all.names = TRUE), envir = .fundsr_storage)
+    objs <- ls(envir = .fundsr_storage, all.names = TRUE)
+    if (length(objs)) {
+        tryCatch(
+            rm(list = objs, envir = .fundsr_storage),
+            error = function(e) {
+                fundsr_abort(
+                    msg    = "Failed to clear fundsr storage.",
+                    class  = "fundsr_bad_state",
+                    parent = e
+                )
+            }
+        )
+    }
     if (clear_map) {
         clear_fund_index_map()
     }
@@ -51,8 +64,8 @@ clear_storage <- function(clear_map = FALSE) {
 #'   `.fundsr_storage`.
 #' @param expr An expression. Evaluated in the caller's environment when
 #'   (re)computing the cached value.
-#' @param fund_index_map Optional named vector or list. Fund/index pairs to merge
-#'   into `.fundsr$fund_index_map`. Names are used as keys.
+#' @param fund_index_map Optional named vector of fund/index pairs to merge
+#'   into `.fundsr$fund_index_map`. Names are used as keys, values should be indices.
 #' @param overwrite Logical scalar. If `TRUE`, recompute and replace any existing
 #'   cached value, regardless of `fundsr.reload`.
 #' @param postprocess Function applied to the computed value before caching.
@@ -91,6 +104,8 @@ store_timeseries <- function(var_name,
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     reload <- isTRUE(fundsr_get_option("reload"))
+    fundsr_require_state(storage = TRUE)
+
     needs_eval <- overwrite || reload || !exists(var_name, envir = .fundsr_storage)
     # Check if assignment is needed and evaluate expr in parent_env
     if (needs_eval) {
@@ -143,7 +158,11 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
     conflicts <- intersect(base, nms)
     if (length(conflicts) > 0L) {
         ex <- paste(conflicts, collapse = ", ")
-        stop(glue("Cannot coalesce: would overwrite existing column(s): {ex}."), call. = FALSE)
+        fundsr_abort(
+            msg   = glue::glue("Cannot coalesce: would overwrite existing column(s): {ex}."),
+            class = "fundsr_join_conflict"
+        )
+
     }
 
     for (b in base) {
@@ -224,8 +243,11 @@ join_env <- function(env,
             with = "join_env(join_precedence)"
         )
         if (!missing(join_precedence)) {
-            stop("Use only one of `join_precedence` or deprecated `coalesce_suffixed`.",
-                 call. = FALSE)
+            stop_bad_arg(
+                "coalesce_suffixed",
+                paste("(deprecated) cannot be used together with `join_precedence`",
+                      "(use only the latter).")
+            )
         }
         join_precedence <- coalesce_suffixed
     }
@@ -246,21 +268,27 @@ join_env <- function(env,
     not_df <- purrr::map_lgl(objs, ~ !is.data.frame(.x))
     if (any(not_df)) {
         offenders <- names(objs)[not_df]
-        stop(
-            "Non-joinable object(s) in `env` (expected data.frame/tibble): ",
-            paste(offenders, collapse = ", "),
-            call. = FALSE
+        stop_bad_arg(
+            "env",
+            paste0(
+                "must contain only data frames (incl. tibbles). Non-joinable object(s): ",
+                paste(offenders, collapse = ", "),
+                "."
+            )
         )
     }
     missing_by <- purrr::imap_lgl(objs, ~ !all(by %in% names(.x)))
     if (any(missing_by)) {
         offenders <- names(objs)[missing_by]
-        stop(
-            "Join key(s) missing from: ",
-            paste(offenders, collapse = ", "),
-            ". Required key(s): ",
-            paste(by, collapse = ", "),
-            call. = FALSE
+        stop_bad_arg(
+            "env",
+            paste0(
+                "contains data frame(s) missing join key(s). Offenders: ",
+                paste(offenders, collapse = ", "),
+                ". Required key(s): ",
+                paste(by, collapse = ", "),
+                "."
+            )
         )
     }
     missing_late <- setdiff(raw_late, obj_names)
@@ -272,7 +300,10 @@ join_env <- function(env,
     late <- intersect(raw_late, obj_names)
     main_names <- setdiff(obj_names, late)
     if (length(main_names) == 0L) {
-        stop("No objects left to full_join after excluding `late`.")
+        stop_bad_arg(
+            "late",
+            "excludes all objects in `env`; no objects left to full_join."
+        )
     }
     main_list <- mget(main_names, envir = env)
     main_chr <- glue::glue_collapse(main_names, sep = ", ")

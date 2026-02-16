@@ -19,8 +19,8 @@ store_timeseries(
 \item{expr}{An expression. Evaluated in the caller's environment when
 (re)computing the cached value.}
 
-\item{fund_index_map}{Optional named vector or list. Fund/index pairs to merge
-into \code{.fundsr$fund_index_map}. Names are used as keys.}
+\item{fund_index_map}{Optional named vector of fund/index pairs to merge
+into \code{.fundsr$fund_index_map}. Names are used as keys, values should be indices.}
 
 \item{overwrite}{Logical scalar. If \code{TRUE}, recompute and replace any existing
 cached value, regardless of \code{fundsr.reload}.}

@@ -88,9 +88,15 @@ load_fund <- function(ticker,
                       data_sheet = NULL,
                       ...) {
     check_string(ticker)
+    check_string(file, allow_null = TRUE)
     check_string(date_col)
     check_string(nav_col)
+    check_string(benchmark, allow_null = TRUE)
+    check_string(benchmark_col, allow_null = TRUE)
+    check_logical(retrieve_benchmark)
     check_string(date_order)
+    check_string(var_name, allow_null = TRUE)
+    check_string(data_sheet, allow_null = TRUE)
     # Deprecated param handling
     if (!missing(data_sheet) && !is.null(data_sheet)) {
         lifecycle::deprecate_warn(
@@ -99,8 +105,10 @@ load_fund <- function(ticker,
             with = "load_fund(sheet)"
         )
         if (!missing(sheet)) {
-            stop("Use only one of `sheet` or deprecated `data_sheet`.",
-                 call. = FALSE)
+            stop_bad_arg(
+                "data_sheet",
+                "(deprecated) cannot be used together with `sheet` (use only the latter)."
+            )
         }
         sheet <- data_sheet
     }
@@ -115,10 +123,22 @@ load_fund <- function(ticker,
         paths <- file.path(fund_data_dir, candidates)
         exists <- file.exists(paths)
         if (!any(exists)) {
-            stop(glue("No .xls[x] file found for {ticker}."), call. = FALSE)
+            fundsr_abort(
+                msg = c(
+                    glue("No .xls[x] file found for {ticker}."),
+                    glue("Looked for: {paste(sQuote(paths), collapse = ', ')}.")
+                ),
+                class = "fundsr_io_error"
+            )
         }
         if (sum(exists) > 1L) {
-            stop(glue("Multiple .xls[x] files found for {ticker}."), call. = FALSE)
+            fundsr_abort(
+                msg = c(
+                    glue("Multiple .xls[x] files found for {ticker}."),
+                    glue("Matches: {paste(sQuote(paths[exists]), collapse = ', ')}.")
+                ),
+                class = "fundsr_io_error"
+            )
         }
         file <- candidates[exists]
     }
@@ -128,9 +148,13 @@ load_fund <- function(ticker,
         set_names(nav_col, ticker_lower)
     )
     # If a benchmark is provided, add it to col_trans
-    if (isTRUE(retrieve_benchmark)) {
-        if (is.null(benchmark) || is.null(benchmark_col))
-            stop("Need benchmark and benchmark_col to retrieve benchmark.", call. = FALSE)
+    if (retrieve_benchmark) {
+        if (is.null(benchmark) || is.null(benchmark_col)) {
+            stop_bad_arg(
+                "retrieve_benchmark",
+                "requires both `benchmark` and `benchmark_col`."
+            )
+        }
         ct <- c(ct, set_names(benchmark_col, benchmark))
     }
     store_timeseries(
@@ -329,6 +353,28 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL, ...) {
               file = file,
               benchmark = benchmark,
               date_order = "mdy",
+              ...)
+}
+
+#' Import an BNP Paribas fund
+#'
+#' Wrapper around `load_fund()` for HSBC files.
+#'
+#' @param ticker Fund ticker.
+#' @param file Optional filename override.
+#' @param benchmark Optional benchmark key.
+#' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
+#'   `postprocess`.
+#'
+#' @seealso
+#' [load_fund()]
+#' @family provider wrappers
+#' @export
+bnpp <- function(ticker, file = NULL, benchmark = NULL, ...) {
+    load_fund(ticker = ticker,
+              file = file,
+              benchmark = benchmark,
+              nav_col = "^Value",
               ...)
 }
 

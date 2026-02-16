@@ -66,9 +66,16 @@ read_xlm_directory <- function(directory,
         xlm_col <- grep("^Xetra Liquidity Measure \\(XLM\\)\\*\\..*",
                         colnames(data), value = TRUE)
         if (length(xlm_col) != 1) {
-            stop(paste("Error in file:",
-                       file,
-                       "- Could not uniquely identify the XLM column."))
+            found <- if (!length(xlm_col)) "none" else paste(xlm_col, collapse = ", ")
+            fundsr_abort(
+                msg = c(
+                    sprintf("Could not uniquely identify the XLM column in file %s.",
+                            sQuote(file)),
+                    sprintf("Expected exactly 1 matching column; found %d: %s.",
+                            length(xlm_col), found)
+                ),
+                class = "fundsr_bad_data"
+            )
         }
         # Extract the Month-Year string from the column name
         month_year <- sub("^Xetra Liquidity Measure \\(XLM\\)\\*\\.",

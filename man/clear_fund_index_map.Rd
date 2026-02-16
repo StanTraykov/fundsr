@@ -12,12 +12,9 @@ Invisibly returns \code{NULL}. Called for side effects.
 \description{
 Clears the fund-index map stored in \code{.fundsr$fund_index_map}.
 }
-\examples{
-clear_fund_index_map()
-}
 \seealso{
-Other fund-index map mutators: 
+Other fund-index map functions: 
 \code{\link{add_fund_index_map}()},
 \code{\link{get_fund_index_map}()}
 }
-\concept{fund-index map mutators}
+\concept{fund-index map functions}

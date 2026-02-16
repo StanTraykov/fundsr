@@ -53,16 +53,10 @@ save_plot <- function(file,
                       save_png = fundsr_get_option("internal_png", FALSE),
                       save_svg = fundsr_get_option("export_svg", TRUE),
                       background = "white") {
-    if (!is.character(file) || length(file) != 1L || !nzchar(file)) {
-        stop("`file` must be a non-empty single string.", call. = FALSE)
-    }
-    if (!is.logical(save_png) || length(save_png) != 1L || is.na(save_png)) {
-        stop("`save_png` must be TRUE or FALSE.", call. = FALSE)
-    }
-    if (!is.logical(save_svg) || length(save_svg) != 1L || is.na(save_svg)) {
-        stop("`save_svg` must be TRUE or FALSE.", call. = FALSE)
-    }
-    if (!isTRUE(save_svg) && !isTRUE(save_png)) {
+    check_string(file)
+    check_logical(save_png)
+    check_logical(save_svg)
+    if (!save_svg && !save_png) {
         warning("Nothing to do: both `save_svg` and `save_png` are FALSE.", call. = FALSE)
         return(invisible(NULL))
     }
@@ -72,7 +66,7 @@ save_plot <- function(file,
     svgf <- fname(file, "svg")
     pngf <- fname(file, "png")
 
-    if (isTRUE(save_svg)) {
+    if (save_svg) {
         ggplot2::ggsave(
             svgf,
             plot = plot,
@@ -83,10 +77,13 @@ save_plot <- function(file,
         bad <- grepl(";", c(svgf, pngf), fixed = TRUE)
         if (any(bad)) {
             bad_items <- unique(c(svgf, pngf)[bad])
-            stop(
-                "cannot queue Inkscape export; ';' in path(s):\n- ",
-                paste(bad_items, collapse = "\n- "),
-                call. = FALSE
+            fundsr_abort(
+                msg = c(
+                    "Cannot queue Inkscape export: path(s) contain ';'.",
+                    paste0("- ", bad_items),
+                    "Rename the affected file(s) (or export to a path without ';') and try again."
+                ),
+                class = c("fundsr_export_error", "fundsr_bad_path")
             )
         }
         a <- glue(
@@ -96,13 +93,14 @@ save_plot <- function(file,
         .fundsr$inkscape_queue[file] <- a
     }
 
-    if (isTRUE(save_png)) {
+    if (save_png) {
         width_in <- switch(
             units,
             "in" = width,
             "cm" = width / 2.54,
             "mm" = width / 25.4,
-            stop("For PNG saving, `units` must be one of: \"in\", \"cm\", \"mm\".", call. = FALSE)
+            stop_bad_arg("units", "must be one of: \"in\", \"cm\", \"mm\" for saving PNG.")
+
         )
         dpi <- px_width / width_in
         ggplot2::ggsave(
@@ -260,10 +258,11 @@ run_plots <- function(roll_diffs,
                       bmark_type = c("net", "gross"),
                       suffix = "",
                       ...) {
+    check_numeric_scalar(n_days, whole_num = TRUE, ge = 1)
     if (!is.list(roll_diffs) ||
             length(roll_diffs) != 2L ||
             !setequal(names(roll_diffs), c("cagr", "log"))) {
-        stop("roll_diffs must be a list with names `cagr` and `log`.", call. = FALSE)
+        stop_bad_arg("roll_diffs", "must be a list with names `cagr` and `log`.")
     }
     variants <- names(roll_diffs)
     if (is.list(plot_spec) && !inherits(plot_spec, "data.frame")) {
@@ -274,7 +273,6 @@ run_plots <- function(roll_diffs,
             if (is.character(x)) {
                 is_multilang <- !is.null(names(x)) && any(nzchar(names(x)))
                 # If it's a multilingual named vector, keep it as one element
-                # (common in 1-row specs)
                 if (is_multilang && nrow(df) == 1L) {
                     df[[col]] <- list(x)
                     return(df)
@@ -283,7 +281,7 @@ run_plots <- function(roll_diffs,
                 df[[col]] <- as.list(x)
                 return(df)
             }
-            stop(sprintf("`%s` must be character or list.", col), call. = FALSE)
+            stop_bad_arg("plot_spec", sprintf("column %s must be character or list.", sQuote(col)))
         }
         plot_spec <- bind_rows(lapply(plot_spec, ensure_title_col))
     }

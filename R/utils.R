@@ -5,9 +5,10 @@
 }
 
 vec_key <- function(x, ignore_order = FALSE) {
+    check_logical(ignore_order)
     if (is.null(x)) return("<NULL>")
     if (!is.atomic(x) || is.object(x)) {
-        stop("`x` must be an atomic vector.", call. = FALSE)
+        stop_bad_arg("x", "must be an atomic vector.")
     }
     x_type <- typeof(x)
     x_chr  <- as.character(x)  # NAs remain NA_character_
@@ -34,7 +35,7 @@ fundsr_verbosity <- function() {
 }
 
 fundsr_msg <- function(..., level = 1L) {
-    level <- suppressWarnings(as.integer(level))
+    level <- check_numeric_scalar(level, as_integer = TRUE, ge = 0)
     if (length(level) != 1L || is.na(level) || level < 0L) level <- 1L
     if (level == 0L || fundsr_verbosity() >= level) message(...)
     invisible(NULL)
@@ -45,25 +46,28 @@ add_gg_params <- function(p, gg_params) {
     if (is.null(gg_params)) return(p)
 
     if (!is.list(gg_params)) gg_params <- list(gg_params)
-    repeat {
-        any_list <- any(vapply(gg_params, is.list, logical(1)))
-        if (!any_list) break
-        gg_params <- purrr::list_flatten(gg_params)
+
+    while (any(vapply(gg_params, rlang::is_bare_list, logical(1)))) {
+        gg_params <- purrr::list_flatten(gg_params, is_node = rlang::is_bare_list)
     }
 
     tryCatch(
         purrr::reduce(gg_params, `+`, .init = p),
         error = function(e) {
-            stop(
-                "Invalid `gg_params`: must contain ggplot components (scales/themes/etc.).\n",
-                "Underlying error: ", conditionMessage(e),
-                call. = FALSE
+            stop_bad_arg(
+                "gg_params",
+                c(
+                    "must contain ggplot components (scales, themes, etc.).",
+                    "Underlying error:",
+                    conditionMessage(e)
+                )
             )
         }
     )
 }
 
 keep_supported_breaks <- function(breaks, min_date, max_date) {
+    breaks <- breaks[!is.na(breaks)]
     breaks <- sort(unique(breaks))
     if (length(breaks) <= 1L) return(breaks)
 
@@ -106,22 +110,16 @@ keep_supported_breaks <- function(breaks, min_date, max_date) {
 #'
 #' @keywords internal
 make_date_fmts <- function(order) {
-    check_string(order)
+    check_string(order, n_chars = 3L, pattern = "^[dmyM]{3}$")
     chars <- strsplit(order, "", fixed = TRUE)[[1]]
-
-    allowed <- c("d", "y", "m", "M")
-    if (!all(chars %in% allowed)) {
-        stop("`order` must use only 'd', 'y', and one of 'm' or 'M' (e.g. 'dmy', 'dMy').",
-             call. = FALSE)
-    }
-    if (length(chars) != 3L || length(unique(chars)) != 3L) {
-        stop("`order` must be length 3 with no repeats.", call. = FALSE)
+    if (length(unique(chars)) != 3L) {
+        stop_bad_arg("order", "must be length 3 with no repeats.")
     }
     if (!all(c("d", "y") %in% chars)) {
-        stop("`order` must include 'd' and 'y'.", call. = FALSE)
+        stop_bad_arg("order", "must include 'd' and 'y'.")
     }
     if (!xor("m" %in% chars, "M" %in% chars)) {
-        stop("`order` must include exactly one of 'm' or 'M'.", call. = FALSE)
+        stop_bad_arg("order", "must include exactly one of 'm' or 'M'.")
     }
 
     seps <- c("/", "-", ".", " ")
@@ -132,11 +130,12 @@ make_date_fmts <- function(order) {
 
     tokens_for <- function(y_tok, m_tok) {
         vapply(chars, function(ch) {
-            switch(ch,
-                   d = "%d",
-                   y = y_tok,
-                   m = m_tok,
-                   M = m_tok
+            switch(
+                ch,
+                d = "%d",
+                y = y_tok,
+                m = m_tok,
+                M = m_tok
             )
         }, character(1))
     }

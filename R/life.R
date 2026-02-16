@@ -26,17 +26,24 @@
 #' }
 read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
     sex <- match.arg(sex)
-    look_back <- max(1L, as.integer(look_back))
+    check_string(directory)
+    look_back <- check_numeric_scalar(look_back, ge = 1, whole_num = TRUE, as_integer = TRUE)
 
     base <- file.path(directory, paste0(sex, "ltper_1x1"))
     candidates <- c(paste0(base, ".txt"), paste0(base, ".txt.gz"))
     existing <- candidates[file.exists(candidates)]
 
     if (length(existing) == 0L) {
-        stop(
-            "No life table file found for sex '", sex, "' in '", directory,
-            "'. Expected one of: ", paste(basename(candidates), collapse = ", "),
-            call. = FALSE
+        fundsr_abort(
+            msg = c(
+                sprintf("No life table file found for sex %s in %s.",
+                        sQuote(sex),
+                        sQuote(directory)),
+                sprintf("Expected one of: %s.",
+                        paste(sQuote(basename(candidates)), collapse = ", "))
+            ),
+            class = "fundsr_io_error",
+            arg   = "directory"
         )
     }
 
@@ -98,12 +105,28 @@ read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
 #' ca
 #' }
 chance_alive <- function(lt, pop_name, age0) {
-    age0 <- as.integer(age0)
+    if (!is.data.frame(lt)) stop_bad_arg("lt", "must be a data frame.")
+    pop_name <- check_string(pop_name)
+    age0 <- check_numeric_scalar(age0, ge = 0, as_integer = TRUE)
+    need <- c("PopName", "Year", "Age", "lx")
+    missing <- setdiff(need, names(lt))
+    if (length(missing)) stop_bad_arg("lt", sprintf("must contain %s; missing %s.",
+                                                    paste(sQuote(need), collapse = ", "),
+                                                    paste(sQuote(missing), collapse = ", ")))
     lt_pop <- lt %>% filter(.data[["PopName"]] == pop_name)
     base <- lt_pop %>%
         filter(.data[["Age"]] == age0) %>%
         select(all_of("Year"), lx0 = all_of("lx"))
-    if (nrow(base) == 0L) stop("`age0` not found for `pop_name` in `lt$Age`.", call. = FALSE)
+    if (nrow(base) == 0L) {
+        fundsr_abort(
+            msg = c(
+                "No baseline row found in `lt` for the requested population and age.",
+                sprintf("pop_name = %s, age0 = %s.", sQuote(pop_name), age0)
+            ),
+            class = "fundsr_no_data",
+            arg   = "lt"
+        )
+    }
     lt_pop %>%
         inner_join(base, by = "Year") %>%
         filter(.data[["Age"]] >= age0) %>%
@@ -138,7 +161,22 @@ chance_alive <- function(lt, pop_name, age0) {
 #' p
 #' }
 plot_chance_alive <- function(ca, sex = c("m", "f"), population) {
-    stopifnot(all(c("Year", "Age", "chance_alive") %in% names(ca)))
+    if (!is.data.frame(ca)) {
+        stop_bad_arg("ca", "must be a data frame.")
+    }
+    check_string(population)
+    need <- c("Year", "Age", "chance_alive")
+    missing <- setdiff(need, names(ca))
+    if (length(missing)) {
+        stop_bad_arg(
+            "ca",
+            sprintf(
+                "must contain column(s) %s; missing %s.",
+                paste(sQuote(need), collapse = ", "),
+                paste(sQuote(missing), collapse = ", ")
+            )
+        )
+    }
     sex <- match.arg(sex)
     sex_label <- if (sex == "m") gettext("male") else gettext("female")
     year_max <- max(ca[["Year"]], na.rm = TRUE)

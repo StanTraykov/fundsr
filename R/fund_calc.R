@@ -20,7 +20,16 @@ longer <- function(df,
                    values_to = "value",
                    names_to = "fund",
                    drop_na = TRUE) {
-    stopifnot(is.character(date_col), length(date_col) == 1)
+    if (!is.data.frame(df)) stop_bad_arg("df", "must be a data frame.")
+    check_string(date_col)
+    check_string(values_to)
+    check_string(names_to)
+    check_logical(drop_na)
+    check_string(funds, n = NULL)
+
+    if (!(date_col %in% names(df))) {
+        stop_bad_arg("date_col", sprintf("column %s not found in `df`.", sQuote(date_col)))
+    }
 
     df %>%
         select(any_of(c(date_col, funds))) %>%
@@ -45,7 +54,7 @@ longer <- function(df,
 #' @param fund_index_map Named character vector mapping fund column names
 #'   to their corresponding benchmark/index base column names.
 #' @param date_col Name of the date column in `df`.
-#'   Must be of class `Date` and sorted in ascending order.
+#'   Must be of class `Date` and sorted (strictly increasing).
 #' @param index_level Which index level to use, one of `"net"` or `"gross"`.
 #'   If `"gross"`, `gross_suffix` is appended to the mapped index base name
 #'   before lookup in `df`.
@@ -83,10 +92,9 @@ longer <- function(df,
 #'     }
 #' }
 #'
-#' Values are `NA` when an anchor cannot be found, current-date inputs are missing,
-#' \eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g. any
-#' non-positive value for log returns, or non-finite / non-positive ratios for
-#' CAGR).
+#' #' Values are `NA` when an anchor cannot be found, current-date inputs are missing,
+#' or inputs are invalid for the chosen formula (e.g. any non-positive level for
+#' log returns, or non-finite / non-positive ratios for CAGR).
 #'
 #' Funds are skipped (optionally with a message) when the fund column is missing,
 #' the mapped index column is missing (after applying `index_level` /
@@ -106,12 +114,35 @@ roll_diffs <- function(df,
                        messages = c("roll", "skip"),
                        gross_suffix = "-GR") {
     index_level <- match.arg(index_level)
-    stopifnot(!is.null(names(fund_index_map)), all(nzchar(names(fund_index_map))))
     if (is.null(messages) || length(messages) == 0L) {
         messages <- character()
     } else {
         messages <- match.arg(messages, choices = c("roll", "skip"), several.ok = TRUE)
     }
+    if (!is.data.frame(df)) {
+        stop_bad_arg("df", "must be a data frame.")
+    }
+    check_numeric_scalar(n_days, whole_num = TRUE, gt = 0)
+    check_string(date_col)
+    check_numeric_scalar(annual_days, whole_num = TRUE, gt = 0)
+    check_string(gross_suffix)
+    check_mapping(fund_index_map, scalar_values = TRUE)
+
+    if (!(date_col %in% names(df))) {
+        stop_bad_arg("date_col", sprintf("column %s not found in `df`.", sQuote(date_col)))
+    }
+
+    d <- df[[date_col]]
+    if (!inherits(d, "Date")) {
+        stop_bad_arg("date_col", "must refer to a Date column in `df`.")
+    }
+    if (anyNA(d)) {
+        stop_bad_arg("date_col", "must not contain NA.")
+    }
+    if (is.unsorted(d, strictly = TRUE)) {
+        stop_bad_arg("date_col", "must be strictly increasing.")
+    }
+
     verbosity_override <- fundsr_get_option("verbosity") >= 4
     msg_roll <- "roll" %in% messages || verbosity_override
     msg_skip <- "skip" %in% messages || verbosity_override

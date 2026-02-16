@@ -25,7 +25,7 @@ benchmark/index columns referenced in \code{fund_index_map}.}
 to their corresponding benchmark/index base column names.}
 
 \item{date_col}{Name of the date column in \code{df}.
-Must be of class \code{Date} and sorted in ascending order.}
+Must be of class \code{Date} and sorted (strictly increasing).}
 
 \item{index_level}{Which index level to use, one of \code{"net"} or \code{"gross"}.
 If \code{"gross"}, \code{gross_suffix} is appended to the mapped index base name
@@ -73,10 +73,9 @@ The annualized tracking differences are:
     }
 }
 
-Values are \code{NA} when an anchor cannot be found, current-date inputs are missing,
-\eqn{\Delta \le 0}, or values are invalid for the chosen formula (e.g. any
-non-positive value for log returns, or non-finite / non-positive ratios for
-CAGR).
+#' Values are \code{NA} when an anchor cannot be found, current-date inputs are missing,
+or inputs are invalid for the chosen formula (e.g. any non-positive level for
+log returns, or non-finite / non-positive ratios for CAGR).
 
 Funds are skipped (optionally with a message) when the fund column is missing,
 the mapped index column is missing (after applying \code{index_level} /

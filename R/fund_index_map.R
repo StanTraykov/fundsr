@@ -3,36 +3,53 @@
 #' Merges fund-index pairs into the fund-index map (`.fundsr$fund_index_map`).
 #' Existing entries with the same names are replaced.
 #'
-#' @param fund_index_map Named vector or list of fund-index pairs to merge into
+#' @param fund_index_map Named character vector of fund-index pairs to merge into
 #'   `.fundsr$fund_index_map`. Names are fund identifiers; values are index
 #'   identifiers.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
-#' @family fund-index map mutators
+#' @family fund-index map functions
 #' @export
-#'
-#' @examples
-#' add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2"))
 add_fund_index_map <- function(fund_index_map) {
-    if (is.null(fund_index_map)) {
+    fund_index_map <- check_mapping(
+        fund_index_map,
+        allow_null = TRUE,
+        allow_empty = TRUE,
+        type = "character",
+        scalar_values = TRUE
+    )
+    if (is.null(fund_index_map) || length(fund_index_map) == 0L) {
         return(invisible(NULL))
     }
-    if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
-        stop("Fundsr state environment is not initialised.", call. = FALSE)
+    fundsr_require_state()
+
+    cur <- .fundsr$fund_index_map
+    cur <- tryCatch(
+        check_mapping(
+            cur,
+            arg = ".fundsr$fund_index_map",
+            allow_null = TRUE,
+            allow_empty = TRUE,
+            type = "character",
+            allow_na_values = FALSE,
+            allow_empty_values = FALSE
+        ),
+        fundsr_bad_arg = function(e) {
+            fundsr_abort(
+                msg    = "The internal fund index map has an invalid value.",
+                class  = "fundsr_bad_state",
+                parent = e
+            )
+        }
+    )
+
+    if (is.null(cur)) {
+        cur <- character()
     }
 
-    if (!(is.atomic(fund_index_map) || is.list(fund_index_map))) {
-        stop("`fund_index_map` must be a named vector or list.", call. = FALSE)
-    }
-    nms <- names(fund_index_map)
-    if (is.null(nms) || any(is.na(nms)) || any(nms == "")) {
-        stop("`fund_index_map` must have non-empty names.", call. = FALSE)
-    }
-    if (is.null(.fundsr$fund_index_map)) {
-        .fundsr$fund_index_map <- character()
-    }
+    cur[names(fund_index_map)] <- fund_index_map
+    .fundsr$fund_index_map <- cur
 
-    .fundsr$fund_index_map[nms] <- fund_index_map
     invisible(NULL)
 }
 
@@ -41,12 +58,11 @@ add_fund_index_map <- function(fund_index_map) {
 #' Returns the package's fund index lookup table stored in
 #' `.fundsr$fund_index_map`.
 #'
-#' @return A character vector or named list representing the internal
-#'   fund index mapping.
-#'
-#' @family fund-index map mutators
+#' @return A named character vector representing the internal fund index mapping.
+#' @family fund-index map functions
 #' @export
 get_fund_index_map <- function() {
+    fundsr_require_state()
     .fundsr$fund_index_map
 }
 
@@ -55,14 +71,11 @@ get_fund_index_map <- function() {
 #' Clears the fund-index map stored in `.fundsr$fund_index_map`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
-#' @family fund-index map mutators
+#' @family fund-index map functions
 #' @export
-#'
-#' @examples
-#' clear_fund_index_map()
 clear_fund_index_map <- function() {
-    if (!exists(".fundsr", inherits = TRUE) || !is.environment(.fundsr)) {
-        stop("Fundsr state environment is not initialised.", call. = FALSE)
+    if (!is.environment(.fundsr)) {
+        return(invisible(NULL))
     }
     .fundsr$fund_index_map <- character()
     invisible(NULL)

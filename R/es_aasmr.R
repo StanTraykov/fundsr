@@ -27,7 +27,19 @@
 #' es_aasmr %>% dplyr::count(geo, sex, projection, sort = TRUE)
 #' }
 read_es_aasmr <- function(directory) {
+    check_string(directory)
     file <- file.path(directory, "estat_proj_23naasmr.tsv.gz")
+    if (!file.exists(file)) {
+        fundsr_abort(
+            msg = c(
+                sprintf("Eurostat aasmr file not found in %s.", sQuote(directory)),
+                sprintf("Expected file: %s.", sQuote(basename(file)))
+            ),
+            class = "fundsr_io_error",
+            arg   = "directory"
+        )
+    }
+
     x <- readr::read_tsv(file,
                          col_types = readr::cols(.default = readr::col_character()),
                          na = c(":", ": "),
@@ -88,10 +100,22 @@ read_es_aasmr <- function(directory) {
 #' p
 #' }
 chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
-    stopifnot(all(c("projection", "sex", "geo", "Age", "Year", "mx") %in% names(es)))
-    age0 <- as.integer(age0)
+    if (!is.data.frame(es)) stop_bad_arg("es", "must be a data frame.")
+    need <- c("projection", "sex", "geo", "Age", "Year", "mx")
+    missing <- setdiff(need, names(es))
+    if (length(missing)) {
+        stop_bad_arg(
+            "es",
+            sprintf(
+                "must contain column(s) %s; missing %s.",
+                paste(sQuote(need), collapse = ", "),
+                paste(sQuote(missing), collapse = ", ")
+            )
+        )
+    }
+    age0 <- check_numeric_scalar(age0, as_integer = TRUE, ge = 0)
+    check_string(sex, pattern = "^[mMfF]$")
     sex <- toupper(sex)
-    if (!sex %in% c("M", "F")) stop("`sex` must be 'm' or 'f'.", call. = FALSE)
     geo <- trimws(geo)
     filtered <- es %>%
         mutate(geo = trimws(.data[["geo"]]),
@@ -101,7 +125,17 @@ chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
                .data[["sex"]] == .env$sex,
                .data[["projection"]] %in% c("BSL", "LMRT")) %>%
         filter(!is.na(.data[["mx"]]), !is.na(.data[["Year"]]), !is.na(.data[["Age"]]))
-    if (nrow(filtered) == 0L) stop("No rows for given geo/sex in `es`.", call. = FALSE)
+    if (nrow(filtered) == 0L) {
+        fundsr_abort(
+            msg = sprintf(
+                "No rows in `es` match the requested geo/sex: %s / %s.",
+                sQuote(geo), sQuote(sex)
+            ),
+            class = "fundsr_no_data",
+            arg   = "es"
+        )
+    }
+
     if (is.null(start_year)) start_year <- min(filtered[["Year"]], na.rm = TRUE)
     start_year <- as.integer(start_year)
 
@@ -116,8 +150,17 @@ chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
             left_join(d %>%
                           select(all_of(c("Year", "Age", "mx"))), by = c("Year", "Age")) %>%
             arrange(.data[["Year"]], .data[["Age"]])
-        if (is.na(out[["mx"]][1])) stop("Missing mx at baseline (Year, Age) for ", proj, ".",
-                                        call. = FALSE)
+        if (is.na(out[["mx"]][1])) {
+            fundsr_abort(
+                msg = c(
+                    sprintf("Missing `mx` at baseline for projection %s.", proj),
+                    sprintf("Baseline cell: Year = %s, Age = %s.", start_year, age0)
+                ),
+                class = "fundsr_incomplete_data",
+                arg   = "es",
+                call  = rlang::caller_env(n = 2)
+            )
+        }
         if (anyNA(out[["mx"]])) out <-
             out[seq_len(which(is.na(out[["mx"]]))[1] - 1L), , drop = FALSE]
         mx <- out[["mx"]]
@@ -159,9 +202,23 @@ chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
 #' p <- plot_chance_alive_es_aasmr(ca, sex = "m", population = "BG")
 #' p
 #' }
-plot_chance_alive_es_aasmr <- function(ca, sex = c("m", "f"), population) {
-    stopifnot(all(c("projection", "Age", "chance_alive") %in% names(ca)))
-    sex <- match.arg(sex)
+plot_chance_alive_es_aasmr <- function(ca, sex, population) {
+    if (!is.data.frame(ca)) stop_bad_arg("ca", "must be a data frame.")
+    need <- c("projection", "Age", "chance_alive")
+    missing <- setdiff(need, names(ca))
+    if (length(missing)) {
+        stop_bad_arg(
+            "ca",
+            sprintf(
+                "must contain column(s) %s; missing %s.",
+                paste(sQuote(need), collapse = ", "),
+                paste(sQuote(missing), collapse = ", ")
+            )
+        )
+    }
+    check_string(population)
+    check_string(sex, pattern = "^[mMfF]$")
+    sex <- tolower(sex)
     sex_label <- if (sex == "m") gettext("male") else gettext("female")
     age_min <- min(ca[["Age"]], na.rm = TRUE)
     age_max <- max(ca[["Age"]], na.rm = TRUE)

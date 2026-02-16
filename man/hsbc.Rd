@@ -25,6 +25,7 @@ Wrapper around \code{load_fund()} for HSBC files.
 Other provider wrappers: 
 \code{\link{amun}()},
 \code{\link{avan}()},
+\code{\link{bnpp}()},
 \code{\link{inve}()},
 \code{\link{ishs}()},
 \code{\link{msci}()},

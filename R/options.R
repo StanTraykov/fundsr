@@ -35,10 +35,13 @@ fundsr_get_option <- function(name, default) {
     defs <- .fundsr_option_defaults()
 
     if (!name %in% names(defs)) {
-        stop(
-            "Unknown fundsr option: ", sQuote(name), ".\n",
-            "Valid options: ", paste(sort(names(defs)), collapse = ", "),
-            call. = FALSE
+        stop_bad_arg(
+            "name",
+            paste0(
+                "is an unknown fundsr option name: ",
+                sQuote(name), ".\n",
+                "Valid options: ", paste(sort(names(defs)), collapse = ", "), "."
+            )
         )
     }
 
@@ -123,11 +126,15 @@ fundsr_options <- function(data_dir = NULL,
     check_logical(export_svg, allow_null = TRUE)
     check_logical(reload, allow_null = TRUE)
 
-    xetra_map <- check_mapping(xetra_map, allow_null = TRUE, type = "character")
+    xetra_map <- check_mapping(xetra_map,
+                               allow_null = TRUE,
+                               type = "character",
+                               scalar_values = TRUE)
     fund_urls <- check_mapping(fund_urls,
                                allow_null = TRUE,
                                type = "character",
-                               name_case = "upper")
+                               name_case = "upper",
+                               scalar_values = TRUE)
 
     px_width <- check_numeric_scalar(px_width, allow_null = TRUE, as_integer = TRUE, ge = 1)
     verbosity <- check_numeric_scalar(verbosity, allow_null = TRUE, as_integer = TRUE, ge = 0)
@@ -162,8 +169,9 @@ fundsr_options <- function(data_dir = NULL,
 #' Names are converted to uppercase before storing.
 #'
 #' @param fund_urls A named character vector mapping download identifiers to URLs.
+#' @return Invisibly returns a named list (as returned by [fundsr_options()])
+#'   containing the previous value of `fundsr.fund_urls`.
 #'
-#' @return A list with the previous value of `fundsr.fund_urls`.
 #' @seealso
 #' [fundsr_options()] to set `fundsr.fund_urls` and other fundsr options in one call.
 #' [download_fund_data()] to download files from the added URLs.
@@ -171,20 +179,38 @@ fundsr_options <- function(data_dir = NULL,
 #' @family download functions
 #' @export
 add_fund_urls <- function(fund_urls) {
-    if (!is.character(fund_urls)) {
-        stop("`fund_urls` must be a character vector.", call. = FALSE)
-    }
-    nms <- names(fund_urls)
-    if (is.null(nms) ||
-            anyNA(nms) ||
-            any(!nzchar(nms))) {
-        stop("`fund_urls` must have non-empty names.", call. = FALSE)
-    }
-    names(fund_urls) <- toupper(names(fund_urls))
+    fund_urls <- check_mapping(
+        fund_urls,
+        allow_null = TRUE,
+        allow_empty = TRUE,
+        type = "character",
+        name_case = "upper",
+        scalar_values = TRUE
+    )
+
     cur <- fundsr_get_option("fund_urls")
-    if (length(cur) && !is.null(names(cur))) {
-        names(cur) <- toupper(names(cur))
-    }
+    cur <- tryCatch(
+        check_mapping(
+            cur,
+            arg = "options('fundsr.fund_urls')",
+            allow_empty = TRUE,
+            type = "character",
+            name_case = "upper",
+            allow_na_values = FALSE,
+            allow_empty_values = FALSE
+        ),
+        fundsr_bad_arg = function(e) {
+            fundsr_abort(
+                msg = c(
+                    sprintf("Existing option value of %s is invalid.",
+                            sQuote("fundsr.fund_urls")),
+                    "Fix it with `fundsr_options(fund_urls = ...)`."
+                ),
+                class  = "fundsr_bad_option",
+                parent = e
+            )
+        }
+    )
 
     new <- c(cur, fund_urls)
     new <- new[!duplicated(names(new), fromLast = TRUE)]
@@ -193,10 +219,11 @@ add_fund_urls <- function(fund_urls) {
 
 find_inkscape <- function(candidates = NULL,
                           env_var = "INKSCAPE") {
+    check_string(env_var)
+
     safe_norm <- function(x) {
         tryCatch(normalizePath(x, winslash = "/", mustWork = FALSE), error = function(e) x)
     }
-
     override <- fundsr_get_option("inkscape", Sys.getenv(env_var, unset = NA_character_))
     if (!is.na(override) && nzchar(override) && file.exists(override)) {
         return(safe_norm(override))
