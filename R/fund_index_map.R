@@ -1,10 +1,10 @@
 #' Add to fund-index map
 #'
-#' Merges fund-index pairs into the fund-index map (`.fundsr$fund_index_map`).
+#' Merges fund-index pairs into the session fund-index map (`session$state$fund_index_map`).
 #' Existing entries with the same names are replaced.
 #'
 #' @param fund_index_map Named character vector of fund-index pairs to merge into
-#'   `.fundsr$fund_index_map`. Names are fund identifiers; values are index
+#'   `session$state$fund_index_map`. Names are fund identifiers; values are index
 #'   identifiers.
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
@@ -29,7 +29,7 @@ add_fund_index_map <- function(fund_index_map, session = NULL) {
     cur <- tryCatch(
         check_mapping(
             cur,
-            arg = ".fundsr$fund_index_map",
+            arg = "session$state$fund_index_map",
             allow_null = TRUE,
             allow_empty = TRUE,
             type = "character",
@@ -58,7 +58,7 @@ add_fund_index_map <- function(fund_index_map, session = NULL) {
 #' Get the internal fund index map
 #'
 #' Returns the package's fund index lookup table stored in
-#' `.fundsr$fund_index_map`.
+#' `session$state$fund_index_map`.
 #'
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
@@ -73,7 +73,7 @@ get_fund_index_map <- function(session = NULL) {
 
 #' Clear fund-index map
 #'
-#' Clears the fund-index map stored in `.fundsr$fund_index_map`.
+#' Clears the fund-index map stored in `session$state$fund_index_map`.
 #'
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.

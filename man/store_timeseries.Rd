@@ -15,13 +15,13 @@ store_timeseries(
 }
 \arguments{
 \item{var_name}{Character scalar. Name of the variable to store in
-\code{.fundsr_storage}.}
+\code{session$storage}.}
 
 \item{expr}{An expression. Evaluated in the caller's environment when
 (re)computing the cached value.}
 
 \item{fund_index_map}{Optional named vector of fund/index pairs to merge
-into \code{.fundsr$fund_index_map}. Names are used as keys, values should be indices.}
+into \code{session$state$fund_index_map}. Names are used as keys, values should be indices.}
 
 \item{overwrite}{Logical scalar. If \code{TRUE}, recompute and replace any existing
 cached value, regardless of \code{fundsr.reload}.}
@@ -38,24 +38,24 @@ Invisibly returns \code{NULL} (called for its side effects).
 }
 \description{
 Evaluate an expression and cache its result in the package storage
-environment (\code{.fundsr_storage}) under a given name. The expression is only
+environment (\code{session$storage}) under a given name. The expression is only
 re-evaluated when the cached value is missing, when \code{overwrite = TRUE}, or
 when the global option \code{fundsr.reload} is \code{TRUE}. Optionally merges additional
-fund/index mappings into \code{.fundsr$fund_index_map}.
+fund/index mappings into \code{session$state$fund_index_map}.
 }
 \details{
 \code{expr} is evaluated in the environment where \code{store_timeseries()} is called
-(i.e. the caller's environment), then assigned into \code{.fundsr_storage} under
+(i.e. the caller's environment), then assigned into \code{session$storage} under
 \code{var_name}.
 
 Caching behavior is controlled by:
 \itemize{
 \item \code{overwrite = TRUE} (always recompute),
 \item \code{options(fundsr.reload = TRUE)} (force recomputation globally), or
-\item absence of \code{var_name} in \code{.fundsr_storage} (compute once).
+\item absence of \code{var_name} in \code{session$storage} (compute once).
 }
 
-If \code{fund_index_map} is supplied, it is merged into \code{.fundsr$fund_index_map}
+If \code{fund_index_map} is supplied, it is merged into \code{session$state$fund_index_map}
 via name-based assignment: existing entries with the same names are replaced.
 }
 \seealso{

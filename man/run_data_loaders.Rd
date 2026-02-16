@@ -14,11 +14,11 @@ run_data_loaders(reload = FALSE, session = NULL)
 default session when \code{NULL}.}
 }
 \value{
-Invisibly returns \code{.fundsr_storage} after running the data loaders.
+Invisibly returns \code{session$storage} after running the data loaders.
 }
 \description{
-Runs the data loader registry (\code{.fundsr$data_loaders}) to populate (or refresh)
-the package's storage environment (\code{.fundsr_storage}).
+Runs the data loader registry (\code{session$state$data_loaders}) to populate (or refresh)
+the package's storage environment (\code{session$storage}).
 }
 \details{
 The function temporarily sets the \code{fundsr.reload} option so that data loaders
@@ -27,7 +27,7 @@ can decide whether to recompute cached objects.
 The previous value of option "fundsr.reload" is restored on exit,
 even if a data loader errors.
 
-Data loaders are taken from \code{.fundsr$data_loaders} and are called
+Data loaders are taken from \code{session$state$data_loaders} and are called
 sequentially in registration order. Each registered function must take
 no arguments.
 }

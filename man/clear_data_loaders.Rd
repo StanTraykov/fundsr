@@ -14,7 +14,7 @@ default session when \code{NULL}.}
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-Clears the internal data-loader registry (\code{.fundsr$data_loaders}), removing
+Clears the internal data-loader registry (\code{session$state$data_loaders}), removing
 all previously registered data loader functions.
 }
 \examples{

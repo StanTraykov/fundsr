@@ -8,7 +8,7 @@ add_fund_index_map(fund_index_map, session = NULL)
 }
 \arguments{
 \item{fund_index_map}{Named character vector of fund-index pairs to merge into
-\code{.fundsr$fund_index_map}. Names are fund identifiers; values are index
+\code{session$state$fund_index_map}. Names are fund identifiers; values are index
 identifiers.}
 
 \item{session}{Optional \code{fundsr_session} object. Defaults to the package
@@ -18,7 +18,7 @@ default session when \code{NULL}.}
 Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
-Merges fund-index pairs into the fund-index map (\code{.fundsr$fund_index_map}).
+Merges fund-index pairs into the session fund-index map (\code{session$state$fund_index_map}).
 Existing entries with the same names are replaced.
 }
 \seealso{

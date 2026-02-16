@@ -20,7 +20,7 @@ Runs all pending Inkscape export actions stored in the internal queue,
 invoking Inkscape to produce PNG files from previously saved SVGs.
 }
 \details{
-This function reads queued Inkscape actions from \code{.fundsr$inkscape_queue},
+This function reads queued Inkscape actions from \code{session$state$inkscape_queue},
 optionally prepends an \code{export-background:{background}} action, and executes
 Inkscape using \code{\link[base:system2]{base::system2()}}.
 

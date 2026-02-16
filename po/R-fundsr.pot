@@ -22,7 +22,7 @@ msgstr ""
 msgid "`fun` must take no arguments."
 msgstr ""
 
-msgid "Internal registry `.fundsr$data_loaders` must be a list."
+msgid "Internal registry `session$state$data_loaders` must be a list."
 msgstr ""
 
 msgid "`clear_fund_index_map` must be TRUE or FALSE."
@@ -37,13 +37,13 @@ msgstr ""
 msgid "Fundsr storage is not initialised."
 msgstr ""
 
-msgid "Internal registry `.fundsr$data_loaders` must be a list of functions."
+msgid "Internal registry `session$state$data_loaders` must be a list of functions."
 msgstr ""
 
-msgid "`.fundsr$data_loaders[[%d]]` is not a function."
+msgid "`session$state$data_loaders[[%d]]` is not a function."
 msgstr ""
 
-msgid "`.fundsr$data_loaders[[%d]]` must take no arguments."
+msgid "`session$state$data_loaders[[%d]]` must take no arguments."
 msgstr ""
 
 msgid "Joining: {glue::glue_collapse(obj_names, sep = ', ')}"

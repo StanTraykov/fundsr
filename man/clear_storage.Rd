@@ -8,7 +8,7 @@ clear_storage(clear_map = FALSE, session = NULL)
 }
 \arguments{
 \item{clear_map}{Logical scalar; if \code{TRUE}, also clears
-\code{.fundsr$fund_index_map}.}
+\code{session$state$fund_index_map}.}
 
 \item{session}{Optional \code{fundsr_session} object. Defaults to the package
 default session when \code{NULL}.}
@@ -18,8 +18,8 @@ Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
 Removes all objects from the package's storage environment
-(\code{.fundsr_storage}). Optionally also clears the fund-index map
-(\code{.fundsr$fund_index_map}).
+(\code{session$storage}). Optionally also clears the fund-index map
+(\code{session$state$fund_index_map}).
 }
 \examples{
 clear_storage()
