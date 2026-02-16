@@ -74,13 +74,15 @@ if (sheet_idx > length(ws_nodes)) {
 ## Testing and validation
 Run the narrowest useful checks first, then broader checks if needed.
 
-Preferred commands:
-1. Targeted tests for changed behavior (example):
-   - `Rscript -e 'testthat::test_file("tests/testthat/test-rolling.R")'`
-2. Full tests:
-   - `Rscript -e 'testthat::test_dir("tests/testthat")'`
-3. Package check (heavier):
-   - `R CMD check --no-manual --as-cran .`
+### Tests (preferred in this repo/Codex env [package not installed / attached])
+- `Rscript -e 'testthat::test_local()'`
+- `Rscript -e 'testthat::test_local(filter = "session")'`
+
+### Avoid (fails unless package installed)
+- `Rscript -e 'testthat::test_dir("tests/testthat")'`
+
+### Package check (heavy)
+- `R CMD check --no-manual --as-cran .`
 
 If runtime/environment limits block checks, report what was attempted and why it failed.
 
