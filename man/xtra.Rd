@@ -4,14 +4,7 @@
 \alias{xtra}
 \title{Import an Xtrackers fund}
 \usage{
-xtra(
-  ticker,
-  file = NULL,
-  benchmark = NULL,
-  retrieve_benchmark = FALSE,
-  session = NULL,
-  ...
-)
+xtra(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...)
 }
 \arguments{
 \item{ticker}{Fund ticker.}
@@ -21,9 +14,6 @@ xtra(
 \item{benchmark}{Optional benchmark key.}
 
 \item{retrieve_benchmark}{Logical; also import benchmark column.}
-
-\item{session}{Optional \code{fundsr_session} object. Defaults to the package
-default session when \code{NULL}.}
 
 \item{...}{Additional arguments passed to \code{\link[=load_fund]{load_fund()}} and \code{\link[=store_timeseries]{store_timeseries()}}, such as
 \code{postprocess}.}

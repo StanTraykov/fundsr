@@ -4,7 +4,7 @@
 \alias{amun}
 \title{Import an Amundi fund}
 \usage{
-amun(ticker, file = NULL, benchmark = NULL, session = NULL, ...)
+amun(ticker, file = NULL, benchmark = NULL, ...)
 }
 \arguments{
 \item{ticker}{Fund ticker.}
@@ -12,9 +12,6 @@ amun(ticker, file = NULL, benchmark = NULL, session = NULL, ...)
 \item{file}{Optional filename override.}
 
 \item{benchmark}{Optional benchmark key.}
-
-\item{session}{Optional \code{fundsr_session} object. Defaults to the package
-default session when \code{NULL}.}
 
 \item{...}{Additional arguments passed to \code{\link[=load_fund]{load_fund()}} and \code{\link[=store_timeseries]{store_timeseries()}}, such as
 \code{postprocess}.}

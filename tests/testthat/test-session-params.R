@@ -1,18 +1,14 @@
-test_that("functions forwarding state-sensitive calls expose session", {
+test_that("functions forwarding state-sensitive calls expose session when needed", {
     expect_true("session" %in% names(formals(save_plot)))
     expect_true("session" %in% names(formals(export_pngs)))
     expect_true("session" %in% names(formals(run_plots)))
 
     expect_true("session" %in% names(formals(msci)))
     expect_true("session" %in% names(formals(load_fund)))
-    expect_true("session" %in% names(formals(ishs)))
-    expect_true("session" %in% names(formals(spdr)))
-    expect_true("session" %in% names(formals(xtra)))
-    expect_true("session" %in% names(formals(amun)))
-    expect_true("session" %in% names(formals(inve)))
-    expect_true("session" %in% names(formals(vang)))
-    expect_true("session" %in% names(formals(ubs)))
-    expect_true("session" %in% names(formals(hsbc)))
-    expect_true("session" %in% names(formals(bnpp)))
-    expect_true("session" %in% names(formals(avan)))
+})
+
+test_that("provider wrappers stay compatible via ellipsis forwarding", {
+    wrappers <- list(ishs, spdr, xtra, amun, inve, vang, ubs, hsbc, bnpp, avan)
+    has_session <- vapply(wrappers, function(f) "session" %in% names(formals(f)), logical(1))
+    expect_false(any(has_session))
 })

@@ -4,7 +4,7 @@
 \alias{avan}
 \title{Import an Avantis fund}
 \usage{
-avan(ticker, file, benchmark = NULL, session = NULL, ...)
+avan(ticker, file, benchmark = NULL, ...)
 }
 \arguments{
 \item{ticker}{Fund ticker.}
@@ -12,9 +12,6 @@ avan(ticker, file, benchmark = NULL, session = NULL, ...)
 \item{file}{Filename.}
 
 \item{benchmark}{Optional benchmark key.}
-
-\item{session}{Optional \code{fundsr_session} object. Defaults to the package
-default session when \code{NULL}.}
 
 \item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
 \code{postprocess}.}

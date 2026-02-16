@@ -187,8 +187,6 @@ load_fund <- function(ticker,
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -196,7 +194,7 @@ load_fund <- function(ticker,
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, session = NULL, ...) {
+ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
               sheet = "Historical",
@@ -204,7 +202,6 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
               benchmark = benchmark,
               benchmark_col = "^Benchmark Ret",
               retrieve_benchmark = retrieve_benchmark,
-              session = session,
               ...)
 }
 
@@ -215,8 +212,6 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -224,11 +219,10 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-spdr <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
+spdr <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               benchmark = benchmark,
-              session = session,
               ...)
 }
 
@@ -240,8 +234,6 @@ spdr <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -249,13 +241,12 @@ spdr <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, session = NULL, ...) {
+xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
               benchmark = benchmark,
               benchmark_col = "^Index Level",
               retrieve_benchmark = retrieve_benchmark,
-              session = session,
               ...)
 }
 
@@ -266,8 +257,6 @@ xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -275,12 +264,11 @@ xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-amun <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
+amun <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^Official NAV",
               benchmark = benchmark,
-              session = session,
               ...)
 }
 
@@ -292,8 +280,6 @@ amun <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -301,14 +287,13 @@ amun <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, session = NULL, ...) {
+inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^NAV$", # need end marker ($) for Invesco do disambiguate
               benchmark = benchmark,
               benchmark_col = "^Index",
               retrieve_benchmark = retrieve_benchmark,
-              session = session,
               ...)
 }
 
@@ -319,8 +304,6 @@ inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -328,12 +311,11 @@ inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-vang <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
+vang <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^NAV \\(USD\\)$",
               benchmark = benchmark,
-              session = session,
               ...)
 }
 
@@ -344,8 +326,6 @@ vang <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -353,12 +333,11 @@ vang <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-ubs <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
+ubs <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               nav_col = "^Official NAV",
               benchmark = benchmark,
-              session = session,
               ...)
 }
 
@@ -369,8 +348,6 @@ ubs <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -378,12 +355,11 @@ ubs <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-hsbc <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
+hsbc <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               benchmark = benchmark,
               date_order = "mdy",
-              session = session,
               ...)
 }
 
@@ -394,8 +370,6 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' @param ticker Fund ticker.
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -403,12 +377,11 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' [load_fund()]
 #' @family provider wrappers
 #' @export
-bnpp <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
+bnpp <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
               file = file,
               benchmark = benchmark,
               nav_col = "^Value",
-              session = session,
               ...)
 }
 
@@ -419,8 +392,6 @@ bnpp <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' @param ticker Fund ticker.
 #' @param file Filename.
 #' @param benchmark Optional benchmark key.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [store_timeseries()], such as
 #'   `postprocess`.
 #'
@@ -428,7 +399,7 @@ bnpp <- function(ticker, file = NULL, benchmark = NULL, session = NULL, ...) {
 #' [read_timeseries()]
 #' @family provider wrappers
 #' @export
-avan <- function(ticker, file, benchmark = NULL, session = NULL, ...) {
+avan <- function(ticker, file, benchmark = NULL, ...) {
     ticker_lower <- tolower(ticker)
     store_timeseries(
         ticker_lower,
@@ -441,7 +412,6 @@ avan <- function(ticker, file, benchmark = NULL, session = NULL, ...) {
             select("date", "NAV") %>%
             rename_with(~ ticker_lower, "NAV"),
         fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower),
-        session = session,
         ...
     )
 }
