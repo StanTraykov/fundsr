@@ -6,14 +6,14 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Store a cached object in the package storage environment — store_timeseries"><meta name="description" content="Evaluate an expression and cache its result in the package storage
-environment (.fundsr_storage) under a given name. The expression is only
+environment (session$storage) under a given name. The expression is only
 re-evaluated when the cached value is missing, when overwrite = TRUE, or
 when the global option fundsr.reload is TRUE. Optionally merges additional
-fund/index mappings into .fundsr$fund_index_map."><meta property="og:description" content="Evaluate an expression and cache its result in the package storage
-environment (.fundsr_storage) under a given name. The expression is only
+fund/index mappings into session$state$fund_index_map."><meta property="og:description" content="Evaluate an expression and cache its result in the package storage
+environment (session$storage) under a given name. The expression is only
 re-evaluated when the cached value is missing, when overwrite = TRUE, or
 when the global option fundsr.reload is TRUE. Optionally merges additional
-fund/index mappings into .fundsr$fund_index_map."><meta property="og:image" content="https://stantraykov.github.io/fundsr/logo.png"></head><body>
+fund/index mappings into session$state$fund_index_map."><meta property="og:image" content="https://stantraykov.github.io/fundsr/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -54,10 +54,10 @@ fund/index mappings into .fundsr$fund_index_map."><meta property="og:image" cont
 
     <div class="ref-description section level2">
     <p>Evaluate an expression and cache its result in the package storage
-environment (<code>.fundsr_storage</code>) under a given name. The expression is only
+environment (<code>session$storage</code>) under a given name. The expression is only
 re-evaluated when the cached value is missing, when <code>overwrite = TRUE</code>, or
 when the global option <code>fundsr.reload</code> is <code>TRUE</code>. Optionally merges additional
-fund/index mappings into <code>.fundsr$fund_index_map</code>.</p>
+fund/index mappings into <code>session$state$fund_index_map</code>.</p>
     </div>
 
     <div class="section level2">
@@ -78,7 +78,7 @@ fund/index mappings into <code>.fundsr$fund_index_map</code>.</p>
 
 <dl><dt id="arg-var-name">var_name<a class="anchor" aria-label="anchor" href="#arg-var-name"></a></dt>
 <dd><p>Character scalar. Name of the variable to store in
-<code>.fundsr_storage</code>.</p></dd>
+<code>session$storage</code>.</p></dd>
 
 
 <dt id="arg-expr">expr<a class="anchor" aria-label="anchor" href="#arg-expr"></a></dt>
@@ -88,7 +88,7 @@ fund/index mappings into <code>.fundsr$fund_index_map</code>.</p>
 
 <dt id="arg-fund-index-map">fund_index_map<a class="anchor" aria-label="anchor" href="#arg-fund-index-map"></a></dt>
 <dd><p>Optional named vector of fund/index pairs to merge
-into <code>.fundsr$fund_index_map</code>. Names are used as keys, values should be indices.</p></dd>
+into <code>session$state$fund_index_map</code>. Names are used as keys, values should be indices.</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
@@ -114,12 +114,12 @@ default session when <code>NULL</code>.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>expr</code> is evaluated in the environment where <code>store_timeseries()</code> is called
-(i.e. the caller's environment), then assigned into <code>.fundsr_storage</code> under
+(i.e. the caller's environment), then assigned into <code>session$storage</code> under
 <code>var_name</code>.</p>
 <p>Caching behavior is controlled by:</p><ul><li><p><code>overwrite = TRUE</code> (always recompute),</p></li>
 <li><p><code>options(fundsr.reload = TRUE)</code> (force recomputation globally), or</p></li>
-<li><p>absence of <code>var_name</code> in <code>.fundsr_storage</code> (compute once).</p></li>
-</ul><p>If <code>fund_index_map</code> is supplied, it is merged into <code>.fundsr$fund_index_map</code>
+<li><p>absence of <code>var_name</code> in <code>session$storage</code> (compute once).</p></li>
+</ul><p>If <code>fund_index_map</code> is supplied, it is merged into <code>session$state$fund_index_map</code>
 via name-based assignment: existing entries with the same names are replaced.</p>
     </div>
     <div class="section level2">

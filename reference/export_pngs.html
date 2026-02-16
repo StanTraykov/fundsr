@@ -73,7 +73,7 @@ Defaults to <code>"white"</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function reads queued Inkscape actions from <code>.fundsr$inkscape_queue</code>,
+    <p>This function reads queued Inkscape actions from <code>session$state$inkscape_queue</code>,
 optionally prepends an <code>export-background:{background}</code> action, and executes
 Inkscape using <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">base::system2()</a></code>.</p>
 <p>The Inkscape executable is searched for in the following order:</p><ol><li><p>user-supplied config (<code>fundsr.inkscape</code> option or <code>INKSCAPE</code> environment variable)</p></li>

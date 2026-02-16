@@ -130,7 +130,7 @@ Inkscape export action.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>If <code>save_svg = TRUE</code>, the SVG is written as <code>"{file}.svg"</code>. An Inkscape action
-string is then stored in <code>.fundsr$inkscape_queue[file]</code> so the SVG can later be
+string is then stored in <code>session$state$inkscape_queue[file]</code> so the SVG can later be
 exported to <code>"{file}.png"</code> at <code>px_width</code> pixels wide when <code><a href="export_pngs.html">export_pngs()</a></code> is run.</p>
 <p>Queueing is refused if either output path contains a semicolon (<code>;</code>), since
 Inkscape actions are separated by semicolons.</p>

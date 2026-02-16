@@ -5,9 +5,9 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Run registered data loaders — run_data_loaders"><meta name="description" content="Runs the data loader registry (.fundsr$data_loaders) to populate (or refresh)
-the package's storage environment (.fundsr_storage)."><meta property="og:description" content="Runs the data loader registry (.fundsr$data_loaders) to populate (or refresh)
-the package's storage environment (.fundsr_storage)."><meta property="og:image" content="https://stantraykov.github.io/fundsr/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Run registered data loaders — run_data_loaders"><meta name="description" content="Runs the data loader registry (session$state$data_loaders) to populate (or refresh)
+the package's storage environment (session$storage)."><meta property="og:description" content="Runs the data loader registry (session$state$data_loaders) to populate (or refresh)
+the package's storage environment (session$storage)."><meta property="og:image" content="https://stantraykov.github.io/fundsr/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -47,8 +47,8 @@ the package's storage environment (.fundsr_storage)."><meta property="og:image" 
     </div>
 
     <div class="ref-description section level2">
-    <p>Runs the data loader registry (<code>.fundsr$data_loaders</code>) to populate (or refresh)
-the package's storage environment (<code>.fundsr_storage</code>).</p>
+    <p>Runs the data loader registry (<code>session$state$data_loaders</code>) to populate (or refresh)
+the package's storage environment (<code>session$storage</code>).</p>
     </div>
 
     <div class="section level2">
@@ -72,7 +72,7 @@ default session when <code>NULL</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisibly returns <code>.fundsr_storage</code> after running the data loaders.</p>
+    <p>Invisibly returns <code>session$storage</code> after running the data loaders.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -80,7 +80,7 @@ default session when <code>NULL</code>.</p></dd>
 can decide whether to recompute cached objects.</p>
 <p>The previous value of option "fundsr.reload" is restored on exit,
 even if a data loader errors.</p>
-<p>Data loaders are taken from <code>.fundsr$data_loaders</code> and are called
+<p>Data loaders are taken from <code>session$state$data_loaders</code> and are called
 sequentially in registration order. Each registered function must take
 no arguments.</p>
     </div>
