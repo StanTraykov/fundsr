@@ -8,8 +8,7 @@
 #' @family fund/index workflow functions
 #' @export
 get_storage <- function() {
-    fundsr_require_state(storage = TRUE)
-    .fundsr_storage
+    fundsr_require_state(storage = TRUE)$storage
 }
 
 #' Clear storage
@@ -30,6 +29,9 @@ get_storage <- function() {
 #' clear_storage(clear_map = TRUE)
 clear_storage <- function(clear_map = FALSE) {
     check_logical(clear_map)
+    if (clear_map) {
+        clear_fund_index_map()
+    }
     if (!is.environment(.fundsr_storage)) {
         return(invisible(NULL))
     }
@@ -45,9 +47,6 @@ clear_storage <- function(clear_map = FALSE) {
                 )
             }
         )
-    }
-    if (clear_map) {
-        clear_fund_index_map()
     }
     invisible(NULL)
 }
@@ -104,15 +103,15 @@ store_timeseries <- function(var_name,
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     reload <- isTRUE(fundsr_get_option("reload"))
-    fundsr_require_state(storage = TRUE)
+    storage <- fundsr_require_state(storage = TRUE)$storage
 
-    needs_eval <- overwrite || reload || !exists(var_name, envir = .fundsr_storage)
+    needs_eval <- overwrite || reload || !exists(var_name, envir = storage)
     # Check if assignment is needed and evaluate expr in parent_env
     if (needs_eval) {
         fundsr_msg(paste("*** Loading:", var_name), level = 2L)
         value <- eval(substitute(expr), envir = parent_env)
         value <- postprocess(value)
-        assign(var_name, value, envir = .fundsr_storage)
+        assign(var_name, value, envir = storage)
     }
     # Also add fund index pairs to global map (if supplied)
     if (!is.null(fund_index_map)) {

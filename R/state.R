@@ -25,15 +25,21 @@ reset_state <- function() {
     invisible(NULL)
 }
 
-fundsr_require_state <- function(storage = FALSE, caller_n = 1L) {
+fundsr_require_state <- function(storage = FALSE, call = rlang::caller_env(n = 2L)) {
     check_logical(storage)
-    env <- rlang::caller_env(n = caller_n)
+    if (!is.environment(call)) {
+        stop_bad_arg(
+            "call",
+            "must be an environment (a caller frame).",
+            call = rlang::caller_env(n = 1L)
+        )
+    }
 
     if (!is.environment(.fundsr)) {
         fundsr_abort(
             msg   = "Fundsr state environment is not initialised.",
             class = "fundsr_bad_state",
-            call  = env
+            call  = call
         )
     }
 
@@ -41,7 +47,7 @@ fundsr_require_state <- function(storage = FALSE, caller_n = 1L) {
         fundsr_abort(
             msg   = "Fundsr storage is not initialised.",
             class = "fundsr_bad_state",
-            call  = env
+            call  = call
         )
     }
 

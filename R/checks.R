@@ -1,6 +1,6 @@
 fundsr_abort <- function(msg,
                          class,
-                         call = rlang::caller_env(),
+                         call = rlang::caller_env(n = 2),
                          parent = NULL,
                          arg = NULL) {
     intern_err_cls <- c("fundsr_internal_error", "fundsr_error")

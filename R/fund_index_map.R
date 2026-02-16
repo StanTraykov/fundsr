@@ -21,9 +21,9 @@ add_fund_index_map <- function(fund_index_map) {
     if (is.null(fund_index_map) || length(fund_index_map) == 0L) {
         return(invisible(NULL))
     }
-    fundsr_require_state()
+    st <- fundsr_require_state()$state
 
-    cur <- .fundsr$fund_index_map
+    cur <- st$fund_index_map
     cur <- tryCatch(
         check_mapping(
             cur,
@@ -48,7 +48,7 @@ add_fund_index_map <- function(fund_index_map) {
     }
 
     cur[names(fund_index_map)] <- fund_index_map
-    .fundsr$fund_index_map <- cur
+    st$fund_index_map <- cur
 
     invisible(NULL)
 }
@@ -62,8 +62,8 @@ add_fund_index_map <- function(fund_index_map) {
 #' @family fund-index map functions
 #' @export
 get_fund_index_map <- function() {
-    fundsr_require_state()
-    .fundsr$fund_index_map
+    st <- fundsr_require_state()$state
+    st$fund_index_map
 }
 
 #' Clear fund-index map

@@ -43,19 +43,19 @@ add_data_loader <- function(fun) {
         stop_bad_arg("fun", "must take no arguments.")
     }
 
-    fundsr_require_state()
+    st   <- fundsr_require_state()$state
 
-    if (is.null(.fundsr$data_loaders)) {
-        .fundsr$data_loaders <- list()
+    if (is.null(st$data_loaders)) {
+        st$data_loaders <- list()
     }
-    if (!is.list(.fundsr$data_loaders)) {
+    if (!is.list(st$data_loaders)) {
         fundsr_abort(
             msg   = "Internal registry `.fundsr$data_loaders` must be a list.",
             class = "fundsr_bad_state"
         )
     }
 
-    fns <- .fundsr$data_loaders
+    fns <- st$data_loaders
     sig <- function(f) paste(deparse(body(f)), collapse = "\n")
     fun_sig <- sig(fun)
 
@@ -70,10 +70,10 @@ add_data_loader <- function(fun) {
     }, logical(1)))
 
     if (!already) {
-        .fundsr$data_loaders <- c(fns, list(fun))
+        st$data_loaders <- c(fns, list(fun))
     }
 
-    invisible(.fundsr$data_loaders)
+    invisible(st$data_loaders)
 }
 
 #' Run registered data loaders
@@ -101,9 +101,11 @@ add_data_loader <- function(fun) {
 #' @export
 run_data_loaders <- function(reload = FALSE) {
     check_logical(reload)
-    fundsr_require_state(storage = TRUE)
+    rqs <- fundsr_require_state(storage = TRUE)
+    st <- rqs$state
+    storage <- rqs$storage
 
-    fns <- .fundsr$data_loaders
+    fns <- st$data_loaders
     if (is.null(fns)) fns <- list()
 
     if (!is.list(fns)) {
@@ -147,5 +149,5 @@ run_data_loaders <- function(reload = FALSE) {
         )
     }
 
-    invisible(.fundsr_storage)
+    invisible(storage)
 }
