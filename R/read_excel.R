@@ -402,7 +402,7 @@ read_timeseries_excel <- function(file,
                 sprintf("file     = %s.", sQuote(xl_file)),
                 sprintf("sheet    = %s.", sQuote(sheet))
             ),
-            class = c("fundsr_bad_data", "fundsr_duplicate_dates", "fundsr_excel_import_failed")
+            class = c("fundsr_duplicate_dates", "fundsr_bad_data", "fundsr_excel_import_failed")
         )
     }
 

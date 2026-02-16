@@ -2,131 +2,134 @@
 
 Guidance for AI/code agents working in this repository.
 
-## Scope, priorities, and discipline
-- This guidance applies to the entire repository.
-- Follow **system/developer/user** instructions first, then this file.
-- Keep changes **small, reviewable, and reversible**.
-- Do not refactor unrelated code. Avoid renames/moves/deletions unless required.
-- Prefer incremental edits that keep diffs readable.
+## 0) Priority order
+1. Follow **system/developer/user instructions** in the chat.
+2. Then follow this file.
+3. If this file conflicts with the repo’s established conventions, prefer the repo’s existing code patterns.
 
-## Repository overview
-- This is an **R package** named `fundsr` for importing ETF/index data and producing plots and financial/survival visuals.
-- Core package code: `R/`
-- Tests: `tests/testthat/` (entry: `tests/testthat.R`)
-- Docs: roxygen in `R/` → generated `man/` and `NAMESPACE`
-- Website/vignettes: `vignettes/` and pkgdown config in `_pkgdown.yml`
-- i18n: `R/i18n.R`, `po/`, `inst/po/`
+## 1) Repository summary
+`fundsr` is an **R package** for:
+- importing fund/index time series from provider exports (Excel/CSV/TSV),
+- caching them in a package-owned session store,
+- computing rolling differences / tracking diagnostics,
+- producing plots (incl. export helpers),
+- plus survival / life-table utilities.
 
-## Architecture map (rough)
-- **Checks & errors:** `R/checks.R`
-- **State & storage:** `R/state.R`, `R/storage.R`, `R/zzz.R`
-- **Options:** `R/options.R`
-- **Downloads:** `R/fund_download.R`
-- **Ingest/readers:** `R/read_text.R`, `R/read_excel.R`, `R/data_loaders.R`
-- **Computation:** `R/fund_calc.R`, `R/fund_index_map.R`
-- **Plotting/export:** `R/plot_*.R`, `R/plot_export.R`, `R/xlm.R`, `R/life.R`, `R/es_aasmr.R`
-- **Provider wrappers:** `R/wrappers.R`
+Key directories:
+- `R/` – package code (source of truth)
+- `tests/testthat/` – tests (`tests/testthat.R` runs them)
+- `man/` – generated Rd docs (do not edit by hand)
+- `vignettes/`, `pkgdown/` – website and long-form docs
+- `po/`, `inst/po/` – translations / i18n assets
 
-Preserve these boundaries; don’t mix unrelated concerns.
+## 2) Architecture and state model
+This package is intentionally **stateful**:
 
-## Error handling (IMPORTANT)
-This repo uses a structured error framework. Prefer it over raw `stop()`.
+- `.fundsr` is a session environment for mutable registries and metadata:
+  - loader registry (`.fundsr$data_loaders`)
+  - fund/index map (`.fundsr$fund_index_map`)
+  - export queue (`.fundsr$inkscape_queue`)
+  - XLM bookkeeping (`.fundsr$done_xlm_sets`)
 
-### Use `stop_bad_arg()` when:
-- A function argument is invalid (type/length/range/pattern).
-- An input parameter contradicts another parameter.
-- A required column name is missing because the user specified it wrong.
+- `.fundsr_storage` is an environment used as a cache for imported/processed objects.
 
-### Use `fundsr_abort()` when:
-- The failure is **not** primarily an argument issue:
-  - IO problems (missing files, unreadable files, cannot create directories)
-  - Bad or incomplete input data (file contents don’t match expectations)
-  - Invalid internal state (`.fundsr` / `.fundsr_storage` not initialised, registry corrupted)
-  - Join conflicts, missing baseline rows, inconsistent datasets, etc.
-- Wrap underlying errors via `parent = e` and classify the error with `class = ...`.
+Initialization happens in `R/zzz.R` via `.onLoad()`.
 
-### Conventions
-- Provide messages as character vectors when useful; they are collapsed with newlines.
-- Prefer stable error class names like:
+### Main building blocks
+- **Checks & structured errors:** `fundsr_abort()`, `stop_bad_arg()`, `check_*()` helpers (`R/checks.R`)
+- **State gate:** `fundsr_require_state()` (`R/state.R`)
+- **Storage/cache:** `store_timeseries()`, `get_storage()`, `clear_storage()` (`R/storage.R`)
+- **Loader registry:** `add_data_loader()`, `run_data_loaders()`, `clear_data_loaders()` (`R/data_loaders.R`)
+- **Wrappers:** provider wrappers are thin adapters around the common import/caching workflow (`R/wrappers.R`)
+- **Joining:** `join_env()` and `build_all_series()` assemble storage content into wide tibbles (`R/storage.R`)
+- **Utilities & messaging:** `%||%`, `fundsr_msg()`, helper utilities (`R/utils.R`)
+- **XLM utilities:** read+plot Xetra XLM exports (`R/xlm.R`)
+- **i18n:** gettext usage + catalogs (`R/i18n.R`, `po/`, `inst/po/`)
+
+When modifying code, preserve these separations:
+- readers parse; wrappers configure; storage caches; calculations compute; plots render.
+
+## 3) Error handling and validation rules
+This repo uses structured errors with `rlang::abort()`.
+
+### Which error helper to use
+- Use `stop_bad_arg()` for **invalid user inputs / argument validation**.
+- Use `fundsr_abort()` for:
+  - state problems (e.g. missing initialization),
+  - I/O failures,
+  - invalid/ambiguous input data files,
+  - internal invariants / “this should not happen” situations,
+  - wrapping lower-level failures.
+
+### Checks and consistency
+- Prefer existing `check_*()` helpers over ad-hoc validation.
+- When wrapping a caught error, pass it as `parent = e` so callers retain context.
+- Use meaningful error classes consistent with existing ones (examples seen in code):
   - `fundsr_bad_state`, `fundsr_io_error`, `fundsr_bad_data`,
-    `fundsr_download_failed`, `fundsr_loader_failed`, `fundsr_no_data`,
-    `fundsr_incomplete_data`, `fundsr_bad_option`, etc.
-- When applicable, set `arg = "<argument name>"` to support caller UX.
+  - `fundsr_duplicate_dates`, `fundsr_download_failed`, etc.
 
-## State model & side effects
-- Package state lives in `.fundsr` and `.fundsr_storage` (initialised in `.onLoad()` in `R/zzz.R`).
-- Functions that rely on state/storage should call:
-  - `fundsr_require_state()` or `fundsr_require_state(storage = TRUE)`
-- Do not introduce new global variables. Do not bypass these helpers.
+Message style:
+- Keep messages actionable and specific (include key parameters like `file`, `sheet`, etc. when relevant).
+- Avoid overly verbose multi-paragraph output unless it materially helps the user debug.
 
-## Options and messaging
-### Options
-Options are namespaced as `fundsr.<name>` and accessed via `fundsr_get_option()`.
-Key options:
-- `fundsr.data_dir`, `fundsr.out_dir`
-- `fundsr.reload` (controls caching in data loaders)
-- `fundsr.verbosity` (integer; 0 silences informational messages)
+## 4) Coding style and conventions
+- Indentation: **4 spaces**.
+- Keep lines roughly ≤ 100 characters when practical.
+- Match existing tidyverse patterns:
+  - use `.data` / `.env` pronouns for NSE,
+  - prefer readable pipelines and small helpers over deep nesting,
+  - use existing messaging (`fundsr_msg`) for progress output where appropriate.
+- Avoid broad refactors unless explicitly requested.
+- Avoid new dependencies unless necessary; if added, update `DESCRIPTION`.
 
-Do not read `getOption("fundsr.*")` directly in new code; use `fundsr_get_option()`.
+## 5) Import pipeline conventions
+Imported series typically have:
+- a `date` column of class `Date`,
+- one or more value columns (often numeric).
 
-### Messaging / progress output
-- Use `fundsr_msg(..., level = <int>)` for output. Avoid `message()`, `cat()`, `print()`.
-- Avoid noisy defaults:
-  - Do not enable `readr` progress bars by default.
-  - Gate progress output via `interactive()` or `fundsr_verbosity()`/`fundsr_msg(level=...)`.
-- Prefer `level = 1L` for normal informative messages, `2L` for detailed diagnostics.
+Wrappers/loaders generally:
+1. call a reader (`read_timeseries()` / `read_timeseries_excel()`),
+2. postprocess (select/rename/coerce),
+3. store via `store_timeseries()` under a stable key (often lowercase ticker),
+4. optionally record benchmark mappings via `fund_index_map`.
 
-## i18n / gettext
-- User-facing strings may be translated.
-- When composing translated strings with placeholders:
-  - Translate first: `gettext("... {name} ...")`
-  - Then interpolate: `glue(..., gettext("..."))`
-- Do not change placeholder names casually; it breaks translations.
+If changing a reader, consider downstream effects on:
+- provider wrappers in `R/wrappers.R`,
+- `build_all_series()` / `join_env()`,
+- rolling difference calculations and plotting code.
 
-## Style & coding conventions
-- Use idiomatic R with **4-space indentation**.
-- Keep lines reasonably short (~100 chars target).
-- Avoid deep nesting; use small helpers where appropriate.
-- Follow existing conventions:
-  - `check_*()` helpers for validation
-  - `.data` / `.env` pronouns in dplyr code
-  - `imports.R` governs package imports; avoid adding `library()` in package code
-- Avoid adding dependencies unless necessary; if you add one, update `DESCRIPTION`.
+## 6) Documentation and generated files
+- `man/*.Rd` and `NAMESPACE` are generated from roxygen comments.
+- Do not hand-edit generated files.
+- If exported APIs or roxygen docs change, run `devtools::document()` and commit updated `man/` and `NAMESPACE`.
+- Keep README/vignettes consistent with behavior changes that affect users.
 
-## Documentation and generated files
-- `man/*.Rd` and `NAMESPACE` are generated.
-- If you modify roxygen or exports, regenerate via `devtools::document()` and commit the results.
-- Keep README/vignettes consistent with user-visible behavior changes.
+## 7) Internationalization (i18n)
+- Some user-facing strings are translated via gettext.
+- When modifying user-visible strings, preserve translation hooks where present.
+- If you introduce new user-facing strings in translated areas, follow existing i18n patterns and consider whether catalogs/templates need updating.
 
-## Testing and validation
-Prefer the narrowest checks first:
-1. Targeted tests:
-   - `Rscript -e 'testthat::test_file("tests/testthat/test-<file>.R")'`
-2. Full tests:
-   - `Rscript -e 'testthat::test_dir("tests/testthat")'`
-3. Full package check:
-   - `R CMD check --no-manual --as-cran .`
+## 8) Tests and validation workflow
+Prefer the narrowest relevant checks:
+1. Targeted tests (when present):  
+   `Rscript -e 'testthat::test_file("tests/testthat/<file>.R")'`
+2. All tests:  
+   `Rscript -e 'testthat::test_dir("tests/testthat")'`
+3. Full package check:  
+   `R CMD check --no-manual --as-cran .`
 
-If checks cannot be run due to environment limits, state what was attempted and why.
+If checks cannot be run (environment limits), state what was attempted and why.
 
-## Data, examples, and downloads
-- Do not commit bulky/generated data unless explicitly requested.
-- Example scripts live under `inst/scripts/examples`; preserve naming/layout.
-- Download helpers enforce safe filenames; do not loosen filename safety checks without a specific reason.
+## 9) Change discipline for agents
+- Keep changes minimal and reviewable.
+- Do not rename/move/delete files unless required by the task.
+- Avoid “drive-by” formatting or cleanup in unrelated files.
+- Prefer atomic commits with imperative messages and a brief validation note.
 
-## PR/commit expectations for agents
-- Make atomic commits with clear, imperative messages.
-- Summarize:
-  - what changed,
-  - why it changed,
-  - how it was validated,
-  - any backward-compatibility impact.
-
-## Quick checklist before finishing
-- [ ] Changes match the request.
-- [ ] Errors use `stop_bad_arg()` / `fundsr_abort()` appropriately.
-- [ ] Messages respect `fundsr_msg()` / verbosity.
-- [ ] State access uses `fundsr_require_state()` where needed.
-- [ ] Docs regenerated if roxygen/exports changed.
-- [ ] Tests/checks run (or blockers documented).
-- [ ] Diff is focused and reviewable.
+## 10) Pre-finish checklist
+- [ ] Scope matches the user request.
+- [ ] Error handling follows `fundsr_abort()` / `stop_bad_arg()` conventions.
+- [ ] Style matches repository conventions.
+- [ ] Generated docs updated if needed.
+- [ ] Relevant tests/checks run (or blockers documented).
+- [ ] `git diff` is focused and reviewable.
