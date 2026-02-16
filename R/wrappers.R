@@ -60,8 +60,6 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
 #' @param date_order Date parsing order passed to the importer.
 #' @param var_name Specify a custom variable name for the storage environment.
 #' @param data_sheet Deprecated; use `sheet`.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [store_timeseries()], such as
 #'   `overwrite` or `postprocess`.
 #'
@@ -91,7 +89,6 @@ load_fund <- function(ticker,
                       date_order = "dmy",
                       var_name = NULL,
                       data_sheet = NULL,
-                      session = NULL,
                       ...) {
     check_string(ticker)
     check_string(file, allow_null = TRUE)
@@ -173,7 +170,6 @@ load_fund <- function(ticker,
             date_order = date_order
         ),
         fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower),
-        session = session,
         ...
     )
 

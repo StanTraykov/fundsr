@@ -16,7 +16,6 @@ load_fund(
   date_order = "dmy",
   var_name = NULL,
   data_sheet = NULL,
-  session = NULL,
   ...
 )
 }
@@ -49,9 +48,6 @@ alongside the fund.}
 \item{var_name}{Specify a custom variable name for the storage environment.}
 
 \item{data_sheet}{Deprecated; use \code{sheet}.}
-
-\item{session}{Optional \code{fundsr_session} object. Defaults to the package
-default session when \code{NULL}.}
 
 \item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
 \code{overwrite} or \code{postprocess}.}
