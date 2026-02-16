@@ -15,14 +15,16 @@ Invisibly returns \code{NULL}. Called for side effects.
 }
 \description{
 Convenience helper that clears mutable internal fundsr state for a session:
-storage, fund-index map, import-function registry, Inkscape export queue, and
-the XLM bookkeeping vector.
+storage, fund-index map, import-function registry, Inkscape export queue,
+and the XLM bookkeeping vector.
 }
 \examples{
 reset_state()
 }
 \seealso{
 Other config functions: 
-\code{\link{fundsr_options}()}
+\code{\link{fundsr_default_session}()},
+\code{\link{fundsr_options}()},
+\code{\link{fundsr_session}()}
 }
 \concept{config functions}

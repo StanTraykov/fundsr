@@ -85,6 +85,8 @@ fundsr_options(
 \code{\link[=add_fund_urls]{add_fund_urls()}} to add/update entries in \code{fundsr.fund_urls}.
 
 Other config functions: 
+\code{\link{fundsr_default_session}()},
+\code{\link{fundsr_session}()},
 \code{\link{reset_state}()}
 }
 \concept{config functions}
