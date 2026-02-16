@@ -14,7 +14,8 @@ save_plot(
   out_dir = fundsr_get_option("out_dir"),
   save_png = fundsr_get_option("internal_png", FALSE),
   save_svg = fundsr_get_option("export_svg", TRUE),
-  background = "white"
+  background = "white",
+  session = NULL
 )
 }
 \arguments{
@@ -43,6 +44,9 @@ Inkscape export action.}
 
 \item{background}{Background color used for immediate PNG saving via
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}} (\code{bg}).}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.

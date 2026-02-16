@@ -4,7 +4,7 @@
 \alias{msci}
 \title{Import an MSCI index sheet and register benchmark mappings}
 \usage{
-msci(var_name, file, col_trans, benchmarks = NULL)
+msci(var_name, file, col_trans, benchmarks = NULL, session = NULL)
 }
 \arguments{
 \item{var_name}{Storage key used in \code{session$storage}.}
@@ -15,6 +15,9 @@ msci(var_name, file, col_trans, benchmarks = NULL)
 
 \item{benchmarks}{Optional index mapping to record in
 the fund index map (used to map gross to net indices).}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{store_timeseries()}.

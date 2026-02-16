@@ -7,13 +7,15 @@
 #' @param benchmarks Optional index mapping to record in
 #'   the fund index map (used to map gross to net indices).
 #' @param file Filename of the XLSX file to import.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns `NULL`. Data are stored via `store_timeseries()`.
 #' @seealso
 #' [store_timeseries()], [read_timeseries_excel()]
 #' @family provider wrappers
 #' @export
-msci <- function(var_name, file, col_trans, benchmarks = NULL) {
+msci <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
     store_timeseries(
         var_name = var_name,
         expr = read_timeseries_excel(
@@ -24,7 +26,8 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL) {
             date_order = "mdy",
             comma_rep = ""
         ),
-        fund_index_map = benchmarks
+        fund_index_map = benchmarks,
+        session = session
     )
 }
 
