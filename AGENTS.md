@@ -75,11 +75,14 @@ if (sheet_idx > length(ws_nodes)) {
 Run the narrowest useful checks first, then broader checks if needed.
 
 Preferred commands:
-1. Targeted tests for changed behavior (example):
+1. Targeted tests in pkgload context (recommended):
+   - `Rscript -e 'testthat::test_local(filter = "rolling")'`
+2. Full local test run in pkgload context (recommended):
+   - `Rscript -e 'testthat::test_local()'`
+3. Direct file/dir runs (optional; can fail without pkgload context):
    - `Rscript -e 'testthat::test_file("tests/testthat/test-rolling.R")'`
-2. Full tests:
    - `Rscript -e 'testthat::test_dir("tests/testthat")'`
-3. Package check (heavier):
+4. Package check (heavier):
    - `R CMD check --no-manual --as-cran .`
 
 If runtime/environment limits block checks, report what was attempted and why it failed.

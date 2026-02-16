@@ -21,6 +21,8 @@
 #'   Inkscape export action.
 #' @param background Background color used for immediate PNG saving via
 #'   [ggplot2::ggsave()] (`bg`).
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
@@ -52,7 +54,8 @@ save_plot <- function(file,
                       out_dir = fundsr_get_option("out_dir"),
                       save_png = fundsr_get_option("internal_png", FALSE),
                       save_svg = fundsr_get_option("export_svg", TRUE),
-                      background = "white") {
+                      background = "white",
+                      session = NULL) {
     check_string(file)
     check_logical(save_png)
     check_logical(save_svg)
@@ -89,8 +92,8 @@ save_plot <- function(file,
         a <- glue(
             "file-open:{svgf};export-filename:{pngf};export-width:{px_width};export-do;file-close"
         )
-        st <- fundsr_require_state()$state
-        if (is.null(st$inkscape_queue)) clear_inkscape_queue()
+        st <- fundsr_require_state(session = session)$state
+        if (is.null(st$inkscape_queue)) clear_inkscape_queue(session = session)
         st$inkscape_queue[file] <- a
     }
 
@@ -127,6 +130,8 @@ save_plot <- function(file,
 #' @param background Background color for PNG export, passed to Inkscape as an
 #'   `export-background:{...}` action. If `NULL`, no background action is added.
 #'   Defaults to `"white"`.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return
 #' The exit status returned by Inkscape (0 indicates success). Invisibly returns
@@ -148,9 +153,9 @@ save_plot <- function(file,
 #' @seealso [clear_inkscape_queue()], [save_plot()]
 #' @family plot export utilities
 #' @export
-export_pngs <- function(background = "white") {
+export_pngs <- function(background = "white", session = NULL) {
     check_string(background, allow_null = TRUE)
-    st <- fundsr_require_state()$state
+    st <- fundsr_require_state(session = session)$state
 
     if (length(st$inkscape_queue) == 0) {
         fundsr_msg("export_pngs: nothing queued.", level = 1L)
@@ -169,7 +174,7 @@ export_pngs <- function(background = "white") {
     fundsr_msg(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"), level = 1L)
     exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
-        clear_inkscape_queue()
+        clear_inkscape_queue(session = session)
     } else {
         fundsr_msg(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"),
                    level = 0L)
@@ -226,6 +231,8 @@ clear_inkscape_queue <- function(session = NULL) {
 #' @param bmark_type Benchmark type used in plot titles: `"net"` or `"gross"`.
 #' @param suffix Character string appended to each `plot_id` when constructing
 #'   filenames and names in the returned environment. Defaults to `""`.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #' @param ... Additional arguments passed to [plot_roll_diffs()].
 #'
 #' @return
@@ -271,6 +278,7 @@ run_plots <- function(roll_diffs,
                       add_gg_params = ggplot2::geom_blank(),
                       bmark_type = c("net", "gross"),
                       suffix = "",
+                      session = NULL,
                       ...) {
     check_numeric_scalar(n_days, whole_num = TRUE, ge = 1)
     if (!is.list(roll_diffs) ||
@@ -303,7 +311,7 @@ run_plots <- function(roll_diffs,
     plots_env <- new.env(parent = emptyenv())
     xetra_map <- fundsr_get_option("xetra_map")
     bmark_type <- match.arg(bmark_type)
-    st <- fundsr_require_state()$state
+    st <- fundsr_require_state(session = session)$state
     st$done_xlm_sets <- character()
     purrr::pwalk(runs, function(plot_id,
                                 title,
@@ -326,7 +334,7 @@ run_plots <- function(roll_diffs,
                                 bmark_type = bmark_type,
                                 ...)
         fname <- paste0(plot_id, if (use_log) "_L" else "")
-        save_plot(fname, plot, width = width, height = height)
+        save_plot(fname, plot, width = width, height = height, session = session)
         plots_env[[fname]] <- plot
 
         if (!is.null(xlm_data)) {
@@ -340,7 +348,7 @@ run_plots <- function(roll_diffs,
                                       gg_params = list(gg_params, add_gg_params),
                                       back_trans = TRUE)
                 xlm_fname <- paste0("xlm_", plot_id)
-                save_plot(xlm_fname, xlm_plot, width = width, height = height)
+                save_plot(xlm_fname, xlm_plot, width = width, height = height, session = session)
                 plots_env[[xlm_fname]] <- xlm_plot
                 st$done_xlm_sets <- c(st$done_xlm_sets, key)
             }
