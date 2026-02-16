@@ -4,7 +4,11 @@
 \alias{clear_data_loaders}
 \title{Clear registered data loaders}
 \usage{
-clear_data_loaders()
+clear_data_loaders(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.

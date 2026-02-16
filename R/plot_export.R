@@ -178,6 +178,9 @@ export_pngs <- function(background = "white") {
 #' Clears the internal Inkscape export queue (`.fundsr$inkscape_queue`), removing all
 #' queued export commands.
 #'
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
+#'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
 #' @family plot export utilities
@@ -185,8 +188,15 @@ export_pngs <- function(background = "white") {
 #'
 #' @examples
 #' clear_inkscape_queue()
-clear_inkscape_queue <- function() {
-    .fundsr$inkscape_queue <- character()
+clear_inkscape_queue <- function(session = NULL) {
+    session <- fundsr_get_session(session)
+    st <- session$state
+
+    if (!is.environment(st)) {
+        return(invisible(NULL))
+    }
+
+    st$inkscape_queue <- character()
     invisible(NULL)
 }
 

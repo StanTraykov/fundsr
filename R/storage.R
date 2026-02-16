@@ -3,12 +3,15 @@
 #' Returns the fundsr's fund storage environment
 #' (`.fundsr_storage`).
 #'
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
+#'
 #' @return The storage environment.
 #'
 #' @family fund/index workflow functions
 #' @export
-get_storage <- function() {
-    fundsr_require_state(storage = TRUE)$storage
+get_storage <- function(session = NULL) {
+    fundsr_require_state(storage = TRUE, session = session)$storage
 }
 
 #' Clear storage
@@ -19,6 +22,8 @@ get_storage <- function() {
 #'
 #' @param clear_map Logical scalar; if `TRUE`, also clears
 #'   `.fundsr$fund_index_map`.
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns `NULL`. Called for side effects.
 #'
@@ -27,18 +32,23 @@ get_storage <- function() {
 #' @examples
 #' clear_storage()
 #' clear_storage(clear_map = TRUE)
-clear_storage <- function(clear_map = FALSE) {
+clear_storage <- function(clear_map = FALSE, session = NULL) {
     check_logical(clear_map)
+    session <- fundsr_get_session(session)
+
     if (clear_map) {
-        clear_fund_index_map()
+        clear_fund_index_map(session = session)
     }
-    if (!is.environment(.fundsr_storage)) {
+
+    storage <- session$storage
+    if (!is.environment(storage)) {
         return(invisible(NULL))
     }
-    objs <- ls(envir = .fundsr_storage, all.names = TRUE)
+
+    objs <- ls(envir = storage, all.names = TRUE)
     if (length(objs)) {
         tryCatch(
-            rm(list = objs, envir = .fundsr_storage),
+            rm(list = objs, envir = storage),
             error = function(e) {
                 fundsr_abort(
                     msg    = "Failed to clear fundsr storage.",
@@ -70,6 +80,8 @@ clear_storage <- function(clear_map = FALSE) {
 #' @param postprocess Function applied to the computed value before caching.
 #'   Only used when the value is (re)computed (i.e. not applied when a cached
 #'   value is reused). Defaults to [base::identity()].
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return Invisibly returns `NULL` (called for its side effects).
 #'
@@ -94,7 +106,8 @@ store_timeseries <- function(var_name,
                              expr,
                              fund_index_map = NULL,
                              overwrite = FALSE,
-                             postprocess = identity) {
+                             postprocess = identity,
+                             session = NULL) {
     check_string(var_name)
     check_logical(overwrite)
     if (!is.function(postprocess)) {
@@ -103,7 +116,7 @@ store_timeseries <- function(var_name,
     # Access the parent's environment (where store_timeseries was called)
     parent_env <- parent.frame()
     reload <- isTRUE(fundsr_get_option("reload"))
-    storage <- fundsr_require_state(storage = TRUE)$storage
+    storage <- fundsr_require_state(storage = TRUE, session = session)$storage
 
     needs_eval <- overwrite || reload || !exists(var_name, envir = storage)
     # Check if assignment is needed and evaluate expr in parent_env
@@ -115,7 +128,7 @@ store_timeseries <- function(var_name,
     }
     # Also add fund index pairs to global map (if supplied)
     if (!is.null(fund_index_map)) {
-        add_fund_index_map(fund_index_map)
+        add_fund_index_map(fund_index_map, session = session)
     }
     invisible(NULL)
 }
@@ -335,6 +348,8 @@ join_env <- function(env,
 #' @param by Character vector of column names to join by and sort by.
 #' @param ... Additional arguments forwarded to [join_env()] (e.g. `late`,
 #'   `join_precedence`, etc.).
+#' @param session Optional `fundsr_session` object. Defaults to the package
+#'   default session when `NULL`.
 #'
 #' @return A tibble containing all joined series, sorted by `by`.
 #'
@@ -348,9 +363,9 @@ join_env <- function(env,
 #' s2 <- build_all_series(by = "date", late = "ftaw", join_precedence = c(".y", ".x")) %>%
 #'   filter(date >= as_date("2013-01-01"))
 #' }
-build_all_series <- function(reload = FALSE, by = "date", ...) {
+build_all_series <- function(reload = FALSE, by = "date", session = NULL, ...) {
     check_string(by, min_n = 1)
-    run_data_loaders(reload = reload) %>%
+    run_data_loaders(reload = reload, session = session) %>%
         join_env(by = by, ...) %>%
         arrange(across(all_of(by)))
 }

@@ -9,7 +9,8 @@ store_timeseries(
   expr,
   fund_index_map = NULL,
   overwrite = FALSE,
-  postprocess = identity
+  postprocess = identity,
+  session = NULL
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ cached value, regardless of \code{fundsr.reload}.}
 \item{postprocess}{Function applied to the computed value before caching.
 Only used when the value is (re)computed (i.e. not applied when a cached
 value is reused). Defaults to \code{\link[base:identity]{base::identity()}}.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL} (called for its side effects).

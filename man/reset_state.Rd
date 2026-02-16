@@ -4,7 +4,11 @@
 \alias{reset_state}
 \title{Clear fundsr session state}
 \usage{
-reset_state()
+reset_state(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.

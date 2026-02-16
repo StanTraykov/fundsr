@@ -4,11 +4,14 @@
 \alias{run_data_loaders}
 \title{Run registered data loaders}
 \usage{
-run_data_loaders(reload = FALSE)
+run_data_loaders(reload = FALSE, session = NULL)
 }
 \arguments{
 \item{reload}{Logical scalar. If \code{TRUE}, forces a full reload by setting
 \code{options(fundsr.reload = TRUE)} for the duration of this call.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{.fundsr_storage} after running the data loaders.

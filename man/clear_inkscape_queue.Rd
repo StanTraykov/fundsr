@@ -4,7 +4,11 @@
 \alias{clear_inkscape_queue}
 \title{Clear queued Inkscape exports}
 \usage{
-clear_inkscape_queue()
+clear_inkscape_queue(session = NULL)
+}
+\arguments{
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 Invisibly returns \code{NULL}. Called for side effects.
