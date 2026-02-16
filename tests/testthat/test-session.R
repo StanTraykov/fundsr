@@ -48,16 +48,14 @@ test_that("build_all_series uses the provided session", {
 
 
 test_that("clear helpers are no-ops for uninitialised default session", {
-    ns <- asNamespace("fundsr")
-    old_state <- get(".fundsr", envir = ns)
-    old_storage <- get(".fundsr_storage", envir = ns)
-    on.exit({
-        assign(".fundsr", old_state, envir = ns)
-        assign(".fundsr_storage", old_storage, envir = ns)
-    }, add = TRUE)
-
-    assign(".fundsr", NULL, envir = ns)
-    assign(".fundsr_storage", NULL, envir = ns)
+    testthat::local_mocked_bindings(
+        fundsr_default_session = function() {
+            structure(
+                list(state = NULL, storage = NULL),
+                class = "fundsr_session"
+            )
+        }
+    )
 
     expect_invisible(clear_data_loaders())
     expect_invisible(clear_fund_index_map())
