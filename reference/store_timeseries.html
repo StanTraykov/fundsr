@@ -67,7 +67,8 @@ fund/index mappings into <code>.fundsr$fund_index_map</code>.</p>
 <span>  <span class="va">expr</span>,</span>
 <span>  fund_index_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  postprocess <span class="op">=</span> <span class="va">identity</span></span>
+<span>  postprocess <span class="op">=</span> <span class="va">identity</span>,</span>
+<span>  session <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +100,11 @@ cached value, regardless of <code>fundsr.reload</code>.</p></dd>
 <dd><p>Function applied to the computed value before caching.
 Only used when the value is (re)computed (i.e. not applied when a cached
 value is reused). Defaults to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">base::identity()</a></code>.</p></dd>
+
+
+<dt id="arg-session">session<a class="anchor" aria-label="anchor" href="#arg-session"></a></dt>
+<dd><p>Optional <code>fundsr_session</code> object. Defaults to the package
+default session when <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
