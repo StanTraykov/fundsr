@@ -135,8 +135,20 @@
 <div class="section level2">
 <h2 id="testing-and-validation">Testing and validation<a class="anchor" aria-label="anchor" href="#testing-and-validation"></a></h2>
 <p>Run the narrowest useful checks first, then broader checks if needed.</p>
-<p>Preferred commands: 1. Targeted tests for changed behavior (example): - <code>Rscript -e 'testthat::test_file("tests/testthat/test-rolling.R")'</code> 2. Full tests: - <code>Rscript -e 'testthat::test_dir("tests/testthat")'</code> 3. Package check (heavier): - <code>R CMD check --no-manual --as-cran .</code></p>
-<p>If runtime/environment limits block checks, report what was attempted and why it failed.</p>
+<div class="section level3">
+<h3 id="tests-preferred-in-this-repocodex-env-package-not-installed--attached">Tests (preferred in this repo/Codex env [package not installed / attached])<a class="anchor" aria-label="anchor" href="#tests-preferred-in-this-repocodex-env-package-not-installed--attached"></a></h3>
+<ul><li><code>Rscript -e 'testthat::test_local()'</code></li>
+<li><code>Rscript -e 'testthat::test_local(filter = "session")'</code></li>
+</ul></div>
+<div class="section level3">
+<h3 id="avoid-fails-unless-package-installed">Avoid (fails unless package installed)<a class="anchor" aria-label="anchor" href="#avoid-fails-unless-package-installed"></a></h3>
+<ul><li><code>Rscript -e 'testthat::test_dir("tests/testthat")'</code></li>
+</ul></div>
+<div class="section level3">
+<h3 id="package-check-heavy">Package check (heavy)<a class="anchor" aria-label="anchor" href="#package-check-heavy"></a></h3>
+<ul><li><code>R CMD check --no-manual --as-cran .</code></li>
+</ul><p>If runtime/environment limits block checks, report what was attempted and why it failed.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="lintingformatting">Linting/formatting<a class="anchor" aria-label="anchor" href="#lintingformatting"></a></h2>
