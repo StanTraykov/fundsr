@@ -1,6 +1,6 @@
 #' Clear registered data loaders
 #'
-#' Clears the internal data-loader registry (`.fundsr$data_loaders`), removing
+#' Clears the internal data-loader registry (`session$state$data_loaders`), removing
 #' all previously registered data loader functions.
 #'
 #' @param session Optional `fundsr_session` object. Defaults to the package
@@ -26,7 +26,7 @@ clear_data_loaders <- function(session = NULL) {
 
 #' Register a data loader
 #'
-#' Appends `fun` to the internal data-loader registry (`.fundsr$data_loaders`).
+#' Appends `fun` to the internal data-loader registry (`session$state$data_loaders`).
 #' Registered functions are intended to be run sequentially in registration
 #' order.
 #'
@@ -37,7 +37,7 @@ clear_data_loaders <- function(session = NULL) {
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
 #'
-#' @return Invisibly returns the updated `.fundsr$data_loaders` list.
+#' @return Invisibly returns the updated `session$state$data_loaders` list.
 #'
 #' @family fund/index workflow functions
 #' @export
@@ -58,7 +58,7 @@ add_data_loader <- function(fun, session = NULL) {
     }
     if (!is.list(st$data_loaders)) {
         fundsr_abort(
-            msg   = "Internal registry `.fundsr$data_loaders` must be a list.",
+            msg   = "Internal registry `session$state$data_loaders` must be a list.",
             class = "fundsr_bad_state"
         )
     }
@@ -70,7 +70,7 @@ add_data_loader <- function(fun, session = NULL) {
     already <- any(vapply(fns, function(g) {
         if (!identical(typeof(g), "closure")) {
             fundsr_abort(
-                msg   = "Internal registry `.fundsr$data_loaders` must contain only closures.",
+                msg   = "Internal registry `session$state$data_loaders` must contain only closures.",
                 class = "fundsr_bad_state"
             )
         }
@@ -86,8 +86,8 @@ add_data_loader <- function(fun, session = NULL) {
 
 #' Run registered data loaders
 #'
-#' Runs the data loader registry (`.fundsr$data_loaders`) to populate (or refresh)
-#' the package's storage environment (`.fundsr_storage`).
+#' Runs the data loader registry (`session$state$data_loaders`) to populate (or refresh)
+#' the package's storage environment (`session$storage`).
 #'
 #' The function temporarily sets the `fundsr.reload` option so that data loaders
 #' can decide whether to recompute cached objects.
@@ -97,13 +97,13 @@ add_data_loader <- function(fun, session = NULL) {
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
 #'
-#' @return Invisibly returns `.fundsr_storage` after running the data loaders.
+#' @return Invisibly returns `session$storage` after running the data loaders.
 #'
 #' @details
 #' The previous value of option "fundsr.reload" is restored on exit,
 #' even if a data loader errors.
 #'
-#' Data loaders are taken from `.fundsr$data_loaders` and are called
+#' Data loaders are taken from `session$state$data_loaders` and are called
 #' sequentially in registration order. Each registered function must take
 #' no arguments.
 #'
@@ -120,7 +120,7 @@ run_data_loaders <- function(reload = FALSE, session = NULL) {
 
     if (!is.list(fns)) {
         fundsr_abort(
-            msg   = "Internal registry `.fundsr$data_loaders` must be a list of functions.",
+            msg   = "Internal registry `session$state$data_loaders` must be a list of functions.",
             class = "fundsr_bad_state"
         )
     }
@@ -129,13 +129,13 @@ run_data_loaders <- function(reload = FALSE, session = NULL) {
         fn <- fns[[i]]
         if (!identical(typeof(fn), "closure")) {
             fundsr_abort(
-                msg   = sprintf("`.fundsr$data_loaders[[%d]]` is not a closure.", i),
+                msg   = sprintf("`session$state$data_loaders[[%d]]` is not a closure.", i),
                 class = "fundsr_bad_state"
             )
         }
         if (length(formals(fn)) != 0L) {
             fundsr_abort(
-                msg   = sprintf("`.fundsr$data_loaders[[%d]]` must take no arguments.", i),
+                msg   = sprintf("`session$state$data_loaders[[%d]]` must take no arguments.", i),
                 class = "fundsr_bad_state"
             )
         }

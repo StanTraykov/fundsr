@@ -26,7 +26,7 @@
 #'
 #' @details
 #' If `save_svg = TRUE`, the SVG is written as `"{file}.svg"`. An Inkscape action
-#' string is then stored in `.fundsr$inkscape_queue[file]` so the SVG can later be
+#' string is then stored in `session$state$inkscape_queue[file]` so the SVG can later be
 #' exported to `"{file}.png"` at `px_width` pixels wide when [export_pngs()] is run.
 #'
 #' Queueing is refused if either output path contains a semicolon (`;`), since
@@ -133,7 +133,7 @@ save_plot <- function(file,
 #' `NULL` if the queue is empty or if Inkscape cannot be located.
 #'
 #' @details
-#' This function reads queued Inkscape actions from `.fundsr$inkscape_queue`,
+#' This function reads queued Inkscape actions from `session$state$inkscape_queue`,
 #' optionally prepends an `export-background:{background}` action, and executes
 #' Inkscape using [base::system2()].
 #'
@@ -179,7 +179,7 @@ export_pngs <- function(background = "white") {
 
 #' Clear queued Inkscape exports
 #'
-#' Clears the internal Inkscape export queue (`.fundsr$inkscape_queue`), removing all
+#' Clears the internal Inkscape export queue (`session$state$inkscape_queue`), removing all
 #' queued export commands.
 #'
 #' @param session Optional `fundsr_session` object. Defaults to the package

@@ -13,10 +13,10 @@ add_data_loader(fun, session = NULL)
 default session when \code{NULL}.}
 }
 \value{
-Invisibly returns the updated \code{.fundsr$data_loaders} list.
+Invisibly returns the updated \code{session$state$data_loaders} list.
 }
 \description{
-Appends \code{fun} to the internal data-loader registry (\code{.fundsr$data_loaders}).
+Appends \code{fun} to the internal data-loader registry (\code{session$state$data_loaders}).
 Registered functions are intended to be run sequentially in registration
 order.
 }

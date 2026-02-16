@@ -7,7 +7,7 @@
 msci(var_name, file, col_trans, benchmarks = NULL)
 }
 \arguments{
-\item{var_name}{Storage key used in \code{.fundsr_storage}.}
+\item{var_name}{Storage key used in \code{session$storage}.}
 
 \item{file}{Filename of the XLSX file to import.}
 

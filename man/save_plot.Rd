@@ -55,7 +55,7 @@ also saves a PNG immediately via \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}
 }
 \details{
 If \code{save_svg = TRUE}, the SVG is written as \code{"{file}.svg"}. An Inkscape action
-string is then stored in \code{.fundsr$inkscape_queue[file]} so the SVG can later be
+string is then stored in \code{session$state$inkscape_queue[file]} so the SVG can later be
 exported to \code{"{file}.png"} at \code{px_width} pixels wide when \code{\link[=export_pngs]{export_pngs()}} is run.
 
 Queueing is refused if either output path contains a semicolon (\verb{;}), since
