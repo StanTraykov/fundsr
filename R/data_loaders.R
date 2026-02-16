@@ -43,7 +43,7 @@ add_data_loader <- function(fun) {
         stop_bad_arg("fun", "must take no arguments.")
     }
 
-    st   <- fundsr_require_state()$state
+    st <- fundsr_require_state()$state
 
     if (is.null(st$data_loaders)) {
         st$data_loaders <- list()

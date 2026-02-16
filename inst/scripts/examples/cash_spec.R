@@ -28,8 +28,6 @@ add_data_loader(function() {
     store_timeseries("solovr", read_timeseries("SOLOVR.csv"))
     store_timeseries("soldly", read_timeseries("SOLDLY.csv"),
                      fund_index_map = set_names("SOLOVR", "SOLDLY"))
-    store_timeseries("soldlym", read_timeseries("SOLDLYM.csv"),
-                     fund_index_map = set_names("SOLOVR", "SOLDLYM"))
     store_timeseries("sol85", read_timeseries("SOL85.csv"),
                      fund_index_map = set_names("SOLOVR", "SOL85"))
     ####### Funds #######
