@@ -1,0 +1,18 @@
+test_that("functions forwarding state-sensitive calls expose session", {
+    expect_true("session" %in% names(formals(save_plot)))
+    expect_true("session" %in% names(formals(export_pngs)))
+    expect_true("session" %in% names(formals(run_plots)))
+
+    expect_true("session" %in% names(formals(msci)))
+    expect_true("session" %in% names(formals(load_fund)))
+    expect_true("session" %in% names(formals(ishs)))
+    expect_true("session" %in% names(formals(spdr)))
+    expect_true("session" %in% names(formals(xtra)))
+    expect_true("session" %in% names(formals(amun)))
+    expect_true("session" %in% names(formals(inve)))
+    expect_true("session" %in% names(formals(vang)))
+    expect_true("session" %in% names(formals(ubs)))
+    expect_true("session" %in% names(formals(hsbc)))
+    expect_true("session" %in% names(formals(bnpp)))
+    expect_true("session" %in% names(formals(avan)))
+})

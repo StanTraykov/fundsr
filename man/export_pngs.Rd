@@ -4,12 +4,15 @@
 \alias{export_pngs}
 \title{Export queued SVGs to PNG via Inkscape}
 \usage{
-export_pngs(background = "white")
+export_pngs(background = "white", session = NULL)
 }
 \arguments{
 \item{background}{Background color for PNG export, passed to Inkscape as an
 \code{export-background:{...}} action. If \code{NULL}, no background action is added.
 Defaults to \code{"white"}.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 }
 \value{
 The exit status returned by Inkscape (0 indicates success). Invisibly returns

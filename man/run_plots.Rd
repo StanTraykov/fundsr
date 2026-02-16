@@ -12,6 +12,7 @@ run_plots(
   add_gg_params = ggplot2::geom_blank(),
   bmark_type = c("net", "gross"),
   suffix = "",
+  session = NULL,
   ...
 )
 }
@@ -37,6 +38,9 @@ defined in \code{plot_spec}. Defaults to \code{\link[ggplot2:geom_blank]{ggplot2
 
 \item{suffix}{Character string appended to each \code{plot_id} when constructing
 filenames and names in the returned environment. Defaults to \code{""}.}
+
+\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
 
 \item{...}{Additional arguments passed to \code{\link[=plot_roll_diffs]{plot_roll_diffs()}}.}
 }
