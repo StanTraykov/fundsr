@@ -9,7 +9,7 @@ for MSCI index files.
 ## Usage
 
 ``` r
-msci(var_name, col_trans, benchmarks = NULL, file)
+msci(var_name, file, col_trans, benchmarks = NULL)
 ```
 
 ## Arguments
@@ -17,6 +17,10 @@ msci(var_name, col_trans, benchmarks = NULL, file)
 - var_name:
 
   Storage key used in `.fundsr_storage`.
+
+- file:
+
+  Filename of the XLSX file to import.
 
 - col_trans:
 
@@ -26,10 +30,6 @@ msci(var_name, col_trans, benchmarks = NULL, file)
 
   Optional index mapping to record in the fund index map (used to map
   gross to net indices).
-
-- file:
-
-  Filename of the XLSX file to import.
 
 ## Value
 
@@ -43,6 +43,8 @@ Invisibly returns `NULL`. Data are stored via
 
 Other provider wrappers:
 [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md),
+[`avan()`](https://stantraykov.github.io/fundsr/reference/avan.md),
+[`bnpp()`](https://stantraykov.github.io/fundsr/reference/bnpp.md),
 [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md),
 [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md),
 [`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md),

@@ -12,7 +12,8 @@ read_timeseries(
   date_col = "date",
   time_unit = c("ms", "s", "us", "ns"),
   orders = NULL,
-  force_text_date = FALSE
+  force_text_date = FALSE,
+  line_filter = NULL
 )
 ```
 
@@ -42,6 +43,14 @@ read_timeseries(
 
   Logical scalar. If `TRUE`, the date column is always parsed as text
   using `orders` (no Unix-epoch numeric interpretation is attempted).
+
+- line_filter:
+
+  Optional regular expression used to pre-filter the raw file by lines
+  before parsing. If supplied, the file is read with
+  [`readr::read_lines()`](https://readr.tidyverse.org/reference/read_lines.html)
+  and only lines matching `line_filter` are kept. The regex must match
+  both data lines and the header line, e.g. `"^[0-9]|^Date,"`
 
 ## Value
 

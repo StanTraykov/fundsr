@@ -10,7 +10,13 @@ Optionally merges additional fund/index mappings into
 ## Usage
 
 ``` r
-store_timeseries(var_name, expr, fund_index_map = NULL, overwrite = FALSE)
+store_timeseries(
+  var_name,
+  expr,
+  fund_index_map = NULL,
+  overwrite = FALSE,
+  postprocess = identity
+)
 ```
 
 ## Arguments
@@ -26,13 +32,21 @@ store_timeseries(var_name, expr, fund_index_map = NULL, overwrite = FALSE)
 
 - fund_index_map:
 
-  Optional named vector or list. Fund/index pairs to merge into
-  `.fundsr$fund_index_map`. Names are used as keys.
+  Optional named vector of fund/index pairs to merge into
+  `.fundsr$fund_index_map`. Names are used as keys, values should be
+  indices.
 
 - overwrite:
 
   Logical scalar. If `TRUE`, recompute and replace any existing cached
   value, regardless of `fundsr.reload`.
+
+- postprocess:
+
+  Function applied to the computed value before caching. Only used when
+  the value is (re)computed (i.e. not applied when a cached value is
+  reused). Defaults to
+  [`base::identity()`](https://rdrr.io/r/base/identity.html).
 
 ## Value
 

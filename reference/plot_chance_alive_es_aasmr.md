@@ -8,7 +8,7 @@ lower-mortality variant (`LMRT`) is shown in dark cyan.
 ## Usage
 
 ``` r
-plot_chance_alive_es_aasmr(ca, sex = c("m", "f"), population)
+plot_chance_alive_es_aasmr(ca, sex, population)
 ```
 
 ## Arguments

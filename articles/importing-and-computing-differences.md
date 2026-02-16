@@ -218,7 +218,7 @@ store_timeseries(
     ),
     fund_index_map = c(`IDX1-GR` = "IDX1")
 )
-#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/IDX1.xlsx'
+#> Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/IDX1.xlsx'
 
 store_timeseries(
     var_name = "idx2",
@@ -267,7 +267,7 @@ load_fund("FNDA",
           sheet = "historical",
           date_col = "^As Of",
           nav_col = "^NAV")
-#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDA.xlsx'
+#> Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/FNDA.xlsx'
 ```
 
 [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
@@ -287,7 +287,7 @@ load_fund("FNDB",
           date_col = "^date",
           nav_col = "^net asset val",
           date_order = "mdy")
-#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDB.xlsx'
+#> Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/FNDB.xlsx'
 ```
 
 The final fund to load is GNDA.
@@ -298,7 +298,7 @@ load_fund("GNDA",
           benchmark = "IDX2",
           date_col = "^Date",
           nav_col = "^Official NAV")
-#> Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/GNDA.xlsx'
+#> Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/GNDA.xlsx'
 ```
 
 ### Building the master table

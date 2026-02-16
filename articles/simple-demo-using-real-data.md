@@ -116,7 +116,7 @@ Check contents.
 
 ``` r
 series %>% filter(date >= as_date("2015-04-03"))
-#> # A tibble: 2,764 × 4
+#> # A tibble: 2,789 × 4
 #>    date        iusq  ACWI  spyy
 #>    <date>     <dbl> <dbl> <dbl>
 #>  1 2015-04-06  38.2  153.   NA 
@@ -129,7 +129,7 @@ series %>% filter(date >= as_date("2015-04-03"))
 #>  8 2015-04-15  39.0  156.  102.
 #>  9 2015-04-16  39.1  156.  102.
 #> 10 2015-04-17  38.7  155.  101.
-#> # ℹ 2,754 more rows
+#> # ℹ 2,779 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
@@ -148,15 +148,15 @@ diffs <- roll_diffs(series, nd, get_fund_index_map())
 
 ``` r
 diffs$cagr %>% slice_tail(n = 3)
-#>         date        spyy         iusq
-#> 1 2026-01-07 0.004357993 0.0007516283
-#> 2 2026-01-08 0.004395124 0.0007814405
-#> 3 2026-01-09          NA           NA
+#>         date        spyy        iusq
+#> 1 2026-02-11 0.004067776 0.001102975
+#> 2 2026-02-12 0.004097801 0.001045235
+#> 3 2026-02-13          NA          NA
 diffs$log %>% slice_tail(n = 3)
 #>         date        spyy         iusq
-#> 1 2026-01-07 0.003521613 0.0006082626
-#> 2 2026-01-08 0.003554415 0.0006328890
-#> 3 2026-01-09          NA           NA
+#> 1 2026-02-11 0.003313984 0.0008996709
+#> 2 2026-02-12 0.003368045 0.0008601726
+#> 3 2026-02-13          NA           NA
 ```
 
 ## Plot specifications

@@ -29,6 +29,14 @@ install.packages(
 )
 ```
 
+## Overview
+
+fundsr is a tool for the DIY investor. It’s not a data provider—you need
+to download ETF NAVs and index levels yourself. See the *Getting data*
+section in [the project’s
+wiki](https://github.com/StanTraykov/fundsr/wiki) for more info. The
+package also supports plotting survival curves.
+
 ## Usage
 
 - [Importing Data and Computing
@@ -42,6 +50,7 @@ install.packages(
   - `glob_funds.R` is an example workflow plotting global funds, but
     data needs to be downloaded separately
   - `all_funds.R` features many more funds
+- [Options](https://stantraykov.github.io/fundsr/reference/fundsr_options.html)
 - [Reference](https://stantraykov.github.io/fundsr/reference/index.html)
 
 ## Output
@@ -115,7 +124,7 @@ law.
 - [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
   : Store a cached object in the package storage environment
 
-## Fund-index map mutators
+## Fund-index map functions
 
 - [`add_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/add_fund_index_map.md)
   : Add to fund-index map
@@ -128,6 +137,10 @@ law.
 
 - [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md) :
   Import an Amundi fund
+- [`avan()`](https://stantraykov.github.io/fundsr/reference/avan.md) :
+  Import an Avantis fund
+- [`bnpp()`](https://stantraykov.github.io/fundsr/reference/bnpp.md) :
+  Import an BNP Paribas fund
 - [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md) :
   Import an HSBC fund
 - [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md) :

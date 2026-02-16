@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-12</h4>
+            <h4 data-toc-skip class="date">2026-02-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/articles/simple-demo-using-real-data.Rmd" class="external-link"><code>vignettes/articles/simple-demo-using-real-data.Rmd</code></a></small>
       <div class="d-none name"><code>simple-demo-using-real-data.Rmd</code></div>
@@ -174,7 +174,7 @@ path can be discovered via
 <p>Check contents.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2015-04-03"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,764 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,789 × 4</span></span></span>
 <span><span class="co">#&gt;    date        iusq  ACWI  spyy</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2015-04-06  38.2  153.   <span style="color: #BB0000;">NA</span> </span></span>
@@ -187,7 +187,7 @@ path can be discovered via
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2015-04-15  39.0  156.  102.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2015-04-16  39.1  156.  102.</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2015-04-17  38.7  155.  101.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,754 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,779 more rows</span></span></span>
 <span><span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   spyy   iusq </span></span>
 <span><span class="co">#&gt; "ACWI" "ACWI"</span></span></code></pre></div>
@@ -204,15 +204,15 @@ window.</p>
 <span><span class="co">#&gt; Roll diffs iusq -&gt; ACWI</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diffs</span><span class="op">$</span><span class="va">cagr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date        spyy         iusq</span></span>
-<span><span class="co">#&gt; 1 2026-01-07 0.004357993 0.0007516283</span></span>
-<span><span class="co">#&gt; 2 2026-01-08 0.004395124 0.0007814405</span></span>
-<span><span class="co">#&gt; 3 2026-01-09          NA           NA</span></span>
+<span><span class="co">#&gt;         date        spyy        iusq</span></span>
+<span><span class="co">#&gt; 1 2026-02-11 0.004067776 0.001102975</span></span>
+<span><span class="co">#&gt; 2 2026-02-12 0.004097801 0.001045235</span></span>
+<span><span class="co">#&gt; 3 2026-02-13          NA          NA</span></span>
 <span><span class="va">diffs</span><span class="op">$</span><span class="va">log</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date        spyy         iusq</span></span>
-<span><span class="co">#&gt; 1 2026-01-07 0.003521613 0.0006082626</span></span>
-<span><span class="co">#&gt; 2 2026-01-08 0.003554415 0.0006328890</span></span>
-<span><span class="co">#&gt; 3 2026-01-09          NA           NA</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2026-02-11 0.003313984 0.0008996709</span></span>
+<span><span class="co">#&gt; 2 2026-02-12 0.003368045 0.0008601726</span></span>
+<span><span class="co">#&gt; 3 2026-02-13          NA           NA</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plot-specifications">Plot specifications<a class="anchor" aria-label="anchor" href="#plot-specifications"></a>

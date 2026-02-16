@@ -4,7 +4,7 @@ Helper for post-processing join results that use suffixes such as `.x` /
 `.y`. For each base name that appears with both suffixes (e.g. `FTAW.x`
 and `FTAW.y`), this function creates a new column `FTAW` as
 `dplyr::coalesce(FTAW.x, FTAW.y)` and drops the suffixed columns. The
-order of `suffix` controls which column is preferred.
+order of `suffixes` controls which column is preferred.
 
 ## Usage
 

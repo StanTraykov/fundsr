@@ -88,7 +88,7 @@ to their corresponding benchmark/index base column names.</p></dd>
 
 <dt id="arg-date-col">date_col<a class="anchor" aria-label="anchor" href="#arg-date-col"></a></dt>
 <dd><p>Name of the date column in <code>df</code>.
-Must be of class <code>Date</code> and sorted in ascending order.</p></dd>
+Must be of class <code>Date</code> and sorted (strictly increasing).</p></dd>
 
 
 <dt id="arg-index-level">index_level<a class="anchor" aria-label="anchor" href="#arg-index-level"></a></dt>
@@ -137,10 +137,9 @@ $$
       \left(\frac{f_t}{f_{t_0}}\right)^{annual\_days/\Delta}
       - \left(\frac{i_t}{i_{t_0}}\right)^{annual\_days/\Delta}
     $$</p></li>
-</ul><p>Values are <code>NA</code> when an anchor cannot be found, current-date inputs are missing,
-\(\Delta \le 0\), or values are invalid for the chosen formula (e.g. any
-non-positive value for log returns, or non-finite / non-positive ratios for
-CAGR).</p>
+</ul><p>#' Values are <code>NA</code> when an anchor cannot be found, current-date inputs are missing,
+or inputs are invalid for the chosen formula (e.g. any non-positive level for
+log returns, or non-finite / non-positive ratios for CAGR).</p>
 <p>Funds are skipped (optionally with a message) when the fund column is missing,
 the mapped index column is missing (after applying <code>index_level</code> /
 <code>gross_suffix</code>), or when <code>fund == index</code> (self-tracking).</p>

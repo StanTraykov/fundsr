@@ -46,7 +46,7 @@
 - [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
   : Store a cached object in the package storage environment
 
-## Fund-index map mutators
+## Fund-index map functions
 
 - [`add_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/add_fund_index_map.md)
   : Add to fund-index map
@@ -59,6 +59,10 @@
 
 - [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md) :
   Import an Amundi fund
+- [`avan()`](https://stantraykov.github.io/fundsr/reference/avan.md) :
+  Import an Avantis fund
+- [`bnpp()`](https://stantraykov.github.io/fundsr/reference/bnpp.md) :
+  Import an BNP Paribas fund
 - [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md) :
   Import an HSBC fund
 - [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md) :

@@ -1,8 +1,8 @@
 # Download fund data according to the configured download list
 
-Retrieves all fund data files listed in the `fundsr.fund_urls` option
-and saves them into the directory specified by the `fundsr.data_dir`
-option.
+Retrieves all Excel files with fund identifiers and URLs listed in the
+`fundsr.fund_urls` option and saves them into the directory specified by
+the `fundsr.data_dir` option.
 
 ## Usage
 

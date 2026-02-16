@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-01-12</h4>
+            <h4 data-toc-skip class="date">2026-02-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/importing-and-computing-differences.Rmd" class="external-link"><code>vignettes/importing-and-computing-differences.Rmd</code></a></small>
       <div class="d-none name"><code>importing-and-computing-differences.Rmd</code></div>
@@ -633,7 +633,7 @@ table.</p>
 <span>    <span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX1-GR` <span class="op">=</span> <span class="st">"IDX1"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/IDX1.xlsx'</span></span>
+<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/IDX1.xlsx'</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span></span>
 <span>    var_name <span class="op">=</span> <span class="st">"idx2"</span>,</span>
@@ -682,7 +682,7 @@ still match.</p>
 <span>          sheet <span class="op">=</span> <span class="st">"historical"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
 <p><code><a href="../reference/load_fund.html">load_fund()</a></code> recognizes proper Excel dates, improperly
 stored Excel dates, and a large number of text date formats used in fund
 files, but the date order (e.g. <code>"dmy"</code>, <code>"mdy"</code>,
@@ -698,7 +698,7 @@ histories.</p>
 <span>          date_col <span class="op">=</span> <span class="st">"^date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
 <span>          date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
 <p>The final fund to load is GNDA.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"GNDA"</span>,</span>
@@ -706,7 +706,7 @@ histories.</p>
 <span>          benchmark <span class="op">=</span> <span class="st">"IDX2"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/RtmpNHTwCB/temp_libpath1d696685a5d/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-the-master-table">Building the master table<a class="anchor" aria-label="anchor" href="#building-the-master-table"></a>

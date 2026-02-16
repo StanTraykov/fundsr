@@ -37,8 +37,8 @@ roll_diffs(
 
 - date_col:
 
-  Name of the date column in `df`. Must be of class `Date` and sorted in
-  ascending order.
+  Name of the date column in `df`. Must be of class `Date` and sorted
+  (strictly increasing).
 
 - index_level:
 
@@ -65,15 +65,18 @@ roll_diffs(
 
 ## Value
 
-A named list with two data frames, `log` and `cagr`. Each data frame
+A named list with two data frames, `cagr` and `log`. Each data frame
 contains `date_col` followed by one column per fund (named as in
 `fund_index_map`), holding the rolling annualized tracking differences.
 
 ## Details
 
-For each date \\t\\, an anchor date \\t_0\\ is chosen as the last
-available observation at or before \\t - n\\days\\ where both fund and
-index values are present. Let \\\Delta = t - t_0\\ in calendar days.
+For each date \\t\\, a target anchor threshold \\t - n\\days\\ is
+formed. The anchor date \\t_0\\ is chosen as the **last available
+observation at or before** \\t - n\\days\\ among rows where **both**
+fund and index values are present. Let \\\Delta = t - t_0\\ in calendar
+days (\\\Delta\\ can be greater than `n_days` when data are missing
+around the threshold).
 
 The annualized tracking differences are:
 
@@ -86,12 +89,19 @@ The annualized tracking differences are:
   \left(\frac{f_t}{f\_{t_0}}\right)^{annual\\days/\Delta} -
   \left(\frac{i_t}{i\_{t_0}}\right)^{annual\\days/\Delta} \$\$
 
-Values are `NA` when an anchor cannot be found, required inputs are
-missing, \\\Delta \le 0\\, or values are invalid for the chosen formula
-(e.g. non-positive inputs for log returns).
+\#' Values are `NA` when an anchor cannot be found, current-date inputs
+are missing, or inputs are invalid for the chosen formula (e.g. any
+non-positive level for log returns, or non-finite / non-positive ratios
+for CAGR).
+
+Funds are skipped (optionally with a message) when the fund column is
+missing, the mapped index column is missing (after applying
+`index_level` / `gross_suffix`), or when `fund == index`
+(self-tracking).
 
 Emitted messages will be visible at verbosity level \>= 1 (option
-`fundsr.verbosity`).
+`fundsr.verbosity`). Verbosity level \>= 4 forces both message types
+regardless of the `messages` argument.
 
 ## See also
 

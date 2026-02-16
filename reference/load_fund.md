@@ -20,7 +20,8 @@ load_fund(
   retrieve_benchmark = FALSE,
   date_order = "dmy",
   var_name = NULL,
-  data_sheet = NULL
+  data_sheet = NULL,
+  ...
 )
 ```
 
@@ -76,6 +77,12 @@ load_fund(
 
   Deprecated; use `sheet`.
 
+- ...:
+
+  Additional arguments passed to
+  [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md),
+  such as `overwrite` or `postprocess`.
+
 ## Value
 
 Invisibly returns `NULL`. The imported data are stored in
@@ -93,9 +100,10 @@ column and, if requested, a benchmark column. It then calls
 [`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
 to read the Excel file and
 [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
-to cache the imported object under `tolower(ticker)`. When `benchmark`
-is provided, a corresponding entry is added to `.fundsr$fund_index_map`
-to link the fund to its benchmark key.
+to cache the imported object under `var_name`, if supplied, otherwise
+`tolower(ticker)`. When `benchmark` is provided, a corresponding entry
+is added to `.fundsr$fund_index_map` to link the fund to its benchmark
+key.
 
 ## See also
 

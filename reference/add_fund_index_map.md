@@ -14,7 +14,7 @@ add_fund_index_map(fund_index_map)
 
 - fund_index_map:
 
-  Named vector or list of fund-index pairs to merge into
+  Named character vector of fund-index pairs to merge into
   `.fundsr$fund_index_map`. Names are fund identifiers; values are index
   identifiers.
 
@@ -24,12 +24,6 @@ Invisibly returns `NULL`. Called for side effects.
 
 ## See also
 
-Other fund-index map mutators:
+Other fund-index map functions:
 [`clear_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/clear_fund_index_map.md),
 [`get_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/get_fund_index_map.md)
-
-## Examples
-
-``` r
-add_fund_index_map(c(fund1 = "INDEX1", fund2 = "INDEX2", fund3 = "INDEX2"))
-```

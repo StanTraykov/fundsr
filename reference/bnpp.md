@@ -1,13 +1,13 @@
-# Import an Invesco fund
+# Import an BNP Paribas fund
 
 Wrapper around
 [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
-for Invesco files.
+for HSBC files.
 
 ## Usage
 
 ``` r
-inve(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...)
+bnpp(ticker, file = NULL, benchmark = NULL, ...)
 ```
 
 ## Arguments
@@ -24,10 +24,6 @@ inve(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...)
 
   Optional benchmark key.
 
-- retrieve_benchmark:
-
-  Logical; also import benchmark column.
-
 - ...:
 
   Additional arguments passed to
@@ -43,8 +39,8 @@ inve(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...)
 Other provider wrappers:
 [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md),
 [`avan()`](https://stantraykov.github.io/fundsr/reference/avan.md),
-[`bnpp()`](https://stantraykov.github.io/fundsr/reference/bnpp.md),
 [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md),
+[`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md),
 [`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md),
 [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md),
 [`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md),

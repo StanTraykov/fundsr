@@ -1,5 +1,47 @@
 # Changelog
 
+## fundsr (development version)
+
+### General
+
+- add new structured error/state-checking framework; improve error
+  messages, standardize classes
+
+### Importing
+
+- validate imported time series have unique dates (also check for this
+  during tracking difference calculations)
+- add a provider wrapper for BNP Paribas ETFs
+- support/fix numeric sheet selection for Excel 2003 XML files
+
+### Examples
+
+- add cash funds
+- fix Japan gross index import
+
+## fundsr 0.4.0
+
+### Breaking changes
+
+- reorder arguments in
+  [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md) to
+  match package convention
+
+### Importing
+
+- add `postprocess` param to
+  [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
+- add `...` param to import wrappers, passing it upstream to
+  [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
+- add `line_filter` param to
+  [`read_timeseries()`](https://stantraykov.github.io/fundsr/reference/read_timeseries.md)
+- add Avantis CSV NAV history support
+
+### Examples
+
+- add Eurozone and EURO STOXX 50
+- add Japan
+
 ## fundsr 0.3.0
 
 ### Breaking changes

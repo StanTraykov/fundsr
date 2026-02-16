@@ -21,7 +21,7 @@ build_all_series(reload = FALSE, by = "date", ...)
 
 - by:
 
-  Column name to join by and to sort by.
+  Character vector of column names to join by and sort by.
 
 - ...:
 

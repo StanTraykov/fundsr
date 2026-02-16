@@ -95,13 +95,21 @@ Other fund/index workflow functions:
                                               "Keith" ~ "harpsichord")) |>
       dplyr::add_row(name = "Mick", plays = "harmonica") |>
       dplyr::add_row(name = "Stu", plays = "piano")
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `plays = dplyr::case_match(...)`.
+#> Caused by warning:
+#> ! `case_match()` was deprecated in dplyr 1.2.0.
+#> ℹ Please use `recode_values()` instead.
 
   full <- join_env(e, by = "name")
+#> Joining: instruments, members, other_instr.
   late <- join_env(e, by = "name", late = "other_instr")
+#> Joining: instruments, members (late = other_instr).
   late_coalesced <- join_env(e,
                              by = "name",
                              late = "other_instr",
                              join_precedence = c(".early", ".late"))
+#> Joining: instruments, members (late = other_instr).
   print(list(full = full, late = late, late_coalesced = late_coalesced))
 #> $full
 #> # A tibble: 5 × 4

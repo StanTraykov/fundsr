@@ -18,7 +18,9 @@ add_fund_urls(fund_urls)
 
 ## Value
 
-A list with the previous value of `fundsr.fund_urls`.
+Invisibly returns a named list (as returned by
+[`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md))
+containing the previous value of `fundsr.fund_urls`.
 
 ## Details
 
