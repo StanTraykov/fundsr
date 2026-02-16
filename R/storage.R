@@ -34,7 +34,7 @@ get_storage <- function(session = NULL) {
 #' clear_storage(clear_map = TRUE)
 clear_storage <- function(clear_map = FALSE, session = NULL) {
     check_logical(clear_map)
-    session <- fundsr_get_session(session)
+    session <- fundsr_get_session(session, validate = FALSE)
 
     if (clear_map) {
         clear_fund_index_map(session = session)

@@ -82,7 +82,7 @@ get_fund_index_map <- function(session = NULL) {
 #' @family fund-index map functions
 #' @export
 clear_fund_index_map <- function(session = NULL) {
-    session <- fundsr_get_session(session)
+    session <- fundsr_get_session(session, validate = FALSE)
     st <- session$state
 
     if (!is.environment(st)) {

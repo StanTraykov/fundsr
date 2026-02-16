@@ -67,10 +67,22 @@ fundsr_default_session <- function() {
 }
 
 
-fundsr_get_session <- function(session = NULL, call = rlang::caller_env(n = 2L)) {
+fundsr_get_session <- function(session = NULL,
+    call = rlang::caller_env(n = 2L),
+    validate = TRUE) {
+    validate <- check_logical(validate)
+
     if (is.null(session)) {
-        return(fundsr_default_session())
+        session <- fundsr_default_session()
     }
+
+    if (!validate) {
+        if (!inherits(session, "fundsr_session")) {
+            stop_bad_arg("session", "must be a fundsr_session object.", call = call)
+        }
+        return(session)
+    }
+
     fundsr_validate_session(session, call = call)
 }
 
@@ -91,7 +103,7 @@ fundsr_get_session <- function(session = NULL, call = rlang::caller_env(n = 2L))
 #' @examples
 #' reset_state()
 reset_state <- function(session = NULL) {
-    session <- fundsr_get_session(session)
+    session <- fundsr_get_session(session, validate = FALSE)
 
     clear_storage(clear_map = TRUE, session = session)
     clear_data_loaders(session = session)

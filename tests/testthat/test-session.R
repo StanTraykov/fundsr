@@ -61,5 +61,6 @@ test_that("clear helpers are no-ops for uninitialised default session", {
     expect_invisible(clear_fund_index_map())
     expect_invisible(clear_inkscape_queue())
     expect_invisible(clear_storage())
+    expect_invisible(clear_storage(clear_map = TRUE))
     expect_invisible(reset_state())
 })

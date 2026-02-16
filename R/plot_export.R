@@ -189,7 +189,7 @@ export_pngs <- function(background = "white") {
 #' @examples
 #' clear_inkscape_queue()
 clear_inkscape_queue <- function(session = NULL) {
-    session <- fundsr_get_session(session)
+    session <- fundsr_get_session(session, validate = FALSE)
     st <- session$state
 
     if (!is.environment(st)) {

@@ -13,7 +13,7 @@
 #' @examples
 #' clear_data_loaders()
 clear_data_loaders <- function(session = NULL) {
-    session <- fundsr_get_session(session)
+    session <- fundsr_get_session(session, validate = FALSE)
     st <- session$state
 
     if (!is.environment(st)) {
