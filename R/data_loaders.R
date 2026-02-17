@@ -13,7 +13,7 @@
 #' @examples
 #' clear_data_loaders()
 clear_data_loaders <- function(session = NULL) {
-    session <- fundsr_get_session(session, validate = FALSE)
+    session <- fundsr_get_session(session)
     st <- session$state
 
     if (!is.environment(st)) {
@@ -111,9 +111,9 @@ add_data_loader <- function(fun, session = NULL) {
 #' @export
 run_data_loaders <- function(reload = FALSE, session = NULL) {
     check_logical(reload)
-    rqs <- fundsr_require_state(storage = TRUE, session = session)
-    st <- rqs$state
-    storage <- rqs$storage
+    session <- fundsr_require_state(storage = TRUE, session = session)
+    st <- session$state
+    storage <- session$storage
 
     fns <- st$data_loaders
     if (is.null(fns)) fns <- list()

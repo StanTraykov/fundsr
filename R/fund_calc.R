@@ -143,7 +143,7 @@ roll_diffs <- function(df,
         stop_bad_arg("date_col", "must be strictly increasing.")
     }
 
-    verbosity_override <- fundsr_get_option("verbosity") >= 4
+    verbosity_override <- fundsr_verbosity() >= 4
     msg_roll <- "roll" %in% messages || verbosity_override
     msg_skip <- "skip" %in% messages || verbosity_override
 

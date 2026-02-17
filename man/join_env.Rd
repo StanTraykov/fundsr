@@ -9,7 +9,7 @@ join_env(
   by = "date",
   late = NULL,
   join_precedence = NULL,
-  coalesce_suffixed = NULL,
+  coalesce_suffixed = deprecated(),
   late_join = dplyr::left_join
 )
 }

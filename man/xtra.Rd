@@ -16,7 +16,7 @@ xtra(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...)
 \item{retrieve_benchmark}{Logical; also import benchmark column.}
 
 \item{...}{Additional arguments passed to \code{\link[=load_fund]{load_fund()}} and \code{\link[=store_timeseries]{store_timeseries()}}, such as
-\code{postprocess}.}
+\code{postprocess}, \code{session}.}
 }
 \description{
 Wrapper around \code{load_fund()} for Xtrackers files.

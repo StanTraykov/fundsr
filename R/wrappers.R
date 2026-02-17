@@ -61,7 +61,7 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
 #' @param var_name Specify a custom variable name for the storage environment.
 #' @param data_sheet Deprecated; use `sheet`.
 #' @param ... Additional arguments passed to [store_timeseries()], such as
-#'   `overwrite` or `postprocess`.
+#'   `overwrite`, `postprocess`, `session`.
 #'
 #' @return Invisibly returns `NULL`. The imported data are stored in
 #'   `session$storage` under `tolower(ticker)`. A fund/index mapping is recorded
@@ -88,20 +88,9 @@ load_fund <- function(ticker,
                       retrieve_benchmark = FALSE,
                       date_order = "dmy",
                       var_name = NULL,
-                      data_sheet = NULL,
+                      data_sheet = deprecated(), # equivalent to sheet
                       ...) {
-    check_string(ticker)
-    check_string(file, allow_null = TRUE)
-    check_string(date_col)
-    check_string(nav_col)
-    check_string(benchmark, allow_null = TRUE)
-    check_string(benchmark_col, allow_null = TRUE)
-    check_logical(retrieve_benchmark)
-    check_string(date_order)
-    check_string(var_name, allow_null = TRUE)
-    check_string(data_sheet, allow_null = TRUE)
-    # Deprecated param handling
-    if (!missing(data_sheet) && !is.null(data_sheet)) {
+    if (lifecycle::is_present(data_sheet)) {
         lifecycle::deprecate_warn(
             when = "0.2.1",
             what = "load_fund(data_sheet)",
@@ -115,7 +104,15 @@ load_fund <- function(ticker,
         }
         sheet <- data_sheet
     }
-    # / Deprecated param handling
+    check_string(ticker)
+    check_string(file, allow_null = TRUE)
+    check_string(date_col)
+    check_string(nav_col)
+    check_string(benchmark, allow_null = TRUE)
+    check_string(benchmark_col, allow_null = TRUE)
+    check_logical(retrieve_benchmark)
+    check_string(date_order)
+    check_string(var_name, allow_null = TRUE)
 
     ticker_lower <- tolower(ticker)
 
@@ -184,7 +181,7 @@ load_fund <- function(ticker,
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -209,7 +206,7 @@ ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -231,7 +228,7 @@ spdr <- function(ticker, file = NULL, benchmark = NULL, ...) {
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -254,7 +251,7 @@ xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -277,7 +274,7 @@ amun <- function(ticker, file = NULL, benchmark = NULL, ...) {
 #' @param benchmark Optional benchmark key.
 #' @param retrieve_benchmark Logical; also import benchmark column.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -301,7 +298,7 @@ inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FAL
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -323,7 +320,7 @@ vang <- function(ticker, file = NULL, benchmark = NULL, ...) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -345,7 +342,7 @@ ubs <- function(ticker, file = NULL, benchmark = NULL, ...) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -367,7 +364,7 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL, ...) {
 #' @param file Optional filename override.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [load_fund()] and [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [load_fund()]
@@ -389,7 +386,7 @@ bnpp <- function(ticker, file = NULL, benchmark = NULL, ...) {
 #' @param file Filename.
 #' @param benchmark Optional benchmark key.
 #' @param ... Additional arguments passed to [store_timeseries()], such as
-#'   `postprocess`.
+#'   `postprocess`, `session`.
 #'
 #' @seealso
 #' [read_timeseries()]

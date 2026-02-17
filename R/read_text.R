@@ -66,6 +66,8 @@ read_timeseries <- function(
         )
     }
 
+    fundsr_msg(paste("Reading Text: ", sQuote(path)), level = 1L)
+
     if (!is.null(line_filter)) {
         data_lines <- grep(line_filter, readr::read_lines(path), value = TRUE)
         if (length(data_lines) == 0L) {
@@ -115,7 +117,7 @@ read_timeseries <- function(
         )
     }
 
-    df <- reader(read_obj, show_col_types = FALSE)
+    df <- reader(read_obj, show_col_types = FALSE, name_repair = "unique_quiet")
     if (!(date_col %in% names(df))) {
         stop_bad_arg(
             "date_col",

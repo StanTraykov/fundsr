@@ -60,7 +60,7 @@ save_plot <- function(file,
     check_logical(save_png)
     check_logical(save_svg)
     if (!save_svg && !save_png) {
-        warning("Nothing to do: both `save_svg` and `save_png` are FALSE.", call. = FALSE)
+        fundsr_warn("Nothing to do: both `save_svg` and `save_png` are FALSE.")
         return(invisible(NULL))
     }
 
@@ -198,7 +198,7 @@ export_pngs <- function(background = "white", session = NULL) {
 #' @examples
 #' clear_inkscape_queue()
 clear_inkscape_queue <- function(session = NULL) {
-    session <- fundsr_get_session(session, validate = FALSE)
+    session <- fundsr_get_session(session)
     st <- session$state
 
     if (!is.environment(st)) {

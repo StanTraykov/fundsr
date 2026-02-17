@@ -15,7 +15,7 @@ load_fund(
   retrieve_benchmark = FALSE,
   date_order = "dmy",
   var_name = NULL,
-  data_sheet = NULL,
+  data_sheet = deprecated(),
   ...
 )
 }
@@ -50,7 +50,7 @@ alongside the fund.}
 \item{data_sheet}{Deprecated; use \code{sheet}.}
 
 \item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
-\code{overwrite} or \code{postprocess}.}
+\code{overwrite}, \code{postprocess}, \code{session}.}
 }
 \value{
 Invisibly returns \code{NULL}. The imported data are stored in

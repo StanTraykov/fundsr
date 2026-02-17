@@ -111,7 +111,7 @@ download_fund_data <- function(redownload = FALSE) {
 
     if (!did_download) {
         msg <- "Downloads skipped: all files already exist."
-        if (isTRUE(hint)) {
+        if (hint) {
             msg <- paste(msg, "Use redownload = TRUE to overwrite.")
         }
         fundsr_msg(msg)
