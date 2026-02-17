@@ -193,7 +193,7 @@ read_timeseries <- function(
                 sprintf("examples = %s.", paste(ex, collapse = ", ")),
                 sprintf("path     = %s.", sQuote(path))
             ),
-            class = c("fundsr_duplicate_dates", "fundsr_bad_data", "fundsr_io_error")
+            class = c("fundsr_duplicate_dates", "fundsr_bad_data")
         )
     }
 

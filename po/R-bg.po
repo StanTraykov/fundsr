@@ -23,11 +23,11 @@ msgstr "базов сценарий"
 msgid "lower mortality"
 msgstr "по-ниска смъртност"
 
-# 
+#
 msgid "Survival by age per EUROPOP2023 projection"
 msgstr "Преживяемост по възраст според прогноза EUROPOP2023"
 
-# 
+#
 msgid "{population} · {sex_label} · age {age_min} · start year {start_year}"
 msgstr ""
 "{population} · {sex_label} · възраст {age_min} · начална година {start_year}"
@@ -85,4 +85,4 @@ msgid "monthly avg XLM (bps)"
 msgstr "средномесечен XLM (bps)"
 
 msgid "fundsr loaded."
-msgstr ""
+msgstr "fundsr зереден."
