@@ -1,23 +1,5 @@
 .fundsr_default_session <- NULL
 
-fundsr_validate_session <- function(session,
-                                    arg = "session",
-                                    call = rlang::caller_env(n = 2L)) {
-    if (!inherits(session, "fundsr_session")) {
-        stop_bad_arg(arg, "must be a fundsr_session object.", call = call)
-    }
-
-    if (!is.environment(session$state)) {
-        stop_bad_arg(arg, "must contain a `state` environment.", call = call)
-    }
-
-    if (!is.environment(session$storage)) {
-        stop_bad_arg(arg, "must contain a `storage` environment.", call = call)
-    }
-
-    session
-}
-
 #' Create a fundsr session
 #'
 #' Constructs a `fundsr_session` object, which encapsulates a mutable state
@@ -64,24 +46,14 @@ fundsr_default_session <- function() {
     .fundsr_default_session
 }
 
-
 fundsr_get_session <- function(session = NULL,
-                                 call = rlang::caller_env(n = 2L),
-                                 validate = TRUE) {
-    validate <- check_logical(validate)
-
+                                 call = rlang::caller_env(n = 2L)) {
     if (is.null(session)) {
         session <- fundsr_default_session()
+    } else if (!inherits(session, "fundsr_session")) {
+        stop_bad_arg("session", "must be a fundsr_session object.", call = call)
     }
-
-    if (!validate) {
-        if (!inherits(session, "fundsr_session")) {
-            stop_bad_arg("session", "must be a fundsr_session object.", call = call)
-        }
-        return(session)
-    }
-
-    fundsr_validate_session(session, call = call)
+    session
 }
 
 #' Clear fundsr session state
@@ -100,7 +72,7 @@ fundsr_get_session <- function(session = NULL,
 #' @examples
 #' reset_state()
 reset_state <- function(session = NULL) {
-    session <- fundsr_get_session(session, validate = FALSE)
+    session <- fundsr_get_session(session)
 
     clear_storage(clear_map = TRUE, session = session)
     clear_data_loaders(session = session)
@@ -116,11 +88,9 @@ reset_state <- function(session = NULL) {
 }
 
 fundsr_require_state <- function(storage = FALSE,
-                                 session = fundsr_default_session(),
+                                 session = NULL,
                                  call = rlang::caller_env(n = 2L)) {
     check_logical(storage)
-    session <- fundsr_get_session(session = session, call = call)
-
     if (!is.environment(call)) {
         stop_bad_arg(
             "call",
@@ -128,10 +98,11 @@ fundsr_require_state <- function(storage = FALSE,
             call = rlang::caller_env(n = 1L)
         )
     }
+    session <- fundsr_get_session(session = session, call = call)
 
     if (!is.environment(session$state)) {
         fundsr_abort(
-            msg   = "Fundsr state environment is not initialised.",
+            msg   = "fundsr session is not initialized.",
             class = "fundsr_bad_state",
             call  = call
         )
@@ -139,14 +110,11 @@ fundsr_require_state <- function(storage = FALSE,
 
     if (storage && !is.environment(session$storage)) {
         fundsr_abort(
-            msg   = "Fundsr storage is not initialised.",
+            msg   = "fundsr session storage is not initialized.",
             class = "fundsr_bad_state",
             call  = call
         )
     }
 
-    list(
-        state = session$state,
-        storage = if (storage) session$storage else NULL
-    )
+    session
 }

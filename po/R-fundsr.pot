@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: fundsr 0.1.0.9000\n"
-"POT-Creation-Date: 2025-12-30 07:04\n"
+"Project-Id-Version: fundsr 0.4.0.9000\n"
+"POT-Creation-Date: 2026-02-17 11:28\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,118 +10,10 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Skipping {fund}: not in df"
-msgstr ""
-
-msgid "Roll {roll_type} for {fund} tracking {index}"
-msgstr ""
-
-msgid "`fun` must be a function."
-msgstr ""
-
-msgid "`fun` must take no arguments."
-msgstr ""
-
-msgid "Internal registry `session$state$data_loaders` must be a list."
-msgstr ""
-
-msgid "`clear_fund_index_map` must be TRUE or FALSE."
-msgstr ""
-
-msgid "Fundsr storage environment is not initialised."
-msgstr ""
-
-msgid "`reload` must be TRUE or FALSE."
-msgstr ""
-
-msgid "Fundsr storage is not initialised."
-msgstr ""
-
-msgid "Internal registry `session$state$data_loaders` must be a list of functions."
-msgstr ""
-
-msgid "`session$state$data_loaders[[%d]]` is not a function."
-msgstr ""
-
-msgid "`session$state$data_loaders[[%d]]` must take no arguments."
-msgstr ""
-
-msgid "Joining: {glue::glue_collapse(obj_names, sep = ', ')}"
-msgstr ""
-
-msgid "Objects not found in `env` and ignored in `late`:"
-msgstr ""
-
-msgid ","
-msgstr ""
-
-msgid "No objects left to full_join after excluding `late`."
-msgstr ""
-
-msgid "Downloading '{file}'"
-msgstr ""
-
-msgid "Skipping '{file}': file already exists."
-msgstr ""
-
-msgid "Unsupported file extension for `file`: expected .csv or .tsv (optionally .gz)."
-msgstr ""
-
-msgid "*** Loading:"
-msgstr ""
-
-msgid "No .xls[x] file found for {ticker}."
-msgstr ""
-
-msgid "Multiple .xls[x] files found for {ticker}."
-msgstr ""
-
-msgid "Need benchmark and benchmark_col to retrieve benchmark."
-msgstr ""
-
-msgid "No life table file found for sex '"
-msgstr ""
-
-msgid "' in '"
-msgstr ""
-
-msgid "'. Expected one of:"
-msgstr ""
-
-msgid "`age0` not found for `pop_name` in `lt$Age`."
-msgstr ""
-
 msgid "male"
 msgstr ""
 
 msgid "female"
-msgstr ""
-
-msgid "Survival by age per HMD life table"
-msgstr ""
-
-msgid "{population} · {sex_label} · age {age_min} · latest data from {year_max} (black line)"
-msgstr ""
-
-msgid "age"
-msgstr ""
-
-msgid "survival"
-msgstr ""
-
-msgid "data"
-msgstr ""
-
-msgid "`sex` must be 'm' or 'f'."
-msgstr ""
-
-msgid "No rows for given geo/sex in `es`."
-msgstr ""
-
-msgid "Missing mx at baseline (Year, Age) for"
-msgstr ""
-
-msgid "."
 msgstr ""
 
 msgid "baseline"
@@ -136,64 +28,22 @@ msgstr ""
 msgid "{population} · {sex_label} · age {age_min} · start year {start_year}"
 msgstr ""
 
+msgid "age"
+msgstr ""
+
+msgid "survival"
+msgstr ""
+
 msgid "projection"
 msgstr ""
 
-msgid "`data_dir` must be a single non-missing string."
+msgid "Survival by age per HMD life table"
 msgstr ""
 
-msgid "`out_dir` must be a single non-missing string."
+msgid "{population} · {sex_label} · age {age_min} · latest data from {year_max} (black line)"
 msgstr ""
 
-msgid "`px_width` must be a single positive number."
-msgstr ""
-
-msgid "`internal_png` must be TRUE or FALSE."
-msgstr ""
-
-msgid "`export_svg` must be TRUE or FALSE."
-msgstr ""
-
-msgid "`xetra_map` must be a named character vector."
-msgstr ""
-
-msgid "`inkscape` must be a single non-empty string."
-msgstr ""
-
-msgid "`fund_urls` must be a named character vector or named list."
-msgstr ""
-
-msgid "`file` must be a non-empty single string."
-msgstr ""
-
-msgid "`save_png` must be TRUE or FALSE."
-msgstr ""
-
-msgid "`save_svg` must be TRUE or FALSE."
-msgstr ""
-
-msgid "Nothing to do: both `save_svg` and `save_png` are FALSE."
-msgstr ""
-
-msgid "cannot queue Inkscape export; ';' in path(s):\n-"
-msgstr ""
-
-msgid "-"
-msgstr ""
-
-msgid "For PNG saving, `units` must be one of: \"in\", \"cm\", \"mm\"."
-msgstr ""
-
-msgid "export_pngs: nothing queued."
-msgstr ""
-
-msgid "export_pngs: no inkscape executable specified"
-msgstr ""
-
-msgid "Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"
-msgstr ""
-
-msgid "export_pngs: Inkscape returned non-zero exit status: {exit_status}"
+msgid "data"
 msgstr ""
 
 msgid "net"
@@ -208,9 +58,6 @@ msgstr ""
 msgid "{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}"
 msgstr ""
 
-msgid "plot_roll_diffs:"
-msgstr ""
-
 msgid "fund"
 msgstr ""
 
@@ -218,93 +65,6 @@ msgid "rolling annualized log-return difference (bps)"
 msgstr ""
 
 msgid "rolling CAGR difference (bps)"
-msgstr ""
-
-msgid "`%s` must be character or list."
-msgstr ""
-
-msgid "`order` must use only 'd', 'm', 'y' (e.g. 'dmy', 'ymd')."
-msgstr ""
-
-msgid "`order` must be a permutation of 'd', 'm', 'y' (length 3, no repeats)."
-msgstr ""
-
-msgid "Attempting readxl on '"
-msgstr ""
-
-msgid "'..."
-msgstr ""
-
-msgid "readxl succeeded. Returning data."
-msgstr ""
-
-msgid "readxl failed. Attempting parse as Excel 2003 XML..."
-msgstr ""
-
-msgid "File '"
-msgstr ""
-
-msgid "' not found or is empty."
-msgstr ""
-
-msgid "Could not parse '"
-msgstr ""
-
-msgid "' as Excel or as valid 2003 XML."
-msgstr ""
-
-msgid "Original readxl error was:"
-msgstr ""
-
-msgid "No <ss:Worksheet> found in the XML for '"
-msgstr ""
-
-msgid "'."
-msgstr ""
-
-msgid "Could not find a Worksheet named '"
-msgstr ""
-
-msgid "'; using the first."
-msgstr ""
-
-msgid "No <ss:Table> found in the selected Worksheet for '"
-msgstr ""
-
-msgid "Could NOT find the date column header matching '{date_field_name}'"
-msgstr ""
-
-msgid "in '{xl_file}', sheet '{data_sheet}'."
-msgstr ""
-
-msgid "The detected header row ({row_header_idx}) is the last row."
-msgstr ""
-
-msgid "No data below it in '{xl_file}', sheet '{data_sheet}'."
-msgstr ""
-
-msgid "Could NOT find a column matching '{date_field_name}'"
-msgstr ""
-
-msgid "after assigning header names in '{xl_file}', sheet '{data_sheet}'."
-msgstr ""
-
-msgid "Returning {nrow(data_subset)} rows x {ncol(data_subset)} columns"
-msgstr ""
-
-msgid "from '{xl_file}' (sheet='{data_sheet}', date_field='{date_field_name}')."
-msgstr ""
-
-msgid "Error in file:"
-msgstr ""
-
-msgid "- Could not uniquely identify the XLM column."
-msgstr ""
-
-msgid "XLM read: {month_year}"
-msgstr ""
-
-msgid "plot_xlms:"
 msgstr ""
 
 msgid "Xetra Liquidity Measure (€100K round-trip spread costs)"

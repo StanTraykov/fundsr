@@ -14,7 +14,7 @@ vang(ticker, file = NULL, benchmark = NULL, ...)
 \item{benchmark}{Optional benchmark key.}
 
 \item{...}{Additional arguments passed to \code{\link[=load_fund]{load_fund()}} and \code{\link[=store_timeseries]{store_timeseries()}}, such as
-\code{postprocess}.}
+\code{postprocess}, \code{session}.}
 }
 \description{
 Wrapper around \code{load_fund()} for Vanguard files.

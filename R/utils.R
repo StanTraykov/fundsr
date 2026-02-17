@@ -26,21 +26,6 @@ vec_key <- function(x, ignore_order = FALSE) {
     paste0(x_type, "|", length(x_chr), "|", paste(parts, collapse = "|"))
 }
 
-##### Messaging #####
-
-fundsr_verbosity <- function() {
-    v <- fundsr_get_option("verbosity")
-    v <- suppressWarnings(as.integer(v))
-    if (length(v) != 1L || is.na(v) || v < 0L) 1L else v
-}
-
-fundsr_msg <- function(..., level = 1L) {
-    level <- check_numeric_scalar(level, as_integer = TRUE, ge = 0)
-    if (length(level) != 1L || is.na(level) || level < 0L) level <- 1L
-    if (level == 0L || fundsr_verbosity() >= level) message(...)
-    invisible(NULL)
-}
-
 ##### Plot helpers #####
 add_gg_params <- function(p, gg_params) {
     if (is.null(gg_params)) return(p)

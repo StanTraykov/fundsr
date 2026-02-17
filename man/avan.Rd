@@ -14,7 +14,7 @@ avan(ticker, file, benchmark = NULL, ...)
 \item{benchmark}{Optional benchmark key.}
 
 \item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
-\code{postprocess}.}
+\code{postprocess}, \code{session}.}
 }
 \description{
 Wrapper around \code{read_timeseries()} for Avantis files.

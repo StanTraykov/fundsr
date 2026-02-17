@@ -21,7 +21,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
     }
 
     # First, try reading as a standard Excel file with readxl
-    fundsr_msg("Reading Excel: ", sQuote(file_path), level = 1L)
+    fundsr_msg(paste("Reading Excel:", sQuote(file_path)), level = 1L)
     df <- tryCatch({
         # Try readxl in a tryCatch
         readxl::read_excel(path = file_path,
@@ -139,12 +139,9 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         }
 
         if (is.null(matched_ws)) {
-            warning(
-                "Could not find a Worksheet named '",
-                sheet_name,
-                "'; using the first.",
-                call. = FALSE
-            )
+            fundsr_warn(paste0("Could not find a Worksheet named ",
+                               sQuote(sheet_name),
+                               ". Selecting the first sheet."))
             matched_ws <- ws_nodes[[1]]
         }
     }

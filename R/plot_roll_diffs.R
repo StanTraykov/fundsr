@@ -71,8 +71,7 @@ plot_roll_diffs <- function(data,
     if (!any(has_data)) {
         # fallback: use full date span
         fnds <- paste(funds, collapse = ", ")
-        warning(glue("plot_roll_diffs: no finite data for selected funds ({fnds})."),
-                call. = FALSE)
+        fundsr_warn(glue("plot_roll_diffs: no finite data for selected funds ({fnds})."))
         min_date <- min(data[["date"]], na.rm = TRUE)
         max_date <- max(data[["date"]], na.rm = TRUE)
     } else {

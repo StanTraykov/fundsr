@@ -14,20 +14,26 @@ Guidance for AI/code agents working in this repository.
 - Tests live in `tests/testthat/` and are run via `tests/testthat.R`.
 - Documentation pages are generated in `man/` from roxygen comments in `R/`.
 - Package metadata/config is in `DESCRIPTION`, `NAMESPACE`, `.lintr`, `.Rprofile`, and `_pkgdown.yml`.
-- Website/vignettes content lives in `vignettes/` and pkgdown/GitHub workflow config.
+- Website/vignettes content lives in `vignettes/` and `vignettes/articles`.
+- CI/workflows live in `.github/workflows/`; pkgdown config is `_pkgdown.yml`.
 
 ## High-level architecture
-- **Data ingest/parsing:** `R/read_*.R`, `R/read_text.R`, `R/read_excel.R`, `R/fund_download.R`, `R/data_loaders.R`.
-- **State/storage/options:** `R/state.R`, `R/storage.R`, `R/options.R`.
-- **Checks/errors/messages:** `R/checks.R`, `R/utils.R` (e.g. `fundsr_abort`, `stop_bad_arg`, `check_*`, `fundsr_msg`).
-- **Computation:** `R/fund_calc.R`, `R/fund_index_map.R`.
-- **Plotting/export:** `R/plot_*.R`, `R/plot_export.R`, `R/xlm.R`, `R/life.R`, `R/wrappers.R`.
-- **i18n/localization:** `R/i18n.R`, `po/`, `inst/po/`.
+- **Ingest + parsing:** `R/read_*.R`, `R/read_text.R`, `R/read_excel.R`, `R/fund_download.R`, `R/data_loaders.R`, `R/wrappers.R`.
+- **Options:** `R/options.R`.
+- **Session + storage:** `R/state.R`, `R/storage.R`, `R/fund_index_map.R`.
+- **Checks:** `R/checks.R` (`check_*`).
+- **Conditions + messaging:** `R/conditions.R` (`fundsr_abort`, `stop_bad_arg`, `fundsr_warn`, `fundsr_msg`).
+- **Small generic helpers:** `R/utils.R`.
+- **Computation:** `R/fund_calc.R`.
+- **Plotting + export:** `R/plot_*.R`, `R/plot_export.R`, `R/plot_roll_diffs.R`.
+- **i18n:** `R/i18n.R`, `po/`, `inst/po/`.
+- **Domain modules:** liquidity: `R/xlm.R`; survival curves: `R/life.R`, `R/es_aasmr.R`.
+- **Package hooks + imports:** `R/imports.R`, `R/zzz.R`.
 
 When touching code, preserve this split and avoid mixing unrelated concerns.
 
 ## Style and coding conventions
-- Use idiomatic R with **4-space indentation** (see `.lintr` / styler config).
+- Use idiomatic R with **4-space indentation** (see `.lintr` config).
 - Keep lines reasonably short (target ~100 chars).
 - Prefer explicit names and small helper functions over deeply nested pipelines.
 - Follow existing tidyverse style and existing package patterns (`rlang` `.data` pronoun, `check_*` helpers, `fundsr_msg`, etc.).
@@ -38,19 +44,20 @@ This repo uses a structured, consistent error/checking approach.
 
 ### Which helper to use
 - **Bad user arguments:** use `stop_bad_arg(arg, msg, call = ...)` (class `fundsr_bad_arg`).
-- **Bad state / internal invariants:** use `fundsr_abort(..., class = "fundsr_bad_state" / "fundsr_internal_error")`.
-- **I/O / data problems:** use `fundsr_abort(..., class = "fundsr_io_error" / "fundsr_bad_data" / more specific subclasses as appropriate)`.
+- **Bad state / internal invariants:** use `fundsr_abort()` with an internal/state-related class (typically includes `fundsr_bad_state` or `fundsr_internal_error`; add more specific subclasses when helpful).
+- **I/O / data problems:** use `fundsr_abort()` with I/O/data-related classes (typically includes `fundsr_io_error` or `fundsr_bad_data`; add more specific subclasses when helpful).
 - Prefer existing `check_*()` helpers (`check_string`, `check_numeric_scalar`, `check_logical`, `check_mapping`) over ad-hoc validation.
 
 ### Message style (house conventions)
 - Multi-line messages are normal and encouraged when they add structured context.
 - Prefer a **1-line headline** followed by a small set of **context lines** (often `key = value.`) that help debugging.
-- Use `msg = c(...)` for message vectors; `collapse_msg()` will join with newlines.
+- Use `msg = c(...)` for multi-line messages (they get collapsed with newlines).
 - Keep context scan-friendly: short lines, concrete values.
 - Include key parameters when relevant: `file`, `path`, `sheet`, `date_col`, `ext`, counts (`n_rows`, `n_unique`), and a few examples (first 3–5 offending values).
 - Avoid overly verbose narrative text unless it materially helps debugging.
 
-### Example
+### Examples
+#### Example with `stop_bad_arg()`
 ```r
 if (sheet_idx > length(ws_nodes)) {
     stop_bad_arg(
@@ -63,6 +70,24 @@ if (sheet_idx > length(ws_nodes)) {
         )
     )
 }
+```
+#### Example with `fundsr_abort()`
+```r
+    if (dup_pos > 0L) {
+        dup_dates <- unique(out$date[duplicated(out$date)])
+        ex <- format(utils::head(sort(dup_dates), 5L), "%Y-%m-%d")
+
+        fundsr_abort(
+            msg = c(
+                "Parsed dates are not unique.",
+                sprintf("n_unique = %d.", length(unique(out$date))),
+                sprintf("n_rows   = %d.", nrow(out)),
+                sprintf("examples = %s.", paste(ex, collapse = ", ")),
+                sprintf("path     = %s.", sQuote(path))
+            ),
+            class = c("fundsr_duplicate_dates", "fundsr_bad_data", "fundsr_io_error")
+        )
+    }
 ```
 
 ## Documentation and generated files
@@ -89,14 +114,14 @@ If runtime/environment limits block checks, report what was attempted and why it
 
 ## Linting/formatting
 - Lint config is in `.lintr`.
-- Styler helper exists at `dev/styler/style.R`.
 - Keep exclusions in mind (`inst/extdata`, `data-raw`, `vignettes`, `inst/scripts`).
 - Avoid mass reformatting unrelated files.
 
 ## Internationalization (i18n)
-- User-facing strings may be translated with gettext.
-- When changing translatable UI/messages, ensure consistency with i18n helpers and translation templates/catalogs (`po/`, `inst/po/`) when relevant.
-- Do not remove translation hooks from existing user-facing text without reason.
+- Plot texts (titles, labels) may be translated with `gettext()`.
+- When changing translatable texts, ensure consistency with i18n helpers and translation templates/catalogs (`po/`, `inst/po/`) when relevant.
+- Do not remove translation hooks from existing texts without reason.
+- There's also another layer of i18n support for user-specified plot texts via multi-language character vectors, e.g. `(en = "Plot title", fr = "Titre du graphique")`
 
 ## Data and examples
 - Example/raw data helpers are under `data-raw/` and `inst/extdata/`.

@@ -34,7 +34,7 @@ get_storage <- function(session = NULL) {
 #' clear_storage(clear_map = TRUE)
 clear_storage <- function(clear_map = FALSE, session = NULL) {
     check_logical(clear_map)
-    session <- fundsr_get_session(session, validate = FALSE)
+    session <- fundsr_get_session(session)
 
     if (clear_map) {
         clear_fund_index_map(session = session)
@@ -245,10 +245,10 @@ join_env <- function(env,
                      by = "date",
                      late = NULL,
                      join_precedence = NULL,
-                     coalesce_suffixed = NULL, # Deprecated; equivalent to above
+                     coalesce_suffixed = deprecated(), # equivalent to join_precedence
                      late_join = dplyr::left_join) {
     # Deprecated param handling
-    if (!missing(coalesce_suffixed) && !is.null(coalesce_suffixed)) {
+    if (lifecycle::is_present(coalesce_suffixed)) {
         lifecycle::deprecate_warn(
             when = "0.2.1",
             what = "join_env(coalesce_suffixed)",
@@ -305,9 +305,8 @@ join_env <- function(env,
     }
     missing_late <- setdiff(raw_late, obj_names)
     if (length(missing_late)) {
-        warning("Objects not found in `env` and ignored in `late`: ",
-                paste(missing_late, collapse = ", "),
-                call. = FALSE)
+        fundsr_warn(paste("Objects not found in `env` and ignored in `late`:",
+                          paste(missing_late, collapse = ", ")))
     }
     late <- intersect(raw_late, obj_names)
     main_names <- setdiff(obj_names, late)
