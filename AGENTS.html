@@ -60,27 +60,38 @@
 <li>Tests live in <code>tests/testthat/</code> and are run via <code>tests/testthat.R</code>.</li>
 <li>Documentation pages are generated in <code>man/</code> from roxygen comments in <code>R/</code>.</li>
 <li>Package metadata/config is in <code>DESCRIPTION</code>, <code>NAMESPACE</code>, <code>.lintr</code>, <code>.Rprofile</code>, and <code>_pkgdown.yml</code>.</li>
-<li>Website/vignettes content lives in <code>vignettes/</code> and pkgdown/GitHub workflow config.</li>
+<li>Website/vignettes content lives in <code>vignettes/</code> and <code>vignettes/articles</code>.</li>
+<li>CI/workflows live in <code>.github/workflows/</code>; pkgdown config is <code>_pkgdown.yml</code>.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="high-level-architecture">High-level architecture<a class="anchor" aria-label="anchor" href="#high-level-architecture"></a></h2>
 <ul><li>
-<strong>Data ingest/parsing:</strong> <code>R/read_*.R</code>, <code>R/read_text.R</code>, <code>R/read_excel.R</code>, <code>R/fund_download.R</code>, <code>R/data_loaders.R</code>.</li>
+<strong>Ingest + parsing:</strong> <code>R/read_*.R</code>, <code>R/read_text.R</code>, <code>R/read_excel.R</code>, <code>R/fund_download.R</code>, <code>R/data_loaders.R</code>, <code>R/wrappers.R</code>.</li>
 <li>
-<strong>State/storage/options:</strong> <code>R/state.R</code>, <code>R/storage.R</code>, <code>R/options.R</code>.</li>
+<strong>Options:</strong> <code>R/options.R</code>.</li>
 <li>
-<strong>Checks/errors/messages:</strong> <code>R/checks.R</code>, <code>R/utils.R</code> (e.g. <code>fundsr_abort</code>, <code>stop_bad_arg</code>, <code>check_*</code>, <code>fundsr_msg</code>).</li>
+<strong>Session + storage:</strong> <code>R/state.R</code>, <code>R/storage.R</code>, <code>R/fund_index_map.R</code>.</li>
 <li>
-<strong>Computation:</strong> <code>R/fund_calc.R</code>, <code>R/fund_index_map.R</code>.</li>
+<strong>Checks:</strong> <code>R/checks.R</code> (<code>check_*</code>).</li>
 <li>
-<strong>Plotting/export:</strong> <code>R/plot_*.R</code>, <code>R/plot_export.R</code>, <code>R/xlm.R</code>, <code>R/life.R</code>, <code>R/wrappers.R</code>.</li>
+<strong>Conditions + messaging:</strong> <code>R/conditions.R</code> (<code>fundsr_abort</code>, <code>stop_bad_arg</code>, <code>fundsr_warn</code>, <code>fundsr_msg</code>).</li>
 <li>
-<strong>i18n/localization:</strong> <code>R/i18n.R</code>, <code>po/</code>, <code>inst/po/</code>.</li>
+<strong>Small generic helpers:</strong> <code>R/utils.R</code>.</li>
+<li>
+<strong>Computation:</strong> <code>R/fund_calc.R</code>.</li>
+<li>
+<strong>Plotting + export:</strong> <code>R/plot_*.R</code>, <code>R/plot_export.R</code>, <code>R/plot_roll_diffs.R</code>.</li>
+<li>
+<strong>i18n:</strong> <code>R/i18n.R</code>, <code>po/</code>, <code>inst/po/</code>.</li>
+<li>
+<strong>Domain modules:</strong> liquidity: <code>R/xlm.R</code>; survival curves: <code>R/life.R</code>, <code>R/es_aasmr.R</code>.</li>
+<li>
+<strong>Package hooks + imports:</strong> <code>R/imports.R</code>, <code>R/zzz.R</code>.</li>
 </ul><p>When touching code, preserve this split and avoid mixing unrelated concerns.</p>
 </div>
 <div class="section level2">
 <h2 id="style-and-coding-conventions">Style and coding conventions<a class="anchor" aria-label="anchor" href="#style-and-coding-conventions"></a></h2>
-<ul><li>Use idiomatic R with <strong>4-space indentation</strong> (see <code>.lintr</code> / styler config).</li>
+<ul><li>Use idiomatic R with <strong>4-space indentation</strong> (see <code>.lintr</code> config).</li>
 <li>Keep lines reasonably short (target ~100 chars).</li>
 <li>Prefer explicit names and small helper functions over deeply nested pipelines.</li>
 <li>Follow existing tidyverse style and existing package patterns (<code>rlang</code> <code>.data</code> pronoun, <code>check_*</code> helpers, <code>fundsr_msg</code>, etc.).</li>
@@ -94,22 +105,25 @@
 <ul><li>
 <strong>Bad user arguments:</strong> use <code>stop_bad_arg(arg, msg, call = ...)</code> (class <code>fundsr_bad_arg</code>).</li>
 <li>
-<strong>Bad state / internal invariants:</strong> use <code>fundsr_abort(..., class = "fundsr_bad_state" / "fundsr_internal_error")</code>.</li>
+<strong>Bad state / internal invariants:</strong> use <code>fundsr_abort()</code> with an internal/state-related class (typically includes <code>fundsr_bad_state</code> or <code>fundsr_internal_error</code>; add more specific subclasses when helpful).</li>
 <li>
-<strong>I/O / data problems:</strong> use <code>fundsr_abort(..., class = "fundsr_io_error" / "fundsr_bad_data" / more specific subclasses as appropriate)</code>.</li>
+<strong>I/O / data problems:</strong> use <code>fundsr_abort()</code> with I/O/data-related classes (typically includes <code>fundsr_io_error</code> or <code>fundsr_bad_data</code>; add more specific subclasses when helpful).</li>
 <li>Prefer existing <code>check_*()</code> helpers (<code>check_string</code>, <code>check_numeric_scalar</code>, <code>check_logical</code>, <code>check_mapping</code>) over ad-hoc validation.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="message-style-house-conventions">Message style (house conventions)<a class="anchor" aria-label="anchor" href="#message-style-house-conventions"></a></h3>
 <ul><li>Multi-line messages are normal and encouraged when they add structured context.</li>
 <li>Prefer a <strong>1-line headline</strong> followed by a small set of <strong>context lines</strong> (often <code>key = value.</code>) that help debugging.</li>
-<li>Use <code>msg = c(...)</code> for message vectors; <code>collapse_msg()</code> will join with newlines.</li>
+<li>Use <code>msg = c(...)</code> for multi-line messages (they get collapsed with newlines).</li>
 <li>Keep context scan-friendly: short lines, concrete values.</li>
 <li>Include key parameters when relevant: <code>file</code>, <code>path</code>, <code>sheet</code>, <code>date_col</code>, <code>ext</code>, counts (<code>n_rows</code>, <code>n_unique</code>), and a few examples (first 3–5 offending values).</li>
 <li>Avoid overly verbose narrative text unless it materially helps debugging.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a></h3>
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h3>
+<div class="section level4">
+<h4 id="example-with-stop_bad_arg">Example with <code>stop_bad_arg()</code>
+<a class="anchor" aria-label="anchor" href="#example-with-stop_bad_arg"></a></h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="va">sheet_idx</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ws_nodes</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu">stop_bad_arg</span><span class="op">(</span></span>
@@ -122,6 +136,27 @@
 <span>        <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="example-with-fundsr_abort">Example with <code>fundsr_abort()</code>
+<a class="anchor" aria-label="anchor" href="#example-with-fundsr_abort"></a></h4>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="kw">if</span> <span class="op">(</span><span class="va">dup_pos</span> <span class="op">&gt;</span> <span class="fl">0L</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">dup_dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">date</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">date</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">dup_dates</span><span class="op">)</span>, <span class="fl">5L</span><span class="op">)</span>, <span class="st">"%Y-%m-%d"</span><span class="op">)</span></span>
+<span></span>
+<span>        <span class="fu">fundsr_abort</span><span class="op">(</span></span>
+<span>            msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>                <span class="st">"Parsed dates are not unique."</span>,</span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"n_unique = %d."</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">date</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"n_rows   = %d."</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"examples = %s."</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">ex</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"path     = %s."</span>, <span class="fu"><a href="https://rdrr.io/r/base/sQuote.html" class="external-link">sQuote</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="op">)</span>,</span>
+<span>            class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fundsr_duplicate_dates"</span>, <span class="st">"fundsr_bad_data"</span>, <span class="st">"fundsr_io_error"</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">}</span></span></code></pre></div>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -141,15 +176,16 @@
 <div class="section level2">
 <h2 id="lintingformatting">Linting/formatting<a class="anchor" aria-label="anchor" href="#lintingformatting"></a></h2>
 <ul><li>Lint config is in <code>.lintr</code>.</li>
-<li>Styler helper exists at <code>dev/styler/style.R</code>.</li>
 <li>Keep exclusions in mind (<code>inst/extdata</code>, <code>data-raw</code>, <code>vignettes</code>, <code>inst/scripts</code>).</li>
 <li>Avoid mass reformatting unrelated files.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="internationalization-i18n">Internationalization (i18n)<a class="anchor" aria-label="anchor" href="#internationalization-i18n"></a></h2>
-<ul><li>User-facing strings may be translated with gettext.</li>
-<li>When changing translatable UI/messages, ensure consistency with i18n helpers and translation templates/catalogs (<code>po/</code>, <code>inst/po/</code>) when relevant.</li>
-<li>Do not remove translation hooks from existing user-facing text without reason.</li>
+<ul><li>Plot texts (titles, labels) may be translated with <code><a href="https://rdrr.io/r/base/gettext.html" class="external-link">gettext()</a></code>.</li>
+<li>When changing translatable texts, ensure consistency with i18n helpers and translation templates/catalogs (<code>po/</code>, <code>inst/po/</code>) when relevant.</li>
+<li>Do not remove translation hooks from existing texts without reason.</li>
+<li>There’s also another layer of i18n support for user-specified plot texts via multi-language character vectors, e.g. <code>(en = "Plot title", fr = "Titre du graphique")</code>
+</li>
 </ul></div>
 <div class="section level2">
 <h2 id="data-and-examples">Data and examples<a class="anchor" aria-label="anchor" href="#data-and-examples"></a></h2>
