@@ -72,7 +72,8 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
 #' if requested, a benchmark column. It then calls `read_timeseries_excel()` to read the
 #' Excel file and `store_timeseries()` to cache the imported object under
 #' `var_name`, if supplied, otherwise `tolower(ticker)`. When `benchmark` is provided, a
-#' corresponding entry is added to `session$state$fund_index_map` to link the fund to its benchmark key.
+#' corresponding entry is added to `session$state$fund_index_map` to link the fund to
+#' its benchmark key.
 #'
 #' @seealso
 #' Provider wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
@@ -126,7 +127,7 @@ load_fund <- function(ticker,
             fundsr_abort(
                 msg = c(
                     glue("No .xls[x] file found for {ticker}."),
-                    glue("Looked for: {paste(sQuote(paths), collapse = ', ')}.")
+                    i = glue("Looked for: {paste(sQuote(paths), collapse = ', ')}.")
                 ),
                 class = "fundsr_io_error"
             )
@@ -135,7 +136,7 @@ load_fund <- function(ticker,
             fundsr_abort(
                 msg = c(
                     glue("Multiple .xls[x] files found for {ticker}."),
-                    glue("Matches: {paste(sQuote(paths[exists]), collapse = ', ')}.")
+                    i = glue("Matches: {paste(sQuote(paths[exists]), collapse = ', ')}.")
                 ),
                 class = "fundsr_io_error"
             )

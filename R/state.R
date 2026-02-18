@@ -47,7 +47,7 @@ fundsr_default_session <- function() {
 }
 
 fundsr_get_session <- function(session = NULL,
-                                 call = rlang::caller_env(n = 2L)) {
+                               call = rlang::caller_env(n = 2L)) {
     if (is.null(session)) {
         session <- fundsr_default_session()
     } else if (!inherits(session, "fundsr_session")) {

@@ -6,7 +6,9 @@ test_that("sessions isolate state and can share storage", {
     session_b <- fundsr_session(storage = storage_shared)
 
     add_data_loader(function() {
-        store_timeseries("foo", tibble::tibble(date = as.Date("2024-01-01"), x = 1), session = session_a)
+        store_timeseries("foo",
+                         tibble::tibble(date = as.Date("2024-01-01"), x = 1),
+                         session = session_a)
     }, session = session_a)
 
     run_data_loaders(session = session_a)

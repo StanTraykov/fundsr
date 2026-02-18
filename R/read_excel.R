@@ -15,7 +15,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         } else {
             stop_bad_arg(
                 "sheet",
-                "must be NULL, a sheet name (character), or a 1-based sheet index (numeric)."
+                "must be NULL, a sheet name (string), or a 1-based sheet index (numeric)."
             )
         }
     }
@@ -45,7 +45,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         stop_bad_arg(
             "file_path",
             c("must refer to an existing non-empty file.",
-              sprintf("file_path = %s.", sQuote(file_path)))
+              i = sprintf("file_path = %s.", sQuote(file_path)))
         )
     }
     raw_data <- readBin(file_path, what = "raw", n = file_size)
@@ -81,9 +81,9 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         fundsr_abort(
             msg = c(
                 "Could not parse the file as Excel or as valid SpreadsheetML (Excel 2003 XML).",
-                sprintf("file_path = %s.", sQuote(file_path)),
+                i = sprintf("file_path = %s.", sQuote(file_path)),
                 "Original readxl error:",
-                readxl_msg
+                x = readxl_msg
             ),
             class = c("fundsr_bad_data", "fundsr_excel_import_failed"),
             parent = df
@@ -100,7 +100,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         fundsr_abort(
             msg = c(
                 "No <ss:Worksheet> found in the XML.",
-                sprintf("file_path = %s.", sQuote(file_path))
+                i = sprintf("file_path = %s.", sQuote(file_path))
             ),
             class = c("fundsr_bad_data", "fundsr_excel_import_failed")
         )
@@ -115,9 +115,9 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
                 "sheet [if numeric]",
                 c(
                     "must be between 1 and the number of worksheets in the XML file.",
-                    sprintf("sheet = %d.", sheet_idx),
-                    sprintf("n_sheets = %d.", length(ws_nodes)),
-                    sprintf("file_path = %s.", sQuote(file_path))
+                    i = sprintf("sheet = %d.", sheet_idx),
+                    i = sprintf("n_sheets = %d.", length(ws_nodes)),
+                    i = sprintf("file_path = %s.", sQuote(file_path))
                 )
             )
         }
@@ -155,7 +155,7 @@ read_excel_or_xml <- function(file_path, sheet = NULL) {
         fundsr_abort(
             msg = c(
                 "No <ss:Table> found in the selected Worksheet.",
-                sprintf("file_path = %s.", sQuote(file_path))
+                i = sprintf("file_path = %s.", sQuote(file_path))
             ),
             class = c("fundsr_bad_data", "fundsr_excel_import_failed")
         )
@@ -305,8 +305,8 @@ read_timeseries_excel <- function(file,
             "date_col",
             c(
                 "did not match any cell; could not detect a header row.",
-                sprintf("file = %s.", sQuote(xl_file)),
-                sprintf("sheet = %s.", sQuote(sheet))
+                i = sprintf("file = %s.", sQuote(xl_file)),
+                i = sprintf("sheet = %s.", sQuote(sheet))
             )
         )
     }
@@ -319,8 +319,8 @@ read_timeseries_excel <- function(file,
                     "The detected header row (%d) is the last row; no data below it.",
                     row_header_idx
                 ),
-                sprintf("file = %s.", sQuote(xl_file)),
-                sprintf("sheet = %s.", sQuote(sheet))
+                i = sprintf("file = %s.", sQuote(xl_file)),
+                i = sprintf("sheet = %s.", sQuote(sheet))
             ),
             class = c("fundsr_bad_data", "fundsr_excel_import_failed")
         )
@@ -350,8 +350,8 @@ read_timeseries_excel <- function(file,
             "date_col",
             c(
                 "did not match any column after assigning header names.",
-                sprintf("file = %s.", sQuote(xl_file)),
-                sprintf("sheet = %s.", sQuote(sheet))
+                i = sprintf("file = %s.", sQuote(xl_file)),
+                i = sprintf("sheet = %s.", sQuote(sheet))
             )
         )
     }
@@ -393,11 +393,11 @@ read_timeseries_excel <- function(file,
         fundsr_abort(
             msg = c(
                 "Parsed dates are not unique.",
-                sprintf("n_unique = %d.", length(unique(data_raw$date))),
-                sprintf("n_rows   = %d.", nrow(data_raw)),
-                sprintf("examples = %s.", paste(ex, collapse = ", ")),
-                sprintf("file     = %s.", sQuote(xl_file)),
-                sprintf("sheet    = %s.", sQuote(sheet))
+                i = sprintf("n_unique = %d.", length(unique(data_raw$date))),
+                i = sprintf("n_rows   = %d.", nrow(data_raw)),
+                i = sprintf("examples = %s.", paste(ex, collapse = ", ")),
+                i = sprintf("file     = %s.", sQuote(xl_file)),
+                i = sprintf("sheet    = %s.", sQuote(sheet))
             ),
             class = c("fundsr_duplicate_dates", "fundsr_bad_data", "fundsr_excel_import_failed")
         )
@@ -445,10 +445,10 @@ read_timeseries_excel <- function(file,
         }
     }
 
-    fundsr_msg(glue(
+    fundsr_msg(c(v = glue(
         "{nrow(data_subset)} rows x {ncol(data_subset)} cols ",
         "(sheet='{sheet}', date col ='{date_col}')."
-    ), level = 2L)
+    )), level = 2L)
 
     data_subset
 }

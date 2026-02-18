@@ -72,7 +72,8 @@ The function builds a column-translation mapping from the fund NAV column and,
 if requested, a benchmark column. It then calls \code{read_timeseries_excel()} to read the
 Excel file and \code{store_timeseries()} to cache the imported object under
 \code{var_name}, if supplied, otherwise \code{tolower(ticker)}. When \code{benchmark} is provided, a
-corresponding entry is added to \code{session$state$fund_index_map} to link the fund to its benchmark key.
+corresponding entry is added to \code{session$state$fund_index_map} to link the fund to
+its benchmark key.
 }
 \seealso{
 Provider wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}

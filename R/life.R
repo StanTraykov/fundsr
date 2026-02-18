@@ -39,8 +39,8 @@ read_life_table <- function(directory, sex = c("f", "m"), look_back = 20) {
                 sprintf("No life table file found for sex %s in %s.",
                         sQuote(sex),
                         sQuote(directory)),
-                sprintf("Expected one of: %s.",
-                        paste(sQuote(basename(candidates)), collapse = ", "))
+                i = sprintf("Expected one of: %s.",
+                            paste(sQuote(basename(candidates)), collapse = ", "))
             ),
             class = "fundsr_io_error",
             arg   = "directory"
@@ -121,7 +121,7 @@ chance_alive <- function(lt, pop_name, age0) {
         fundsr_abort(
             msg = c(
                 "No baseline row found in `lt` for the requested population and age.",
-                sprintf("pop_name = %s, age0 = %s.", sQuote(pop_name), age0)
+                i = sprintf("pop_name = %s, age0 = %s.", sQuote(pop_name), age0)
             ),
             class = "fundsr_no_data",
             arg   = "lt"

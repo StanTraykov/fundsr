@@ -70,7 +70,7 @@ add_data_loader <- function(fun, session = NULL) {
     already <- any(vapply(fns, function(g) {
         if (!identical(typeof(g), "closure")) {
             fundsr_abort(
-                msg   = "Internal registry `session$state$data_loaders` must contain only closures.",
+                msg = "Internal registry `session$state$data_loaders` must contain only closures.",
                 class = "fundsr_bad_state"
             )
         }

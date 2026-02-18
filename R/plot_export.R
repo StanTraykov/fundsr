@@ -83,8 +83,9 @@ save_plot <- function(file,
             fundsr_abort(
                 msg = c(
                     "Cannot queue Inkscape export: path(s) contain ';'.",
-                    paste0("- ", bad_items),
-                    "Rename the affected file(s) (or export to a path without ';') and try again."
+                    set_names(sQuote(bad_items), "x"),
+                    i = paste("Rename the affected file(s) (or export to a path without ';')",
+                              "and try again.")
                 ),
                 class = c("fundsr_export_error", "fundsr_bad_path")
             )
@@ -163,7 +164,7 @@ export_pngs <- function(background = "white", session = NULL) {
     }
     inkscape <- find_inkscape()
     if (is.na(inkscape) || !nzchar(inkscape)) {
-        fundsr_msg("export_pngs: cannot find Inkscape", level = 0L)
+        fundsr_warn("export_pngs: cannot find Inkscape")
         return(invisible(NULL))
     }
     acts <- paste(st$inkscape_queue, collapse = ";")
@@ -176,8 +177,7 @@ export_pngs <- function(background = "white", session = NULL) {
     if (exit_status == 0) {
         clear_inkscape_queue(session = session)
     } else {
-        fundsr_msg(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"),
-                   level = 0L)
+        fundsr_warn(glue("export_pngs: Inkscape returned non-zero exit status: {exit_status}"))
     }
     exit_status
 }

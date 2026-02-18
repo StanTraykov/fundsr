@@ -33,7 +33,7 @@ read_es_aasmr <- function(directory) {
         fundsr_abort(
             msg = c(
                 sprintf("Eurostat aasmr file not found in %s.", sQuote(directory)),
-                sprintf("Expected file: %s.", sQuote(basename(file)))
+                i = sprintf("Expected file: %s.", sQuote(basename(file)))
             ),
             class = "fundsr_io_error",
             arg   = "directory"
@@ -154,7 +154,7 @@ chance_alive_es_aasmr <- function(es, geo, sex, age0, start_year = NULL) {
             fundsr_abort(
                 msg = c(
                     sprintf("Missing `mx` at baseline for projection %s.", proj),
-                    sprintf("Baseline cell: Year = %s, Age = %s.", start_year, age0)
+                    i = sprintf("Baseline cell: Year = %s, Age = %s.", start_year, age0)
                 ),
                 class = "fundsr_incomplete_data",
                 arg   = "es",

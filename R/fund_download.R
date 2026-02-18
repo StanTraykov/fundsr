@@ -48,7 +48,7 @@ download_fund_data <- function(redownload = FALSE) {
     )
 
     if (!length(named_urls)) {
-        fundsr_msg("No fund URLs configured (option 'fundsr.fund_urls' is empty).", level = 0L)
+        fundsr_warn("No fund URLs configured (option 'fundsr.fund_urls' is empty).")
         return(invisible(character()))
     }
 
@@ -58,7 +58,7 @@ download_fund_data <- function(redownload = FALSE) {
             fundsr_abort(
                 msg = c(
                     "Cannot download fund files: directory could not be created.",
-                    sprintf("path = %s.", sQuote(path))
+                    i = sprintf("path = %s.", sQuote(path))
                 ),
                 class = "fundsr_io_error"
             )
@@ -146,7 +146,7 @@ download_fund_data <- function(redownload = FALSE) {
             fundsr_abort(
                 msg = c(
                     "Cannot download: destination directory could not be created.",
-                    sprintf("destdir = %s.", sQuote(destdir))
+                    i = sprintf("destdir = %s.", sQuote(destdir))
                 ),
                 class = "fundsr_io_error"
             )
@@ -192,7 +192,7 @@ download_fund_data <- function(redownload = FALSE) {
                     fundsr_abort(
                         msg = c(
                             "Download succeeded but couldn't write the destination file.",
-                            sprintf("destfile = %s.", sQuote(destfile))
+                            i = sprintf("destfile = %s.", sQuote(destfile))
                         ),
                         class = "fundsr_io_error"
                     )
@@ -217,8 +217,8 @@ download_fund_data <- function(redownload = FALSE) {
 
     fundsr_abort(
         msg = c(
-            glue("Failed to download {sQuote(url)} to {sQuote(destfile)}"),
-            glue("    after {attempts} attempt(s)."),
+            glue("Failed to download {sQuote(url)} to {sQuote(destfile)}."),
+            i = glue("Attempted {attempts} time(s)."),
             details
         ),
         class  = "fundsr_download_failed",

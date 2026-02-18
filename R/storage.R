@@ -171,7 +171,7 @@ coalesce_join_suffixes <- function(df, suffixes = c(".x", ".y")) {
     if (length(conflicts) > 0L) {
         ex <- paste(conflicts, collapse = ", ")
         fundsr_abort(
-            msg   = glue::glue("Cannot coalesce: would overwrite existing column(s): {ex}."),
+            msg   = glue::glue("Cannot coalesce; would overwrite existing column(s): {ex}."),
             class = "fundsr_join_conflict"
         )
 
@@ -294,12 +294,11 @@ join_env <- function(env,
         offenders <- names(objs)[missing_by]
         stop_bad_arg(
             "env",
-            paste0(
-                "contains data frame(s) missing join key(s). Offenders: ",
-                paste(offenders, collapse = ", "),
-                ". Required key(s): ",
-                paste(by, collapse = ", "),
-                "."
+            c(
+                "contains data frame(s) without join key(s).",
+                i = paste0("offenders     = ", paste(offenders, collapse = ", "), "."),
+                i = paste0("required keys = ", paste(by, collapse = ", "), ".")
+
             )
         )
     }

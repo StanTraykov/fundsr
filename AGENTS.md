@@ -50,8 +50,8 @@ This repo uses a structured, consistent error/checking approach.
 
 ### Message style (house conventions)
 - Multi-line messages are normal and encouraged when they add structured context.
-- Prefer a **1-line headline** followed by a small set of **context lines** (often `key = value.`) that help debugging.
-- Use `msg = c(...)` for multi-line messages (they get collapsed with newlines).
+- Use `msg = c(...)` for multi-line messages with usual rlang::inform/warn/abort semantics (bullets)
+- Convention: `msg[[1]]` is the headline; `msg[2:]` are context lines (often `key = value`.).
 - Keep context scan-friendly: short lines, concrete values.
 - Include key parameters when relevant: `file`, `path`, `sheet`, `date_col`, `ext`, counts (`n_rows`, `n_unique`), and a few examples (first 3–5 offending values).
 - Avoid overly verbose narrative text unless it materially helps debugging.
@@ -64,9 +64,9 @@ if (sheet_idx > length(ws_nodes)) {
         "sheet [if numeric]",
         c(
             "must be between 1 and the number of worksheets in the XML file.",
-            sprintf("sheet     = %d.", sheet_idx),
-            sprintf("n_sheets  = %d.", length(ws_nodes)),
-            sprintf("file_path = %s.", sQuote(file_path))
+            i = sprintf("sheet     = %d.", sheet_idx),
+            i = sprintf("n_sheets  = %d.", length(ws_nodes)),
+            i = sprintf("file_path = %s.", sQuote(file_path))
         )
     )
 }
@@ -80,10 +80,10 @@ if (sheet_idx > length(ws_nodes)) {
         fundsr_abort(
             msg = c(
                 "Parsed dates are not unique.",
-                sprintf("n_unique = %d.", length(unique(out$date))),
-                sprintf("n_rows   = %d.", nrow(out)),
-                sprintf("examples = %s.", paste(ex, collapse = ", ")),
-                sprintf("path     = %s.", sQuote(path))
+                i = sprintf("n_unique = %d.", length(unique(out$date))),
+                i = sprintf("n_rows   = %d.", nrow(out)),
+                i = sprintf("examples = %s.", paste(ex, collapse = ", ")),
+                i = sprintf("path     = %s.", sQuote(path))
             ),
             class = c("fundsr_duplicate_dates", "fundsr_bad_data")
         )

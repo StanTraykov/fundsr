@@ -61,7 +61,7 @@ read_timeseries <- function(
             "file",
             c(
                 "must refer to an existing file; file does not exist.",
-                sprintf("path = %s.", sQuote(path))
+                i = sprintf("path = %s.", sQuote(path))
             )
         )
     }
@@ -75,7 +75,7 @@ read_timeseries <- function(
                 "line_filter",
                 c(
                     "matched no lines.",
-                    sprintf("path = %s.", sQuote(path))
+                    i = sprintf("path = %s.", sQuote(path))
                 )
             )
         }
@@ -97,8 +97,8 @@ read_timeseries <- function(
         stop_bad_arg(
             "file",
             c("must have extension .csv or .tsv/.txt/.tab (optionally .gz).",
-              sprintf("ext  = %s.", sQuote(ext)),
-              sprintf("path = %s.", sQuote(path)))
+              i = sprintf("ext  = %s.", sQuote(ext)),
+              i = sprintf("path = %s.", sQuote(path)))
         )
     )
     div <- switch(
@@ -123,8 +123,8 @@ read_timeseries <- function(
             "date_col",
             c(
                 "must name a column present in the input.",
-                sprintf("date_col = %s.", sQuote(date_col)),
-                sprintf("path     = %s.", sQuote(path))
+                i = sprintf("date_col = %s.", sQuote(date_col)),
+                i = sprintf("path     = %s.", sQuote(path))
             )
         )
     }
@@ -138,7 +138,7 @@ read_timeseries <- function(
                 d
             } else if (inherits(d, "POSIXt")) {
                 lubridate::as_date(d)
-            } else if (isTRUE(force_text_date)) {
+            } else if (force_text_date) {
                 parsed <- lubridate::parse_date_time(
                     as.character(d),
                     orders = orders,
@@ -171,8 +171,8 @@ read_timeseries <- function(
                 "date_col",
                 c(
                     "cannot be specified because renaming it to `date` would overwrite an",
-                    "existing `date` column in the input file.",
-                    sprintf("path = %s.", sQuote(path))
+                    ` ` = "existing `date` column in the input file.",
+                    i = sprintf("path = %s.", sQuote(path))
                 )
             )
         }
@@ -188,15 +188,19 @@ read_timeseries <- function(
         fundsr_abort(
             msg = c(
                 "Parsed dates are not unique.",
-                sprintf("n_unique = %d.", length(unique(out$date))),
-                sprintf("n_rows   = %d.", nrow(out)),
-                sprintf("examples = %s.", paste(ex, collapse = ", ")),
-                sprintf("path     = %s.", sQuote(path))
+                i = sprintf("n_unique = %d.", length(unique(out$date))),
+                i = sprintf("n_rows   = %d.", nrow(out)),
+                i = sprintf("examples = %s.", paste(ex, collapse = ", ")),
+                i = sprintf("path     = %s.", sQuote(path))
             ),
             class = c("fundsr_duplicate_dates", "fundsr_bad_data")
         )
     }
 
+    fundsr_msg(c(v = glue(
+        "{nrow(out)} rows x {ncol(out)} cols ",
+        "(date col ='{date_col}')."
+    )), level = 2L)
     out
 }
 
@@ -224,7 +228,7 @@ read_msci_tsv <- function(file) {
             "file",
             c(
                 "must refer to an existing file; file does not exist.",
-                sprintf("path = %s.", sQuote(path))
+                i = sprintf("path = %s.", sQuote(path))
             )
         )
     }
@@ -234,7 +238,7 @@ read_msci_tsv <- function(file) {
         fundsr_abort(
             msg = c(
                 "MSCI TSV parse failed: no data lines found.",
-                sprintf("path = %s.", sQuote(path))
+                i = sprintf("path = %s.", sQuote(path))
             ),
             class = "fundsr_bad_data"
         )

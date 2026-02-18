@@ -204,7 +204,7 @@ add_fund_urls <- function(fund_urls) {
                 msg = c(
                     sprintf("Existing option value of %s is invalid.",
                             sQuote("fundsr.fund_urls")),
-                    "Fix it with `fundsr_options(fund_urls = ...)`."
+                    i = "Fix it with `fundsr_options(fund_urls = ...)`."
                 ),
                 class  = "fundsr_bad_option",
                 parent = e

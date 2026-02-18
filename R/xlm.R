@@ -71,8 +71,8 @@ read_xlm_directory <- function(directory,
                 msg = c(
                     sprintf("Could not uniquely identify the XLM column in file %s.",
                             sQuote(file)),
-                    sprintf("Expected exactly 1 matching column; found %d: %s.",
-                            length(xlm_col), found)
+                    i = sprintf("Expected exactly 1 matching column; found %d: %s.",
+                                length(xlm_col), found)
                 ),
                 class = "fundsr_bad_data"
             )
