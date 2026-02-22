@@ -92,7 +92,7 @@ longer <- function(df,
 #'     }
 #' }
 #'
-#' #' Values are `NA` when an anchor cannot be found, current-date inputs are missing,
+#' Values are `NA` when an anchor cannot be found, current-date inputs are missing,
 #' or inputs are invalid for the chosen formula (e.g. any non-positive level for
 #' log returns, or non-finite / non-positive ratios for CAGR).
 #'

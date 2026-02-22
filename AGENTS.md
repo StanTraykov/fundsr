@@ -51,7 +51,7 @@ This repo uses a structured, consistent error/checking approach.
 ### Message style (house conventions)
 - Multi-line messages are normal and encouraged when they add structured context.
 - Use `msg = c(...)` for multi-line messages with usual rlang::inform/warn/abort semantics (bullets)
-- Convention: `msg[[1]]` is the headline; `msg[2:]` are context lines (often `key = value`.).
+- Convention: `msg[[1]]` is the headline; `msg[2:]` are context lines (often `key = value`).
 - Keep context scan-friendly: short lines, concrete values.
 - Include key parameters when relevant: `file`, `path`, `sheet`, `date_col`, `ext`, counts (`n_rows`, `n_unique`), and a few examples (first 3–5 offending values).
 - Avoid overly verbose narrative text unless it materially helps debugging.
@@ -121,7 +121,7 @@ If runtime/environment limits block checks, report what was attempted and why it
 - Plot texts (titles, labels) may be translated with `gettext()`.
 - When changing translatable texts, ensure consistency with i18n helpers and translation templates/catalogs (`po/`, `inst/po/`) when relevant.
 - Do not remove translation hooks from existing texts without reason.
-- There's also another layer of i18n support for user-specified plot texts via multi-language character vectors, e.g. `(en = "Plot title", fr = "Titre du graphique")`
+- There's also another layer of i18n support for user-specified plot texts via multi-language character vectors, e.g. `c(en = "Plot title", fr = "Titre du graphique")`
 
 ## Data and examples
 - Example/raw data helpers are under `data-raw/` and `inst/extdata/`.

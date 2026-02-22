@@ -7,7 +7,7 @@ phys_s_title <- c(en = "Global funds (phys. and swap)",
                   bg = "Глобални фондове (физ. и суап)")
 spyi_title <- c(en = "SPYI in comparison to a few global funds",
                 bg = "SPYI в сравнение с някои глобални фондове")
-spyi_funds <- c("spyy", "spyi", "vwce", "iusq", "webn", "ACWI-GR", "ACWI_IMI-GR", "GMLM-GR")
+spyi_funds <- c("spyy", "spyi", "vwce", "iusq", "webn", "scwx", "ACWI-GR", "ACWI_IMI-GR", "GMLM-GR")
 glob_fund_pal <- c("webn" = "red",           "iusq" = "#00BFC4",
                    "spyy" = "#89AE00",       "vwce" = "#600000",
                    "spyi" = "darkgreen",     "acwi" = "pink",
