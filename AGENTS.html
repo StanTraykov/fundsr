@@ -114,7 +114,7 @@
 <h3 id="message-style-house-conventions">Message style (house conventions)<a class="anchor" aria-label="anchor" href="#message-style-house-conventions"></a></h3>
 <ul><li>Multi-line messages are normal and encouraged when they add structured context.</li>
 <li>Use <code>msg = c(...)</code> for multi-line messages with usual rlang::inform/warn/abort semantics (bullets)</li>
-<li>Convention: <code>msg[[1]]</code> is the headline; <code>msg[2:]</code> are context lines (often <code>key = value</code>.).</li>
+<li>Convention: <code>msg[[1]]</code> is the headline; <code>msg[2:]</code> are context lines (often <code>key = value</code>).</li>
 <li>Keep context scan-friendly: short lines, concrete values.</li>
 <li>Include key parameters when relevant: <code>file</code>, <code>path</code>, <code>sheet</code>, <code>date_col</code>, <code>ext</code>, counts (<code>n_rows</code>, <code>n_unique</code>), and a few examples (first 3–5 offending values).</li>
 <li>Avoid overly verbose narrative text unless it materially helps debugging.</li>
@@ -184,7 +184,7 @@
 <ul><li>Plot texts (titles, labels) may be translated with <code><a href="https://rdrr.io/r/base/gettext.html" class="external-link">gettext()</a></code>.</li>
 <li>When changing translatable texts, ensure consistency with i18n helpers and translation templates/catalogs (<code>po/</code>, <code>inst/po/</code>) when relevant.</li>
 <li>Do not remove translation hooks from existing texts without reason.</li>
-<li>There’s also another layer of i18n support for user-specified plot texts via multi-language character vectors, e.g. <code>(en = "Plot title", fr = "Titre du graphique")</code>
+<li>There’s also another layer of i18n support for user-specified plot texts via multi-language character vectors, e.g. <code>c(en = "Plot title", fr = "Titre du graphique")</code>
 </li>
 </ul></div>
 <div class="section level2">
