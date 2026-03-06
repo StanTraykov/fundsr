@@ -31,13 +31,13 @@ no_filter <- NULL
 zoom_filter <- function(x) {
     x |> filter(date >= lubridate::as_date("2022-01-01"))
 }
-fund_palette <- c("#11569B",
+fund_palette <- c("#1156cB",
                   "#ED0000",
-                  "#009900",
+                  "#008800",
                   "#46B8DA",
                   "#DD7700",
-                  "#880088",
-                  "#206666",
+                  "#991188",
+                  "#22cc44",
                   "grey50",
                   "black")
 
