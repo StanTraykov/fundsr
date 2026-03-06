@@ -10,10 +10,7 @@ splice_series <- function(
     x_col <- check_string(x_col)
     y_col <- check_string(y_col)
     out_col <- check_string(out_col)
-    x_col <- rlang::as_string(rlang::ensym(x_col))
-    y_col <- rlang::as_string(rlang::ensym(y_col))
-    out_col <- rlang::as_string(rlang::ensym(out_col))
-    date_col <- rlang::as_string(rlang::ensym(date_col))
+    date_col <- check_string(date_col)
     splice_date <- lubridate::as_date(splice_date)
 
     if (is.na(splice_date)) {
