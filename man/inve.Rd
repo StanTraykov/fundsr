@@ -31,6 +31,7 @@ Other provider wrappers:
 \code{\link{hsbc}()},
 \code{\link{ishs}()},
 \code{\link{msci}()},
+\code{\link{spdj}()},
 \code{\link{spdr}()},
 \code{\link{ubs}()},
 \code{\link{vang}()},

@@ -29,6 +29,7 @@ Other provider wrappers:
 \code{\link{inve}()},
 \code{\link{ishs}()},
 \code{\link{msci}()},
+\code{\link{spdj}()},
 \code{\link{spdr}()},
 \code{\link{ubs}()},
 \code{\link{vang}()},

@@ -18,7 +18,10 @@ fundsr_options(
         spxs = "p500",
         c50 = "v50a",
         mse = "lysx",
-        ijpa = "eunn"
+        ijpa = "eunn",
+        sp5c = "lyp5",
+        esd = "esap",
+        ese = "esee"
     )
 )
 spec_list <- list()
@@ -68,6 +71,7 @@ fund_colors <- function(breaks,
 }
 
 net_idx_trans <- c(
+    # MSCI
     WORLD = "^WORLD Standard",
     ACWI = "^ACWI Standard",
     ACWI_IMI = "^ACWI IMI",
@@ -89,7 +93,9 @@ net_idx_trans <- c(
     S_AFR = "^SOUTH AFRICA Standard",
     EURSCVW = "^EUROPE SMALL CAP VALUE WEIGHTED",
     USASCVW = "^USA SMALL CAP VALUE WEIGHTED",
-    WSCV = "^WORLD SMALL VALUE"
+    WSCV = "^WORLD SMALL VALUE",
+    # S&P DJ
+    SP500 = "^S&P 500"
 )
 gross_idx_trans <- set_names(net_idx_trans, paste0(names(net_idx_trans), "-GR"))
 net_idx_trans_ccy <- function(ccy) {

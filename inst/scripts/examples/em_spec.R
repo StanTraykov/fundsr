@@ -62,8 +62,9 @@ add_fund_urls(c(
 
 add_data_loader(function() {
     ####### Indices #######
-    store_timeseries("emlm", read_timeseries("EMLM.csv"))
-    store_timeseries("emlm-gr", read_timeseries("EMLM-GR.csv"),
+    store_timeseries("emlm", read_timeseries("EMLM.csv") %>% mutate(date = date + 1))
+    store_timeseries("emlm-gr",
+                     read_timeseries("EMLM-GR.csv") %>% mutate(date = date + 1),
                      fund_index_map = set_names("EMLM", "EMLM-GR"))
     msci(var_name = "msci-nt",
          col_trans = net_idx_trans,

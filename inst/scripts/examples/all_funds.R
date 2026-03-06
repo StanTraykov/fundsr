@@ -32,10 +32,11 @@ download_fund_data(redownload = FALSE)
 
 # Get funds and indexes into a big tibble, handle two FTSE All-World data sources
 series <- build_all_series(late = "ftaw", join_precedence = c(".late", ".early")) |>
-    filter(date >= as_date("2012-12-29"))
+#    filter(date >= as_date("2012-12-29"))
+    filter(date >= as_date("2016-02-29"))
 
 # Calculate CAGR & log diffs vs both net & gross variants
-nd <- 365
+nd <- 183
 diffs <- map(
     list(net = "net", gross = "gross"),
     ~ roll_diffs(series, nd, get_fund_index_map(), index_level = .x, messages = NULL)

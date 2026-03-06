@@ -7,8 +7,8 @@
 
 ## Importing
 
+- add provider wrappers for S&P Dow Jones indices and BNP Paribas ETFs
 - validate imported time series have unique dates (also check for this during tracking difference calculations)
-- add a provider wrapper for BNP Paribas ETFs
 - support/fix numeric sheet selection for Excel 2003 XML files
 
 ## Examples

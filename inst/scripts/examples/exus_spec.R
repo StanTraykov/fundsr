@@ -1,5 +1,5 @@
 ##### Plots #####
-funds <- c("exus", "wexe", "ixua", "chsi", "WxUSA-GR")
+funds <- c("exus", "wexe", "ixua", "WxUSA-GR")
 title <- c(
     en = "World ex USA funds",
     bg = "Фондове World ex USA"
