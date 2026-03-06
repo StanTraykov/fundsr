@@ -322,6 +322,8 @@ run_plots <- function(roll_diffs,
                                 funds,
                                 variants) {
         plot_id <- paste0(plot_id, suffix)
+        lang <- get_lang()
+        lang_prefix <- if (lang == "en") "" else paste0(lang, "_")
         use_log <- variants == "log"
         data <- if (use_log) roll_diffs$log else roll_diffs$cagr
         if (!is.null(data_filter)) data <- data %>% data_filter()
@@ -333,7 +335,7 @@ run_plots <- function(roll_diffs,
                                 title_add = title,
                                 bmark_type = bmark_type,
                                 ...)
-        fname <- paste0(plot_id, if (use_log) "_L" else "")
+        fname <- paste0(lang_prefix, plot_id, if (use_log) "_L" else "")
         save_plot(fname, plot, width = width, height = height, session = session)
         plots_env[[fname]] <- plot
 
@@ -347,7 +349,7 @@ run_plots <- function(roll_diffs,
                                       funds_xet,
                                       gg_params = list(gg_params, add_gg_params),
                                       back_trans = TRUE)
-                xlm_fname <- paste0("xlm_", plot_id)
+                xlm_fname <- paste0(lang_prefix, "xlm_", plot_id)
                 save_plot(xlm_fname, xlm_plot, width = width, height = height, session = session)
                 plots_env[[xlm_fname]] <- xlm_plot
                 st$done_xlm_sets <- c(st$done_xlm_sets, key)
