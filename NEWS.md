@@ -8,12 +8,14 @@
 ## Importing
 
 - add provider wrappers for S&P Dow Jones indices and BNP Paribas ETFs
+- add `adjust_for_split()` helper (for use in `postprocess = `)
 - validate imported time series have unique dates (also check for this during tracking difference calculations)
 - support/fix numeric sheet selection for Excel 2003 XML files
 
 ## Examples
 
 - add cash funds
+- add US extended swap, PEA comparisons
 - fix Japan gross index import
 
 # fundsr 0.4.0

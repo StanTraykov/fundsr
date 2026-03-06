@@ -36,7 +36,7 @@ series <- build_all_series(late = "ftaw", join_precedence = c(".late", ".early")
     filter(date >= as_date("2016-02-29"))
 
 # Calculate CAGR & log diffs vs both net & gross variants
-nd <- 183
+nd <- 365
 diffs <- map(
     list(net = "net", gross = "gross"),
     ~ roll_diffs(series, nd, get_fund_index_map(), index_level = .x, messages = NULL)

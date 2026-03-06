@@ -124,6 +124,14 @@ add_data_loader(function() {
     amun("SP5C", benchmark = "SP500EUR", file = "NAV History_Amundi Core S&P 500 Swap UCITS ETF Acc_LU1135865084_09_12_2014.xlsx")
     amun("500U", benchmark = "SP500", file = "NAV History_Amundi S&P 500 Swap UCITS ETF USD Acc_LU1681049018_22_03_2018.xlsx")
     amun("PSP5", benchmark = "SP500EUR", file = "NAV History_Amundi PEA S&P 500 UCITS ETF Acc_FR0011871128_20_05_2014.xlsx")
-    bnpp("ESD", benchmark = "SP500")
-    bnpp("ESE", benchmark = "SP500EUR")
+    bnpp("ESD",
+         benchmark = "SP500",
+         postprocess = function(x) {
+             adjust_for_split(x, as_date("2018-06-08"), 15, "esd")
+         })
+    bnpp("ESE",
+         benchmark = "SP500EUR",
+         postprocess = function(x) {
+             adjust_for_split(x, as_date("2018-06-08"), 12, "ese")
+         })
 })

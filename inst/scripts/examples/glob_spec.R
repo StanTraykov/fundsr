@@ -82,7 +82,11 @@ add_data_loader(function() {
     vang("VWCE", benchmark = "FTAW", file = "Historical Prices - Vanguard FTSE All-World UCITS ETF (USD) Accumulating.xlsx")
     xtra("SCWX", benchmark = "ACWI", file = "HistoricalData-LU2903252349.xlsx")
     spdr("SPYY", benchmark = "ACWI")
-    spdr("SPYI", benchmark = "ACWI_IMI")
+    spdr("SPYI",
+         benchmark = "ACWI_IMI",
+         postprocess = function(x) {
+             adjust_for_split(x, as_date("2026-02-23"), 25, "spyi")
+         })
     ishs("IUSQ", benchmark = "ACWI")
     # Swap
     amun("ACWU", benchmark = "ACWI", file = "NAV History_Amundi MSCI All Country World UCITS ETF USD Acc_LU1829220133_03_10_2012.xlsx")
