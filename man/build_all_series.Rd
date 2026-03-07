@@ -40,6 +40,7 @@ s2 <- build_all_series(by = "date", late = "ftaw", join_precedence = c(".y", ".x
 \seealso{
 Other fund/index workflow functions: 
 \code{\link{add_data_loader}()},
+\code{\link{adjust_for_split}()},
 \code{\link{clear_data_loaders}()},
 \code{\link{clear_storage}()},
 \code{\link{get_storage}()},

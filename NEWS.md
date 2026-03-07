@@ -1,5 +1,9 @@
 # fundsr (development version)
 
+## Bugfix
+
+- export `adjust_for_split()`
+
 # fundsr 0.4.1
 
 ## General

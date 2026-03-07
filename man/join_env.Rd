@@ -71,6 +71,7 @@ via \code{join_precedence}.
 \seealso{
 Other fund/index workflow functions: 
 \code{\link{add_data_loader}()},
+\code{\link{adjust_for_split}()},
 \code{\link{build_all_series}()},
 \code{\link{clear_data_loaders}()},
 \code{\link{clear_storage}()},

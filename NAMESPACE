@@ -3,6 +3,7 @@
 export(add_data_loader)
 export(add_fund_index_map)
 export(add_fund_urls)
+export(adjust_for_split)
 export(amun)
 export(avan)
 export(bnpp)

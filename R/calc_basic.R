@@ -108,6 +108,44 @@ splice_series <- function(x,
     out
 }
 
+#' Adjust a time series for a stock split
+#'
+#' Adjusts values in a numeric column for observations strictly before a given
+#' split date by dividing them by the supplied split ratio.
+#'
+#' @param data A data frame.
+#' @param split_date A single date coercible via [lubridate::as_date()].
+#' @param split_ratio A positive numeric scalar giving the split ratio.
+#' @param value_col String. Name of the numeric column to adjust.
+#' @param date_col String. Name of the date column in `data`.
+#'
+#' @return
+#' A data frame with the same columns as `data`, where `value_col` has been
+#' adjusted for rows with dates strictly before `split_date`.
+#'
+#' @details
+#' The function parses `split_date` and `data[[date_col]]` with
+#' [lubridate::as_date()]. Rows with missing dates are left unchanged. Rows with
+#' unparseable non-missing dates trigger an error.
+#'
+#' For rows where the parsed date is strictly earlier than `split_date`, the
+#' values in `value_col` are divided by `split_ratio`.
+#'
+#' @examples
+#' df <- data.frame(
+#'   date = c("2024-01-01", "2024-01-02", "2024-01-03"),
+#'   price = c(300, 330, 120)
+#' )
+#'
+#' adjust_for_split(
+#'   data = df,
+#'   split_date = "2024-01-03",
+#'   split_ratio = 3,
+#'   value_col = "price"
+#' )
+#'
+#' @family fund/index workflow functions
+#' @export
 adjust_for_split <- function(data,
                              split_date,
                              split_ratio,
