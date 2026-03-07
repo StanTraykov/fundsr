@@ -1,12 +1,10 @@
-splice_series <- function(
-        x,
-        y,
-        x_col,
-        y_col,
-        out_col,
-        splice_date,
-        date_col = "date"
-) {
+splice_series <- function(x,
+                          y,
+                          x_col,
+                          y_col,
+                          out_col,
+                          splice_date,
+                          date_col = "date") {
     x_col <- check_string(x_col)
     y_col <- check_string(y_col)
     out_col <- check_string(out_col)
@@ -153,11 +151,12 @@ adjust_for_split <- function(data,
     }
 
     if (!is.numeric(data[[value_col]])) {
+        cl <- paste(class(data[[value_col]]), collapse = ", ")
         stop_bad_arg(
             "value_col",
             c(
                 "must refer to a numeric column.",
-                i = glue("Column {sQuote(value_col)} has class: {paste(class(data[[value_col]]), collapse = ', ')}.")
+                i = glue("Column {sQuote(value_col)} has class: {cl}.")
             ),
             call = call
         )
