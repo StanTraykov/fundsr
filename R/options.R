@@ -37,10 +37,10 @@ fundsr_get_option <- function(name, default) {
     if (!name %in% names(defs)) {
         stop_bad_arg(
             "name",
-            paste0(
-                "is an unknown fundsr option name: ",
-                sQuote(name), ".\n",
-                "Valid options: ", paste(sort(names(defs)), collapse = ", "), "."
+            c(
+                glue("is an unknown fundsr option name: {sQuote(name)}"),
+                i = "Valid options:",
+                " " = paste0(paste(sort(names(defs)), collapse = ", "), ".")
             )
         )
     }
