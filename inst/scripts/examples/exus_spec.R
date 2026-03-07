@@ -4,8 +4,22 @@ title <- c(
     en = "World ex USA funds",
     bg = "Фондове World ex USA"
 )
-gg_par <- fund_colors(breaks = funds,
-                      special = c(`WxUSA-GR` = "black"))
+
+funds2 <- c("exus", "wexe", "ixua", "chsi", "WxUSA-GR")
+title2 <- c(
+    en = "World ex USA funds (incl. low-res CHSI)",
+    bg = "Фондове World ex USA (вкл. CHSI в ниска резолюция)"
+)
+
+exus_pal <- c("exus" = "#1156cB",
+              "wexe" = "#ED0000",
+              "ixua" = "#008800",
+              "chsi" = "#991188",
+              "WxUSA-GR" = "black")
+
+exus_colors <- function(values = exus_pal, ...) {
+    scale_color_manual(values = values, na.value = "grey50", labels = toupper, ...)
+}
 
 # plot specification
 plot_spec <- tribble(
@@ -14,12 +28,20 @@ plot_spec <- tribble(
     ~funds,
 
     "exus", title, no_filter,
-    gg_par, std_w, std_h,
+    exus_colors(), std_w, std_h,
     funds,
 
     "exusZ", title, zoom_filter,
-    gg_par, std_w, std_h,
+    exus_colors(), std_w, std_h,
     funds,
+
+    "exus2", title2, no_filter,
+    exus_colors(), std_w, std_h,
+    funds2,
+
+    "exusZ", title2, zoom_filter,
+    exus_colors(), std_w, std_h,
+    funds2,
 )
 spec_list <- c(spec_list, list(plot_spec))
 
