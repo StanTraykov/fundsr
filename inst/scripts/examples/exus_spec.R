@@ -39,7 +39,7 @@ plot_spec <- tribble(
     exus_colors(), std_w, std_h,
     funds2,
 
-    "exusZ", title2, zoom_filter,
+    "exus2Z", title2, zoom_filter,
     exus_colors(), std_w, std_h,
     funds2,
 )
