@@ -48,8 +48,9 @@ add_fund_urls(c(
 
 add_data_loader(function() {
     ####### Indices #######
-    store_timeseries("dmlm", read_timeseries("DMLM.csv"))
-    store_timeseries("dmlm-gr", read_timeseries("DMLM-GR.csv"),
+    store_timeseries("dmlm", read_timeseries("DMLM.csv") |> mutate(date = date + 1))
+    store_timeseries("dmlm-gr",
+                     read_timeseries("DMLM-GR.csv") |> mutate(date = date + 1),
                      fund_index_map = set_names("DMLM", "DMLM-GR"))
     msci(col_trans = net_idx_trans,
          file = "MSCI-NT.xls")

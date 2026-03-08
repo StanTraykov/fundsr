@@ -25,10 +25,10 @@ spec_list <- c(spec_list, list(plot_spec))
 ##### Data #####
 add_data_loader(function() {
     ####### Indices #######
-    store_timeseries("solovr", read_timeseries("SOLOVR.csv"))
-    store_timeseries("soldly", read_timeseries("SOLDLY.csv"),
+    store_timeseries("solovr", read_timeseries("SOLOVR.csv") |> mutate(date = date + 1))
+    store_timeseries("soldly", read_timeseries("SOLDLY.csv") |> mutate(date = date + 1),
                      fund_index_map = set_names("SOLOVR", "SOLDLY"))
-    store_timeseries("sol85", read_timeseries("SOL85.csv"),
+    store_timeseries("sol85", read_timeseries("SOL85.csv") |> mutate(date = date + 1),
                      fund_index_map = set_names("SOLOVR", "SOL85"))
     ####### Funds #######
     xtra("XEON", benchmark = "SOL85", file = "HistoricalData-LU0290358497.xlsx")

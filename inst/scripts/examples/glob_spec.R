@@ -57,8 +57,9 @@ add_fund_urls(c(
 
 add_data_loader(function() {
     ####### Indices #######
-    store_timeseries("gmlm", read_timeseries("GMLM.csv"))
-    store_timeseries("gmlm-gr", read_timeseries("GMLM-GR.csv"),
+    store_timeseries("gmlm", read_timeseries("GMLM.csv") |> mutate(date = date + 1))
+    store_timeseries("gmlm-gr",
+                     read_timeseries("GMLM-GR.csv") |> mutate(date = date + 1),
                      fund_index_map = set_names("GMLM", "GMLM-GR"))
     store_timeseries("ftaw", read_timeseries("FTAW.csv"))
     msci(col_trans = net_idx_trans,

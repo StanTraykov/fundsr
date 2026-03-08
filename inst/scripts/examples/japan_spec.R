@@ -32,8 +32,9 @@ add_fund_urls(c(
 
 add_data_loader(function() {
     ####### Indices #######
-    store_timeseries("gbsjjpy", read_timeseries("GBSJJPY.csv"))
-    store_timeseries("gbsjjpy-gr", read_timeseries("GBSJJPY-GR.csv"),
+    store_timeseries("gbsjjpy", read_timeseries("GBSJJPY.csv") |> mutate(date = date + 1))
+    store_timeseries("gbsjjpy-gr",
+                     read_timeseries("GBSJJPY-GR.csv") |> mutate(date = date + 1),
                      fund_index_map = set_names("GBSJJPY", "GBSJJPY-GR"))
     msci(col_trans = net_idx_trans,
          file = "MSCI2-NT.xls")
