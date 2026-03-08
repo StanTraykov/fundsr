@@ -62,7 +62,8 @@ to numeric.</p>
 <span>  time_unit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ms"</span>, <span class="st">"s"</span>, <span class="st">"us"</span>, <span class="st">"ns"</span><span class="op">)</span>,</span>
 <span>  orders <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  force_text_date <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  line_filter <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  line_filter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ext_override <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -102,6 +103,11 @@ file by lines before parsing. If supplied, the file is read with
 regex must match both data lines and the header line, e.g.
 <code>"^[0-9]|^Date,"</code></p></dd>
 
+
+<dt id="arg-ext-override">ext_override<a class="anchor" aria-label="anchor" href="#arg-ext-override"></a></dt>
+<dd><p>File format to assume instead of the one implied by
+the filename extension: either <code>tsv</code>, <code>csv</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -111,7 +117,8 @@ regex must match both data lines and the header line, e.g.
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The reader is chosen by file extension: <code>.csv</code> uses <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code> and
 <code>.tsv</code>/<code>.tab</code>/<code>.txt</code> uses <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_tsv()</a></code>. Gzipped variants such as
-<code>.csv.gz</code> and <code>.tsv.gz</code> are also supported.</p>
+<code>.csv.gz</code> and <code>.tsv.gz</code> are also supported. This can be overriden by
+<code>ext_override</code>.</p>
 <p>The function assumes a date column exists (default: <code>date</code>). By default, if
 the date column looks numeric (i.e., coercion to numeric yields at least one
 non-<code>NA</code>), it is interpreted as a Unix timestamp (scaled by <code>time_unit</code>).
@@ -123,7 +130,6 @@ become <code>NA</code>).</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other fund/index file readers:
-<code><a href="read_msci_tsv.html">read_msci_tsv()</a></code>,
 <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code></p></div>
     </div>
 

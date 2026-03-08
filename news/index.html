@@ -47,10 +47,12 @@
 <h2 class="pkg-version" data-toc-text="development version" id="fundsr-development-version">fundsr (development version)<a class="anchor" aria-label="anchor" href="#fundsr-development-version"></a></h2>
 <div class="section level3">
 <h3 id="importing-development-version">Importing<a class="anchor" aria-label="anchor" href="#importing-development-version"></a></h3>
-<ul><li>
-<code><a href="../reference/load_fund.html">load_fund()</a></code> renamed to <code><a href="../reference/import_fund.html">import_fund()</a></code> (<code><a href="../reference/load_fund.html">load_fund()</a></code> remaining as a deprecated alias)</li>
-<li>
-<code>var_name</code> param is now optional for all provider wrappers (both fund and index)</li>
+<ul><li>add <code><a href="../reference/index_provider_wrappers.html">msci_tsv()</a></code> for importing MSCI TSV files</li>
+<li>rename <code><a href="../reference/load_fund.html">load_fund()</a></code> to <code><a href="../reference/import_fund.html">import_fund()</a></code> (<code><a href="../reference/load_fund.html">load_fund()</a></code> remaining as a deprecated alias)</li>
+<li>make <code>var_name</code> param optional for all provider wrappers (fund and index)</li>
+<li>remove <code>read_msci_tsv()</code> reader</li>
+<li>add <code>override_ext</code> param to <code><a href="../reference/read_timeseries.html">read_timeseries()</a></code>
+</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -210,7 +212,7 @@
 <li>Download and import helpers:
 <ul><li>Download configured fund files to a local data directory (<code><a href="../reference/download_fund_data.html">download_fund_data()</a></code>).</li>
 <li>Read generic delimited time series with epoch timestamps (<code><a href="../reference/read_timeseries.html">read_timeseries()</a></code>).</li>
-<li>Read MSCI TSV files (<code><a href="../reference/read_msci_tsv.html">read_msci_tsv()</a></code>) and import MSCI Excel data via <code><a href="../reference/index_provider_wrappers.html">msci()</a></code>.</li>
+<li>Read MSCI TSV files (<code>read_msci_tsv()</code>) and import MSCI Excel data via <code><a href="../reference/index_provider_wrappers.html">msci()</a></code>.</li>
 <li>Import fund NAV (and optional benchmark series) from Excel and register fund→benchmark mappings (<code><a href="../reference/load_fund.html">load_fund()</a></code>, <code><a href="../reference/get_fund_index_map.html">get_fund_index_map()</a></code>).</li>
 <li>Fallback parser for Excel 2003 XML (SpreadsheetML) files.</li>
 </ul></li>
