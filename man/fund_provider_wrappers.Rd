@@ -58,7 +58,9 @@ value is reused). Defaults to \code{\link[base:identity]{base::identity()}}.}
 default session when \code{NULL}.}
   }}
 
-\item{var_name}{Specify a custom variable name for the storage environment.}
+\item{var_name}{Optional custom storage key. Supported by all wrapper functions, either
+as a formal argument or via \code{...} passed to the underlying helper
+(\code{\link[=load_fund]{load_fund()}} or \code{\link[=store_timeseries]{store_timeseries()}}).}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.

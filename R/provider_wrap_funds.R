@@ -15,6 +15,9 @@
 #' @param retrieve_benchmark Logical. Also import the vendor-supplied benchmark series. Only
 #'   supported for NAV histories from Invesco, iShares, and Xtrackers ([inve()], [ishs()],
 #'   [xtra()]).
+#' @param var_name Optional custom storage key. Supported by all wrapper functions, either
+#'   as a formal argument or via `...` passed to the underlying helper
+#'   ([load_fund()] or [store_timeseries()]).
 #' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
 #'
 #' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
@@ -131,7 +134,6 @@ bnpp <- function(ticker, file = NULL, benchmark = NULL, ...) {
 }
 
 #' @describeIn fund_provider_wrappers Import an Avantis NAV history
-#' @param var_name Specify a custom variable name for the storage environment.
 #' @export
 avan <- function(ticker, file = NULL, benchmark = NULL, var_name = NULL, ...) {
     ticker_lower <- tolower(ticker)
