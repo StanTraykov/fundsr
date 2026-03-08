@@ -172,7 +172,10 @@ export_pngs <- function(background = "white", session = NULL) {
         acts <- paste0(glue("export-background:{shQuote(background)};"), acts)
     }
     args <- c(sprintf("--actions=%s", shQuote(acts)))
-    fundsr_msg(glue("Executing {shQuote(inkscape)} {paste(args, collapse = ' ')}"), level = 1L)
+    fundsr_msg(
+        c(i = glue("Executing {shQuote(inkscape)}"),
+          " " = paste(args, collapse = " ")),
+        level = 1L)
     exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
         clear_inkscape_queue(session = session)

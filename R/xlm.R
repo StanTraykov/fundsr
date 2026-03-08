@@ -55,6 +55,7 @@ read_xlm_directory <- function(directory,
     file_list <- list.files(path = directory, pattern = "\\.xlsx$",
                             full.names = TRUE)
     # Read and process each file
+    fundsr_msg(glue("Reading XLM directory: {sQuote(directory)}"), level = 1L)
     combined_data <- purrr::map_dfr(file_list, function(file) {
         # Read the file using read_xlsx_hdr
         data <- read_xlsx_hdr(file_path = file,
