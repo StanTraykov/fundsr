@@ -1,8 +1,7 @@
 library(tidyverse)
 library(fundsr)
 
-script_dir <- system.file("scripts/examples", package = "fundsr")
-stopifnot(nzchar(script_dir))
+script_dir <- system.file("scripts/examples", package = "fundsr", mustWork = TRUE)
 source_script <- function(...) {
     source(file.path(script_dir, ...))
 }

@@ -45,6 +45,21 @@
 #' Provider wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
 #' @family fund/index workflow functions
 #' @export
+#' @examples
+#' fundsr_options(data_dir = fundsr_example_data())
+#'
+#' load_fund("FNDA",
+#'           "FNDA.xlsx",
+#'           benchmark = "IDX1",
+#'           sheet = "historical",
+#'           date_col = "^As Of",
+#'           nav_col = "^NAV")
+#'
+#' load_fund("FNDB",
+#'           benchmark = "IDX1",
+#'           date_col = "^date",
+#'           nav_col = "^net asset val",
+#'           date_order = "mdy")
 load_fund <- function(ticker,
                       file = NULL,
                       sheet = 1,

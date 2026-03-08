@@ -44,3 +44,7 @@ reference:
   - title: "Survival-curve functions"
     contents:
       - has_concept("survival curve functions")
+
+  - title: "Example helpers"
+    contents:
+      - has_concept("example helpers")

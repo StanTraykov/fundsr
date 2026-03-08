@@ -3,8 +3,9 @@ library(tidyverse)
 library(fundsr)
 
 ##### Config ######
-common_config <- system.file("scripts/examples/common_config.R", package = "fundsr")
-stopifnot(nzchar(common_config))
+common_config <- system.file("scripts/examples/common_config.R",
+                             package = "fundsr",
+                             mustWork = TRUE)
 source(common_config)
 
 ##### Plot specs #####

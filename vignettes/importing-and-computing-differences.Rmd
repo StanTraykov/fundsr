@@ -193,7 +193,7 @@ fundsr reads fund NAVs and index levels from a single directory specified via th
 
 ```{r fundsr-opt}
 fundsr_options(
-    data_dir = system.file("extdata", package = "fundsr"),
+    data_dir = system.file("extdata", package = "fundsr", mustWork = TRUE),
     out_dir = "output", # where to store plots
     export_svg = TRUE, # output SVG (main workflow)
     

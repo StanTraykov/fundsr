@@ -84,6 +84,22 @@ Excel file and \code{store_timeseries()} to cache the imported object under
 corresponding entry is added to \code{session$state$fund_index_map} to link the fund to
 its benchmark key.
 }
+\examples{
+fundsr_options(data_dir = fundsr_example_data())
+
+load_fund("FNDA",
+          "FNDA.xlsx",
+          benchmark = "IDX1",
+          sheet = "historical",
+          date_col = "^As Of",
+          nav_col = "^NAV")
+
+load_fund("FNDB",
+          benchmark = "IDX1",
+          date_col = "^date",
+          nav_col = "^net asset val",
+          date_order = "mdy")
+}
 \seealso{
 Provider wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}
 
