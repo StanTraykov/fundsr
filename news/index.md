@@ -2,21 +2,47 @@
 
 ## fundsr (development version)
 
+### Importing
+
+- [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
+  renamed to
+  [`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md)
+  ([`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
+  remaining as a deprecated alias)
+- `var_name` param is now optional for all provider wrappers (both fund
+  and index)
+
+## fundsr 0.4.2
+
+### Bugfix
+
+- export
+  [`adjust_for_split()`](https://stantraykov.github.io/fundsr/reference/adjust_for_split.md)
+
+## fundsr 0.4.1
+
 ### General
 
 - add new structured error/state-checking framework; improve error
   messages, standardize classes
+- add session management to all functions requiring state via `session`
+  parameter (not specifying it uses a default session fo backwards
+  compatibility / simple use cases)
 
 ### Importing
 
+- add provider wrappers for S&P Dow Jones indices and BNP Paribas ETFs
+- add
+  [`adjust_for_split()`](https://stantraykov.github.io/fundsr/reference/adjust_for_split.md)
+  helper (for use in `postprocess =`)
 - validate imported time series have unique dates (also check for this
   during tracking difference calculations)
-- add a provider wrapper for BNP Paribas ETFs
 - support/fix numeric sheet selection for Excel 2003 XML files
 
 ### Examples
 
 - add cash funds
+- add US extended swap, PEA comparisons
 - fix Japan gross index import
 
 ## fundsr 0.4.0
@@ -24,8 +50,8 @@
 ### Breaking changes
 
 - reorder arguments in
-  [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md) to
-  match package convention
+  [`msci()`](https://stantraykov.github.io/fundsr/reference/index_provider_wrappers.md)
+  to match package convention
 
 ### Importing
 
@@ -189,28 +215,28 @@
   - Read MSCI TSV files
     ([`read_msci_tsv()`](https://stantraykov.github.io/fundsr/reference/read_msci_tsv.md))
     and import MSCI Excel data via
-    [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md).
+    [`msci()`](https://stantraykov.github.io/fundsr/reference/index_provider_wrappers.md).
   - Import fund NAV (and optional benchmark series) from Excel and
     register fund→benchmark mappings
     ([`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md),
     [`get_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/get_fund_index_map.md)).
   - Fallback parser for Excel 2003 XML (SpreadsheetML) files.
 - Convenience helpers for provider-specific Excel formats:
-  [`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md)
+  [`ishs()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (iShares),
-  [`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md)
+  [`spdr()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (SPDR),
-  [`xtra()`](https://stantraykov.github.io/fundsr/reference/xtra.md)
+  [`xtra()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (Xtrackers),
-  [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md)
+  [`amun()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (Amundi),
-  [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md)
+  [`inve()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (Invesco),
-  [`vang()`](https://stantraykov.github.io/fundsr/reference/vang.md)
+  [`vang()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (Vanguard),
-  [`ubs()`](https://stantraykov.github.io/fundsr/reference/ubs.md)
+  [`ubs()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (UBS),
-  [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md)
+  [`hsbc()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
   (HSBC).
 - [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
   combines multiple tables stored in an environment, with optional

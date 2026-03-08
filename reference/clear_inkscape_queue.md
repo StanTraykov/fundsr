@@ -1,13 +1,20 @@
 # Clear queued Inkscape exports
 
-Clears the internal Inkscape export queue (`.fundsr$inkscape_queue`),
-removing all queued export commands.
+Clears the internal Inkscape export queue
+(`session$state$inkscape_queue`), removing all queued export commands.
 
 ## Usage
 
 ``` r
-clear_inkscape_queue()
+clear_inkscape_queue(session = NULL)
 ```
+
+## Arguments
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
 
 ## Value
 

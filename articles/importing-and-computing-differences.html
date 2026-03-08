@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fundsr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Stanislav
 Traykov</h4>
             
-            <h4 data-toc-skip class="date">2026-02-16</h4>
+            <h4 data-toc-skip class="date">2026-03-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/importing-and-computing-differences.Rmd" class="external-link"><code>vignettes/importing-and-computing-differences.Rmd</code></a></small>
       <div class="d-none name"><code>importing-and-computing-differences.Rmd</code></div>
@@ -433,7 +433,7 @@ package. The plot output directory is set to <code>output</code> (option
 <code>fundsr.out_dir</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fundsr_options.html">fundsr_options</a></span><span class="op">(</span></span>
-<span>    data_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"fundsr"</span><span class="op">)</span>,</span>
+<span>    data_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"fundsr"</span>, mustWork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    out_dir <span class="op">=</span> <span class="st">"output"</span>, <span class="co"># where to store plots</span></span>
 <span>    export_svg <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># output SVG (main workflow)</span></span>
 <span>    </span>
@@ -559,10 +559,10 @@ index levels for IDX2, net return
 </h3>
 <p><code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> is the basic function for importing
 into the storage environment. It is most commonly used via wrappers such
-as <code><a href="../reference/load_fund.html">load_fund()</a></code> or the vendor-specific wrappers around
-<code><a href="../reference/load_fund.html">load_fund()</a></code>—handling Excel NAV histories from Amundi, HSBC,
-Invesco, iShares, SPDR, UBS, Vanguard, and Xtrackers. It is often called
-directly when importing CSV/TSV files or data frames.</p>
+as <code><a href="../reference/import_fund.html">import_fund()</a></code> or the vendor-specific wrappers around
+<code><a href="../reference/import_fund.html">import_fund()</a></code>—handling Excel NAV histories from Amundi,
+HSBC, Invesco, iShares, SPDR, UBS, Vanguard, and Xtrackers. It is often
+called directly when importing CSV/TSV files or data frames.</p>
 <p>The example fund GNDB has a NAV history in CSV format with dates
 expressed as milliseconds since the Unix epoch, a NAV column, and a
 Benchmark column that will not be imported from the fund file in this
@@ -587,7 +587,9 @@ import the benchmark later from its own file).</p>
 <span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">NAV</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>gndb <span class="op">=</span> <span class="va">NAV</span><span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gndb <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:</span></span>
+<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/GNDB.csv'</span></span></code></pre></div>
 <p>The variable name used for the storage environment
 (<code>var_name</code>) can be chosen arbitrarily and serves as the
 cache key. The <code>fund_index_map</code> parameter defines a mapping
@@ -633,7 +635,8 @@ table.</p>
 <span>    <span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX1-GR` <span class="op">=</span> <span class="st">"IDX1"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/IDX1.xlsx'</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
+<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX1.xlsx'</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span></span>
 <span>    var_name <span class="op">=</span> <span class="st">"idx2"</span>,</span>
@@ -641,17 +644,19 @@ table.</p>
 <span>                     <span class="fu"><a href="../reference/read_timeseries.html">read_timeseries</a></span><span class="op">(</span><span class="st">"IDX2G.csv"</span><span class="op">)</span>,</span>
 <span>                     by <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX2-GR` <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX2N.csv'</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX2G.csv'</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="load_fund">
-<code>load_fund()</code><a class="anchor" aria-label="anchor" href="#load_fund"></a>
+<h3 id="import_fund">
+<code>import_fund()</code><a class="anchor" aria-label="anchor" href="#import_fund"></a>
 </h3>
-<p><code><a href="../reference/load_fund.html">load_fund()</a></code> reads an Excel file with fund NAVs into the
-storage environment (it calls <code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> with an
-expression that uses <code><a href="../reference/read_timeseries_excel.html">read_timeseries_excel()</a></code>). It accepts
-<strong>regular expressions</strong> for identifying the date and NAV
-columns and a <code>sheet</code> (name or number) selecting the
+<p><code><a href="../reference/import_fund.html">import_fund()</a></code> reads an Excel file with fund NAVs into
+the storage environment (it calls <code><a href="../reference/store_timeseries.html">store_timeseries()</a></code> with
+an expression that uses <code><a href="../reference/read_timeseries_excel.html">read_timeseries_excel()</a></code>). It
+accepts <strong>regular expressions</strong> for identifying the date
+and NAV columns and a <code>sheet</code> (name or number) selecting the
 worksheet within the Excel workbook that contains the NAV history. The
 default values are <code>date_col = "^Date"</code>,
 <code>nav_col = "^NAV"</code>, and <code>sheet = 1</code> (which works
@@ -676,14 +681,15 @@ files). For this file, <code>sheet</code> and <code>date_col</code> are
 required; <code>nav_col</code> is optional because the default would
 still match.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"FNDA"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"FNDA"</span>,</span>
 <span>          <span class="st">"FNDA.xlsx"</span>,</span>
 <span>          benchmark <span class="op">=</span> <span class="st">"IDX1"</span>,</span>
 <span>          sheet <span class="op">=</span> <span class="st">"historical"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
-<p><code><a href="../reference/load_fund.html">load_fund()</a></code> recognizes proper Excel dates, improperly
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
+<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
+<p><code><a href="../reference/import_fund.html">import_fund()</a></code> recognizes proper Excel dates, improperly
 stored Excel dates, and a large number of text date formats used in fund
 files, but the date order (e.g. <code>"dmy"</code>, <code>"mdy"</code>,
 <code>"ymd"</code>) must be known for interpretation of text dates. It
@@ -692,21 +698,23 @@ histories.</p>
 <p>FNDB has text dates in MM/DD/YYYY format, so supplying
 <code>date_order = "mdy"</code> is required.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"FNDB"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"FNDB"</span>,</span>
 <span>          <span class="st">"FNDB.xlsx"</span>,</span>
 <span>          benchmark <span class="op">=</span> <span class="st">"IDX1"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
 <span>          date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
+<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
 <p>The final fund to load is GNDA.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"GNDA"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"GNDA"</span>,</span>
 <span>          <span class="st">"GNDA.xlsx"</span>,</span>
 <span>          benchmark <span class="op">=</span> <span class="st">"IDX2"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
 <span>          nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Reading Excel: '/tmp/Rtmp9scYrL/temp_libpath1b937280693/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
+<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-the-master-table">Building the master table<a class="anchor" aria-label="anchor" href="#building-the-master-table"></a>
@@ -968,12 +976,12 @@ same column name into different variables in the storage environment.
 When building the series, one can be designated <code>late</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load fund NAVs, uses default "acme" for column and storage variable</span></span>
-<span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"ACME"</span>,</span>
+<span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"ACME"</span>,</span>
 <span>          file <span class="op">=</span> <span class="st">"ACME1.xlsx"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"As Of"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># also load NAVs into "acme" column, but storage variable is "acme2"</span></span>
-<span><span class="fu"><a href="../reference/load_fund.html">load_fund</a></span><span class="op">(</span><span class="st">"ACME"</span>,</span>
+<span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"ACME"</span>,</span>
 <span>          var_name <span class="op">=</span> <span class="st">"acme2"</span>,</span>
 <span>          file <span class="op">=</span> <span class="st">"ACME2.xlsx"</span>,</span>
 <span>          date_col <span class="op">=</span> <span class="st">"As Of"</span><span class="op">)</span></span>
@@ -996,33 +1004,33 @@ When building the series, one can be designated <code>late</code>.</p>
 <div class="section level3">
 <h3 id="vendor-specific-wrappers">Vendor-specific wrappers<a class="anchor" aria-label="anchor" href="#vendor-specific-wrappers"></a>
 </h3>
-<p>The following wrappers use <code><a href="../reference/load_fund.html">load_fund()</a></code> to import Excel
+<p>The following wrappers use <code><a href="../reference/import_fund.html">import_fund()</a></code> to import Excel
 files provided by fund managers.</p>
 <ul>
 <li>
-<code><a href="../reference/amun.html">amun()</a></code> (Amundi)</li>
+<code><a href="../reference/fund_provider_wrappers.html">amun()</a></code> (Amundi)</li>
 <li>
-<code><a href="../reference/hsbc.html">hsbc()</a></code> (HSBC)</li>
+<code><a href="../reference/fund_provider_wrappers.html">hsbc()</a></code> (HSBC)</li>
 <li>
-<code><a href="../reference/inve.html">inve()</a></code> (Invesco)</li>
+<code><a href="../reference/fund_provider_wrappers.html">inve()</a></code> (Invesco)</li>
 <li>
-<code><a href="../reference/ishs.html">ishs()</a></code> (iShares)</li>
+<code><a href="../reference/fund_provider_wrappers.html">ishs()</a></code> (iShares)</li>
 <li>
-<code><a href="../reference/spdr.html">spdr()</a></code> (SPDR)</li>
+<code><a href="../reference/fund_provider_wrappers.html">spdr()</a></code> (SPDR)</li>
 <li>
-<code><a href="../reference/ubs.html">ubs()</a></code> (UBS)</li>
+<code><a href="../reference/fund_provider_wrappers.html">ubs()</a></code> (UBS)</li>
 <li>
-<code><a href="../reference/vang.html">vang()</a></code> (Vanguard)</li>
+<code><a href="../reference/fund_provider_wrappers.html">vang()</a></code> (Vanguard)</li>
 <li>
-<code><a href="../reference/xtra.html">xtra()</a></code> (Xtrackers)</li>
+<code><a href="../reference/fund_provider_wrappers.html">xtra()</a></code> (Xtrackers)</li>
 </ul>
 <p>Example usage:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/xtra.html">xtra</a></span><span class="op">(</span><span class="st">"EXUS"</span>, benchmark <span class="op">=</span> <span class="st">"WxUSA"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fund_provider_wrappers.html">xtra</a></span><span class="op">(</span><span class="st">"EXUS"</span>, benchmark <span class="op">=</span> <span class="st">"WxUSA"</span>,</span>
 <span>     file <span class="op">=</span> <span class="st">"HistoricalData-IE0006WW1TQ4.xlsx"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/xtra.html">xtra</a></span><span class="op">(</span><span class="st">"EXUS"</span>, benchmark <span class="op">=</span> <span class="st">"WxUSA"</span><span class="op">)</span> <span class="co"># assumes EXUS.xls[x]</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/fund_provider_wrappers.html">xtra</a></span><span class="op">(</span><span class="st">"EXUS"</span>, benchmark <span class="op">=</span> <span class="st">"WxUSA"</span><span class="op">)</span> <span class="co"># assumes EXUS.xls[x]</span></span></code></pre></div>
 <p><strong>Note:</strong> MSCI Excel downloads can be imported via
-<code><a href="../reference/msci.html">msci()</a></code>. MSCI TSV files (the download format for leveraged
+<code><a href="../reference/index_provider_wrappers.html">msci()</a></code>. MSCI TSV files (the download format for leveraged
 indices) can be read via <code><a href="../reference/read_msci_tsv.html">read_msci_tsv()</a></code>.</p>
 </div>
 <div class="section level3">
@@ -1042,8 +1050,8 @@ This allows for easy importing via the vendor-specific wrappers.</p>
 <code class="sourceCode R"><span><span class="co"># do not redownload existing files (the default)</span></span>
 <span><span class="fu"><a href="../reference/download_fund_data.html">download_fund_data</a></span><span class="op">(</span>redownload <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span> <span class="co"># assumes SPYY.xls[x]</span></span>
-<span><span class="fu"><a href="../reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/fund_provider_wrappers.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span> <span class="co"># assumes SPYY.xls[x]</span></span>
+<span><span class="fu"><a href="../reference/fund_provider_wrappers.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_all_series.html">build_all_series</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1055,7 +1063,7 @@ downloads. fundsr can retrieve this benchmark via the
 <code>retrieve_benchmark</code> parameter (supported for Invesco,
 iShares, and Xtrackers).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fund_provider_wrappers.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note:</strong> Benchmark series from fund files may have
 missing values. If available, data files from the index provider should
 be preferred.</p>
@@ -1066,10 +1074,10 @@ be preferred.</p>
 <p>Before joining the data frames in the storage environment,
 <code><a href="../reference/build_all_series.html">build_all_series()</a></code> calls <code><a href="../reference/run_data_loaders.html">run_data_loaders()</a></code>
 which invokes all registered as data loaders. Instead of directly
-calling <code><a href="../reference/store_timeseries.html">store_timeseries()</a></code>, <code><a href="../reference/load_fund.html">load_fund()</a></code>, etc.,
-more complex workflows should register functions as data loaders via
-<code><a href="../reference/add_data_loader.html">add_data_loader()</a></code>. A script setting up funds tracking MSCI
-ACWI could do the following.</p>
+calling <code><a href="../reference/store_timeseries.html">store_timeseries()</a></code>, <code><a href="../reference/import_fund.html">import_fund()</a></code>,
+etc., more complex workflows should register functions as data loaders
+via <code><a href="../reference/add_data_loader.html">add_data_loader()</a></code>. A script setting up funds tracking
+MSCI ACWI could do the following.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_fund_urls.html">add_fund_urls</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    IUSQ <span class="op">=</span> <span class="st">"https://..."</span>,</span>
@@ -1079,11 +1087,11 @@ ACWI could do the following.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/add_data_loader.html">add_data_loader</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># downloaded via download_fund_data()</span></span>
-<span>    <span class="fu"><a href="../reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
 <span>         retrieve_benchmark <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>    <span class="co"># manual download</span></span>
-<span>    <span class="fu"><a href="../reference/xtra.html">xtra</a></span><span class="op">(</span><span class="st">"SCWX"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">xtra</a></span><span class="op">(</span><span class="st">"SCWX"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
 <span>         file <span class="op">=</span> <span class="st">"HistoricalData-LU2903252349.xlsx"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note:</strong> Data loaders calling
@@ -1106,11 +1114,11 @@ the following code block.</p>
 <span>    <span class="fu"><a href="../reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span><span class="st">"ftaw"</span>, <span class="fu"><a href="../reference/read_timeseries.html">read_timeseries</a></span><span class="op">(</span><span class="st">"FTAW.csv"</span><span class="op">)</span>,</span>
 <span>                     fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`FTAW-GR` <span class="op">=</span> <span class="st">"FTAW"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="co"># MSCI ACWI and ACWI IMI</span></span>
-<span>    <span class="fu"><a href="../reference/msci.html">msci</a></span><span class="op">(</span>var_name <span class="op">=</span> <span class="st">"msci-nt"</span>,</span>
+<span>    <span class="fu"><a href="../reference/index_provider_wrappers.html">msci</a></span><span class="op">(</span>var_name <span class="op">=</span> <span class="st">"msci-nt"</span>,</span>
 <span>         col_trans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ACWI <span class="op">=</span> <span class="st">"^ACWI Standard"</span>,</span>
 <span>                       ACWI_IMI <span class="op">=</span> <span class="st">"^ACWI IMI"</span><span class="op">)</span>,</span>
 <span>         file <span class="op">=</span> <span class="st">"MSCI-NT.xls"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/msci.html">msci</a></span><span class="op">(</span>var_name <span class="op">=</span> <span class="st">"msci-gr"</span>,</span>
+<span>    <span class="fu"><a href="../reference/index_provider_wrappers.html">msci</a></span><span class="op">(</span>var_name <span class="op">=</span> <span class="st">"msci-gr"</span>,</span>
 <span>         col_trans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`ACWI-GR` <span class="op">=</span> <span class="st">"^ACWI Standard"</span>,</span>
 <span>                       `ACWI_IMI-GR` <span class="op">=</span> <span class="st">"^ACWI IMI"</span><span class="op">)</span>,</span>
 <span>         benchmarks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`ACWI-GR` <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
@@ -1118,17 +1126,17 @@ the following code block.</p>
 <span>         file <span class="op">=</span> <span class="st">"MSCI-GR.xls"</span><span class="op">)</span></span>
 <span>    <span class="co">### Funds</span></span>
 <span>    <span class="co"># manual downloads</span></span>
-<span>    <span class="fu"><a href="../reference/amun.html">amun</a></span><span class="op">(</span><span class="st">"WEBN"</span>, benchmark <span class="op">=</span> <span class="st">"GMLM"</span>,</span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">amun</a></span><span class="op">(</span><span class="st">"WEBN"</span>, benchmark <span class="op">=</span> <span class="st">"GMLM"</span>,</span>
 <span>         file <span class="op">=</span> <span class="st">"NAV History_Amundi_WEBN.xlsx"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/vang.html">vang</a></span><span class="op">(</span><span class="st">"VWCE"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span>,</span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">vang</a></span><span class="op">(</span><span class="st">"VWCE"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span>,</span>
 <span>         file <span class="op">=</span> <span class="st">"Vanguard FTSE All-World UCITS.xlsx"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/xtra.html">xtra</a></span><span class="op">(</span><span class="st">"SCWX"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">xtra</a></span><span class="op">(</span><span class="st">"SCWX"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>,</span>
 <span>         file <span class="op">=</span> <span class="st">"HistoricalData-LU2903252349.xlsx"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/inve.html">inve</a></span><span class="op">(</span><span class="st">"FWRA"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span><span class="op">)</span> <span class="co"># "FWRA.xls[x]" assumed</span></span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">inve</a></span><span class="op">(</span><span class="st">"FWRA"</span>, benchmark <span class="op">=</span> <span class="st">"FTAW"</span><span class="op">)</span> <span class="co"># "FWRA.xls[x]" assumed</span></span>
 <span>    <span class="co"># downloaded via download_fund_data()</span></span>
-<span>    <span class="fu"><a href="../reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/spdr.html">spdr</a></span><span class="op">(</span><span class="st">"SPYI"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI_IMI"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/ishs.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">spdr</a></span><span class="op">(</span><span class="st">"SPYY"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">spdr</a></span><span class="op">(</span><span class="st">"SPYI"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI_IMI"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="../reference/fund_provider_wrappers.html">ishs</a></span><span class="op">(</span><span class="st">"IUSQ"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>Call all registered data loaders and build the master series table by
 joining all objects in the storage environment.</p>
@@ -1200,22 +1208,22 @@ calls.</p>
 <span>                        <span class="va">n_days</span>,</span>
 <span>                        <span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                        index_level <span class="op">=</span> <span class="st">"net"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Roll diffs gndb -&gt; IDX2</span></span>
-<span><span class="co">#&gt; Roll diffs IDX1-GR -&gt; IDX1</span></span>
-<span><span class="co">#&gt; Roll diffs IDX2-GR -&gt; IDX2</span></span>
-<span><span class="co">#&gt; Roll diffs fnda -&gt; IDX1</span></span>
-<span><span class="co">#&gt; Roll diffs fndb -&gt; IDX1</span></span>
-<span><span class="co">#&gt; Roll diffs gnda -&gt; IDX2</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs gndb -&gt; IDX2</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs IDX1-GR -&gt; IDX1</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs IDX2-GR -&gt; IDX2</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs fnda -&gt; IDX1</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs fndb -&gt; IDX1</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs gnda -&gt; IDX2</span></span>
 <span><span class="va">diffs_gross</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/roll_diffs.html">roll_diffs</a></span><span class="op">(</span><span class="va">master_series</span>,</span>
 <span>                          <span class="va">n_days</span>,</span>
 <span>                          <span class="fu"><a href="../reference/get_fund_index_map.html">get_fund_index_map</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                          index_level <span class="op">=</span> <span class="st">"gross"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Roll diffs gndb -&gt; IDX2-GR</span></span>
-<span><span class="co">#&gt; Skipping IDX1-GR: self-tracking</span></span>
-<span><span class="co">#&gt; Skipping IDX2-GR: self-tracking</span></span>
-<span><span class="co">#&gt; Roll diffs fnda -&gt; IDX1-GR</span></span>
-<span><span class="co">#&gt; Roll diffs fndb -&gt; IDX1-GR</span></span>
-<span><span class="co">#&gt; Roll diffs gnda -&gt; IDX2-GR</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs gndb -&gt; IDX2-GR</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Skipping IDX1-GR: self-tracking</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Skipping IDX2-GR: self-tracking</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs fnda -&gt; IDX1-GR</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs fndb -&gt; IDX1-GR</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Roll diffs gnda -&gt; IDX2-GR</span></span></code></pre></div>
 <p>The following code performs the same calculation, avoiding repetition
 and silencing <code><a href="../reference/roll_diffs.html">roll_diffs()</a></code> via the <code>messages</code>
 parameter. Differences can be accessed via <code>diffs$net$cagr</code>,
@@ -1286,7 +1294,7 @@ parameter. Differences can be accessed via <code>diffs$net$cagr</code>,
 <span>                use_log <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                bmark_type <span class="op">=</span> <span class="st">"net"</span>,</span>
 <span>                gg_params <span class="op">=</span> <span class="va">gg</span><span class="op">)</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs net benchmark</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark</span></span></code></pre></div>
 <p><img src="importing-and-computing-differences_files/figure-html/plots-1.png" class="r-plt" alt="" width="98%"></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_roll_diffs.html">plot_roll_diffs</a></span><span class="op">(</span><span class="va">diffs_net</span><span class="op">$</span><span class="va">log</span>,</span>
@@ -1295,7 +1303,7 @@ parameter. Differences can be accessed via <code>diffs$net$cagr</code>,
 <span>                use_log <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                bmark_type <span class="op">=</span> <span class="st">"net"</span>,</span>
 <span>                gg_params <span class="op">=</span> <span class="va">gg</span><span class="op">)</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs net benchmark</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> plot_roll_diffs: 365d rolling log-return differences vs net benchmark</span></span></code></pre></div>
 <p><img src="importing-and-computing-differences_files/figure-html/plots-2.png" class="r-plt" alt="" width="98%"></p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_roll_diffs.html">plot_roll_diffs</a></span><span class="op">(</span><span class="va">diffs_gross</span><span class="op">$</span><span class="va">cagr</span>,</span>
@@ -1304,7 +1312,7 @@ parameter. Differences can be accessed via <code>diffs$net$cagr</code>,
 <span>                use_log <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                bmark_type <span class="op">=</span> <span class="st">"gross"</span>,</span>
 <span>                gg_params <span class="op">=</span> <span class="va">gg</span><span class="op">)</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling CAGR differences vs gross benchmark</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> plot_roll_diffs: 365d rolling CAGR differences vs gross benchmark</span></span></code></pre></div>
 <p><img src="importing-and-computing-differences_files/figure-html/plots-3.png" class="r-plt" alt="" width="98%"></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_roll_diffs.html">plot_roll_diffs</a></span><span class="op">(</span><span class="va">diffs_gross</span><span class="op">$</span><span class="va">log</span>,</span>
@@ -1313,7 +1321,8 @@ parameter. Differences can be accessed via <code>diffs$net$cagr</code>,
 <span>                use_log <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                bmark_type <span class="op">=</span> <span class="st">"gross"</span>,</span>
 <span>                gg_params <span class="op">=</span> <span class="va">gg</span><span class="op">)</span></span>
-<span><span class="co">#&gt; plot_roll_diffs: 365d rolling log-return differences vs gross benchmark</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> plot_roll_diffs: 365d rolling log-return differences vs gross</span></span>
+<span><span class="co">#&gt; benchmark</span></span></code></pre></div>
 <p><img src="importing-and-computing-differences_files/figure-html/plots-4.png" class="r-plt" alt="" width="98%"></p>
 <p>See <code><a href="../reference/run_plots.html">run_plots()</a></code> and the examples under
 <code>scripts/examples</code> for a way to generate plots via flexible

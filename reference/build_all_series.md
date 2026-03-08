@@ -9,7 +9,7 @@ and sorts the result by `by`.
 ## Usage
 
 ``` r
-build_all_series(reload = FALSE, by = "date", ...)
+build_all_series(reload = FALSE, by = "date", session = NULL, ...)
 ```
 
 ## Arguments
@@ -22,6 +22,11 @@ build_all_series(reload = FALSE, by = "date", ...)
 - by:
 
   Character vector of column names to join by and sort by.
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
 
 - ...:
 
@@ -41,11 +46,12 @@ This function is a convenience wrapper for the most common workflow.
 
 Other fund/index workflow functions:
 [`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md),
+[`adjust_for_split()`](https://stantraykov.github.io/fundsr/reference/adjust_for_split.md),
 [`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md),
 [`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md),
 [`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md),
+[`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md),
 [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
-[`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md),
 [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md),
 [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
 

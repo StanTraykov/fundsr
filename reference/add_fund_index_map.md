@@ -1,13 +1,13 @@
 # Add to fund-index map
 
-Merges fund-index pairs into the fund-index map
-(`.fundsr$fund_index_map`). Existing entries with the same names are
-replaced.
+Merges fund-index pairs into the session fund-index map
+(`session$state$fund_index_map`). Existing entries with the same names
+are replaced.
 
 ## Usage
 
 ``` r
-add_fund_index_map(fund_index_map)
+add_fund_index_map(fund_index_map, session = NULL)
 ```
 
 ## Arguments
@@ -15,8 +15,13 @@ add_fund_index_map(fund_index_map)
 - fund_index_map:
 
   Named character vector of fund-index pairs to merge into
-  `.fundsr$fund_index_map`. Names are fund identifiers; values are index
-  identifiers.
+  `session$state$fund_index_map`. Names are fund identifiers; values are
+  index identifiers.
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
 
 ## Value
 

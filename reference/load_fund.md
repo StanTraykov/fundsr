@@ -1,10 +1,7 @@
-# Load a fund's NAV data and optionally register its benchmark mapping
+# Deprecated alias for [`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md).
 
-Imports a fund's NAV time series from an Excel file and stores it in the
-storage environment via
-[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md).
-Optionally, a benchmark column can also be imported, and a fund/index
-mapping is recorded in `.fundsr$fund_index_map`.
+`load_fund()` has been renamed to
+[`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md).
 
 ## Usage
 
@@ -20,7 +17,7 @@ load_fund(
   retrieve_benchmark = FALSE,
   date_order = "dmy",
   var_name = NULL,
-  data_sheet = NULL,
+  data_sheet = lifecycle::deprecated(),
   ...
 )
 ```
@@ -79,50 +76,13 @@ load_fund(
 
 - ...:
 
-  Additional arguments passed to
-  [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md),
-  such as `overwrite` or `postprocess`.
+  Arguments passed on to
+  [`import_fund`](https://stantraykov.github.io/fundsr/reference/import_fund.md)
+
+  :   
 
 ## Value
 
 Invisibly returns `NULL`. The imported data are stored in
-`.fundsr_storage` under `tolower(ticker)`. A fund/index mapping is
-recorded in `.fundsr$fund_index_map` when `benchmark` is supplied.
-
-## Details
-
-If `file` is `NULL`, the function searches `fundsr.data_dir` for exactly
-one of `paste0(toupper(ticker), ".xlsx")` or
-`paste0(toupper(ticker), ".xls")`.
-
-The function builds a column-translation mapping from the fund NAV
-column and, if requested, a benchmark column. It then calls
-[`read_timeseries_excel()`](https://stantraykov.github.io/fundsr/reference/read_timeseries_excel.md)
-to read the Excel file and
-[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
-to cache the imported object under `var_name`, if supplied, otherwise
-`tolower(ticker)`. When `benchmark` is provided, a corresponding entry
-is added to `.fundsr$fund_index_map` to link the fund to its benchmark
-key.
-
-## See also
-
-Provider wrappers:
-[`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md),
-[`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md),
-[`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md),
-[`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md),
-[`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md),
-[`ubs()`](https://stantraykov.github.io/fundsr/reference/ubs.md),
-[`vang()`](https://stantraykov.github.io/fundsr/reference/vang.md),
-[`xtra()`](https://stantraykov.github.io/fundsr/reference/xtra.md)
-
-Other fund/index workflow functions:
-[`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md),
-[`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md),
-[`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md),
-[`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md),
-[`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md),
-[`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
-[`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md),
-[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
+`session$storage` under `tolower(ticker)`. A fund/index mapping is
+recorded in `session$state$fund_index_map` when `benchmark` is supplied.

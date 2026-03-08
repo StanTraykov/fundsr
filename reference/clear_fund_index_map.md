@@ -1,12 +1,19 @@
 # Clear fund-index map
 
-Clears the fund-index map stored in `.fundsr$fund_index_map`.
+Clears the fund-index map stored in `session$state$fund_index_map`.
 
 ## Usage
 
 ``` r
-clear_fund_index_map()
+clear_fund_index_map(session = NULL)
 ```
+
+## Arguments
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
 
 ## Value
 

@@ -6,7 +6,7 @@ invoking Inkscape to produce PNG files from previously saved SVGs.
 ## Usage
 
 ``` r
-export_pngs(background = "white")
+export_pngs(background = "white", session = NULL)
 ```
 
 ## Arguments
@@ -17,6 +17,11 @@ export_pngs(background = "white")
   `export-background:{...}` action. If `NULL`, no background action is
   added. Defaults to `"white"`.
 
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
+
 ## Value
 
 The exit status returned by Inkscape (0 indicates success). Invisibly
@@ -25,7 +30,7 @@ returns `NULL` if the queue is empty or if Inkscape cannot be located.
 ## Details
 
 This function reads queued Inkscape actions from
-`.fundsr$inkscape_queue`, optionally prepends an
+`session$state$inkscape_queue`, optionally prepends an
 `export-background:{background}` action, and executes Inkscape using
 [`base::system2()`](https://rdrr.io/r/base/system2.html).
 

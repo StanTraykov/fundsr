@@ -92,6 +92,8 @@ corresponding `fundsr.*` option is left unchanged.
 to add/update entries in `fundsr.fund_urls`.
 
 Other config functions:
+[`fundsr_default_session()`](https://stantraykov.github.io/fundsr/reference/fundsr_default_session.md),
+[`fundsr_session()`](https://stantraykov.github.io/fundsr/reference/fundsr_session.md),
 [`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)
 
 ## Examples

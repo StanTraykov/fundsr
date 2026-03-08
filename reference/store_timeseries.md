@@ -1,11 +1,11 @@
 # Store a cached object in the package storage environment
 
 Evaluate an expression and cache its result in the package storage
-environment (`.fundsr_storage`) under a given name. The expression is
+environment (`session$storage`) under a given name. The expression is
 only re-evaluated when the cached value is missing, when
 `overwrite = TRUE`, or when the global option `fundsr.reload` is `TRUE`.
 Optionally merges additional fund/index mappings into
-`.fundsr$fund_index_map`.
+`session$state$fund_index_map`.
 
 ## Usage
 
@@ -15,7 +15,8 @@ store_timeseries(
   expr,
   fund_index_map = NULL,
   overwrite = FALSE,
-  postprocess = identity
+  postprocess = identity,
+  session = NULL
 )
 ```
 
@@ -23,7 +24,7 @@ store_timeseries(
 
 - var_name:
 
-  Character scalar. Name of the variable to store in `.fundsr_storage`.
+  Character scalar. Name of the variable to store in `session$storage`.
 
 - expr:
 
@@ -33,8 +34,8 @@ store_timeseries(
 - fund_index_map:
 
   Optional named vector of fund/index pairs to merge into
-  `.fundsr$fund_index_map`. Names are used as keys, values should be
-  indices.
+  `session$state$fund_index_map`. Names are used as keys, values should
+  be indices.
 
 - overwrite:
 
@@ -48,6 +49,11 @@ store_timeseries(
   reused). Defaults to
   [`base::identity()`](https://rdrr.io/r/base/identity.html).
 
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
+
 ## Value
 
 Invisibly returns `NULL` (called for its side effects).
@@ -56,7 +62,7 @@ Invisibly returns `NULL` (called for its side effects).
 
 `expr` is evaluated in the environment where `store_timeseries()` is
 called (i.e. the caller's environment), then assigned into
-`.fundsr_storage` under `var_name`.
+`session$storage` under `var_name`.
 
 Caching behavior is controlled by:
 
@@ -64,20 +70,21 @@ Caching behavior is controlled by:
 
 - `options(fundsr.reload = TRUE)` (force recomputation globally), or
 
-- absence of `var_name` in `.fundsr_storage` (compute once).
+- absence of `var_name` in `session$storage` (compute once).
 
 If `fund_index_map` is supplied, it is merged into
-`.fundsr$fund_index_map` via name-based assignment: existing entries
-with the same names are replaced.
+`session$state$fund_index_map` via name-based assignment: existing
+entries with the same names are replaced.
 
 ## See also
 
 Other fund/index workflow functions:
 [`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md),
+[`adjust_for_split()`](https://stantraykov.github.io/fundsr/reference/adjust_for_split.md),
 [`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md),
 [`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md),
 [`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md),
 [`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md),
+[`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md),
 [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
-[`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md),
 [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)

@@ -89,8 +89,8 @@ The annualized tracking differences are:
   \left(\frac{f_t}{f\_{t_0}}\right)^{annual\\days/\Delta} -
   \left(\frac{i_t}{i\_{t_0}}\right)^{annual\\days/\Delta} \$\$
 
-\#' Values are `NA` when an anchor cannot be found, current-date inputs
-are missing, or inputs are invalid for the chosen formula (e.g. any
+Values are `NA` when an anchor cannot be found, current-date inputs are
+missing, or inputs are invalid for the chosen formula (e.g. any
 non-positive level for log returns, or non-finite / non-positive ratios
 for CAGR).
 

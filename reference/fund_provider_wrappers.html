@@ -115,7 +115,7 @@ default session when <code>NULL</code>.</p></dd>
 <dt id="arg-var-name">var_name<a class="anchor" aria-label="anchor" href="#arg-var-name"></a></dt>
 <dd><p>Optional custom storage key. Supported by all wrapper functions, either
 as a formal argument or via <code>...</code> passed to the underlying helper
-(<code><a href="load_fund.html">load_fund()</a></code> or <code><a href="store_timeseries.html">store_timeseries()</a></code>).</p></dd>
+(<code><a href="import_fund.html">import_fund()</a></code> or <code><a href="store_timeseries.html">store_timeseries()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -124,11 +124,11 @@ as a formal argument or via <code>...</code> passed to the underlying helper
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Most fund importers are wrappers around <code><a href="load_fund.html">load_fund()</a></code> (which uses <code><a href="store_timeseries.html">store_timeseries()</a></code> and
+    <p>Most fund importers are wrappers around <code><a href="import_fund.html">import_fund()</a></code> (which uses <code><a href="store_timeseries.html">store_timeseries()</a></code> and
 <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>). Some use <code><a href="store_timeseries.html">store_timeseries()</a></code> directly, coupled with a reader like
 <code><a href="read_timeseries.html">read_timeseries()</a></code> or <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>. Extra arguments (<code>...</code>) are passed to
-<code><a href="store_timeseries.html">store_timeseries()</a></code>. For wrappers built on <code><a href="load_fund.html">load_fund()</a></code>, <code>...</code> is first passed through
-<code><a href="load_fund.html">load_fund()</a></code>.</p>
+<code><a href="store_timeseries.html">store_timeseries()</a></code>. For wrappers built on <code><a href="import_fund.html">import_fund()</a></code>, <code>...</code> is first passed through
+<code><a href="import_fund.html">import_fund()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
@@ -146,7 +146,7 @@ as a formal argument or via <code>...</code> passed to the underlying helper
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="index_provider_wrappers.html">Index provider wrappers</a>, <code><a href="load_fund.html">load_fund()</a></code>, <code><a href="store_timeseries.html">store_timeseries()</a></code>,
+    <div class="dont-index"><p><a href="index_provider_wrappers.html">Index provider wrappers</a>, <code><a href="import_fund.html">import_fund()</a></code>, <code><a href="store_timeseries.html">store_timeseries()</a></code>,
 <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>, <code><a href="read_timeseries.html">read_timeseries()</a></code></p></div>
     </div>
 

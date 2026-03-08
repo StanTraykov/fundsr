@@ -87,12 +87,12 @@ Populate funds directory (download URLs listed in option
 
 ``` r
 download_fund_data() # downloads as SPYY.xlsx, IUSQ.xls
-#> Downloading 'IUSQ'
-#> Downloading 'SPYY'
+#> ℹ Downloading 'IUSQ'
+#> ℹ Downloading 'SPYY'
 ```
 
 Register data loader calling vendor-specific wrappers around
-[`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md).
+[`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md).
 
 ``` r
 add_data_loader(function() {
@@ -108,15 +108,15 @@ Get fund and index data into a master table.
 ``` r
 series <- build_all_series() %>%
     filter(date >= as_date("2012-12-29"))
-#> Reading Excel: 'data/funds/SPYY.xlsx'
-#> Reading Excel: 'data/funds/IUSQ.xls'
+#> ℹ Reading Excel: 'data/funds/SPYY.xlsx'
+#> ℹ Reading Excel: 'data/funds/IUSQ.xls'
 ```
 
 Check contents.
 
 ``` r
 series %>% filter(date >= as_date("2015-04-03"))
-#> # A tibble: 2,789 × 4
+#> # A tibble: 2,804 × 4
 #>    date        iusq  ACWI  spyy
 #>    <date>     <dbl> <dbl> <dbl>
 #>  1 2015-04-06  38.2  153.   NA 
@@ -129,7 +129,7 @@ series %>% filter(date >= as_date("2015-04-03"))
 #>  8 2015-04-15  39.0  156.  102.
 #>  9 2015-04-16  39.1  156.  102.
 #> 10 2015-04-17  38.7  155.  101.
-#> # ℹ 2,779 more rows
+#> # ℹ 2,794 more rows
 get_fund_index_map()
 #>   spyy   iusq 
 #> "ACWI" "ACWI"
@@ -142,21 +142,21 @@ Calculate CAGR and log-return differences with a 365-day rolling window.
 ``` r
 nd <- 365
 diffs <- roll_diffs(series, nd, get_fund_index_map())
-#> Roll diffs spyy -> ACWI
-#> Roll diffs iusq -> ACWI
+#> ℹ Roll diffs spyy -> ACWI
+#> ℹ Roll diffs iusq -> ACWI
 ```
 
 ``` r
 diffs$cagr %>% slice_tail(n = 3)
-#>         date        spyy        iusq
-#> 1 2026-02-11 0.004067776 0.001102975
-#> 2 2026-02-12 0.004097801 0.001045235
-#> 3 2026-02-13          NA          NA
-diffs$log %>% slice_tail(n = 3)
 #>         date        spyy         iusq
-#> 1 2026-02-11 0.003313984 0.0008996709
-#> 2 2026-02-12 0.003368045 0.0008601726
-#> 3 2026-02-13          NA           NA
+#> 1 2026-03-04 0.003726230 0.0008124696
+#> 2 2026-03-05 0.003508688 0.0006196091
+#> 3 2026-03-06          NA           NA
+diffs$log %>% slice_tail(n = 3)
+#>         date       spyy         iusq
+#> 1 2026-03-04 0.00300919 0.0006568980
+#> 2 2026-03-05 0.00288526 0.0005101219
+#> 3 2026-03-06         NA           NA
 ```
 
 ## Plot specifications
@@ -194,11 +194,11 @@ export using Inkscape (see blow). It may also output lower-quality PNGs
 
 ``` r
 p <- run_plots(diffs, nd, plot_spec, xlm_data)
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
-#> plot_xlms: spyy, iusq
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
-#> plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: recent years
-#> plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: recent years
+#> ℹ plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ
+#> ℹ plot_xlms: spyy, iusq
+#> ℹ plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ
+#> ℹ plot_roll_diffs: 365d rolling CAGR differences vs net benchmark: SPYY & IUSQ: recent years
+#> ℹ plot_roll_diffs: 365d rolling log-return differences vs net benchmark: SPYY & IUSQ: recent years
 ```
 
 ## Output
@@ -238,21 +238,16 @@ Sys.setLanguage("bg")
 plot_spec_bg <- plot_spec %>%
     mutate(plot_id = paste0(plot_id, "_bg"))
 bg_p <- run_plots(diffs, nd, plot_spec_bg, xlm_data)
-#> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ
-#> plot_xlms: spyy, iusq
-#> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ
-#> plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ: последни години
-#> plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ: последни години
+#> ℹ plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ
+#> ℹ plot_xlms: spyy, iusq
+#> ℹ plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ
+#> ℹ plot_roll_diffs: 365-дневни плъзгащи се CAGR разлики спрямо нетен индекс: SPYY & IUSQ: последни години
+#> ℹ plot_roll_diffs: 365-дневни плъзгащи се разлики в log доходност спрямо нетен индекс: SPYY & IUSQ: последни години
 bg_p[["ACWIz_bg_L"]]
-```
-
-![](simple-demo-using-real-data_files/figure-html/acwi-bg-plots-1.png)
-
-``` r
+#> NULL
 bg_p[["xlm_ACWI_bg"]]
+#> NULL
 ```
-
-![](simple-demo-using-real-data_files/figure-html/acwi-bg-plots-2.png)
 
 ## Optional high-quality PNG export
 

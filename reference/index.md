@@ -2,8 +2,12 @@
 
 ## Config functions
 
+- [`fundsr_default_session()`](https://stantraykov.github.io/fundsr/reference/fundsr_default_session.md)
+  : Get the default fundsr session
 - [`fundsr_options()`](https://stantraykov.github.io/fundsr/reference/fundsr_options.md)
   : Set fundsr package options
+- [`fundsr_session()`](https://stantraykov.github.io/fundsr/reference/fundsr_session.md)
+  : Create a fundsr session
 - [`reset_state()`](https://stantraykov.github.io/fundsr/reference/reset_state.md)
   : Clear fundsr session state
 
@@ -28,6 +32,8 @@
 
 - [`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md)
   : Register a data loader
+- [`adjust_for_split()`](https://stantraykov.github.io/fundsr/reference/adjust_for_split.md)
+  : Adjust a time series for a stock split
 - [`build_all_series()`](https://stantraykov.github.io/fundsr/reference/build_all_series.md)
   : Run all registered data loaders and join all loaded series into a
   big tibble.
@@ -37,10 +43,11 @@
   : Clear storage
 - [`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md)
   : Get the internal fund storage
+- [`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md)
+  : Import a fund's NAV data and optionally register its benchmark
+  mapping
 - [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
   : Join all data frames in an environment with optional late joins
-- [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
-  : Load a fund's NAV data and optionally register its benchmark mapping
 - [`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md)
   : Run registered data loaders
 - [`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
@@ -57,28 +64,20 @@
 
 ## Provider wrappers
 
-- [`amun()`](https://stantraykov.github.io/fundsr/reference/amun.md) :
-  Import an Amundi fund
-- [`avan()`](https://stantraykov.github.io/fundsr/reference/avan.md) :
-  Import an Avantis fund
-- [`bnpp()`](https://stantraykov.github.io/fundsr/reference/bnpp.md) :
-  Import an BNP Paribas fund
-- [`hsbc()`](https://stantraykov.github.io/fundsr/reference/hsbc.md) :
-  Import an HSBC fund
-- [`inve()`](https://stantraykov.github.io/fundsr/reference/inve.md) :
-  Import an Invesco fund
-- [`ishs()`](https://stantraykov.github.io/fundsr/reference/ishs.md) :
-  Import an iShares fund
-- [`msci()`](https://stantraykov.github.io/fundsr/reference/msci.md) :
-  Import an MSCI index sheet and register benchmark mappings
-- [`spdr()`](https://stantraykov.github.io/fundsr/reference/spdr.md) :
-  Import an SPDR fund
-- [`ubs()`](https://stantraykov.github.io/fundsr/reference/ubs.md) :
-  Import a UBS fund
-- [`vang()`](https://stantraykov.github.io/fundsr/reference/vang.md) :
-  Import a Vanguard fund
-- [`xtra()`](https://stantraykov.github.io/fundsr/reference/xtra.md) :
-  Import an Xtrackers fund
+- [`ishs()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`spdr()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`xtra()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`amun()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`inve()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`vang()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`ubs()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`hsbc()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`bnpp()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  [`avan()`](https://stantraykov.github.io/fundsr/reference/fund_provider_wrappers.md)
+  : Fund provider wrappers
+- [`msci()`](https://stantraykov.github.io/fundsr/reference/index_provider_wrappers.md)
+  [`spdj()`](https://stantraykov.github.io/fundsr/reference/index_provider_wrappers.md)
+  : Index provider wrappers
 
 ## Rolling-difference functions
 
@@ -121,3 +120,16 @@
   : Read Eurostat EUROPOP2023 mortality-assumption table (proj_23naasmr)
 - [`read_life_table()`](https://stantraykov.github.io/fundsr/reference/read_life_table.md)
   : Read HMD period life tables (1x1) from disk
+
+## Example helpers
+
+- [`fundsr_example_data()`](https://stantraykov.github.io/fundsr/reference/fundsr_example_data.md)
+  : Get the path to an example file shipped with the package.
+
+## Deprecated
+
+- [`load_fund()`](https://stantraykov.github.io/fundsr/reference/load_fund.md)
+  :
+
+  Deprecated alias for
+  [`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md).

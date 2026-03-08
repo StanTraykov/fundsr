@@ -22,7 +22,8 @@ save_plot(
   out_dir = fundsr_get_option("out_dir"),
   save_png = fundsr_get_option("internal_png", FALSE),
   save_svg = fundsr_get_option("export_svg", TRUE),
-  background = "white"
+  background = "white",
+  session = NULL
 )
 ```
 
@@ -75,6 +76,11 @@ save_plot(
   [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
   (`bg`).
 
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
+
 ## Value
 
 Invisibly returns `NULL`. Called for side effects.
@@ -82,9 +88,9 @@ Invisibly returns `NULL`. Called for side effects.
 ## Details
 
 If `save_svg = TRUE`, the SVG is written as `"{file}.svg"`. An Inkscape
-action string is then stored in `.fundsr$inkscape_queue[file]` so the
-SVG can later be exported to `"{file}.png"` at `px_width` pixels wide
-when
+action string is then stored in `session$state$inkscape_queue[file]` so
+the SVG can later be exported to `"{file}.png"` at `px_width` pixels
+wide when
 [`export_pngs()`](https://stantraykov.github.io/fundsr/reference/export_pngs.md)
 is run.
 

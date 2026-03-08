@@ -17,6 +17,7 @@ run_plots(
   add_gg_params = ggplot2::geom_blank(),
   bmark_type = c("net", "gross"),
   suffix = "",
+  session = NULL,
   ...
 )
 ```
@@ -60,6 +61,11 @@ run_plots(
 
   Character string appended to each `plot_id` when constructing
   filenames and names in the returned environment. Defaults to `""`.
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
 
 - ...:
 

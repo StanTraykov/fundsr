@@ -1,13 +1,20 @@
 # Get the internal fund index map
 
 Returns the package's fund index lookup table stored in
-`.fundsr$fund_index_map`.
+`session$state$fund_index_map`.
 
 ## Usage
 
 ``` r
-get_fund_index_map()
+get_fund_index_map(session = NULL)
 ```
+
+## Arguments
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
 
 ## Value
 
