@@ -115,7 +115,7 @@ inve("FWRA", benchmark = "FTAW", retrieve_benchmark = TRUE, session = fs)
 }
 }
 \seealso{
-\link[=index_provider_wrappers]{Index provider wrappers}, \code{\link[=import_fund]{import_fund()}}, \code{\link[=store_timeseries]{store_timeseries()}},
-\code{\link[=read_timeseries_excel]{read_timeseries_excel()}}, \code{\link[=read_timeseries]{read_timeseries()}}
+\link[=index_provider_wrappers]{Index provider wrappers}, \code{\link[=import_fund]{import_fund()}},
+\code{\link[=store_timeseries]{store_timeseries()}}, \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}, \code{\link[=read_timeseries]{read_timeseries()}}
 }
 \concept{provider wrappers}

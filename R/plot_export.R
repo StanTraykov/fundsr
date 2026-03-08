@@ -175,7 +175,8 @@ export_pngs <- function(background = "white", session = NULL) {
     fundsr_msg(
         c(i = glue("Executing {shQuote(inkscape)}"),
           " " = paste(args, collapse = " ")),
-        level = 1L)
+        level = 1L
+    )
     exit_status <- system2(inkscape, args = args)
     if (exit_status == 0) {
         clear_inkscape_queue(session = session)

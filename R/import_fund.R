@@ -61,17 +61,17 @@
 #'           nav_col = "^net asset val",
 #'           date_order = "mdy")
 import_fund <- function(ticker,
-                      file = NULL,
-                      sheet = 1,
-                      date_col = "^Date",
-                      nav_col = "^NAV",
-                      benchmark = NULL,
-                      benchmark_col = NULL,
-                      retrieve_benchmark = FALSE,
-                      date_order = "dmy",
-                      var_name = NULL,
-                      data_sheet = deprecated(), # equivalent to sheet
-                      ...) {
+                        file = NULL,
+                        sheet = 1,
+                        date_col = "^Date",
+                        nav_col = "^NAV",
+                        benchmark = NULL,
+                        benchmark_col = NULL,
+                        retrieve_benchmark = FALSE,
+                        date_order = "dmy",
+                        var_name = NULL,
+                        data_sheet = deprecated(), # equivalent to sheet
+                        ...) {
     if (lifecycle::is_present(data_sheet)) {
         lifecycle::deprecate_warn(
             when = "0.2.1",

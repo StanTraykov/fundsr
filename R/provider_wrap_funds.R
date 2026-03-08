@@ -22,8 +22,8 @@
 #'
 #' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
 #'
-#' @seealso [Index provider wrappers][index_provider_wrappers], [import_fund()], [store_timeseries()],
-#'   [read_timeseries_excel()], [read_timeseries()]
+#' @seealso [Index provider wrappers][index_provider_wrappers], [import_fund()],
+#'   [store_timeseries()], [read_timeseries_excel()], [read_timeseries()]
 #' @concept provider wrappers
 #' @name fund_provider_wrappers
 #'
@@ -48,95 +48,95 @@ NULL
 #' @export
 ishs <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              sheet = "Historical",
-              date_col = "^As Of",
-              benchmark = benchmark,
-              benchmark_col = "^Benchmark Ret",
-              retrieve_benchmark = retrieve_benchmark,
-              ...)
+                file = file,
+                sheet = "Historical",
+                date_col = "^As Of",
+                benchmark = benchmark,
+                benchmark_col = "^Benchmark Ret",
+                retrieve_benchmark = retrieve_benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import an SPDR NAV history
 #' @export
 spdr <- function(ticker, file = NULL, benchmark = NULL, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              benchmark = benchmark,
-              ...)
+                file = file,
+                benchmark = benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import an Xtrackers NAV history
 #' @export
 xtra <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              benchmark = benchmark,
-              benchmark_col = "^Index Level",
-              retrieve_benchmark = retrieve_benchmark,
-              ...)
+                file = file,
+                benchmark = benchmark,
+                benchmark_col = "^Index Level",
+                retrieve_benchmark = retrieve_benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import an Amundi NAV history
 #' @export
 amun <- function(ticker, file = NULL, benchmark = NULL, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              nav_col = "^Official NAV",
-              benchmark = benchmark,
-              ...)
+                file = file,
+                nav_col = "^Official NAV",
+                benchmark = benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import an Invesco NAV history
 #' @export
 inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              nav_col = "^NAV$", # need end marker ($) for Invesco to disambiguate
-              benchmark = benchmark,
-              benchmark_col = "^Index",
-              retrieve_benchmark = retrieve_benchmark,
-              ...)
+                file = file,
+                nav_col = "^NAV$", # need end marker ($) for Invesco to disambiguate
+                benchmark = benchmark,
+                benchmark_col = "^Index",
+                retrieve_benchmark = retrieve_benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import a Vanguard NAV history
 #' @export
 vang <- function(ticker, file = NULL, benchmark = NULL, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              nav_col = "^NAV \\(USD\\)$",
-              benchmark = benchmark,
-              ...)
+                file = file,
+                nav_col = "^NAV \\(USD\\)$",
+                benchmark = benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import a UBS NAV history
 #' @export
 ubs <- function(ticker, file = NULL, benchmark = NULL, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              nav_col = "^Official NAV",
-              benchmark = benchmark,
-              ...)
+                file = file,
+                nav_col = "^Official NAV",
+                benchmark = benchmark,
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import an HSBC NAV history
 #' @export
 hsbc <- function(ticker, file = NULL, benchmark = NULL, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              benchmark = benchmark,
-              date_order = "mdy",
-              ...)
+                file = file,
+                benchmark = benchmark,
+                date_order = "mdy",
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import a BNP Paribas NAV history
 #' @export
 bnpp <- function(ticker, file = NULL, benchmark = NULL, ...) {
     import_fund(ticker = ticker,
-              file = file,
-              benchmark = benchmark,
-              nav_col = "^Value",
-              ...)
+                file = file,
+                benchmark = benchmark,
+                nav_col = "^Value",
+                ...)
 }
 
 #' @describeIn fund_provider_wrappers Import an Avantis NAV history

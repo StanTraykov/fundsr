@@ -294,11 +294,11 @@ The NAV history for FNDA is provided in an Excel workbook with multiple sheets a
 
 ```{r load-fund}
 import_fund("FNDA",
-          "FNDA.xlsx",
-          benchmark = "IDX1",
-          sheet = "historical",
-          date_col = "^As Of",
-          nav_col = "^NAV")
+            "FNDA.xlsx",
+            benchmark = "IDX1",
+            sheet = "historical",
+            date_col = "^As Of",
+            nav_col = "^NAV")
 ```
 
 `import_fund()` recognizes proper Excel dates, improperly stored Excel dates, and a large number of text date formats used in fund files, but the date order (e.g. `"dmy"`, `"mdy"`, `"ymd"`) must be known for interpretation of text dates. It defaults to `"dmy"` which is the most common in UCITS ETF NAV histories.
@@ -307,20 +307,20 @@ FNDB has text dates in MM/DD/YYYY format, so supplying `date_order = "mdy"` is r
 
 ```{r load-fund2}
 import_fund("FNDB",
-          "FNDB.xlsx",
-          benchmark = "IDX1",
-          date_col = "^date",
-          nav_col = "^net asset val",
-          date_order = "mdy")
+            "FNDB.xlsx",
+            benchmark = "IDX1",
+            date_col = "^date",
+            nav_col = "^net asset val",
+            date_order = "mdy")
 ```
 
 The final fund to load is GNDA.
 ```{r import_fund3}
 import_fund("GNDA",
-          "GNDA.xlsx",
-          benchmark = "IDX2",
-          date_col = "^Date",
-          nav_col = "^Official NAV")
+            "GNDA.xlsx",
+            benchmark = "IDX2",
+            date_col = "^Date",
+            nav_col = "^Official NAV")
 ```
 
 ### Building the master table
@@ -356,14 +356,14 @@ If there are multiple sources for the same series and values need to be coalesce
 ```{r merging, eval=FALSE}
 # load fund NAVs, uses default "acme" for column and storage variable
 import_fund("ACME",
-          file = "ACME1.xlsx",
-          date_col = "As Of")
+            file = "ACME1.xlsx",
+            date_col = "As Of")
 
 # also load NAVs into "acme" column, but storage variable is "acme2"
 import_fund("ACME",
-          var_name = "acme2",
-          file = "ACME2.xlsx",
-          date_col = "As Of")
+            var_name = "acme2",
+            file = "ACME2.xlsx",
+            date_col = "As Of")
 
 # join "acme" and "acme2"
 # both columns will be available, named "acme.late" and "acme.early"
