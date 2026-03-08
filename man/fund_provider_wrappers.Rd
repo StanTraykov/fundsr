@@ -101,11 +101,17 @@ Most fund importers are wrappers around \code{\link[=load_fund]{load_fund()}} (w
 \examples{
 \dontrun{
 xtra("SCWX", benchmark = "ACWI", file = "HistoricalData-LU2903252349.xlsx")
-spdr("SPYI",
-     benchmark = "ACWI_IMI",
-     postprocess = function(x) {
-         adjust_for_split(x, lubridate::as_date("2026-02-23"), 25, "spyi")
-     })
+
+spdr(
+    "SPYI",
+    benchmark = "ACWI_IMI",
+    postprocess = function(x) {
+        adjust_for_split(x, lubridate::as_date("2026-02-23"), 25, "spyi")
+    }
+)
+
+fs <- fundsr_session()
+inve("FWRA", benchmark = "FTAW", retrieve_benchmark = TRUE, session = fs)
 }
 }
 \seealso{
