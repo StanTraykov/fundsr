@@ -6,9 +6,9 @@
 \alias{spdj}
 \title{Index provider wrappers}
 \usage{
-msci(var_name = NULL, file, col_trans, benchmarks = NULL, session = NULL)
+msci(var_name = NULL, file, col_trans, benchmarks = NULL, ...)
 
-spdj(var_name = NULL, file, col_trans, benchmarks = NULL, session = NULL)
+spdj(var_name = NULL, file, col_trans, benchmarks = NULL, ...)
 }
 \arguments{
 \item{var_name}{Storage key used in \code{session$storage}. If \code{NULL}, \code{tolower(file)} is
@@ -21,8 +21,17 @@ used.}
 \item{benchmarks}{Optional benchmark mapping to record in the fund-index map
 (for example, to map gross to net indices).}
 
-\item{session}{Optional \code{fundsr_session} object. Defaults to the package
+\item{...}{
+  Arguments passed on to \code{\link[=store_timeseries]{store_timeseries}}
+  \describe{
+    \item{\code{overwrite}}{Logical scalar. If \code{TRUE}, recompute and replace any existing
+cached value, regardless of \code{fundsr.reload}.}
+    \item{\code{postprocess}}{Function applied to the computed value before caching.
+Only used when the value is (re)computed (i.e. not applied when a cached
+value is reused). Defaults to \code{\link[base:identity]{base::identity()}}.}
+    \item{\code{session}}{Optional \code{fundsr_session} object. Defaults to the package
 default session when \code{NULL}.}
+  }}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.

@@ -10,8 +10,7 @@
 #' @param benchmarks Optional benchmark mapping to record in the fund-index map
 #'   (for example, to map gross to net indices).
 #' @param file Filename of the Excel file to import.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
+#' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
 #'
 #' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
 #' @seealso [Fund provider wrappers][fund_provider_wrappers], [store_timeseries()],
@@ -23,7 +22,7 @@ NULL
 #' @describeIn index_provider_wrappers Import an MSCI index sheet and register benchmark
 #'   mappings
 #' @export
-msci <- function(var_name = NULL, file, col_trans, benchmarks = NULL, session = NULL) {
+msci <- function(var_name = NULL, file, col_trans, benchmarks = NULL, ...) {
     store_timeseries(
         var_name = var_name %||% tolower(file),
         expr = read_timeseries_excel(
@@ -35,14 +34,14 @@ msci <- function(var_name = NULL, file, col_trans, benchmarks = NULL, session = 
             comma_rep = ""
         ),
         fund_index_map = benchmarks,
-        session = session
+        ...
     )
 }
 
 #' @describeIn index_provider_wrappers Import an S&P Dow Jones index sheet and register benchmark
 #'   mappings
 #' @export
-spdj <- function(var_name = NULL, file, col_trans, benchmarks = NULL, session = NULL) {
+spdj <- function(var_name = NULL, file, col_trans, benchmarks = NULL, ...) {
     store_timeseries(
         var_name = var_name %||% tolower(file),
         expr = read_timeseries_excel(
@@ -54,6 +53,6 @@ spdj <- function(var_name = NULL, file, col_trans, benchmarks = NULL, session = 
             comma_rep = ""
         ),
         fund_index_map = benchmarks,
-        session = session
+        ...
     )
 }
