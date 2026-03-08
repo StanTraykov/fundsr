@@ -1,10 +1,10 @@
 ---
-title: "Importing Data and Computing Differences in fundsr"
+title: "Importing Data and Computing Rolling Differences"
 author: "Stanislav Traykov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-    %\VignetteIndexEntry{Importing Data and Computing Differences in fundsr}
+    %\VignetteIndexEntry{Importing Data and Computing Rolling Differences}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
