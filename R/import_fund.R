@@ -41,8 +41,8 @@
 #' corresponding entry is added to `session$state$fund_index_map` to link the fund to
 #' its benchmark key.
 #'
-#' @seealso
-#' Provider wrappers: [amun()], [hsbc()], [inve()], [ishs()], [spdr()], [ubs()], [vang()], [xtra()]
+#' @seealso [Fund provider wrappers][fund_provider_wrappers], [store_timeseries()],
+#'   [read_timeseries_excel()]
 #' @family fund/index workflow functions
 #' @export
 #' @examples

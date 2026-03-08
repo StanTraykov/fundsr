@@ -101,7 +101,8 @@ import_fund("FNDB",
           date_order = "mdy")
 }
 \seealso{
-Provider wrappers: \code{\link[=amun]{amun()}}, \code{\link[=hsbc]{hsbc()}}, \code{\link[=inve]{inve()}}, \code{\link[=ishs]{ishs()}}, \code{\link[=spdr]{spdr()}}, \code{\link[=ubs]{ubs()}}, \code{\link[=vang]{vang()}}, \code{\link[=xtra]{xtra()}}
+\link[=fund_provider_wrappers]{Fund provider wrappers}, \code{\link[=store_timeseries]{store_timeseries()}},
+\code{\link[=read_timeseries_excel]{read_timeseries_excel()}}
 
 Other fund/index workflow functions: 
 \code{\link{add_data_loader}()},

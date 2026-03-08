@@ -228,7 +228,7 @@ knitr::kable(example_files,
 
 ### `store_timeseries()`
 
-`store_timeseries()` is the basic function for importing into the storage environment. It is most commonly used via wrappers such as `import_fund()` or the vendor-specific wrappers around `import_fund()`---handling Excel NAV histories from Amundi, HSBC, Invesco, iShares, SPDR, UBS, Vanguard, and Xtrackers. It is often called directly when importing CSV/TSV files or data frames.
+`store_timeseries()` is the basic function for importing into the storage environment. It is most commonly used via wrappers such as `import_fund()` or the vendor-specific wrappers around `import_fund()`---handling Excel NAV histories from Amundi, BNP Paribas, HSBC, Invesco, iShares, SPDR, UBS, Vanguard, and Xtrackers. It is often called directly when importing CSV/TSV files or data frames.
 
 The example fund GNDB has a NAV history in CSV format with dates expressed as milliseconds since the Unix epoch, a NAV column, and a Benchmark column that will not be imported from the fund file in this example.
 
