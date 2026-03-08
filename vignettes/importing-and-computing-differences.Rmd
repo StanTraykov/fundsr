@@ -384,6 +384,7 @@ series <- build_all_series(late = "acme2",
 The following wrappers use `import_fund()` to import Excel files provided by fund managers.
 
 * `amun()` (Amundi)
+* `bnpp()` (BNP Paribas)
 * `hsbc()` (HSBC)
 * `inve()` (Invesco)
 * `ishs()` (iShares)

@@ -46,7 +46,7 @@
 #' @family fund/index workflow functions
 #' @export
 #' @examples
-#' fundsr_options(data_dir = fundsr_example_data())
+#' fundsr_options(data_dir = fundsr_example_data(), verbosity = 2)
 #'
 #' import_fund("FNDA",
 #'           "FNDA.xlsx",
