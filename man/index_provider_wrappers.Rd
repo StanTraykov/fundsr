@@ -14,12 +14,16 @@ spdj(file, col_trans, benchmarks = NULL, var_name = NULL, ...)
 msci_tsv(file, index_id, benchmarks = NULL, var_name = NULL, ...)
 }
 \arguments{
-\item{file}{Filename of the Excel file to import.}
+\item{file}{Filename of the file to import.}
 
-\item{col_trans}{Named vector specifying column translations.}
+\item{col_trans}{Named character vector (or list) mapping index identifiers
+to regular expressions used to select the corresponding columns in Excel files.
+The names become the imported column names in the stored time series; the values
+are matched against the Excel column headers. Passed to \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}.}
 
-\item{benchmarks}{Optional benchmark mapping to record in the fund-index map
-(for example, to map gross to net indices).}
+\item{benchmarks}{Optional benchmark mapping(s) to record in the fund-index map
+(for example, to map gross to net indices for tracking-difference plotting alongside
+funds).}
 
 \item{var_name}{Storage key used in \code{session$storage}. If \code{NULL}, \code{tolower(file)} is
 used.}
@@ -36,7 +40,8 @@ value is reused). Defaults to \code{\link[base:identity]{base::identity()}}.}
 default session when \code{NULL}.}
   }}
 
-\item{index_id}{Index identifier}
+\item{index_id}{Index identifier used as the imported column name for text files
+containing a single index.}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.
@@ -45,20 +50,20 @@ Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries
 Vendor-specific import wrappers for index total return levels (net or gross).
 }
 \details{
-Wrappers around \code{\link[=store_timeseries]{store_timeseries()}} and \code{\link[=read_timeseries_excel]{read_timeseries_excel()}} for index files.
+Wrappers around \code{\link[=store_timeseries]{store_timeseries()}} and either
+\code{\link[=read_timeseries_excel]{read_timeseries_excel()}} or \code{\link[=read_timeseries]{read_timeseries()}} for importing index files.
 }
 \section{Functions}{
 \itemize{
-\item \code{msci()}: Import an MSCI index sheet and register benchmark mappings
+\item \code{msci()}: Import an MSCI index Excel file
 
-\item \code{spdj()}: Import an S&P Dow Jones index sheet and register benchmark
-mappings
+\item \code{spdj()}: Import an S&P Dow Jones index Excel file
 
 \item \code{msci_tsv()}: Import an MSCI two-column TSV file for a single index
 
 }}
 \seealso{
 \link[=fund_provider_wrappers]{Fund provider wrappers}, \code{\link[=store_timeseries]{store_timeseries()}},
-\code{\link[=read_timeseries_excel]{read_timeseries_excel()}}
+\code{\link[=read_timeseries_excel]{read_timeseries_excel()}}, \code{\link[=read_timeseries]{read_timeseries()}}
 }
 \concept{provider wrappers}
