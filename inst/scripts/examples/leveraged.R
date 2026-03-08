@@ -11,18 +11,14 @@ add_data_loader(function() {
                      postprocess = function(d) { names(d) <- c("date", "EONIA"); d }
     )
     ##### MSCI #####
-    msci(var_name = "wusa-nt",
-         col_trans = net_idx_trans,
+    msci(col_trans = net_idx_trans,
          file = "WUSA_FULL-NT.xls")
-    msci(var_name = "wusa-gr",
-         col_trans = gross_idx_trans,
+    msci(col_trans = gross_idx_trans,
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "WUSA_FULL-GR.xls")
-    msci(var_name = "wusa-nt-eur",
-         col_trans = net_idx_trans_ccy("EUR"),
+    msci(col_trans = net_idx_trans_ccy("EUR"),
          file = "WUSA_FULL-NT-EUR.xls")
-    msci(var_name = "wusa-gr-eur",
-         col_trans = gross_idx_trans_ccy("EUR"),
+    msci(col_trans = gross_idx_trans_ccy("EUR"),
          benchmarks = set_names(names(net_idx_trans_ccy("EUR")), names(gross_idx_trans_ccy("EUR"))),
          file = "WUSA_FULL-GR-EUR.xls")
 })

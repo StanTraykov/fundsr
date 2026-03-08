@@ -4,7 +4,7 @@ author: "Stanislav Traykov"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Survival curves for Financial Planning}
+  %\VignetteIndexEntry{Survival Curves for Financial Planning}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

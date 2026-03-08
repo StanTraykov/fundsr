@@ -32,12 +32,10 @@ spec_list <- c(spec_list, list(plot_spec))
 
 ##### Data #####
 add_data_loader(function() {
-    msci(var_name = "msci-em-nt",
-         col_trans = net_idx_trans,
+    msci(col_trans = net_idx_trans,
          benchmarks = set_names(names(gross_idx_trans), names(net_idx_trans)),
          file = "MSCI-EM-NT.xls")
-    msci(var_name = "msci-em-gr",
-         col_trans = gross_idx_trans,
+    msci(col_trans = gross_idx_trans,
          file = "MSCI-EM-GR.xls")
 })
 

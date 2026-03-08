@@ -1,5 +1,9 @@
 # fundsr (development version)
 
+## Importing
+
+- `var_name` param is now optional for all provider wrappers (both fund and index)
+
 # fundsr 0.4.2
 
 ## Bugfix

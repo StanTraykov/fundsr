@@ -35,18 +35,14 @@ add_data_loader(function() {
     store_timeseries("gbsjjpy", read_timeseries("GBSJJPY.csv"))
     store_timeseries("gbsjjpy-gr", read_timeseries("GBSJJPY-GR.csv"),
                      fund_index_map = set_names("GBSJJPY", "GBSJJPY-GR"))
-    msci(var_name = "msci2-nt",
-         col_trans = net_idx_trans,
+    msci(col_trans = net_idx_trans,
          file = "MSCI2-NT.xls")
-    msci(var_name = "msci2-gr",
-         col_trans = gross_idx_trans,
+    msci(col_trans = gross_idx_trans,
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "MSCI2-GR.xls")
-    msci(var_name = "msci2-nt-jpy",
-         col_trans = net_idx_trans_ccy("JPY"),
+    msci(col_trans = net_idx_trans_ccy("JPY"),
          file = "MSCI2-NT-JPY.xls")
-    msci(var_name = "msci2-gr-jpy",
-         col_trans = gross_idx_trans_ccy("JPY"),
+    msci(col_trans = gross_idx_trans_ccy("JPY"),
          benchmarks = set_names(names(net_idx_trans_ccy("JPY")), names(gross_idx_trans_ccy("JPY"))),
          file = "MSCI2-GR-JPY.xls")
 

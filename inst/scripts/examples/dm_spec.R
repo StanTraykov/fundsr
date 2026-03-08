@@ -51,18 +51,14 @@ add_data_loader(function() {
     store_timeseries("dmlm", read_timeseries("DMLM.csv"))
     store_timeseries("dmlm-gr", read_timeseries("DMLM-GR.csv"),
                      fund_index_map = set_names("DMLM", "DMLM-GR"))
-    msci(var_name = "msci-nt",
-         col_trans = net_idx_trans,
+    msci(col_trans = net_idx_trans,
          file = "MSCI-NT.xls")
-    msci(var_name = "msci-gr",
-         col_trans = gross_idx_trans,
+    msci(col_trans = gross_idx_trans,
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "MSCI-GR.xls")
-    msci(var_name = "msci-nt-eur",
-         col_trans = net_idx_trans_ccy("EUR"),
+    msci(col_trans = net_idx_trans_ccy("EUR"),
          file = "MSCI-NT-EUR.xls")
-    msci(var_name = "msci-gr-eur",
-         col_trans = gross_idx_trans_ccy("EUR"),
+    msci(col_trans = gross_idx_trans_ccy("EUR"),
          benchmarks = set_names(names(net_idx_trans_ccy("EUR")), names(gross_idx_trans_ccy("EUR"))),
          file = "MSCI-GR-EUR.xls")
 

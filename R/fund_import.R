@@ -27,8 +27,7 @@
 #' @param date_order Date parsing order passed to the importer.
 #' @param var_name Specify a custom variable name for the storage environment.
 #' @param data_sheet Deprecated; use `sheet`.
-#' @param ... Additional arguments passed to [store_timeseries()], such as
-#'   `overwrite`, `postprocess`, `session`.
+#' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
 #'
 #' @return Invisibly returns `NULL`. The imported data are stored in
 #'   `session$storage` under `tolower(ticker)`. A fund/index mapping is recorded

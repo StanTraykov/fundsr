@@ -49,8 +49,17 @@ alongside the fund.}
 
 \item{data_sheet}{Deprecated; use \code{sheet}.}
 
-\item{...}{Additional arguments passed to \code{\link[=store_timeseries]{store_timeseries()}}, such as
-\code{overwrite}, \code{postprocess}, \code{session}.}
+\item{...}{
+  Arguments passed on to \code{\link[=store_timeseries]{store_timeseries}}
+  \describe{
+    \item{\code{overwrite}}{Logical scalar. If \code{TRUE}, recompute and replace any existing
+cached value, regardless of \code{fundsr.reload}.}
+    \item{\code{postprocess}}{Function applied to the computed value before caching.
+Only used when the value is (re)computed (i.e. not applied when a cached
+value is reused). Defaults to \code{\link[base:identity]{base::identity()}}.}
+    \item{\code{session}}{Optional \code{fundsr_session} object. Defaults to the package
+default session when \code{NULL}.}
+  }}
 }
 \value{
 Invisibly returns \code{NULL}. The imported data are stored in

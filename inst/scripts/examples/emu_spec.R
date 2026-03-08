@@ -35,11 +35,9 @@ add_data_loader(function() {
     store_timeseries("ezlm", read_timeseries("EZLM.csv"))
     store_timeseries("ezlm-gr", read_timeseries("EZLM-GR.csv"),
                      fund_index_map = set_names("EZLM", "EZLM-GR"))
-    msci(var_name = "msci2-nt-eur",
-         col_trans = net_idx_trans_ccy("EUR"),
+    msci(col_trans = net_idx_trans_ccy("EUR"),
          file = "MSCI2-NT-EUR.xls")
-    msci(var_name = "msci2-gr-eur",
-         col_trans = gross_idx_trans_ccy("EUR"),
+    msci(col_trans = gross_idx_trans_ccy("EUR"),
          benchmarks = set_names(names(net_idx_trans_ccy("EUR")), names(gross_idx_trans_ccy("EUR"))),
          file = "MSCI2-GR-EUR.xls")
     ####### Phys #######

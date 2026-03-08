@@ -1,23 +1,31 @@
-#' Import an MSCI index sheet and register benchmark mappings
+#' Index provider wrappers
 #'
-#' Wrapper around `store_timeseries()` and `read_timeseries_excel()` for MSCI index files.
+#' Vendor-specific import wrappers for (net/gross) index total return levels.
 #'
-#' @param var_name Storage key used in `session$storage`.
+#' Wrappers around [store_timeseries()] and [read_timeseries_excel()] for index files.
+#'
+#' @param var_name Storage key used in `session$storage`. If `NULL`, `tolower(file)` is
+#'   used.
 #' @param col_trans Named vector specifying column translations.
-#' @param benchmarks Optional index mapping to record in
-#'   the fund index map (used to map gross to net indices).
-#' @param file Filename of the XLSX file to import.
+#' @param benchmarks Optional benchmark mapping to record in the fund-index map
+#'   (for example, to map gross to net indices).
+#' @param file Filename of the Excel file to import.
 #' @param session Optional `fundsr_session` object. Defaults to the package
 #'   default session when `NULL`.
 #'
-#' @return Invisibly returns `NULL`. Data are stored via `store_timeseries()`.
-#' @seealso
-#' [store_timeseries()], [read_timeseries_excel()]
-#' @family provider wrappers
+#' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
+#' @seealso [Fund provider wrappers][fund_provider_wrappers], [store_timeseries()],
+#'   [read_timeseries_excel()]
+#' @concept provider wrappers
+#' @name index_provider_wrappers
+NULL
+
+#' @describeIn index_provider_wrappers Import an MSCI index sheet and register benchmark
+#'   mappings
 #' @export
-msci <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
+msci <- function(var_name = NULL, file, col_trans, benchmarks = NULL, session = NULL) {
     store_timeseries(
-        var_name = var_name,
+        var_name = var_name %||% tolower(file),
         expr = read_timeseries_excel(
             file = file,
             sheet = 1,
@@ -31,26 +39,12 @@ msci <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
     )
 }
 
-#' Import an S&P Dow Jones index sheet and register benchmark mappings
-#'
-#' Wrapper around `store_timeseries()` and `read_timeseries_excel()` for S&P Dow Jones index files.
-#'
-#' @param var_name Storage key used in `session$storage`.
-#' @param col_trans Named vector specifying column translations.
-#' @param benchmarks Optional index mapping to record in
-#'   the fund index map (used to map gross to net indices).
-#' @param file Filename of the XLSX file to import.
-#' @param session Optional `fundsr_session` object. Defaults to the package
-#'   default session when `NULL`.
-#'
-#' @return Invisibly returns `NULL`. Data are stored via `store_timeseries()`.
-#' @seealso
-#' [store_timeseries()], [read_timeseries_excel()]
-#' @family provider wrappers
+#' @describeIn index_provider_wrappers Import an S&P Dow Jones index sheet and register benchmark
+#'   mappings
 #' @export
-spdj <- function(var_name, file, col_trans, benchmarks = NULL, session = NULL) {
+spdj <- function(var_name = NULL, file, col_trans, benchmarks = NULL, session = NULL) {
     store_timeseries(
-        var_name = var_name,
+        var_name = var_name %||% tolower(file),
         expr = read_timeseries_excel(
             file = file,
             sheet = 1,

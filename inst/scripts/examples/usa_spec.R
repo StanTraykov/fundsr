@@ -85,25 +85,19 @@ add_fund_urls(c(
 
 add_data_loader(function() {
     ####### Indices #######
-    msci(var_name = "msci2-nt",
-         col_trans = net_idx_trans,
+    msci(col_trans = net_idx_trans,
          file = "MSCI2-NT.xls")
-    msci(var_name = "msci2-gr",
-         col_trans = gross_idx_trans,
+    msci(col_trans = gross_idx_trans,
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "MSCI2-GR.xls")
-    spdj(var_name = "sp500",
-         col_trans = net_idx_trans,
+    spdj(col_trans = net_idx_trans,
          file = "SP500-NT.xls")
-    spdj(var_name = "sp500-gr",
-         col_trans = gross_idx_trans,
+    spdj(col_trans = gross_idx_trans,
          benchmarks = set_names(names(net_idx_trans), names(gross_idx_trans)),
          file = "SP500-GR.xls")
-    spdj(var_name = "sp500-nt-eur",
-         col_trans = net_idx_trans_ccy("EUR"),
+    spdj(col_trans = net_idx_trans_ccy("EUR"),
          file = "SP500-NT-EUR.xls")
-    spdj(var_name = "sp500-gr-eur",
-         col_trans = gross_idx_trans_ccy("EUR"),
+    spdj(col_trans = gross_idx_trans_ccy("EUR"),
          benchmarks = set_names(names(net_idx_trans_ccy("EUR")), names(gross_idx_trans_ccy("EUR"))),
          file = "SP500-GR-EUR.xls")
 
