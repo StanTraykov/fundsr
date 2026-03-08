@@ -11,6 +11,6 @@ test_that("provider wrappers stay compatible via ellipsis forwarding", {
 })
 
 
-test_that("load_fund stays ellipsis-compatible for session forwarding", {
-    expect_false("session" %in% names(formals(load_fund)))
+test_that("import_fund stays ellipsis-compatible for session forwarding", {
+    expect_false("session" %in% names(formals(import_fund)))
 })

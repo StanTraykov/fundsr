@@ -225,19 +225,19 @@ save_it <- function() {
 load_it <- function() {
     fundsr::reset_state()
     fundsr_options(data_dir = dir)
-    load_fund("FNDA",
+    import_fund("FNDA",
               "FNDA.xlsx",
               benchmark = "IDX1",
               sheet = "historical",
               date_col = "^As Of",
               nav_col = "^NAV")
-    load_fund("FNDB",
+    import_fund("FNDB",
               "FNDB.xlsx",
               benchmark = "IDX1",
               date_col = "^date",
               nav_col = "^net asset val",
               date_order = "mdy")
-    load_fund("GNDA",
+    import_fund("GNDA",
               "GNDA.xlsx",
               benchmark = "IDX2",
               date_col = "^Date",

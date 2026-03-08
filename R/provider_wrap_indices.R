@@ -23,7 +23,7 @@ NULL
 #' @describeIn index_provider_wrappers Import an MSCI index sheet and register benchmark
 #'   mappings
 #' @export
-msci <- function(var_name = NULL, file, col_trans, benchmarks = NULL, ...) {
+msci <- function(file, col_trans, benchmarks = NULL, var_name = NULL, ...) {
     store_timeseries(
         var_name = var_name %||% tolower(file),
         expr = read_timeseries_excel(
@@ -42,7 +42,7 @@ msci <- function(var_name = NULL, file, col_trans, benchmarks = NULL, ...) {
 #' @describeIn index_provider_wrappers Import an S&P Dow Jones index sheet and register benchmark
 #'   mappings
 #' @export
-spdj <- function(var_name = NULL, file, col_trans, benchmarks = NULL, ...) {
+spdj <- function(file, col_trans, benchmarks = NULL, var_name = NULL, ...) {
     store_timeseries(
         var_name = var_name %||% tolower(file),
         expr = read_timeseries_excel(

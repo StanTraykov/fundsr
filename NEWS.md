@@ -2,6 +2,7 @@
 
 ## Importing
 
+- `load_fund()` renamed to `import_fund()` (`load_fund()` remaining as a deprecated alias)
 - `var_name` param is now optional for all provider wrappers (both fund and index)
 
 # fundsr 0.4.2

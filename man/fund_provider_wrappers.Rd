@@ -60,7 +60,7 @@ default session when \code{NULL}.}
 
 \item{var_name}{Optional custom storage key. Supported by all wrapper functions, either
 as a formal argument or via \code{...} passed to the underlying helper
-(\code{\link[=load_fund]{load_fund()}} or \code{\link[=store_timeseries]{store_timeseries()}}).}
+(\code{\link[=import_fund]{import_fund()}} or \code{\link[=store_timeseries]{store_timeseries()}}).}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.
@@ -69,11 +69,11 @@ Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries
 Vendor-specific import wrappers for NAV histories.
 }
 \details{
-Most fund importers are wrappers around \code{\link[=load_fund]{load_fund()}} (which uses \code{\link[=store_timeseries]{store_timeseries()}} and
+Most fund importers are wrappers around \code{\link[=import_fund]{import_fund()}} (which uses \code{\link[=store_timeseries]{store_timeseries()}} and
 \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}). Some use \code{\link[=store_timeseries]{store_timeseries()}} directly, coupled with a reader like
 \code{\link[=read_timeseries]{read_timeseries()}} or \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}. Extra arguments (\code{...}) are passed to
-\code{\link[=store_timeseries]{store_timeseries()}}. For wrappers built on \code{\link[=load_fund]{load_fund()}}, \code{...} is first passed through
-\code{\link[=load_fund]{load_fund()}}.
+\code{\link[=store_timeseries]{store_timeseries()}}. For wrappers built on \code{\link[=import_fund]{import_fund()}}, \code{...} is first passed through
+\code{\link[=import_fund]{import_fund()}}.
 }
 \section{Functions}{
 \itemize{
@@ -115,7 +115,7 @@ inve("FWRA", benchmark = "FTAW", retrieve_benchmark = TRUE, session = fs)
 }
 }
 \seealso{
-\link[=index_provider_wrappers]{Index provider wrappers}, \code{\link[=load_fund]{load_fund()}}, \code{\link[=store_timeseries]{store_timeseries()}},
+\link[=index_provider_wrappers]{Index provider wrappers}, \code{\link[=import_fund]{import_fund()}}, \code{\link[=store_timeseries]{store_timeseries()}},
 \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}, \code{\link[=read_timeseries]{read_timeseries()}}
 }
 \concept{provider wrappers}

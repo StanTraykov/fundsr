@@ -146,6 +146,7 @@ If runtime/environment limits block checks, report what was attempted and why it
 - Do not delete or rename files as cleanup unless the task requires it.
 - Do not touch unrelated files.
 - Prefer incremental edits that are easy to review.
+- Do not change historic entries in the NEWS.md file (it's OK to add new entries at the top)
 
 ## Quick checklist before finishing
 - [ ] Scope matches the request.

@@ -1,4 +1,4 @@
-#' Load a fund's NAV data and optionally register its benchmark mapping
+#' Import a fund's NAV data and optionally register its benchmark mapping
 #'
 #' Imports a fund's NAV time series from an Excel file and stores it in the
 #' storage environment via `store_timeseries()`. Optionally, a benchmark column
@@ -48,19 +48,19 @@
 #' @examples
 #' fundsr_options(data_dir = fundsr_example_data())
 #'
-#' load_fund("FNDA",
+#' import_fund("FNDA",
 #'           "FNDA.xlsx",
 #'           benchmark = "IDX1",
 #'           sheet = "historical",
 #'           date_col = "^As Of",
 #'           nav_col = "^NAV")
 #'
-#' load_fund("FNDB",
+#' import_fund("FNDB",
 #'           benchmark = "IDX1",
 #'           date_col = "^date",
 #'           nav_col = "^net asset val",
 #'           date_order = "mdy")
-load_fund <- function(ticker,
+import_fund <- function(ticker,
                       file = NULL,
                       sheet = 1,
                       date_col = "^Date",
@@ -75,8 +75,8 @@ load_fund <- function(ticker,
     if (lifecycle::is_present(data_sheet)) {
         lifecycle::deprecate_warn(
             when = "0.2.1",
-            what = "load_fund(data_sheet)",
-            with = "load_fund(sheet)"
+            what = "import_fund(data_sheet)",
+            with = "import_fund(sheet)"
         )
         if (!missing(sheet)) {
             stop_bad_arg(
@@ -152,4 +152,47 @@ load_fund <- function(ticker,
         ...
     )
 
+}
+
+#' Deprecated alias for [import_fund()].
+#'
+#' `load_fund()` has been renamed to [import_fund()].
+#'
+#' @inheritParams import_fund
+#' @inheritDotParams import_fund
+#' @inherit import_fund return
+#' @family deprecated functions
+#' @export
+load_fund <- function(ticker,
+                      file = NULL,
+                      sheet = 1,
+                      date_col = "^Date",
+                      nav_col = "^NAV",
+                      benchmark = NULL,
+                      benchmark_col = NULL,
+                      retrieve_benchmark = FALSE,
+                      date_order = "dmy",
+                      var_name = NULL,
+                      data_sheet = lifecycle::deprecated(),
+                      ...) {
+    lifecycle::deprecate_warn(
+        when = "0.4.3",
+        what = "load_fund()",
+        with = "import_fund()"
+    )
+
+    import_fund(
+        ticker = ticker,
+        file = file,
+        sheet = sheet,
+        date_col = date_col,
+        nav_col = nav_col,
+        benchmark = benchmark,
+        benchmark_col = benchmark_col,
+        retrieve_benchmark = retrieve_benchmark,
+        date_order = date_order,
+        var_name = var_name,
+        data_sheet = data_sheet,
+        ...
+    )
 }

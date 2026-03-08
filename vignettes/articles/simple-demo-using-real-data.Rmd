@@ -95,7 +95,7 @@ Populate funds directory (download URLs listed in option `fundsr.fund_urls`).
 download_fund_data() # downloads as SPYY.xlsx, IUSQ.xls
 ```
 
-Register data loader calling vendor-specific wrappers around `load_fund()`.
+Register data loader calling vendor-specific wrappers around `import_fund()`.
 
 ```{r data-loader}
 add_data_loader(function() {

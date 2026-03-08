@@ -228,7 +228,7 @@ knitr::kable(example_files,
 
 ### `store_timeseries()`
 
-`store_timeseries()` is the basic function for importing into the storage environment. It is most commonly used via wrappers such as `load_fund()` or the vendor-specific wrappers around `load_fund()`---handling Excel NAV histories from Amundi, HSBC, Invesco, iShares, SPDR, UBS, Vanguard, and Xtrackers. It is often called directly when importing CSV/TSV files or data frames.
+`store_timeseries()` is the basic function for importing into the storage environment. It is most commonly used via wrappers such as `import_fund()` or the vendor-specific wrappers around `import_fund()`---handling Excel NAV histories from Amundi, HSBC, Invesco, iShares, SPDR, UBS, Vanguard, and Xtrackers. It is often called directly when importing CSV/TSV files or data frames.
 
 The example fund GNDB has a NAV history in CSV format with dates expressed as milliseconds since the Unix epoch, a NAV column, and a Benchmark column that will not be imported from the fund file in this example.
 
@@ -282,9 +282,9 @@ store_timeseries(
 )
 ```
 
-### `load_fund()`
+### `import_fund()`
 
-`load_fund()` reads an Excel file with fund NAVs into the storage environment (it calls `store_timeseries()` with an expression that uses `read_timeseries_excel()`). It accepts **regular expressions** for identifying the date and NAV columns and a `sheet` (name or number) selecting the worksheet within the Excel workbook that contains the NAV history. The default values are `date_col = "^Date"`, `nav_col = "^NAV"`, and `sheet = 1` (which works for single-sheet workbooks). The first argument (usually a fund ticker), converted to lowercase, is used as the variable name for `store_timeseries()` and as the tibble column name that will eventually propagate to the master table. The `benchmark` argument provides the fund→index mapping.
+`import_fund()` reads an Excel file with fund NAVs into the storage environment (it calls `store_timeseries()` with an expression that uses `read_timeseries_excel()`). It accepts **regular expressions** for identifying the date and NAV columns and a `sheet` (name or number) selecting the worksheet within the Excel workbook that contains the NAV history. The default values are `date_col = "^Date"`, `nav_col = "^NAV"`, and `sheet = 1` (which works for single-sheet workbooks). The first argument (usually a fund ticker), converted to lowercase, is used as the variable name for `store_timeseries()` and as the tibble column name that will eventually propagate to the master table. The `benchmark` argument provides the fund→index mapping.
 
 ```{r, echo=FALSE, fig.cap="Figure 2: Excel file for FNDA", fig.align=fig_align}
 knitr::include_graphics("figures/excel-example.png")
@@ -293,7 +293,7 @@ knitr::include_graphics("figures/excel-example.png")
 The NAV history for FNDA is provided in an Excel workbook with multiple sheets and a date column named "As Of" (Figure 2). If the defaults for `sheet`, `date_col`, or `nav_col` do not match the file layout, you **must** specify the relevant parameters. They will be used to reliably locate the NAV and date ranges even when the sheet contains extraneous rows and columns around the data (common in fund-manager files). For this file, `sheet` and `date_col` are required; `nav_col` is optional because the default would still match.
 
 ```{r load-fund}
-load_fund("FNDA",
+import_fund("FNDA",
           "FNDA.xlsx",
           benchmark = "IDX1",
           sheet = "historical",
@@ -301,12 +301,12 @@ load_fund("FNDA",
           nav_col = "^NAV")
 ```
 
-`load_fund()` recognizes proper Excel dates, improperly stored Excel dates, and a large number of text date formats used in fund files, but the date order (e.g. `"dmy"`, `"mdy"`, `"ymd"`) must be known for interpretation of text dates. It defaults to `"dmy"` which is the most common in UCITS ETF NAV histories.
+`import_fund()` recognizes proper Excel dates, improperly stored Excel dates, and a large number of text date formats used in fund files, but the date order (e.g. `"dmy"`, `"mdy"`, `"ymd"`) must be known for interpretation of text dates. It defaults to `"dmy"` which is the most common in UCITS ETF NAV histories.
 
 FNDB has text dates in MM/DD/YYYY format, so supplying `date_order = "mdy"` is required.
 
 ```{r load-fund2}
-load_fund("FNDB",
+import_fund("FNDB",
           "FNDB.xlsx",
           benchmark = "IDX1",
           date_col = "^date",
@@ -315,8 +315,8 @@ load_fund("FNDB",
 ```
 
 The final fund to load is GNDA.
-```{r load_fund3}
-load_fund("GNDA",
+```{r import_fund3}
+import_fund("GNDA",
           "GNDA.xlsx",
           benchmark = "IDX2",
           date_col = "^Date",
@@ -355,12 +355,12 @@ If there are multiple sources for the same series and values need to be coalesce
 
 ```{r merging, eval=FALSE}
 # load fund NAVs, uses default "acme" for column and storage variable
-load_fund("ACME",
+import_fund("ACME",
           file = "ACME1.xlsx",
           date_col = "As Of")
 
 # also load NAVs into "acme" column, but storage variable is "acme2"
-load_fund("ACME",
+import_fund("ACME",
           var_name = "acme2",
           file = "ACME2.xlsx",
           date_col = "As Of")
@@ -381,7 +381,7 @@ series <- build_all_series(late = "acme2",
 ```
 
 ### Vendor-specific wrappers
-The following wrappers use `load_fund()` to import Excel files provided by fund managers.
+The following wrappers use `import_fund()` to import Excel files provided by fund managers.
 
 * `amun()` (Amundi)
 * `hsbc()` (HSBC)
@@ -436,7 +436,7 @@ ishs("IUSQ", benchmark = "ACWI", retrieve_benchmark = TRUE)
 
 ### Using data loaders
 
-Before joining the data frames in the storage environment, `build_all_series()` calls `run_data_loaders()` which invokes all registered as data loaders. Instead of directly calling `store_timeseries()`, `load_fund()`, etc., more complex workflows should register functions as data loaders via `add_data_loader()`. A script setting up funds tracking MSCI ACWI could do the following.
+Before joining the data frames in the storage environment, `build_all_series()` calls `run_data_loaders()` which invokes all registered as data loaders. Instead of directly calling `store_timeseries()`, `import_fund()`, etc., more complex workflows should register functions as data loaders via `add_data_loader()`. A script setting up funds tracking MSCI ACWI could do the following.
 
 ```{r data-loaders, eval=FALSE}
 add_fund_urls(c(

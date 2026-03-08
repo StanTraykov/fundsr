@@ -6,20 +6,20 @@
 \alias{spdj}
 \title{Index provider wrappers}
 \usage{
-msci(var_name = NULL, file, col_trans, benchmarks = NULL, ...)
+msci(file, col_trans, benchmarks = NULL, var_name = NULL, ...)
 
-spdj(var_name = NULL, file, col_trans, benchmarks = NULL, ...)
+spdj(file, col_trans, benchmarks = NULL, var_name = NULL, ...)
 }
 \arguments{
-\item{var_name}{Storage key used in \code{session$storage}. If \code{NULL}, \code{tolower(file)} is
-used.}
-
 \item{file}{Filename of the Excel file to import.}
 
 \item{col_trans}{Named vector specifying column translations.}
 
 \item{benchmarks}{Optional benchmark mapping to record in the fund-index map
 (for example, to map gross to net indices).}
+
+\item{var_name}{Storage key used in \code{session$storage}. If \code{NULL}, \code{tolower(file)} is
+used.}
 
 \item{...}{
   Arguments passed on to \code{\link[=store_timeseries]{store_timeseries}}

@@ -48,3 +48,7 @@ reference:
   - title: "Example helpers"
     contents:
       - has_concept("example helpers")
+
+  - title: "Deprecated"
+    contents:
+      - has_concept("deprecated functions")

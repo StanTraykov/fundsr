@@ -34,8 +34,8 @@ Other fund/index workflow functions:
 \code{\link{clear_data_loaders}()},
 \code{\link{clear_storage}()},
 \code{\link{get_storage}()},
+\code{\link{import_fund}()},
 \code{\link{join_env}()},
-\code{\link{load_fund}()},
 \code{\link{run_data_loaders}()},
 \code{\link{store_timeseries}()}
 }
