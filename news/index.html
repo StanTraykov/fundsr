@@ -45,6 +45,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="fundsr-development-version">fundsr (development version)<a class="anchor" aria-label="anchor" href="#fundsr-development-version"></a></h2>
+<div class="section level3">
+<h3 id="importing-development-version">Importing<a class="anchor" aria-label="anchor" href="#importing-development-version"></a></h3>
+<ul><li>
+<code>var_name</code> param is now optional for all provider wrappers (both fund and index)</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.2" id="fundsr-042">fundsr 0.4.2<a class="anchor" aria-label="anchor" href="#fundsr-042"></a></h2>
@@ -79,7 +84,7 @@
 <h2 class="pkg-version" data-toc-text="0.4.0" id="fundsr-040">fundsr 0.4.0<a class="anchor" aria-label="anchor" href="#fundsr-040"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
-<ul><li>reorder arguments in <code><a href="../reference/msci.html">msci()</a></code> to match package convention</li>
+<ul><li>reorder arguments in <code><a href="../reference/index_provider_wrappers.html">msci()</a></code> to match package convention</li>
 </ul></div>
 <div class="section level3">
 <h3 id="importing-0-4-0">Importing<a class="anchor" aria-label="anchor" href="#importing-0-4-0"></a></h3>
@@ -203,11 +208,11 @@
 <li>Download and import helpers:
 <ul><li>Download configured fund files to a local data directory (<code><a href="../reference/download_fund_data.html">download_fund_data()</a></code>).</li>
 <li>Read generic delimited time series with epoch timestamps (<code><a href="../reference/read_timeseries.html">read_timeseries()</a></code>).</li>
-<li>Read MSCI TSV files (<code><a href="../reference/read_msci_tsv.html">read_msci_tsv()</a></code>) and import MSCI Excel data via <code><a href="../reference/msci.html">msci()</a></code>.</li>
+<li>Read MSCI TSV files (<code><a href="../reference/read_msci_tsv.html">read_msci_tsv()</a></code>) and import MSCI Excel data via <code><a href="../reference/index_provider_wrappers.html">msci()</a></code>.</li>
 <li>Import fund NAV (and optional benchmark series) from Excel and register fund→benchmark mappings (<code><a href="../reference/load_fund.html">load_fund()</a></code>, <code><a href="../reference/get_fund_index_map.html">get_fund_index_map()</a></code>).</li>
 <li>Fallback parser for Excel 2003 XML (SpreadsheetML) files.</li>
 </ul></li>
-<li>Convenience helpers for provider-specific Excel formats: <code><a href="../reference/ishs.html">ishs()</a></code> (iShares), <code><a href="../reference/spdr.html">spdr()</a></code> (SPDR), <code><a href="../reference/xtra.html">xtra()</a></code> (Xtrackers), <code><a href="../reference/amun.html">amun()</a></code> (Amundi), <code><a href="../reference/inve.html">inve()</a></code> (Invesco), <code><a href="../reference/vang.html">vang()</a></code> (Vanguard), <code><a href="../reference/ubs.html">ubs()</a></code> (UBS), <code><a href="../reference/hsbc.html">hsbc()</a></code> (HSBC).</li>
+<li>Convenience helpers for provider-specific Excel formats: <code><a href="../reference/fund_provider_wrappers.html">ishs()</a></code> (iShares), <code><a href="../reference/fund_provider_wrappers.html">spdr()</a></code> (SPDR), <code><a href="../reference/fund_provider_wrappers.html">xtra()</a></code> (Xtrackers), <code><a href="../reference/fund_provider_wrappers.html">amun()</a></code> (Amundi), <code><a href="../reference/fund_provider_wrappers.html">inve()</a></code> (Invesco), <code><a href="../reference/fund_provider_wrappers.html">vang()</a></code> (Vanguard), <code><a href="../reference/fund_provider_wrappers.html">ubs()</a></code> (UBS), <code><a href="../reference/fund_provider_wrappers.html">hsbc()</a></code> (HSBC).</li>
 <li>
 <code><a href="../reference/join_env.html">join_env()</a></code> combines multiple tables stored in an environment, with optional “late” left-joins and optional coalescing of <code>.x</code>/<code>.y</code> join columns.</li>
 </ul></div>

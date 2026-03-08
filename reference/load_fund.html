@@ -131,8 +131,21 @@ alongside the fund.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments passed to <code><a href="store_timeseries.html">store_timeseries()</a></code>, such as
-<code>overwrite</code>, <code>postprocess</code>, <code>session</code>.</p></dd>
+<dd><p>Arguments passed on to <code><a href="store_timeseries.html">store_timeseries</a></code></p><dl><dt><code>overwrite</code></dt>
+<dd><p>Logical scalar. If <code>TRUE</code>, recompute and replace any existing
+cached value, regardless of <code>fundsr.reload</code>.</p></dd>
+
+    <dt><code>postprocess</code></dt>
+<dd><p>Function applied to the computed value before caching.
+Only used when the value is (re)computed (i.e. not applied when a cached
+value is reused). Defaults to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">base::identity()</a></code>.</p></dd>
+
+    <dt><code>session</code></dt>
+<dd><p>Optional <code>fundsr_session</code> object. Defaults to the package
+default session when <code>NULL</code>.</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
@@ -155,7 +168,7 @@ its benchmark key.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Provider wrappers: <code><a href="amun.html">amun()</a></code>, <code><a href="hsbc.html">hsbc()</a></code>, <code><a href="inve.html">inve()</a></code>, <code><a href="ishs.html">ishs()</a></code>, <code><a href="spdr.html">spdr()</a></code>, <code><a href="ubs.html">ubs()</a></code>, <code><a href="vang.html">vang()</a></code>, <code><a href="xtra.html">xtra()</a></code></p>
+    <div class="dont-index"><p>Provider wrappers: <code><a href="fund_provider_wrappers.html">amun()</a></code>, <code><a href="fund_provider_wrappers.html">hsbc()</a></code>, <code><a href="fund_provider_wrappers.html">inve()</a></code>, <code><a href="fund_provider_wrappers.html">ishs()</a></code>, <code><a href="fund_provider_wrappers.html">spdr()</a></code>, <code><a href="fund_provider_wrappers.html">ubs()</a></code>, <code><a href="fund_provider_wrappers.html">vang()</a></code>, <code><a href="fund_provider_wrappers.html">xtra()</a></code></p>
 <p>Other fund/index workflow functions:
 <code><a href="add_data_loader.html">add_data_loader()</a></code>,
 <code><a href="adjust_for_split.html">adjust_for_split()</a></code>,
