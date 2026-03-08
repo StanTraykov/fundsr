@@ -21,11 +21,11 @@ Guidance for AI/code agents working in this repository.
 - **Ingest + parsing:** `R/read_*.R`, `R/download.R`, `R/data_loaders.R`, `R/import_*.R`.
 - **Options:** `R/options.R`.
 - **Session + storage:** `R/state.R`, `R/storage.R`, `R/fund_index_map.R`.
-- **Checks:** `R/checks.R` (`check_*`).
+- **Checks:** `R/checks.R`.
 - **Conditions + messaging:** `R/conditions.R` (`fundsr_abort`, `stop_bad_arg`, `fundsr_warn`, `fundsr_msg`).
 - **Small generic helpers:** `R/utils.R`.
 - **Computation/series ops:** `R/compute_*.R`.
-- **Plotting + export:** `R/plot_*.R`, `R/plot_export.R`, `R/plot_roll_diffs.R`.
+- **Plotting + export:** `R/plot_*.R`.
 - **i18n:** `R/i18n.R`, `po/`, `inst/po/`.
 - **Domain modules:** liquidity: `R/xlm.R`; survival curves: `R/survival_hmd.R`, `R/survival_europop.R`.
 - **Package hooks + imports:** `R/imports.R`, `R/zzz.R`.
