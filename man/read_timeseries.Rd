@@ -10,7 +10,8 @@ read_timeseries(
   time_unit = c("ms", "s", "us", "ns"),
   orders = NULL,
   force_text_date = FALSE,
-  line_filter = NULL
+  line_filter = NULL,
+  ext_override = NULL
 )
 }
 \arguments{
@@ -34,6 +35,9 @@ file by lines before parsing. If supplied, the file is read with
 \code{\link[readr:read_lines]{readr::read_lines()}} and only lines matching \code{line_filter} are kept. The
 regex must match both data lines and the header line, e.g.
 \code{"^[0-9]|^Date,"}}
+
+\item{ext_override}{File format to assume instead of the one implied by
+the filename extension: either \code{tsv}, \code{csv}.}
 }
 \value{
 A tibble with parsed date column and numeric value columns.
@@ -46,7 +50,8 @@ to numeric.
 \details{
 The reader is chosen by file extension: \code{.csv} uses \code{\link[readr:read_delim]{readr::read_csv()}} and
 \code{.tsv}/\code{.tab}/\code{.txt} uses \code{\link[readr:read_delim]{readr::read_tsv()}}. Gzipped variants such as
-\code{.csv.gz} and \code{.tsv.gz} are also supported.
+\code{.csv.gz} and \code{.tsv.gz} are also supported. This can be overriden by
+\code{ext_override}.
 
 The function assumes a date column exists (default: \code{date}). By default, if
 the date column looks numeric (i.e., coercion to numeric yields at least one
@@ -59,7 +64,6 @@ become \code{NA}).
 }
 \seealso{
 Other fund/index file readers: 
-\code{\link{read_msci_tsv}()},
 \code{\link{read_timeseries_excel}()}
 }
 \concept{fund/index file readers}

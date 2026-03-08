@@ -176,7 +176,7 @@ load_fund <- function(ticker,
                       data_sheet = lifecycle::deprecated(),
                       ...) {
     lifecycle::deprecate_warn(
-        when = "0.4.3",
+        when = "0.5.0",
         what = "load_fund()",
         with = "import_fund()"
     )

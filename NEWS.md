@@ -2,8 +2,11 @@
 
 ## Importing
 
-- `load_fund()` renamed to `import_fund()` (`load_fund()` remaining as a deprecated alias)
-- `var_name` param is now optional for all provider wrappers (both fund and index)
+- add `msci_tsv()` for importing MSCI TSV files
+- rename `load_fund()` to `import_fund()` (`load_fund()` remaining as a deprecated alias)
+- make `var_name` param optional for all provider wrappers (fund and index)
+- remove `read_msci_tsv()` reader
+- add `override_ext` param to `read_timeseries()`
 
 # fundsr 0.4.2
 

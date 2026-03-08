@@ -6,7 +6,8 @@
 #'
 #' The reader is chosen by file extension: `.csv` uses [readr::read_csv()] and
 #' `.tsv`/`.tab`/`.txt` uses [readr::read_tsv()]. Gzipped variants such as
-#' `.csv.gz` and `.tsv.gz` are also supported.
+#' `.csv.gz` and `.tsv.gz` are also supported. This can be overriden by
+#' `ext_override`.
 #'
 #' @param file Filename to read (relative to `fundsr.data_dir` option).
 #' @param date_col Name of the date column in the file.
@@ -23,6 +24,8 @@
 #'   [readr::read_lines()] and only lines matching `line_filter` are kept. The
 #'   regex must match both data lines and the header line, e.g.
 #'   `"^[0-9]|^Date,"`
+#' @param ext_override File format to assume instead of the one implied by
+#'   the filename extension: either `tsv`, `csv`.
 #'
 #' @return A tibble with parsed date column and numeric value columns.
 #'
@@ -44,7 +47,8 @@ read_timeseries <- function(
     time_unit = c("ms", "s", "us", "ns"),
     orders = NULL,
     force_text_date = FALSE,
-    line_filter = NULL
+    line_filter = NULL,
+    ext_override = NULL
 ) {
     time_unit <- match.arg(time_unit)
     check_string(file)
@@ -52,6 +56,7 @@ read_timeseries <- function(
     check_string(orders, allow_null = TRUE, min_n = 1)
     check_logical(force_text_date)
     check_string(line_filter, allow_null = TRUE)
+    check_string(ext_override, allow_null = TRUE)
 
     fund_data_dir <- fundsr_get_option("data_dir")
     path <- file.path(fund_data_dir, file)
@@ -84,7 +89,7 @@ read_timeseries <- function(
         read_obj <- path
     }
 
-    ext <- tolower(tools::file_ext(path))
+    ext <- ext_override %||% tolower(tools::file_ext(path))
     if (identical(ext, "gz")) {
         ext <- tolower(tools::file_ext(sub("\\.gz$", "", path, ignore.case = TRUE)))
     }
@@ -202,50 +207,4 @@ read_timeseries <- function(
         "(date col ='{date_col}')."
     )), level = 2L)
     out
-}
-
-#' Read an MSCI two-column TSV file
-#'
-#' Extracts the data portion of an MSCI TSV file—skipping header noise—and reads
-#' it as a two-column table containing a date and a numeric value.
-#'
-#' @param file Filename of the TSV to read (relative to `fundsr.data_dir` option).
-#'
-#' @return A tibble with a `Date` column and one numeric column.
-#'
-#' @details
-#' The function filters lines beginning with a digit (date rows) or the literal
-#' `"Date"`, then parses them using a fixed `%m/%d/%Y` date format and a numeric
-#' second field.
-#'
-#' @family fund/index file readers
-#' @export
-read_msci_tsv <- function(file) {
-    fund_data_dir <- fundsr_get_option("data_dir")
-    path <- file.path(fund_data_dir, file)
-    if (!file.exists(path)) {
-        stop_bad_arg(
-            "file",
-            c(
-                "must refer to an existing file; file does not exist.",
-                i = sprintf("path = %s.", sQuote(path))
-            )
-        )
-    }
-    lines <- readr::read_lines(path)
-    data_lines <- grep("^[0-9]|^Date\\b", lines, value = TRUE)
-    if (!length(data_lines)) {
-        fundsr_abort(
-            msg = c(
-                "MSCI TSV parse failed: no data lines found.",
-                i = sprintf("path = %s.", sQuote(path))
-            ),
-            class = "fundsr_bad_data"
-        )
-    }
-    df <- readr::read_tsv(I(data_lines), col_types = readr::cols(
-        readr::col_date(format = "%m/%d/%Y"),
-        readr::col_double()
-    ))
-    df
 }

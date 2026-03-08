@@ -21,5 +21,6 @@ add_data_loader(function() {
     msci(col_trans = gross_idx_trans_ccy("EUR"),
          benchmarks = set_names(names(net_idx_trans_ccy("EUR")), names(gross_idx_trans_ccy("EUR"))),
          file = "WUSA_FULL-GR-EUR.xls")
+    msci_tsv(file = "90479.49.all.xls", index_id = "WORLD_L2-GR")
 })
-build_all_series()
+series <- build_all_series()

@@ -85,7 +85,7 @@ corresponding entry is added to \code{session$state$fund_index_map} to link the 
 its benchmark key.
 }
 \examples{
-fundsr_options(data_dir = fundsr_example_data())
+fundsr_options(data_dir = fundsr_example_data(), verbosity = 2)
 
 import_fund("FNDA",
           "FNDA.xlsx",

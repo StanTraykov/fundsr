@@ -10,6 +10,7 @@
 #' @param benchmarks Optional benchmark mapping to record in the fund-index map
 #'   (for example, to map gross to net indices).
 #' @param file Filename of the Excel file to import.
+#' @param index_id Index identifier
 #' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
 #'
 #' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
@@ -20,8 +21,7 @@
 #' @name index_provider_wrappers
 NULL
 
-#' @describeIn index_provider_wrappers Import an MSCI index sheet and register benchmark
-#'   mappings
+#' @describeIn index_provider_wrappers Import an MSCI index sheet and register benchmark mappings
 #' @export
 msci <- function(file, col_trans, benchmarks = NULL, var_name = NULL, ...) {
     store_timeseries(
@@ -56,4 +56,23 @@ spdj <- function(file, col_trans, benchmarks = NULL, var_name = NULL, ...) {
         fund_index_map = benchmarks,
         ...
     )
+}
+
+#' @describeIn index_provider_wrappers Import an MSCI two-column TSV file for a single index
+#' @export
+msci_tsv <- function(file, index_id, benchmarks = NULL, var_name = NULL, ...) {
+    check_string(index_id)
+    store_timeseries(
+        var_name = var_name %||% tolower(file),
+        expr = read_timeseries(
+            file = file,
+            date_col = "Date",
+            ext_override = "tsv",
+            line_filter = "^[0-9]|^Date\\t",
+            orders = "mdy"
+        ) %>% set_names(c("date", index_id)),
+        fund_index_map = benchmarks,
+        ...
+    )
+
 }

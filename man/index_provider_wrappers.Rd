@@ -4,11 +4,14 @@
 \alias{index_provider_wrappers}
 \alias{msci}
 \alias{spdj}
+\alias{msci_tsv}
 \title{Index provider wrappers}
 \usage{
 msci(file, col_trans, benchmarks = NULL, var_name = NULL, ...)
 
 spdj(file, col_trans, benchmarks = NULL, var_name = NULL, ...)
+
+msci_tsv(file, index_id, benchmarks = NULL, var_name = NULL, ...)
 }
 \arguments{
 \item{file}{Filename of the Excel file to import.}
@@ -32,6 +35,8 @@ value is reused). Defaults to \code{\link[base:identity]{base::identity()}}.}
     \item{\code{session}}{Optional \code{fundsr_session} object. Defaults to the package
 default session when \code{NULL}.}
   }}
+
+\item{index_id}{Index identifier}
 }
 \value{
 Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.
@@ -44,11 +49,12 @@ Wrappers around \code{\link[=store_timeseries]{store_timeseries()}} and \code{\l
 }
 \section{Functions}{
 \itemize{
-\item \code{msci()}: Import an MSCI index sheet and register benchmark
-mappings
+\item \code{msci()}: Import an MSCI index sheet and register benchmark mappings
 
 \item \code{spdj()}: Import an S&P Dow Jones index sheet and register benchmark
 mappings
+
+\item \code{msci_tsv()}: Import an MSCI two-column TSV file for a single index
 
 }}
 \seealso{

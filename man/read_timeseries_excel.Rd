@@ -94,7 +94,6 @@ x <- read_timeseries_excel(
 \code{\link[=read_timeseries]{read_timeseries()}} for CSV/TSV time series import.
 
 Other fund/index file readers: 
-\code{\link{read_msci_tsv}()},
 \code{\link{read_timeseries}()}
 }
 \concept{fund/index file readers}
