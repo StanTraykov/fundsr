@@ -165,7 +165,7 @@ store_timeseries(
     fund_index_map = c(gndb = "IDX2")
 )
 #> ℹ Reading Text:
-#> '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/GNDB.csv'
+#> '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/GNDB.csv'
 ```
 
 The variable name used for the storage environment (`var_name`) can be
@@ -221,7 +221,7 @@ store_timeseries(
     fund_index_map = c(`IDX1-GR` = "IDX1")
 )
 #> ℹ Reading Excel:
-#> '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX1.xlsx'
+#> '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/IDX1.xlsx'
 
 store_timeseries(
     var_name = "idx2",
@@ -230,8 +230,8 @@ store_timeseries(
                      by = "date"),
     fund_index_map = c(`IDX2-GR` = "IDX2")
 )
-#> ℹ Reading Text:  '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX2N.csv'
-#> ℹ Reading Text:  '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX2G.csv'
+#> ℹ Reading Text:  '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/IDX2N.csv'
+#> ℹ Reading Text:  '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/IDX2G.csv'
 ```
 
 ### `import_fund()`
@@ -267,13 +267,13 @@ because the default would still match.
 
 ``` r
 import_fund("FNDA",
-          "FNDA.xlsx",
-          benchmark = "IDX1",
-          sheet = "historical",
-          date_col = "^As Of",
-          nav_col = "^NAV")
+            "FNDA.xlsx",
+            benchmark = "IDX1",
+            sheet = "historical",
+            date_col = "^As Of",
+            nav_col = "^NAV")
 #> ℹ Reading Excel:
-#> '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/FNDA.xlsx'
+#> '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/FNDA.xlsx'
 ```
 
 [`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md)
@@ -288,25 +288,25 @@ FNDB has text dates in MM/DD/YYYY format, so supplying
 
 ``` r
 import_fund("FNDB",
-          "FNDB.xlsx",
-          benchmark = "IDX1",
-          date_col = "^date",
-          nav_col = "^net asset val",
-          date_order = "mdy")
+            "FNDB.xlsx",
+            benchmark = "IDX1",
+            date_col = "^date",
+            nav_col = "^net asset val",
+            date_order = "mdy")
 #> ℹ Reading Excel:
-#> '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/FNDB.xlsx'
+#> '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/FNDB.xlsx'
 ```
 
 The final fund to load is GNDA.
 
 ``` r
 import_fund("GNDA",
-          "GNDA.xlsx",
-          benchmark = "IDX2",
-          date_col = "^Date",
-          nav_col = "^Official NAV")
+            "GNDA.xlsx",
+            benchmark = "IDX2",
+            date_col = "^Date",
+            nav_col = "^Official NAV")
 #> ℹ Reading Excel:
-#> '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/GNDA.xlsx'
+#> '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/GNDA.xlsx'
 ```
 
 ### Building the master table
@@ -376,14 +376,14 @@ building the series, one can be designated `late`.
 ``` r
 # load fund NAVs, uses default "acme" for column and storage variable
 import_fund("ACME",
-          file = "ACME1.xlsx",
-          date_col = "As Of")
+            file = "ACME1.xlsx",
+            date_col = "As Of")
 
 # also load NAVs into "acme" column, but storage variable is "acme2"
 import_fund("ACME",
-          var_name = "acme2",
-          file = "ACME2.xlsx",
-          date_col = "As Of")
+            var_name = "acme2",
+            file = "ACME2.xlsx",
+            date_col = "As Of")
 
 # join "acme" and "acme2"
 # both columns will be available, named "acme.late" and "acme.early"

@@ -589,7 +589,7 @@ import the benchmark later from its own file).</p>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gndb <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/GNDB.csv'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/GNDB.csv'</span></span></code></pre></div>
 <p>The variable name used for the storage environment
 (<code>var_name</code>) can be chosen arbitrarily and serves as the
 cache key. The <code>fund_index_map</code> parameter defines a mapping
@@ -636,7 +636,7 @@ table.</p>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX1-GR` <span class="op">=</span> <span class="st">"IDX1"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX1.xlsx'</span></span>
+<span><span class="co">#&gt; '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/IDX1.xlsx'</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span></span>
 <span>    var_name <span class="op">=</span> <span class="st">"idx2"</span>,</span>
@@ -645,8 +645,8 @@ table.</p>
 <span>                     by <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX2-GR` <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX2N.csv'</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/IDX2G.csv'</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/IDX2N.csv'</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/IDX2G.csv'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="import_fund">
@@ -682,13 +682,13 @@ required; <code>nav_col</code> is optional because the default would
 still match.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"FNDA"</span>,</span>
-<span>          <span class="st">"FNDA.xlsx"</span>,</span>
-<span>          benchmark <span class="op">=</span> <span class="st">"IDX1"</span>,</span>
-<span>          sheet <span class="op">=</span> <span class="st">"historical"</span>,</span>
-<span>          date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
-<span>          nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
+<span>            <span class="st">"FNDA.xlsx"</span>,</span>
+<span>            benchmark <span class="op">=</span> <span class="st">"IDX1"</span>,</span>
+<span>            sheet <span class="op">=</span> <span class="st">"historical"</span>,</span>
+<span>            date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
+<span>            nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
 <p><code><a href="../reference/import_fund.html">import_fund()</a></code> recognizes proper Excel dates, improperly
 stored Excel dates, and a large number of text date formats used in fund
 files, but the date order (e.g. <code>"dmy"</code>, <code>"mdy"</code>,
@@ -699,22 +699,22 @@ histories.</p>
 <code>date_order = "mdy"</code> is required.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"FNDB"</span>,</span>
-<span>          <span class="st">"FNDB.xlsx"</span>,</span>
-<span>          benchmark <span class="op">=</span> <span class="st">"IDX1"</span>,</span>
-<span>          date_col <span class="op">=</span> <span class="st">"^date"</span>,</span>
-<span>          nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
-<span>          date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
+<span>            <span class="st">"FNDB.xlsx"</span>,</span>
+<span>            benchmark <span class="op">=</span> <span class="st">"IDX1"</span>,</span>
+<span>            date_col <span class="op">=</span> <span class="st">"^date"</span>,</span>
+<span>            nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
+<span>            date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
 <p>The final fund to load is GNDA.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"GNDA"</span>,</span>
-<span>          <span class="st">"GNDA.xlsx"</span>,</span>
-<span>          benchmark <span class="op">=</span> <span class="st">"IDX2"</span>,</span>
-<span>          date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
-<span>          nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
+<span>            <span class="st">"GNDA.xlsx"</span>,</span>
+<span>            benchmark <span class="op">=</span> <span class="st">"IDX2"</span>,</span>
+<span>            date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
+<span>            nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmprmZorq/temp_libpath1bfe26d430ce/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/Rtmp7szwZq/temp_libpath1ba9488eb9cd/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-the-master-table">Building the master table<a class="anchor" aria-label="anchor" href="#building-the-master-table"></a>
@@ -977,14 +977,14 @@ When building the series, one can be designated <code>late</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load fund NAVs, uses default "acme" for column and storage variable</span></span>
 <span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"ACME"</span>,</span>
-<span>          file <span class="op">=</span> <span class="st">"ACME1.xlsx"</span>,</span>
-<span>          date_col <span class="op">=</span> <span class="st">"As Of"</span><span class="op">)</span></span>
+<span>            file <span class="op">=</span> <span class="st">"ACME1.xlsx"</span>,</span>
+<span>            date_col <span class="op">=</span> <span class="st">"As Of"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># also load NAVs into "acme" column, but storage variable is "acme2"</span></span>
 <span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"ACME"</span>,</span>
-<span>          var_name <span class="op">=</span> <span class="st">"acme2"</span>,</span>
-<span>          file <span class="op">=</span> <span class="st">"ACME2.xlsx"</span>,</span>
-<span>          date_col <span class="op">=</span> <span class="st">"As Of"</span><span class="op">)</span></span>
+<span>            var_name <span class="op">=</span> <span class="st">"acme2"</span>,</span>
+<span>            file <span class="op">=</span> <span class="st">"ACME2.xlsx"</span>,</span>
+<span>            date_col <span class="op">=</span> <span class="st">"As Of"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># join "acme" and "acme2"</span></span>
 <span><span class="co"># both columns will be available, named "acme.late" and "acme.early"</span></span>
