@@ -62,16 +62,20 @@
 
 
 <dl><dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
-<dd><p>Filename of the Excel file to import.</p></dd>
+<dd><p>Filename of the file to import.</p></dd>
 
 
 <dt id="arg-col-trans">col_trans<a class="anchor" aria-label="anchor" href="#arg-col-trans"></a></dt>
-<dd><p>Named vector specifying column translations.</p></dd>
+<dd><p>Named character vector (or list) mapping index identifiers
+to regular expressions used to select the corresponding columns in Excel files.
+The names become the imported column names in the stored time series; the values
+are matched against the Excel column headers. Passed to <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>.</p></dd>
 
 
 <dt id="arg-benchmarks">benchmarks<a class="anchor" aria-label="anchor" href="#arg-benchmarks"></a></dt>
-<dd><p>Optional benchmark mapping to record in the fund-index map
-(for example, to map gross to net indices).</p></dd>
+<dd><p>Optional benchmark mapping(s) to record in the fund-index map
+(for example, to map gross to net indices for tracking-difference plotting alongside
+funds).</p></dd>
 
 
 <dt id="arg-var-name">var_name<a class="anchor" aria-label="anchor" href="#arg-var-name"></a></dt>
@@ -98,7 +102,8 @@ default session when <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-index-id">index_id<a class="anchor" aria-label="anchor" href="#arg-index-id"></a></dt>
-<dd><p>Index identifier</p></dd>
+<dd><p>Index identifier used as the imported column name for text files
+containing a single index.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -107,20 +112,20 @@ default session when <code>NULL</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Wrappers around <code><a href="store_timeseries.html">store_timeseries()</a></code> and <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code> for index files.</p>
+    <p>Wrappers around <code><a href="store_timeseries.html">store_timeseries()</a></code> and either
+<code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code> or <code><a href="read_timeseries.html">read_timeseries()</a></code> for importing index files.</p>
     </div>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
 
-<ul><li><p><code>msci()</code>: Import an MSCI index sheet and register benchmark mappings</p></li>
-<li><p><code>spdj()</code>: Import an S&amp;P Dow Jones index sheet and register benchmark
-mappings</p></li>
+<ul><li><p><code>msci()</code>: Import an MSCI index Excel file</p></li>
+<li><p><code>spdj()</code>: Import an S&amp;P Dow Jones index Excel file</p></li>
 <li><p><code>msci_tsv()</code>: Import an MSCI two-column TSV file for a single index</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="fund_provider_wrappers.html">Fund provider wrappers</a>, <code><a href="store_timeseries.html">store_timeseries()</a></code>,
-<code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code></p></div>
+<code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>, <code><a href="read_timeseries.html">read_timeseries()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
