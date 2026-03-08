@@ -37,7 +37,7 @@ default session when \code{NULL}.}
 Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.
 }
 \description{
-Vendor-specific import wrappers for (net/gross) index total return levels.
+Vendor-specific import wrappers for index total return levels (net or gross).
 }
 \details{
 Wrappers around \code{\link[=store_timeseries]{store_timeseries()}} and \code{\link[=read_timeseries_excel]{read_timeseries_excel()}} for index files.

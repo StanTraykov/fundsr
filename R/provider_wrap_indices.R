@@ -1,6 +1,6 @@
 #' Index provider wrappers
 #'
-#' Vendor-specific import wrappers for (net/gross) index total return levels.
+#' Vendor-specific import wrappers for index total return levels (net or gross).
 #'
 #' Wrappers around [store_timeseries()] and [read_timeseries_excel()] for index files.
 #'
@@ -13,6 +13,7 @@
 #' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
 #'
 #' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
+#'
 #' @seealso [Fund provider wrappers][fund_provider_wrappers], [store_timeseries()],
 #'   [read_timeseries_excel()]
 #' @concept provider wrappers

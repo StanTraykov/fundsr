@@ -60,6 +60,9 @@ default session when \code{NULL}.}
 
 \item{var_name}{Specify a custom variable name for the storage environment.}
 }
+\value{
+Invisibly returns \code{NULL}. Data are stored via \code{\link[=store_timeseries]{store_timeseries()}}.
+}
 \description{
 Vendor-specific import wrappers for NAV histories.
 }
@@ -88,11 +91,21 @@ Most fund importers are wrappers around \code{\link[=load_fund]{load_fund()}} (w
 
 \item \code{hsbc()}: Import an HSBC NAV history
 
-\item \code{bnpp()}: Import an BNP Paribas NAV history
+\item \code{bnpp()}: Import a BNP Paribas NAV history
 
 \item \code{avan()}: Import an Avantis NAV history
 
 }}
+\examples{
+\dontrun{
+xtra("SCWX", benchmark = "ACWI", file = "HistoricalData-LU2903252349.xlsx")
+spdr("SPYI",
+     benchmark = "ACWI_IMI",
+     postprocess = function(x) {
+         adjust_for_split(x, lubridate::as_date("2026-02-23"), 25, "spyi")
+     })
+}
+}
 \seealso{
 \link[=index_provider_wrappers]{Index provider wrappers}, \code{\link[=load_fund]{load_fund()}}, \code{\link[=store_timeseries]{store_timeseries()}},
 \code{\link[=read_timeseries_excel]{read_timeseries_excel()}}, \code{\link[=read_timeseries]{read_timeseries()}}

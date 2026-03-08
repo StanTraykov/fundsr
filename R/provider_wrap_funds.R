@@ -17,11 +17,22 @@
 #'   [xtra()]).
 #' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
 #'
-#' @concept provider wrappers
+#' @return Invisibly returns `NULL`. Data are stored via [store_timeseries()].
+#'
 #' @seealso [Index provider wrappers][index_provider_wrappers], [load_fund()], [store_timeseries()],
 #'   [read_timeseries_excel()], [read_timeseries()]
-#'
+#' @concept provider wrappers
 #' @name fund_provider_wrappers
+#'
+#' @examples
+#' \dontrun{
+#' xtra("SCWX", benchmark = "ACWI", file = "HistoricalData-LU2903252349.xlsx")
+#' spdr("SPYI",
+#'      benchmark = "ACWI_IMI",
+#'      postprocess = function(x) {
+#'          adjust_for_split(x, lubridate::as_date("2026-02-23"), 25, "spyi")
+#'      })
+#' }
 NULL
 
 #' @describeIn fund_provider_wrappers Import an iShares NAV history
@@ -72,7 +83,7 @@ amun <- function(ticker, file = NULL, benchmark = NULL, ...) {
 inve <- function(ticker, file = NULL, benchmark = NULL, retrieve_benchmark = FALSE, ...) {
     load_fund(ticker = ticker,
               file = file,
-              nav_col = "^NAV$", # need end marker ($) for Invesco do disambiguate
+              nav_col = "^NAV$", # need end marker ($) for Invesco to disambiguate
               benchmark = benchmark,
               benchmark_col = "^Index",
               retrieve_benchmark = retrieve_benchmark,
@@ -109,7 +120,7 @@ hsbc <- function(ticker, file = NULL, benchmark = NULL, ...) {
               ...)
 }
 
-#' @describeIn fund_provider_wrappers Import an BNP Paribas NAV history
+#' @describeIn fund_provider_wrappers Import a BNP Paribas NAV history
 #' @export
 bnpp <- function(ticker, file = NULL, benchmark = NULL, ...) {
     load_fund(ticker = ticker,
