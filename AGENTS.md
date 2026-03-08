@@ -18,16 +18,16 @@ Guidance for AI/code agents working in this repository.
 - CI/workflows live in `.github/workflows/`; pkgdown config is `_pkgdown.yml`.
 
 ## High-level architecture
-- **Ingest + parsing:** `R/read_*.R`, `R/read_text.R`, `R/read_excel.R`, `R/fund_download.R`, `R/data_loaders.R`, `R/wrappers.R`.
+- **Ingest + parsing:** `R/read_*.R`, `R/download.R`, `R/data_loaders.R`, `R/import_*.R`.
 - **Options:** `R/options.R`.
 - **Session + storage:** `R/state.R`, `R/storage.R`, `R/fund_index_map.R`.
 - **Checks:** `R/checks.R` (`check_*`).
 - **Conditions + messaging:** `R/conditions.R` (`fundsr_abort`, `stop_bad_arg`, `fundsr_warn`, `fundsr_msg`).
 - **Small generic helpers:** `R/utils.R`.
-- **Computation:** `R/fund_calc.R`.
+- **Computation/series ops:** `R/compute_*.R`.
 - **Plotting + export:** `R/plot_*.R`, `R/plot_export.R`, `R/plot_roll_diffs.R`.
 - **i18n:** `R/i18n.R`, `po/`, `inst/po/`.
-- **Domain modules:** liquidity: `R/xlm.R`; survival curves: `R/life.R`, `R/es_aasmr.R`.
+- **Domain modules:** liquidity: `R/xlm.R`; survival curves: `R/survival_hmd.R`, `R/survival_europop.R`.
 - **Package hooks + imports:** `R/imports.R`, `R/zzz.R`.
 
 When touching code, preserve this split and avoid mixing unrelated concerns.
