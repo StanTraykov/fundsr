@@ -66,7 +66,7 @@
 <div class="section level2">
 <h2 id="high-level-architecture">High-level architecture<a class="anchor" aria-label="anchor" href="#high-level-architecture"></a></h2>
 <ul><li>
-<strong>Ingest + parsing:</strong> <code>R/read_*.R</code>, <code>R/read_text.R</code>, <code>R/read_excel.R</code>, <code>R/fund_download.R</code>, <code>R/data_loaders.R</code>, <code>R/wrappers.R</code>.</li>
+<strong>Ingest + parsing:</strong> <code>R/read_*.R</code>, <code>R/download.R</code>, <code>R/data_loaders.R</code>, <code>R/import_*.R</code>.</li>
 <li>
 <strong>Options:</strong> <code>R/options.R</code>.</li>
 <li>
@@ -78,13 +78,13 @@
 <li>
 <strong>Small generic helpers:</strong> <code>R/utils.R</code>.</li>
 <li>
-<strong>Computation:</strong> <code>R/fund_calc.R</code>.</li>
+<strong>Computation/series ops:</strong> <code>R/compute_*.R</code>.</li>
 <li>
 <strong>Plotting + export:</strong> <code>R/plot_*.R</code>, <code>R/plot_export.R</code>, <code>R/plot_roll_diffs.R</code>.</li>
 <li>
 <strong>i18n:</strong> <code>R/i18n.R</code>, <code>po/</code>, <code>inst/po/</code>.</li>
 <li>
-<strong>Domain modules:</strong> liquidity: <code>R/xlm.R</code>; survival curves: <code>R/life.R</code>, <code>R/es_aasmr.R</code>.</li>
+<strong>Domain modules:</strong> liquidity: <code>R/xlm.R</code>; survival curves: <code>R/survival_hmd.R</code>, <code>R/survival_europop.R</code>.</li>
 <li>
 <strong>Package hooks + imports:</strong> <code>R/imports.R</code>, <code>R/zzz.R</code>.</li>
 </ul><p>When touching code, preserve this split and avoid mixing unrelated concerns.</p>
