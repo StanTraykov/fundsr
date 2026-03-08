@@ -117,6 +117,10 @@ default session when <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>Invisibly returns <code>NULL</code>. Data are stored via <code><a href="store_timeseries.html">store_timeseries()</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Most fund importers are wrappers around <code><a href="load_fund.html">load_fund()</a></code> (which uses <code><a href="store_timeseries.html">store_timeseries()</a></code> and
 <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>). Some use <code><a href="store_timeseries.html">store_timeseries()</a></code> directly, coupled with a reader like
@@ -135,7 +139,7 @@ default session when <code>NULL</code>.</p></dd>
 <li><p><code>vang()</code>: Import a Vanguard NAV history</p></li>
 <li><p><code>ubs()</code>: Import a UBS NAV history</p></li>
 <li><p><code>hsbc()</code>: Import an HSBC NAV history</p></li>
-<li><p><code>bnpp()</code>: Import an BNP Paribas NAV history</p></li>
+<li><p><code>bnpp()</code>: Import a BNP Paribas NAV history</p></li>
 <li><p><code>avan()</code>: Import an Avantis NAV history</p></li>
 </ul></div>
     <div class="section level2">
@@ -144,6 +148,18 @@ default session when <code>NULL</code>.</p></dd>
 <code><a href="read_timeseries_excel.html">read_timeseries_excel()</a></code>, <code><a href="read_timeseries.html">read_timeseries()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">xtra</span><span class="op">(</span><span class="st">"SCWX"</span>, benchmark <span class="op">=</span> <span class="st">"ACWI"</span>, file <span class="op">=</span> <span class="st">"HistoricalData-LU2903252349.xlsx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">spdr</span><span class="op">(</span><span class="st">"SPYI"</span>,</span></span>
+<span class="r-in"><span>     benchmark <span class="op">=</span> <span class="st">"ACWI_IMI"</span>,</span></span>
+<span class="r-in"><span>     postprocess <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>         <span class="fu"><a href="adjust_for_split.html">adjust_for_split</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_date</a></span><span class="op">(</span><span class="st">"2026-02-23"</span><span class="op">)</span>, <span class="fl">25</span>, <span class="st">"spyi"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
