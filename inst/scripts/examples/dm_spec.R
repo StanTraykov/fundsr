@@ -7,13 +7,13 @@ title_phys <- c(
 gg_par_phys <- fund_colors(breaks = funds_phys,
                            special = c(`WORLD-GR` = "black", `DMLM-GR` = "grey50"))
 
-funds_swap <- c("iwda", "sppw", "cw8", "dbxw", "wpea", "cw8u", "wldc", "iwds", "sc0j")
+funds_swap <- c("sppw", "cw8", "dbxw", "wpea", "cw8u", "wldc", "iwds", "sc0j", "dcam")
 title_swap <- c(
-    en = "World/DM swap funds (IWDA, SPPW for reference)",
-    bg = "суап фондове за разв. пазари (IWDA, SPPW за справка)"
+    en = "World/DM swap funds (SPPW for reference)",
+    bg = "суап фондове за разв. пазари (SPPW за справка)"
 )
 gg_par_swap <- fund_colors(breaks = funds_swap,
-                           special = c(iwda = "black", sppw = "grey50"))
+                           special = c(sppw = "black"))
 # plot specification
 plot_spec <- tribble(
     ~plot_id, ~title, ~data_filter,

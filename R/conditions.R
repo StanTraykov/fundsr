@@ -19,9 +19,7 @@
         x <- as.character(x)
         x[!is.na(x) & nzchar(x)]
     }
-    class <- norm_chr(class)
-    append <- norm_chr(append)
-    if (!length(class)) append else unique(c(class, append))
+    unique(c(norm_chr(class), norm_chr(append)))
 }
 
 fundsr_verbosity <- function() {

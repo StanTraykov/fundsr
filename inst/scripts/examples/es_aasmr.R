@@ -8,7 +8,7 @@ common_config <- system.file("scripts/examples/common_config.R",
                              mustWork = TRUE)
 source(common_config)
 
-start_from <- 2025
+start_from <- 2022
 
 specs <- tribble(
     ~geo, ~sex, ~age, ~start,
