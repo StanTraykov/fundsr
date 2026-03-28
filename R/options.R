@@ -1,0 +1,257 @@
+.fundsr_option_defaults <- function() {
+    user_data_dir <- tools::R_user_dir("fundsr", which = "data")
+    list(
+        # Note: fund downloads write to data_dir
+        data_dir = file.path(user_data_dir, "data"),
+        out_dir = file.path(user_data_dir, "output"),
+        fund_urls = character(),
+        reload = FALSE,
+        ticker_map = character(),
+        verbosity = 1L,
+
+        px_width = 1300,
+        internal_png = FALSE,
+        export_svg = TRUE,
+
+        inkscape = NA_character_
+    )
+}
+
+#' Get a fundsr option
+#'
+#' Reads `getOption("fundsr.<name>")`. If unset, uses `default` if provided;
+#' otherwise falls back to the package default from `.fundsr_option_defaults()`.
+#' Errors on unknown option names.
+#'
+#' @param name A single option name without the "fundsr." prefix (e.g. "reload").
+#' @param default Optional fallback value used if the option is unset. If not
+#'   supplied, the package default is used.
+#'
+#' @return The option value (or its fallback/default).
+#' @keywords internal
+fundsr_get_option <- function(name, default) {
+    check_string(name)
+
+    defs <- .fundsr_option_defaults()
+
+    if (!name %in% names(defs)) {
+        stop_bad_arg(
+            "name",
+            c(
+                glue("is an unknown fundsr option name: {sQuote(name)}"),
+                i = "Valid options:",
+                " " = paste0(paste(sort(names(defs)), collapse = ", "), ".")
+            )
+        )
+    }
+
+    if (missing(default)) {
+        default <- defs[[name]]
+    }
+
+    getOption(paste0("fundsr.", name), default = default)
+}
+
+#' Set fundsr package options
+#'
+#' Convenience wrapper around `options()` for setting common `fundsr.*` options.
+#'
+#' All arguments default to `NULL`. If an argument is left as `NULL`, the
+#' corresponding `fundsr.*` option is left unchanged.
+#'
+#' @param data_dir Directory containing fund data files (sets `fundsr.data_dir`). Note: fundsr may
+#' try to write to this directory (see `download_fund_data()`).
+#' @param out_dir Output directory for plots/exports (sets `fundsr.out_dir`).
+#' @param px_width Default PNG export width in pixels (sets `fundsr.px_width`).
+#' @param internal_png Logical; whether to save an internal PNG immediately when
+#'   exporting plots (sets `fundsr.internal_png`).
+#' @param export_svg Logical; whether to save SVGs and queue Inkscape exports
+#'   (sets `fundsr.export_svg`).
+#' @param ticker_map Named character vector mapping "primary" tickers (series
+#'   table column names) to translated tickers (sets `fundsr.ticker_map`).
+#' @param inkscape Inkscape executable (path or command name) used by export
+#'   helpers (sets `fundsr.inkscape`).
+#' @param reload Logical; default value for forcing re-import of cached
+#'   objects (sets `fundsr.reload`).
+#' @param fund_urls Named character vector or named list of URLs for fund data
+#'   downloads (sets `fundsr.fund_urls`).
+#' @param verbosity Integer verbosity level (sets `fundsr.verbosity`). Use 0 to silence
+#'   informational messages, 2 to emit more detailed progress/diagnostic messages, and
+#'   4 to force all message types even when they are disabled via function arguments
+#'   (e.g. `messages` for `roll_diffs()`).
+#'
+#' @return Invisibly returns a named list of the previous values of the options
+#'   that were changed (as returned by `options()`).
+#' @seealso
+#' [add_fund_urls()] to add/update entries in `fundsr.fund_urls`.
+#'
+#' @family config functions
+#' @export
+#' @examples
+#' fundsr_options(verbosity = 4)
+#' fundsr_options(
+#'     data_dir = file.path("data", "funds"),
+#'     out_dir = "output",
+#'     px_width = 1300,
+#'     ticker_map = c(
+#'         ticker1 = "ticker2",
+#'         ticker3 = "ticker4"
+#'     )
+#' )
+fundsr_options <- function(data_dir = NULL,
+                           out_dir = NULL,
+                           px_width = NULL,
+                           internal_png = NULL,
+                           export_svg = NULL,
+                           ticker_map = NULL,
+                           inkscape = NULL,
+                           reload = NULL,
+                           fund_urls = NULL,
+                           verbosity = NULL) {
+    check_string(data_dir, allow_null = TRUE)
+    check_string(out_dir, allow_null = TRUE)
+    check_string(inkscape, allow_null = TRUE)
+
+    check_logical(internal_png, allow_null = TRUE)
+    check_logical(export_svg, allow_null = TRUE)
+    check_logical(reload, allow_null = TRUE)
+
+    ticker_map <- check_mapping(ticker_map,
+                                allow_null = TRUE,
+                                type = "character",
+                                scalar_values = TRUE)
+    fund_urls <- check_mapping(fund_urls,
+                               allow_null = TRUE,
+                               type = "character",
+                               name_case = "upper",
+                               scalar_values = TRUE)
+
+    px_width <- check_numeric_scalar(px_width, allow_null = TRUE, as_integer = TRUE, ge = 1)
+    verbosity <- check_numeric_scalar(verbosity, allow_null = TRUE, as_integer = TRUE, ge = 0)
+
+    set <- list(
+        fundsr.data_dir      = data_dir,
+        fundsr.out_dir       = out_dir,
+        fundsr.px_width      = px_width,
+        fundsr.internal_png  = internal_png,
+        fundsr.export_svg    = export_svg,
+        fundsr.ticker_map    = ticker_map,
+        fundsr.inkscape      = inkscape,
+        fundsr.reload        = reload,
+        fundsr.fund_urls     = fund_urls,
+        fundsr.verbosity     = verbosity
+    )
+    set <- set[!vapply(set, is.null, logical(1))]
+
+    if (length(set) == 0L) {
+        return(invisible(list()))
+    }
+
+    invisible(do.call(options, set))
+}
+
+#' Add entries to the fund download list
+#'
+#' Adds one or more named download specifications to the `fundsr.fund_urls`
+#' option. Existing entries are preserved; entries in `fund_urls` replace any
+#' existing entries with the same name.
+#'
+#' Names are converted to uppercase before storing.
+#'
+#' @param fund_urls A named character vector mapping download identifiers to URLs.
+#' @return Invisibly returns a named list (as returned by [fundsr_options()])
+#'   containing the previous value of `fundsr.fund_urls`.
+#'
+#' @seealso
+#' [fundsr_options()] to set `fundsr.fund_urls` and other fundsr options in one call.
+#' [download_fund_data()] to download files from the added URLs.
+#'
+#' @family download functions
+#' @export
+add_fund_urls <- function(fund_urls) {
+    fund_urls <- check_mapping(
+        fund_urls,
+        allow_null = TRUE,
+        allow_empty = TRUE,
+        type = "character",
+        name_case = "upper",
+        scalar_values = TRUE
+    )
+
+    cur <- fundsr_get_option("fund_urls")
+    cur <- tryCatch(
+        check_mapping(
+            cur,
+            arg = "options('fundsr.fund_urls')",
+            allow_empty = TRUE,
+            type = "character",
+            name_case = "upper",
+            allow_na_values = FALSE,
+            allow_empty_values = FALSE
+        ),
+        fundsr_bad_arg = function(e) {
+            fundsr_abort(
+                msg = c(
+                    sprintf("Existing option value of %s is invalid.",
+                            sQuote("fundsr.fund_urls")),
+                    i = "Fix it with `fundsr_options(fund_urls = ...)`."
+                ),
+                class  = "fundsr_bad_option",
+                parent = e
+            )
+        }
+    )
+
+    new <- c(cur, fund_urls)
+    new <- new[!duplicated(names(new), fromLast = TRUE)]
+    fundsr_options(fund_urls = new)
+}
+
+find_inkscape <- function(candidates = NULL,
+                          env_var = "INKSCAPE") {
+    check_string(env_var)
+
+    safe_norm <- function(x) {
+        tryCatch(normalizePath(x, winslash = "/", mustWork = FALSE), error = function(e) x)
+    }
+    override <- fundsr_get_option("inkscape", Sys.getenv(env_var, unset = NA_character_))
+    if (!is.na(override) && nzchar(override) && file.exists(override)) {
+        return(safe_norm(override))
+    }
+
+    p <- Sys.which("inkscape")
+    if (nzchar(p) && file.exists(p)) {
+        return(safe_norm(p))
+    }
+
+    if (is.null(candidates)) {
+        sys <- Sys.info()[["sysname"]]
+        if (identical(sys, "Windows")) {
+            pf   <- Sys.getenv("ProgramFiles", "C:/Program Files")
+            pf86 <- Sys.getenv("ProgramFiles(x86)", "C:/Program Files (x86)")
+            candidates <- c(
+                file.path(pf,   "Inkscape/bin/inkscape.exe"),
+                file.path(pf,   "Inkscape/inkscape.exe"),
+                file.path(pf86, "Inkscape/bin/inkscape.exe"),
+                file.path(pf86, "Inkscape/inkscape.exe")
+            )
+        } else { # Mac, Linux, etc.
+            candidates <- c(
+                "/Applications/Inkscape.app/Contents/MacOS/inkscape",
+                "/Applications/Inkscape.app/Contents/MacOS/Inkscape",
+                "/opt/homebrew/bin/inkscape",
+                "/usr/local/bin/inkscape",
+                "/opt/local/bin/inkscape",
+                "/usr/bin/inkscape",
+                "/snap/bin/inkscape"
+            )
+        }
+    }
+
+    hit <- candidates[file.exists(candidates)][1]
+    if (!is.na(hit) && nzchar(hit)) {
+        return(safe_norm(hit))
+    }
+
+    NA_character_
+}

@@ -1,0 +1,77 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: fundsr 0.4.0.9000\n"
+"POT-Creation-Date: 2026-02-17 11:28\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "male"
+msgstr ""
+
+msgid "female"
+msgstr ""
+
+msgid "baseline"
+msgstr ""
+
+msgid "lower mortality"
+msgstr ""
+
+msgid "Survival by age per EUROPOP2023 projection"
+msgstr ""
+
+msgid "{population} · {sex_label} · age {age_min} · start year {start_year}"
+msgstr ""
+
+msgid "age"
+msgstr ""
+
+msgid "survival"
+msgstr ""
+
+msgid "projection"
+msgstr ""
+
+msgid "Survival by age per HMD life table"
+msgstr ""
+
+msgid "{population} · {sex_label} · age {age_min} · latest data from {year_max} (black line)"
+msgstr ""
+
+msgid "data"
+msgstr ""
+
+msgid "net"
+msgstr ""
+
+msgid "gross"
+msgstr ""
+
+msgid "{n_days}d rolling log-return differences vs {bmark_type} benchmark{ttl}"
+msgstr ""
+
+msgid "{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}"
+msgstr ""
+
+msgid "fund"
+msgstr ""
+
+msgid "rolling annualized log-return difference (bps)"
+msgstr ""
+
+msgid "rolling CAGR difference (bps)"
+msgstr ""
+
+msgid "Xetra Liquidity Measure (€100K round-trip spread costs)"
+msgstr ""
+
+msgid "monthly avg XLM (bps)"
+msgstr ""
+
+msgid "fundsr loaded."
+msgstr ""

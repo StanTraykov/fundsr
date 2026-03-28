@@ -1,0 +1,16 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^dev$
+(^|/)data(/|$)
+(^|/)noinst(/|$)
+(^|/)output(/|$)
+^doc$
+^docs$
+^Meta$
+^\.github$
+^LICENSE\.md$
+^_pkgdown\.yml$
+^pkgdown$
+^data-raw$
+^\.lintr$
+^AGENTS\.md$

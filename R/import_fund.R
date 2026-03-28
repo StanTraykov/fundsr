@@ -1,0 +1,197 @@
+#' Import a fund's NAV data and optionally register its benchmark mapping
+#'
+#' Imports a fund's NAV time series from an Excel file and stores it in the
+#' storage environment via `store_timeseries()`. Optionally, a benchmark column
+#' can also be imported, and a fund/index mapping is recorded in
+#' `session$state$fund_index_map`.
+#'
+#' If `file` is `NULL`, the function searches `fundsr.data_dir` for
+#' exactly one of `paste0(toupper(ticker), ".xlsx")` or
+#' `paste0(toupper(ticker), ".xls")`.
+#'
+#' @param ticker Fund ticker symbol. Used (in lower case) as the storage key and
+#'   (in upper case) to derive the default filename.
+#' @param file Optional filename. If `NULL` (the default), it is inferred from
+#'   `ticker` as described above.
+#' @param sheet Sheet index or name containing the NAV data.
+#' @param date_col Regular expression identifying the date column.
+#' @param nav_col Regular expression identifying the fund's NAV column.
+#' @param benchmark Optional benchmark key that this fund should be associated
+#'   with in the fund/index map. When `retrieve_benchmark = TRUE`, the same value
+#'   is also used as the name under which the benchmark series is imported.
+#' @param benchmark_col Regular expression identifying the benchmark column in
+#'   the Excel sheet. Only used when `retrieve_benchmark = TRUE`.
+#' @param retrieve_benchmark Logical; if `TRUE`, both `benchmark` and
+#'   `benchmark_col` must be supplied and the benchmark column is imported
+#'   alongside the fund.
+#' @param date_order Date parsing order passed to the importer.
+#' @param var_name Specify a custom variable name for the storage environment.
+#' @param data_sheet Deprecated; use `sheet`.
+#' @inheritDotParams store_timeseries -var_name -expr -fund_index_map
+#'
+#' @return Invisibly returns `NULL`. The imported data are stored in
+#'   `session$storage` under `tolower(ticker)`. A fund/index mapping is recorded
+#'   in `session$state$fund_index_map` when `benchmark` is supplied.
+#'
+#' @details
+#' The function builds a column-translation mapping from the fund NAV column and,
+#' if requested, a benchmark column. It then calls `read_timeseries_excel()` to read the
+#' Excel file and `store_timeseries()` to cache the imported object under
+#' `var_name`, if supplied, otherwise `tolower(ticker)`. When `benchmark` is provided, a
+#' corresponding entry is added to `session$state$fund_index_map` to link the fund to
+#' its benchmark key.
+#'
+#' @seealso [store_timeseries()], [read_timeseries_excel()]
+#' @family fund/index workflow functions
+#' @export
+#' @examples
+#' fundsr_options(data_dir = fundsr_example_data(), verbosity = 2)
+#'
+#' import_fund("FNDA",
+#'           "FNDA.xlsx",
+#'           benchmark = "IDX1",
+#'           sheet = "historical",
+#'           date_col = "^As Of",
+#'           nav_col = "^NAV")
+#'
+#' import_fund("FNDB",
+#'           benchmark = "IDX1",
+#'           date_col = "^date",
+#'           nav_col = "^net asset val",
+#'           date_order = "mdy")
+import_fund <- function(ticker,
+                        file = NULL,
+                        sheet = 1,
+                        date_col = "^Date",
+                        nav_col = "^NAV",
+                        benchmark = NULL,
+                        benchmark_col = NULL,
+                        retrieve_benchmark = FALSE,
+                        date_order = "dmy",
+                        var_name = NULL,
+                        data_sheet = deprecated(), # equivalent to sheet
+                        ...) {
+    if (lifecycle::is_present(data_sheet)) {
+        lifecycle::deprecate_warn(
+            when = "0.2.1",
+            what = "import_fund(data_sheet)",
+            with = "import_fund(sheet)"
+        )
+        if (!missing(sheet)) {
+            stop_bad_arg(
+                "data_sheet",
+                "(deprecated) cannot be used together with `sheet` (use only the latter)."
+            )
+        }
+        sheet <- data_sheet
+    }
+    check_string(ticker)
+    check_string(file, allow_null = TRUE)
+    check_string(date_col)
+    check_string(nav_col)
+    check_string(benchmark, allow_null = TRUE)
+    check_string(benchmark_col, allow_null = TRUE)
+    check_logical(retrieve_benchmark)
+    check_string(date_order)
+    check_string(var_name, allow_null = TRUE)
+
+    ticker_lower <- tolower(ticker)
+
+    # Use provided file or derive default filename based on ticker
+    fund_data_dir <- fundsr_get_option("data_dir")
+    if (is.null(file)) {
+        candidates <- paste0(toupper(ticker), c(".xlsx", ".xls"))
+        paths <- file.path(fund_data_dir, candidates)
+        exists <- file.exists(paths)
+        if (!any(exists)) {
+            fundsr_abort(
+                msg = c(
+                    glue("No .xls[x] file found for {ticker}."),
+                    i = glue("Looked for: {paste(sQuote(paths), collapse = ', ')}.")
+                ),
+                class = "fundsr_io_error"
+            )
+        }
+        if (sum(exists) > 1L) {
+            fundsr_abort(
+                msg = c(
+                    glue("Multiple .xls[x] files found for {ticker}."),
+                    i = glue("Matches: {paste(sQuote(paths[exists]), collapse = ', ')}.")
+                ),
+                class = "fundsr_io_error"
+            )
+        }
+        file <- candidates[exists]
+    }
+
+    # Build column translations
+    ct <- c(
+        set_names(nav_col, ticker_lower)
+    )
+    # If a benchmark is provided, add it to col_trans
+    if (retrieve_benchmark) {
+        if (is.null(benchmark) || is.null(benchmark_col)) {
+            stop_bad_arg(
+                "retrieve_benchmark",
+                "requires both `benchmark` and `benchmark_col`."
+            )
+        }
+        ct <- c(ct, set_names(benchmark_col, benchmark))
+    }
+    store_timeseries(
+        var_name %||% ticker_lower,
+        read_timeseries_excel(
+            file = file,
+            sheet = sheet,
+            date_col = date_col,
+            col_trans = ct,
+            date_order = date_order
+        ),
+        fund_index_map = if (is.null(benchmark)) NULL else set_names(benchmark, ticker_lower),
+        ...
+    )
+
+}
+
+#' Deprecated alias for [import_fund()].
+#'
+#' `load_fund()` has been renamed to [import_fund()].
+#'
+#' @inheritParams import_fund
+#' @inheritDotParams import_fund
+#' @inherit import_fund return
+#' @family deprecated functions
+#' @export
+load_fund <- function(ticker,
+                      file = NULL,
+                      sheet = 1,
+                      date_col = "^Date",
+                      nav_col = "^NAV",
+                      benchmark = NULL,
+                      benchmark_col = NULL,
+                      retrieve_benchmark = FALSE,
+                      date_order = "dmy",
+                      var_name = NULL,
+                      data_sheet = lifecycle::deprecated(),
+                      ...) {
+    lifecycle::deprecate_warn(
+        when = "0.5.0",
+        what = "load_fund()",
+        with = "import_fund()"
+    )
+
+    import_fund(
+        ticker = ticker,
+        file = file,
+        sheet = sheet,
+        date_col = date_col,
+        nav_col = nav_col,
+        benchmark = benchmark,
+        benchmark_col = benchmark_col,
+        retrieve_benchmark = retrieve_benchmark,
+        date_order = date_order,
+        var_name = var_name,
+        data_sheet = data_sheet,
+        ...
+    )
+}

@@ -1,0 +1,106 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+name: pkgdown.yaml
+
+permissions: read-all
+
+jobs:
+  pkgdown:
+    runs-on: ubuntu-latest
+    # Only restrict concurrency for non-PR jobs
+    concurrency:
+      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pkgdown, local::.
+          needs: website
+
+      # Needed for vignette output
+      - name: Enable bg_BG.UTF-8 locale
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y locales
+          sudo locale-gen bg_BG.UTF-8
+
+      # Decide whether to do a light build (no vignettes) or full build (incl. vignettes)
+      - name: Detect full pkgdown build
+        id: detect_full
+        shell: Rscript {0}
+        run: |
+          # Default: light build unless trigger file changed
+          full <- FALSE
+
+          files <- tryCatch(
+            system('git diff --name-only HEAD^..HEAD', intern = TRUE),
+            error = function(e) character()
+          )
+
+          cat("Changed files:\n")
+          if (length(files)) print(files) else cat("(none detected)\n")
+
+          if ("dev/force-full-pkgdown" %in% files) {
+            full <- TRUE
+          }
+
+          cat("Full build?:", full, "\n")
+
+          out <- Sys.getenv("GITHUB_OUTPUT")
+          writeLines(
+            sprintf("full=%s", if (full) "true" else "false"),
+            out,
+            useBytes = TRUE
+          )
+
+      # Light site build: home, reference, news, search — NO vignettes/articles
+      - name: Build light site (no vignettes)
+        if: steps.detect_full.outputs.full == 'false'
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_home(preview = FALSE)
+          pkgdown::build_reference(preview = FALSE, devel = FALSE)
+          pkgdown::build_news(preview = FALSE)
+          pkgdown::build_search()
+
+      # Full site build: includes vignettes/articles
+      - name: Build full site (incl. vignettes)
+        if: steps.detect_full.outputs.full == 'true'
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_site_github_pages(
+            new_process = FALSE,
+            install = TRUE
+          )
+
+      - name: Deploy to GitHub pages 🚀
+        if: github.event_name != 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          # Full builds: clean = true (reset gh-pages to current docs)
+          # Light builds: clean = false (keep old files like articles/)
+          clean: ${{ steps.detect_full.outputs.full == 'true' }}
+          branch: gh-pages
+          folder: docs

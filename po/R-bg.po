@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: fundsr 0.1.0\n"
+"POT-Creation-Date: 2026-02-17 11:28\n"
+"PO-Revision-Date: 2025-12-09 12:00+EET\n"
+"Last-Translator: Stanislav Traykov <st@gmuf.com>\n"
+"Language-Team: Stanislav Traykov <st@gmuf.com>\n"
+"Language: bg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "male"
+msgstr "мъж"
+
+msgid "female"
+msgstr "жена"
+
+msgid "baseline"
+msgstr "базов сценарий"
+
+msgid "lower mortality"
+msgstr "по-ниска смъртност"
+
+#
+msgid "Survival by age per EUROPOP2023 projection"
+msgstr "Преживяемост по възраст според прогноза EUROPOP2023"
+
+#
+msgid "{population} · {sex_label} · age {age_min} · start year {start_year}"
+msgstr ""
+"{population} · {sex_label} · възраст {age_min} · начална година {start_year}"
+
+msgid "age"
+msgstr "възраст"
+
+msgid "survival"
+msgstr "преживяемост"
+
+msgid "projection"
+msgstr "прогноза"
+
+msgid "Survival by age per HMD life table"
+msgstr "Преживяемост по възраст според таблиците на HMD"
+
+msgid ""
+"{population} · {sex_label} · age {age_min} · latest data from {year_max} "
+"(black line)"
+msgstr ""
+"{population} · {sex_label} · възраст {age_min} · последни данни от "
+"{year_max} (черна линия)"
+
+msgid "data"
+msgstr "данни"
+
+msgid "net"
+msgstr "нетен"
+
+msgid "gross"
+msgstr "брутен"
+
+msgid "{n_days}d rolling log-return differences vs {bmark_type} benchmark{ttl}"
+msgstr ""
+"{n_days}-дневни плъзгащи се разлики в log доходност спрямо {bmark_type} "
+"индекс{ttl}"
+
+msgid "{n_days}d rolling CAGR differences vs {bmark_type} benchmark{ttl}"
+msgstr ""
+"{n_days}-дневни плъзгащи се CAGR разлики спрямо {bmark_type} индекс{ttl}"
+
+msgid "fund"
+msgstr "фонд"
+
+msgid "rolling annualized log-return difference (bps)"
+msgstr "плъзг. разлика в анюализирана log доходност (bps)"
+
+msgid "rolling CAGR difference (bps)"
+msgstr "плъзгаща се разлика в CAGR (bps)"
+
+msgid "Xetra Liquidity Measure (€100K round-trip spread costs)"
+msgstr "Xetra Liquidity Measure (двупосочни спред разходи за €100 хил.)"
+
+msgid "monthly avg XLM (bps)"
+msgstr "средномесечен XLM (bps)"
+
+msgid "fundsr loaded."
+msgstr "fundsr зереден."
