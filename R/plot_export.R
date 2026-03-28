@@ -289,7 +289,8 @@ run_plots <- function(roll_diffs,
                       session = NULL,
                       ...) {
     check_numeric_scalar(n_days, whole_num = TRUE, ge = 1)
-    check_string(suffix)
+    check_string(suffix, allow_empty = TRUE, allow_null = TRUE)
+    suffix <- suffix %||% ""
     check_string(extra_prefix)
     if (!is.list(roll_diffs) ||
             length(roll_diffs) != 2L ||
@@ -323,6 +324,7 @@ run_plots <- function(roll_diffs,
     bmark_type <- match.arg(bmark_type)
     st <- fundsr_require_state(session = session)$state
     st$done_extra_sets <- character()
+    fundsr_msg("Walking through specs...", level = 2)
     purrr::pwalk(runs, function(plot_id,
                                 title,
                                 data_filter,
@@ -356,8 +358,8 @@ run_plots <- function(roll_diffs,
             key <- vec_key(funds_translated, ignore_order = TRUE)
             if (!key %in% st$done_extra_sets) {
                 extra_plot <- extra_fun(extra_data,
-                                         funds_translated,
-                                         gg_params = list(gg_params, add_gg_params))
+                                        funds_translated,
+                                        gg_params = list(gg_params, add_gg_params))
                 extra_fname <- paste0(lang_prefix, extra_prefix, plot_id)
                 save_plot(extra_fname, extra_plot, width = width, height = height, session = session)
                 plots_env[[extra_fname]] <- extra_plot

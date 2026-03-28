@@ -91,7 +91,7 @@ download_fund_data <- function(redownload = FALSE) {
             out[[key]] <- if (file.exists(full_file)) full_file else alt_file
             next
         }
-        if (polite_sleep && did_download) Sys.sleep(stats::runif(1, 0.5, 1.0))
+        if (polite_sleep && did_download) Sys.sleep(stats::runif(1, 1.0, 1.8))
         fundsr_msg(glue("Downloading '{key}'"), level = 1L)
         tryCatch(
             .fundsr_download(url = url, destfile = full_file, attempts = attempts, quiet = TRUE),
