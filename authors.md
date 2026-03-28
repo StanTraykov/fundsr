@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/StanTraykov/fundsr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/StanTraykov/fundsr/blob/v0.4.2.9000/DESCRIPTION)
 
 Traykov S (2026). *fundsr: Rolling Differences (CAGR and Log), Survival
 and Other Financial Planning Plots*. R package version 0.4.2.9000,

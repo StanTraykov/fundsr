@@ -74,7 +74,7 @@ Traykov</h4>
             
             <h4 data-toc-skip class="date">2026-03-28</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/main/vignettes/importing-and-computing-differences.Rmd" class="external-link"><code>vignettes/importing-and-computing-differences.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/StanTraykov/fundsr/blob/v0.4.2.9000/vignettes/importing-and-computing-differences.Rmd" class="external-link"><code>vignettes/importing-and-computing-differences.Rmd</code></a></small>
       <div class="d-none name"><code>importing-and-computing-differences.Rmd</code></div>
     </div>
 
@@ -577,7 +577,7 @@ import the benchmark later from its own file).</p>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>gndb <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/GNDB.csv'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/GNDB.csv'</span></span></code></pre></div>
 <p>The variable name used for the storage environment
 (<code>var_name</code>) can be chosen arbitrarily and serves as the
 cache key. The <code>fund_index_map</code> parameter defines a mapping
@@ -624,7 +624,7 @@ table.</p>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX1-GR` <span class="op">=</span> <span class="st">"IDX1"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/IDX1.xlsx'</span></span>
+<span><span class="co">#&gt; '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/IDX1.xlsx'</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/store_timeseries.html">store_timeseries</a></span><span class="op">(</span></span>
 <span>    var_name <span class="op">=</span> <span class="st">"idx2"</span>,</span>
@@ -633,8 +633,8 @@ table.</p>
 <span>                     by <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span>,</span>
 <span>    fund_index_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`IDX2-GR` <span class="op">=</span> <span class="st">"IDX2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/IDX2N.csv'</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/IDX2G.csv'</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/IDX2N.csv'</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Text:  '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/IDX2G.csv'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="import_fund">
@@ -676,7 +676,7 @@ still match.</p>
 <span>            date_col <span class="op">=</span> <span class="st">"^As Of"</span>,</span>
 <span>            nav_col <span class="op">=</span> <span class="st">"^NAV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/FNDA.xlsx'</span></span></code></pre></div>
 <p><code><a href="../reference/import_fund.html">import_fund()</a></code> recognizes proper Excel dates, improperly
 stored Excel dates, and a large number of text date formats used in fund
 files, but the date order (e.g. <code>"dmy"</code>, <code>"mdy"</code>,
@@ -693,7 +693,7 @@ histories.</p>
 <span>            nav_col <span class="op">=</span> <span class="st">"^net asset val"</span>,</span>
 <span>            date_order <span class="op">=</span> <span class="st">"mdy"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/FNDB.xlsx'</span></span></code></pre></div>
 <p>The final fund to load is GNDA.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/import_fund.html">import_fund</a></span><span class="op">(</span><span class="st">"GNDA"</span>,</span>
@@ -702,7 +702,7 @@ histories.</p>
 <span>            date_col <span class="op">=</span> <span class="st">"^Date"</span>,</span>
 <span>            nav_col <span class="op">=</span> <span class="st">"^Official NAV"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">ℹ</span> Reading Excel:</span></span>
-<span><span class="co">#&gt; '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
+<span><span class="co">#&gt; '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/GNDA.xlsx'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-the-master-table">Building the master table<a class="anchor" aria-label="anchor" href="#building-the-master-table"></a>

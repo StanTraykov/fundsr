@@ -149,7 +149,7 @@ import_fund("FNDA",
           date_col = "^As Of",
           nav_col = "^NAV")
 #> ℹ *** Loading: fnda
-#> ℹ Reading Excel: ‘/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/./FNDA.xlsx’
+#> ℹ Reading Excel: ‘/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/./FNDA.xlsx’
 #> ℹ readxl succeeded. Returning data.
 #> ✔ 730 rows x 2 cols (sheet='historical', date col ='^As Of').
 
@@ -159,7 +159,7 @@ import_fund("FNDB",
           nav_col = "^net asset val",
           date_order = "mdy")
 #> ℹ *** Loading: fndb
-#> ℹ Reading Excel: ‘/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/./FNDB.xlsx’
+#> ℹ Reading Excel: ‘/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/./FNDB.xlsx’
 #> ℹ readxl succeeded. Returning data.
 #> ✔ 655 rows x 2 cols (sheet='1', date col ='^date').
 ```

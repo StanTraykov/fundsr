@@ -152,7 +152,7 @@ store_timeseries(
     fund_index_map = c(gndb = "IDX2")
 )
 #> ℹ Reading Text:
-#> '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/GNDB.csv'
+#> '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/GNDB.csv'
 ```
 
 The variable name used for the storage environment (`var_name`) can be
@@ -208,7 +208,7 @@ store_timeseries(
     fund_index_map = c(`IDX1-GR` = "IDX1")
 )
 #> ℹ Reading Excel:
-#> '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/IDX1.xlsx'
+#> '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/IDX1.xlsx'
 
 store_timeseries(
     var_name = "idx2",
@@ -217,8 +217,8 @@ store_timeseries(
                      by = "date"),
     fund_index_map = c(`IDX2-GR` = "IDX2")
 )
-#> ℹ Reading Text:  '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/IDX2N.csv'
-#> ℹ Reading Text:  '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/IDX2G.csv'
+#> ℹ Reading Text:  '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/IDX2N.csv'
+#> ℹ Reading Text:  '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/IDX2G.csv'
 ```
 
 ### `import_fund()`
@@ -260,7 +260,7 @@ import_fund("FNDA",
             date_col = "^As Of",
             nav_col = "^NAV")
 #> ℹ Reading Excel:
-#> '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/FNDA.xlsx'
+#> '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/FNDA.xlsx'
 ```
 
 [`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md)
@@ -281,7 +281,7 @@ import_fund("FNDB",
             nav_col = "^net asset val",
             date_order = "mdy")
 #> ℹ Reading Excel:
-#> '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/FNDB.xlsx'
+#> '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/FNDB.xlsx'
 ```
 
 The final fund to load is GNDA.
@@ -293,7 +293,7 @@ import_fund("GNDA",
             date_col = "^Date",
             nav_col = "^Official NAV")
 #> ℹ Reading Excel:
-#> '/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/GNDA.xlsx'
+#> '/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/GNDA.xlsx'
 ```
 
 ### Building the master table

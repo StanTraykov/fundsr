@@ -18,7 +18,7 @@ fundsr_example_data(file = ".")
 
 ``` r
 fundsr_example_data("FNDA.xlsx")
-#> [1] "/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/FNDA.xlsx"
+#> [1] "/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/FNDA.xlsx"
 fundsr_example_data()
-#> [1] "/tmp/RtmpoFwIpV/temp_libpath1e345dbda4bc/fundsr/extdata/."
+#> [1] "/tmp/RtmpOXdWjF/temp_libpath1e23798c0a23/fundsr/extdata/."
 ```
