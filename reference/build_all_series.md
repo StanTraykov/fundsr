@@ -1,0 +1,68 @@
+# Run all registered data loaders and join all loaded series into a big tibble.
+
+Runs
+[`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md),
+joins the resulting environment into a single data frame via
+[`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
+and sorts the result by `by`.
+
+## Usage
+
+``` r
+build_all_series(reload = FALSE, by = "date", session = NULL, ...)
+```
+
+## Arguments
+
+- reload:
+
+  Logical; if `TRUE`, forces a full reload by temporarily setting
+  `options(fundsr.reload = TRUE)`.
+
+- by:
+
+  Character vector of column names to join by and sort by.
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
+
+- ...:
+
+  Additional arguments forwarded to
+  [`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md)
+  (e.g. `late`, `join_precedence`, etc.).
+
+## Value
+
+A tibble containing all joined series, sorted by `by`.
+
+## Details
+
+This function is a convenience wrapper for the most common workflow.
+
+## See also
+
+Other fund/index workflow functions:
+[`add_data_loader()`](https://stantraykov.github.io/fundsr/reference/add_data_loader.md),
+[`adjust_for_split()`](https://stantraykov.github.io/fundsr/reference/adjust_for_split.md),
+[`clear_data_loaders()`](https://stantraykov.github.io/fundsr/reference/clear_data_loaders.md),
+[`clear_storage()`](https://stantraykov.github.io/fundsr/reference/clear_storage.md),
+[`get_storage()`](https://stantraykov.github.io/fundsr/reference/get_storage.md),
+[`import_fund()`](https://stantraykov.github.io/fundsr/reference/import_fund.md),
+[`join_env()`](https://stantraykov.github.io/fundsr/reference/join_env.md),
+[`run_data_loaders()`](https://stantraykov.github.io/fundsr/reference/run_data_loaders.md),
+[`store_timeseries()`](https://stantraykov.github.io/fundsr/reference/store_timeseries.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+
+s1 <- build_all_series()
+download_fund_data(redownload = TRUE)
+s2 <- build_all_series(by = "date", late = "ftaw", join_precedence = c(".y", ".x")) %>%
+  filter(date >= as_date("2013-01-01"))
+} # }
+```

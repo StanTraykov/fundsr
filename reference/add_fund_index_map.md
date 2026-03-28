@@ -1,0 +1,34 @@
+# Add to fund-index map
+
+Merges fund-index pairs into the session fund-index map
+(`session$state$fund_index_map`). Existing entries with the same names
+are replaced.
+
+## Usage
+
+``` r
+add_fund_index_map(fund_index_map, session = NULL)
+```
+
+## Arguments
+
+- fund_index_map:
+
+  Named character vector of fund-index pairs to merge into
+  `session$state$fund_index_map`. Names are fund identifiers; values are
+  index identifiers.
+
+- session:
+
+  Optional `fundsr_session` object. Defaults to the package default
+  session when `NULL`.
+
+## Value
+
+Invisibly returns `NULL`. Called for side effects.
+
+## See also
+
+Other fund-index map functions:
+[`clear_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/clear_fund_index_map.md),
+[`get_fund_index_map()`](https://stantraykov.github.io/fundsr/reference/get_fund_index_map.md)
